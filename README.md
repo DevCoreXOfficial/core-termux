@@ -1,193 +1,198 @@
-# **Core-Termux**
+# **CORE-TERMUX**
 
-![Core-Termux Logo](assets/img/core-termux.webp)
+<p align="center">
+  <img src="assets/img/core-termux.webp" alt="Core-Termux Logo" width="300" />
+</p>
 
-Automate your web development environment setup in Termux!
+<p align="center">
+  <strong>Automate your web development environment setup in Termux!</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-2.2.0-blue.svg?style=flat" alt="Version 2.2.0" height="26">
+  <img alt="Last Commit" src="https://img.shields.io/github/last-commit/DevCoreXOfficial/core-termux?style=flat&color=blueviolet" height="26">
+  <img alt="Repo Size" src="https://img.shields.io/github/repo-size/DevCoreXOfficial/core-termux?style=flat&color=orange" height="26">
+  <a href="https://youtube.com/@devcorex?si=NNuXTcjqGPGISetL"><img alt="YouTube" src="https://img.shields.io/badge/YouTube-FF0000?style=flat&logo=youtube&logoColor=white" height="26"></a>
+</p>
 
 **Core-Termux** is a powerful tool designed to streamline the setup of a modern web development environment directly on your Android device using the Termux app. Whether you're a beginner or an experienced developer, this project will help you get started quickly and efficiently.
 
 ---
 
+## **📸 Screenshots**
+
+<p align="center">
+  <img src="assets/img/oh-my-zsh.webp" alt="Screenshot 1: Powerlevel10k Prompt" width="48%"/>
+  <img src="assets/img/nvchad-neovim.webp" alt="Screenshot 2: NvChad in Action" width="48%"/>
+</p>
+<p align="center">
+  <em>Showcasing the Powerlevel10k prompt and NvChad editor.</em>
+</p>
+
+---
+
 ## **✨ Features**
 
-- 🚀 **Fully Automated Setup**  
-  Get your development environment ready with just one command.
+- 🚀 **Fully Automated Setup**: Get your development environment ready with just one command.
+- 💻 **Professional Code Editor**: Pre-configured Neovim with the blazingly fast **NvChad** framework.
+- 🎨 **Enhanced Shell Experience**: A beautiful and powerful shell powered by **Oh My Zsh** and **Powerlevel10k**.
+- 📦 **Essential Packages**: Comes with a curated list of packages for web development, databases, and more.
+- 🤖 **AI-Powered Tools**: Integrated AI assistants like **Gemini CLI** to boost your productivity.
+- 🔄 **Auto-Updates**: Keep your environment and tools up to date without running commands.
 
-- 📦 **Node.js Modules Management**  
-  Automatically install and update essential global packages, including:  
-  - `@devcorex/dev.x`  
-    **Dev.X** is the flagship tool developed by **DevCoreX**, designed to automate the creation of web applications, API setups, and frontend components with ease and flexibility.
+---
 
-  - `typescript`  
-  - `@nestjs/cli`  
-  - `prettier`  
-  - `live-server`  
-  - `localtunnel`  
-  - `vercel`
-  - `markserv`
-  - `psqlformat`
+## **🚀 Your Professional Code Editor: Neovim + NvChad**
 
-- 💻 **Enhanced Shell Experience**  
-  Core-Termux uses **Oh My Zsh** as the default shell, enhanced with powerful plugins for productivity:  
-  - **zsh-defer**: Improves Zsh startup time by deferring plugin loading.  
-  - **powerlevel10k**: A highly customizable and fast theme for Zsh.  
-  - **zsh-autosuggestions**: Suggests commands based on history as you type.  
-  - **zsh-syntax-highlighting**: Adds syntax highlighting to your shell commands.  
-  - **zsh-history-substring-search**: Allows substring search in your command history.  
-  - **zsh-completions**: Extends the Zsh autocomplete system with additional features.  
-  - **fzf-tab**: Enhances tab completion with fuzzy search.  
-  - **zsh-you-should-use**: Reminds you to use aliases you've defined.  
-  - **zsh-autopair**: Auto-completes matching pairs like brackets and quotes.  
-  - **zsh-better-npm-completion**: Improves npm command-line completion.
+<p align="center">
+  <img src="assets/img/nvchad.webp" alt="NvChad Logo" width="90%" />
+</p>
 
-- 💡 **NvChad Integration**  
-  Seamlessly configure and update your optimized Neovim setup for Termux.
+Core-Termux doesn't just set up your environment; it gives you a powerful, pre-configured code editor right out of the box with **NvChad**.
 
-- 🔄 **Auto-Updates**  
-  Keep Core-Termux, **Dev.X**, and its dependencies up to date effortlessly.
+NvChad is a blazingly fast Neovim configuration that provides a stunning UI and a rich set of features for modern web development, including:
 
-- ✅ **Compatibility**  
-  Specifically designed for the Termux app, running on Android devices.
+- **Stunning UI**: A beautiful and functional interface.
+- **Integrated File Explorer**: Manage your files with NvimTree.
+- **Git Integration**: Handle version control seamlessly within the editor.
+- **Autocompletion & Snippets**: Write code faster and with fewer errors.
+- **[And much more...](https://github.com/DevCoreXOfficial/nvchad-termux)**
+
+With Core-Termux, your NvChad setup is automatically installed and kept up-to-date, giving you a desktop-class coding experience on your Android device.
+
+---
+
+## **🎓 Community & Learning**
+
+Want to see Core-Termux in action or master Neovim? Check out these resources:
+
+- 📺 **YouTube Channel**: [DevCoreX](https://youtube.com/@devcorex?si=NNuXTcjqGPGISetL)
+- 🎓 **Neovim Course**: [Neovim - NvChad](https://youtu.be/Uqgvzd7Sec0?si=2I-2WIFwZOB7sCkR)
 
 ---
 
 ## **📋 Prerequisites**
 
-Before using Core-Termux, ensure the following:
-1. **Minimum 4GB** of storage available on your android.
-2. **Termux App** installed on your Android device.
-3. **Internet Connection** to fetch required packages and updates.
-4. **Termux Repositories** Updated.
-5. **Git** installed on your Termux app.
+- **Minimum 8GB** of available storage.
+- **Termux App** installed.
+- **Internet Connection**.
+- **Git** installed (`pkg install git`).
 
 ---
 
-## **🛠 Installation**
+## **🛠️ Installation**
 
-1. **Clone the Repository**
-  Open Termux and run the following commands:
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/DevCoreXOfficial/core-termux.git
+    cd core-termux
+    ```
 
-   ```bash
-   git clone https://github.com/DevCoreXOfficial/core-termux.git
-   ```
-   ```bash
-   cd core-termux
-   ```
-
-2. **Run the Setup Script**
-Execute the setup script to set up your environment:
-   ```bash
-   bash setup.sh
-   ```
+2.  **Run the Setup Script**:
+    ```bash
+    bash setup.sh
+    ```
 
 ---
 
-## **💻 Update**
+## **🔄 Update**
 
-**Update Environment**
+The environment is configured to run `update.sh` automatically, so you don't need to worry about manual updates.
 
-To update Core-Termux, Node.js modules, and NvChad, simply run:
-
-```bash
-bash update.sh
-```
-
-**What the Script Does:**
-
-Syncs the latest changes from the Core-Termux repository.
-
-Installs or updates essential Node.js modules globally.
-
-Fetches and updates your NvChad configuration.
-
-Keeps your shell plugins and configurations optimized.
+However, if you need to force an update, you can do so by running the `update.sh` script again. The update process works as follows:
+- **`update.sh`**: Syncs local files with the latest version from the repository.
+- **`bootstrap.sh`**: Called by `update.sh` to handle the actual update of all tools and packages.
 
 ---
 
 ## **📂 Project Structure**
 
-Here's an overview of the Core-Termux directory structure:
-
 ```
 core-termux/
-├── config            # Configuration file for colors, variables, etc.
-├── setup.sh          # Main script for setup core-termux
-├── update.sh         # Find updates of core-termux
-├── README.md         # Project documentation
-└── .gitignore        # Git ignore rules
+├── assets/             # Fonts and images
+├── bootstrap.sh        # Called by update.sh, handles the update of all tools
+├── config              # Color variables and settings
+├── setup.sh            # Main setup script
+├── update.sh           # Syncs files and runs bootstrap.sh
+├── LICENSE             # Project's license
+└── README.md           # This file
 ```
 
 ---
 
-## **📦 Included Packages**
+## **📦 Included Software**
 
-Core-Termux comes preconfigured with the following Termux packages:
+<details>
+<summary><strong>Click to see the full list of included software</strong></summary>
 
-**Languages**
+### **Global Node.js Modules**
 
-- `nodejs` | `python` | `php` | `perl`
+**Web Development**
+- `@devcorex/dev.x`
+- `@nestjs/cli`
+- `vercel`
+- `live-server`
+- `markserv`
 
-**Shell Utilities**
-
-- `zsh` | `curl` | `wget` | `lsd` | `bat` | `tree` | `jq`
-
-**Development Tools**
-
-- `git` | `gh (GitHub CLI)` | `neovim` | `lua-language-server` | `ncurses-utils` | `ripgrep` | `stylua`
-
-**Databases**
-
-- `mongodb` | `postgresql` | `mariadb` | `sqlite`
-
-**Networking Tools**
-
-- `proot` | `tmate` | `cloudflared`
+**Code Quality**
+- `typescript`
+- `prettier`
+- `psqlformat`
 
 **Utilities**
+- `localtunnel`
+- `npm-check-updates`
 
-- `translate-shell` | `html2text` | `bc` | `fzf` | `imagemagick` | `shfmt`
+**AI Tools**
+- `@google/gemini-cli`
+- `@qwen-code/qwen-code`
 
----
+### **Termux Packages**
 
-## **📞 Support**
+**Languages**
+- `nodejs`, `python`, `php`, `perl`
 
-Core-Termux is developed and maintained by DevCoreX. For support, suggestions, or contributions:
+**Shell & Utilities**
+- `zsh`, `curl`, `wget`, `lsd`, `bat`, `tree`, `jq`, `fzf`
 
-**Author:** DevCoreX
+**Development**
+- `git`, `gh`, `neovim`, `lua-language-server`, `ripgrep`, `stylua`
 
-**Email:** devcorexofficial@gmail.com
+**Databases**
+- `mongodb`, `postgresql`, `mariadb`, `sqlite`
+
+</details>
+
+<details>
+<summary><strong>Click to see the full list of Zsh plugins</strong></summary>
+
+- **zsh-defer**: Improves Zsh startup time.
+- **powerlevel10k**: A highly customizable and fast theme.
+- **zsh-autosuggestions**: Suggests commands based on history.
+- **zsh-syntax-highlighting**: Adds syntax highlighting to commands.
+- **zsh-history-substring-search**: Substring search in command history.
+- **zsh-completions**: Extends Zsh autocomplete.
+- **fzf-tab**: Enhances tab completion with fuzzy search.
+- **zsh-you-should-use**: Reminds you to use aliases.
+- **zsh-autopair**: Auto-completes matching pairs.
+- **zsh-better-npm-completion**: Improves npm completion.
+
+</details>
 
 ---
 
 ## **🎉 Contributing**
 
-We welcome contributions from the community! Follow these steps to contribute:
-
-1. **Fork the repository.**
-
-2. **Create a new branch:**
-```bash
-git checkout -b feature/your-feature-name.
-```
-
-3. **Commit your changes:**
-```bash
-git commit -m 'Add your feature here'.
-```
-
-4. **Push to your branch:**
-```bash
-git push origin feature/your-feature-name.
-```
-
-5. **Submit a pull request!**
+Contributions are welcome! Please fork the repository and submit a pull request.
 
 ---
 
 ## **📄 License**
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
 
 ---
 
-Thank you for using Core-Termux! Happy coding!
+<p align="center">
+  <em>Thank you for using Core-Termux! Happy coding!</em>
+</p>

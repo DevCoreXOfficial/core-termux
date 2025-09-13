@@ -27,7 +27,7 @@ yes | pkg install git gh zsh neovim nodejs python perl php curl wget lua-languag
 yes | pkg install mongodb
 
 # installing node global modules
-npm install -g @devcorex/dev.x typescript @nestjs/cli prettier live-server localtunnel vercel markserv psqlformat
+npm install -g @devcorex/dev.x typescript @nestjs/cli prettier live-server localtunnel vercel markserv psqlformat @google/gemini-cli@0.1.14 @qwen-code/qwen-code@0.0.9 npm-check-updates
 
 # fixed localtunnel android error
 sed -i '/case '\''win32'\''/,/break;/ a\    case '\''android'\'':\n        command = '\''termux-open-url'\'';\n        break;' ${PREFIX}/lib/node_modules/localtunnel/node_modules/openurl/openurl.js
