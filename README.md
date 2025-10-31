@@ -142,6 +142,7 @@ core-termux/
 **Utilities**
 - `localtunnel`
 - `npm-check-updates`
+- `ngrok`
 
 **AI Tools**
 - `@google/gemini-cli`

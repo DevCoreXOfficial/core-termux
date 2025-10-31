@@ -17,6 +17,7 @@ node_modules=(
   "@google/gemini-cli"
   "@qwen-code/qwen-code"
   "npm-check-updates"
+  "ngrok"
 )
 
 # exceptions with fixed version
@@ -32,7 +33,7 @@ yes | pkg update && yes | pkg upgrade
 yes | pkg install perl
 
 # new node modules
-npm install -g psqlformat @google/gemini-cli@0.1.14 @qwen-code/qwen-code@0.0.9 npm-check-updates
+npm install -g psqlformat @google/gemini-cli@0.1.14 @qwen-code/qwen-code@0.0.9 npm-check-updates ngrok
 
 # update node modules
 echo -e "${D_CYAN}Updating node modules...${WHITE}"
