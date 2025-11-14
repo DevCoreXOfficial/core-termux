@@ -98,7 +98,7 @@ fi
 # custom termux-keys and cursor
 echo "terminal-cursor-blink-rate=500
 
-extra-keys = [['ESC','</>','-','HOME','UP','END','PGUP'],['TAB','CTRL','ALT','LEFT','DOWN','RIGHT','PGDN']]" >>~/.termux/termux.properties
+extra-keys = [['ESC','</>','-','HOME',{key: 'UP', display: '▲'},'END','PGUP'], ['TAB','CTRL','ALT',{key: 'LEFT', display: '◀'},{key: 'DOWN', display: '▼'},{key: 'RIGHT', display: '▶'},'PGDN']]" >>~/.termux/termux.properties
 echo "cursor=#00FF00" >>~/.termux/colors.properties
 
 # add Meslo Nerd Font

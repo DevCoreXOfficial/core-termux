@@ -35,6 +35,11 @@ yes | pkg install perl
 # new node modules
 npm install -g psqlformat @google/gemini-cli@0.1.14 @qwen-code/qwen-code@0.0.9 npm-check-updates ngrok
 
+# new extra-keys
+new_line="extra-keys = [['ESC','</>','-','HOME',{key: 'UP', display: '▲'},'END','PGUP'], ['TAB','CTRL','ALT',{key: 'LEFT', display: '◀'},{key: 'DOWN', display: '▼'},{key: 'RIGHT', display: '▶'},'PGDN']]"
+
+sed -i "s|^extra-keys =.*|${new_line}|" ~/.termux/termux.properties
+
 # update node modules
 echo -e "${D_CYAN}Updating node modules...${WHITE}"
 for module in "${node_modules[@]}"; do
@@ -63,3 +68,12 @@ for module in "${node_modules[@]}"; do
     fi
   fi
 done
+
+# message of new changes
+echo -e "
+${D_CYAN}What's new?
+
+${BLACK}[${CYAN}*${BLACK}]${YELLOW} The appearance of the [UP], [LEFT], [DOWN], and [RIGHT] keys has changed to descriptive arrow symbols.
+
+${GREEN}Update complete, please restart your Termux${WHITE}
+"
