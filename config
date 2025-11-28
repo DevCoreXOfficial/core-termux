@@ -1,7 +1,7 @@
 # general settings
 PROJECT_NAME="core-termux"
 AUTHOR="DevCoreX"
-VERSION="2.5.0"
+VERSION="2.5.1"
 DESCRIPTION="Automates the setup of a web development environment in Termux, enabling developers to quickly start building web applications on Android."
 
 # environment variables

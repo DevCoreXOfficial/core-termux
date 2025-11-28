@@ -26,7 +26,7 @@ update_timestamp() {
 
 # update only if the interval exceeds the specified time frame
 if ! should_check_updates; then
-	exit 0
+	return 0
 fi
 
 exec </dev/tty
