@@ -1,39 +1,36 @@
 #!/bin/bash
 source ~/.core-termux/config
 
-echo -e "${D_CYAN}Updating Core-Termux...${WHITE}"
+echo -e "${D_CYAN}Starting Core-Termux Update...${WHITE}"
 
-# node modules list
+# node modules list (to verify and install)
 node_modules=(
-  "@devcorex/dev.x"
-  "typescript"
-  "@nestjs/cli"
-  "prettier"
-  "live-server"
-  "localtunnel"
-  "vercel"
-  "markserv"
-  "psqlformat"
-  "@google/gemini-cli"
-  "@qwen-code/qwen-code"
-  "npm-check-updates"
-  "ngrok"
+	"psqlformat"
+	"@google/gemini-cli@0.1.14"
+	"@qwen-code/qwen-code@0.0.9"
+	"npm-check-updates"
+	"ngrok"
 )
 
-# exceptions with fixed version
-declare -A fixed_versions
-fixed_versions["@google/gemini-cli"]="0.1.14"
-fixed_versions["@qwen-code/qwen-code"]="0.0.9"
+# install perl (only if missing)
+if ! command -v perl >/dev/null 2>&1; then
+	echo -e "${D_CYAN}Installing perl...${WHITE}"
+	yes | pkg install perl
+fi
 
-# update termux repositories
-echo -e "${D_CYAN}Updating termux repositories...${WHITE}"
-yes | pkg update && yes | pkg upgrade
+# install npm modules ONLY if not installed
+echo -e "${D_CYAN}Checking required npm modules...${WHITE}"
 
-# new termux-packages
-yes | pkg install perl
+for module in "${node_modules[@]}"; do
+	base_name=$(echo "$module" | awk -F'@' '{print $1}')
 
-# new node modules
-npm install -g psqlformat @google/gemini-cli@0.1.14 @qwen-code/qwen-code@0.0.9 npm-check-updates ngrok
+	if npm list -g --depth=0 "$base_name" >/dev/null 2>&1; then
+		echo -e "${GREEN}${base_name} already installed.${WHITE}"
+	else
+		echo -e "${YELLOW}Installing ${module}...${WHITE}"
+		npm install -g "$module"
+	fi
+done
 
 # new extra-keys
 new_line="extra-keys = [['ESC','</>','-','HOME',{key: 'UP', display: '▲'},'END','PGUP'], ['TAB','CTRL','ALT',{key: 'LEFT', display: '◀'},{key: 'DOWN', display: '▼'},{key: 'RIGHT', display: '▶'},'PGDN']]"
@@ -41,44 +38,19 @@ new_line="extra-keys = [['ESC','</>','-','HOME',{key: 'UP', display: '▲'},'END
 sed -i "s|^extra-keys =.*|${new_line}|" ~/.termux/termux.properties
 
 # new alias
-echo 'alias cat="bat --theme=Dracula --style=plain --paging=never"' >>~/.zshrc
-
-# update node modules
-echo -e "${D_CYAN}Updating node modules...${WHITE}"
-for module in "${node_modules[@]}"; do
-  if [[ -n "${fixed_versions[$module]}" ]]; then
-    # if in exceptions → install fixed version
-    fixed_version=${fixed_versions[$module]}
-    current_version=$(npm list -g "$module" --depth=0 | grep "$module" | awk -F '@' '{print $NF}')
-    
-    if [[ "$current_version" != "$fixed_version" ]]; then
-      echo -e "Installing fixed version for ${module} → ${fixed_version}"
-      npm install -g "${module}@${fixed_version}"
-    else
-      echo -e "${module} is already at fixed version ${fixed_version}"
-    fi
-  else
-    # otherwise → install the latest version
-    if [[ "$module" == "@nestjs/cli" || "$module" == "@devcorex/dev.x" ]]; then
-      version=$(npm list -g ${module} --depth=0 | grep ${module} | awk -F '@' '{print $3}')
-    else
-      version=$(npm list -g ${module} --depth=0 | grep ${module} | awk -F '@' '{print $2}')
-    fi
-
-    if [[ "${version}" != "$(npm show ${module} version)" ]]; then
-      echo -e "Updating ${module}..."
-      npm install -g ${module}@latest
-    fi
-  fi
-done
+if ! grep -q 'alias cat="bat --theme=Dracula --style=plain --paging=never"' ~/.zshrc; then
+	echo 'alias cat="bat --theme=Dracula --style=plain --paging=never"' >>~/.zshrc
+	echo -e "${D_CYAN}Alias for cat created.${WHITE}"
+else
+	echo -e "${GREEN}Alias for cat already exists.${WHITE}"
+fi
 
 # message of new changes
 echo -e "
 ${D_CYAN}What's new?
 
-${BLACK}[${CYAN}*${BLACK}]${YELLOW} An alias for the 'cat' command has been created with syntax highlighting.
-${BLACK}[${CYAN}*${BLACK}]${YELLOW} It now uses the following default parameters:
-${BLACK}[${CYAN}*${BLACK}]${YELLOW} --theme=Dracula --style=plain --paging=never
+${BLACK}[${CYAN}*${BLACK}]${YELLOW} Removed automatic updates for Termux packages and global npm modules.
+${BLACK}[${CYAN}*${BLACK}]${YELLOW} Now npm modules are installed only if they are not already present on the system.
 
 ${GREEN}Update complete, please restart Termux.${WHITE}
 "
