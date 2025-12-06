@@ -18,17 +18,15 @@ if ! command -v perl >/dev/null 2>&1; then
 	yes | pkg install perl
 fi
 
-# install npm modules ONLY if not installed
+# global message only once
 echo -e "${D_CYAN}Checking required npm modules...${WHITE}"
 
+# install npm modules only if not installed
 for module in "${node_modules[@]}"; do
-	# extract base name (removes @version)
 	base_name=$(echo "$module" | awk -F'@' '{print $1}')
 
-	# check if installed using grep, works with scope packages
-	if npm list -g --depth=0 | grep -q " $base_name@"; then
-		echo -e "${GREEN}${base_name} already installed.${WHITE}"
-	else
+	# check silently if installed
+	if ! npm list -g --depth=0 2>/dev/null | grep -q " $base_name@"; then
 		echo -e "${YELLOW}Installing ${module}...${WHITE}"
 		npm install -g "$module"
 	fi
