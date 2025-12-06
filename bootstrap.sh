@@ -22,9 +22,11 @@ fi
 echo -e "${D_CYAN}Checking required npm modules...${WHITE}"
 
 for module in "${node_modules[@]}"; do
+	# extract base name (removes @version)
 	base_name=$(echo "$module" | awk -F'@' '{print $1}')
 
-	if npm list -g --depth=0 "$base_name" >/dev/null 2>&1; then
+	# check if installed using grep, works with scope packages
+	if npm list -g --depth=0 | grep -q " $base_name@"; then
 		echo -e "${GREEN}${base_name} already installed.${WHITE}"
 	else
 		echo -e "${YELLOW}Installing ${module}...${WHITE}"
@@ -41,8 +43,6 @@ sed -i "s|^extra-keys =.*|${new_line}|" ~/.termux/termux.properties
 if ! grep -q 'alias cat="bat --theme=Dracula --style=plain --paging=never"' ~/.zshrc; then
 	echo 'alias cat="bat --theme=Dracula --style=plain --paging=never"' >>~/.zshrc
 	echo -e "${D_CYAN}Alias for cat created.${WHITE}"
-else
-	echo -e "${GREEN}Alias for cat already exists.${WHITE}"
 fi
 
 # message of new changes
