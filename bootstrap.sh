@@ -40,6 +40,9 @@ new_line="extra-keys = [['ESC','</>','-','HOME',{key: 'UP', display: '▲'},'END
 
 sed -i "s|^extra-keys =.*|${new_line}|" ~/.termux/termux.properties
 
+# new alias
+echo 'alias cat="bat --theme=Dracula --style=plain --paging=never"' >>~/.zshrc
+
 # update node modules
 echo -e "${D_CYAN}Updating node modules...${WHITE}"
 for module in "${node_modules[@]}"; do
@@ -73,7 +76,9 @@ done
 echo -e "
 ${D_CYAN}What's new?
 
-${BLACK}[${CYAN}*${BLACK}]${YELLOW} The appearance of the [UP], [LEFT], [DOWN], and [RIGHT] keys has changed to descriptive arrow symbols.
+${BLACK}[${CYAN}*${BLACK}]${YELLOW} An alias for the 'cat' command has been created with syntax highlighting.
+${BLACK}[${CYAN}*${BLACK}]${YELLOW} It now uses the following default parameters:
+${BLACK}[${CYAN}*${BLACK}]${YELLOW} --theme=Dracula --style=plain --paging=never
 
-${GREEN}Update complete, please restart your Termux${WHITE}
+${GREEN}Update complete, please restart Termux.${WHITE}
 "

@@ -89,6 +89,7 @@ zstyle ':fzf-tab:*' switch-word yes" >>~/.zshrc
 	# add alias to ~/.zshrc
 	echo "core='${PWD}'" >>~/.zshrc
 	echo 'alias ls="lsd"' >>~/.zshrc
+	echo 'alias cat="bat --theme=Dracula --style=plain --paging=never"' >>~/.zshrc
 	echo 'INITIAL_PATH=$(pwd)' >>~/.zshrc
 	echo 'source ${core}/update.sh > >(tee /dev/tty) 2>&1' >>~/.zshrc
 	echo 'cd ${INITIAL_PATH}' >>~/.zshrc
