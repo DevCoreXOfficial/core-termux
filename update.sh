@@ -45,7 +45,7 @@ if [ "${local_commit}" != "${remote_commit}" ]; then
 	if [[ "${updateOption}" == "y" || "${updateOption}" == "Y" ]]; then
 		git pull origin main
 		update_timestamp
-		exec bash bootstrap.sh
+		bash bootstrap.sh
 	elif [[ "${updateOption}" == "n" || "${updateOption}" == "N" ]]; then
 		echo -e "Abort"
 		update_timestamp
