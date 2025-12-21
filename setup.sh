@@ -86,6 +86,9 @@ zstyle ':fzf-tab:*' switch-word yes" >>~/.zshrc
 	# zsh-better-npm-completion
 	git clone https://github.com/lukechilds/zsh-better-npm-completion.git ~/.zsh-plugins/zsh-better-npm-completion && echo 'source ~/.zsh-plugins/zsh-better-npm-completion/zsh-better-npm-completion.plugin.zsh' >>~/.zshrc
 
+  # zsh-autocomplete
+  git clone https://github.com/marlonrichert/zsh-autocomplete.git ~/.zsh-plugins/zsh-autocomplete && echo 'source ~/.zsh-plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh' >>~/.zshrc
+
 	# add alias to ~/.zshrc
 	echo "core='${PWD}'" >>~/.zshrc
 	echo 'alias ls="lsd"' >>~/.zshrc
@@ -115,4 +118,4 @@ cd ~/.core-termux/nvchad-termux
 exec bash nvchad.sh
 
 # successfully message
-echo -e "${YELLOW}Please restart your Termux${WHITE}"
+echo -e "${YELLOW}Please restart Termux${WHITE}"
