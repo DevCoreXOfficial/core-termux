@@ -2,36 +2,34 @@
 source ~/.core-termux/config
 echo -e "${D_CYAN}Starting Core-Termux Update... ${WHITE}"
 
-# node modules list
-declare -A node_modules=(
-    ["psqlformat"]="psqlformat"
-    ["@google/gemini-cli@0.1.14"]="gemini"
-    ["@qwen-code/qwen-code@0.0.9"]="qwen"
-    ["npm-check-updates"]="ncu"
-    ["ngrok"]="ngrok"
-)
-
-# install perl (only if missing)
-if ! command -v perl >/dev/null 2>&1; then
-    echo -e "${D_CYAN}Installing perl... ${WHITE}"
-    yes | pkg install perl
-fi
-
 # global message only once
 echo -e "${D_CYAN}Checking required npm modules... ${WHITE}"
 
-# install npm modules only if not installed
-for module in "${!node_modules[@]}"; do
-    bin_name="${node_modules[$module]}"
+# Check and install npm modules
+check_and_install() {
+    local module="$1"
+    local bin_name="$2"
     
-    # Check if the binary is already installed
     if ! command -v "$bin_name" >/dev/null 2>&1; then
         echo -e "${YELLOW}Installing ${module}... ${WHITE}"
         npm install -g "$module"
     else
         echo -e "${GREEN}✓ ${bin_name} already installed ${WHITE}"
     fi
-done
+}
+
+# Install perl (only if missing)
+if ! command -v perl >/dev/null 2>&1; then
+    echo -e "${D_CYAN}Installing perl... ${WHITE}"
+    yes | pkg install perl
+fi
+
+# Install each module
+check_and_install "psqlformat" "psqlformat"
+check_and_install "@google/gemini-cli@0.1.14" "gemini"
+check_and_install "@qwen-code/qwen-code@0.0.9" "qwen"
+check_and_install "npm-check-updates" "ncu"
+check_and_install "ngrok" "ngrok"
 
 # new extra-keys
 new_line="extra-keys = [['ESC','</>','-','HOME',{key: 'UP', display: '▲'},'END','PGUP'], ['TAB','CTRL','ALT',{key: 'LEFT', display: '◀'},{key: 'DOWN', display: '▼'},{key: 'RIGHT', display: '▶'},'PGDN']]"
