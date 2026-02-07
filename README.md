@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.7.0-blue.svg?style=flat" alt="Version 2.7.0" height="30">
+  <img src="https://img.shields.io/badge/Version-2.8.0-blue.svg?style=flat" alt="Version 2.8.0" height="30">
   <img alt="Last Commit" src="https://img.shields.io/github/last-commit/DevCoreXOfficial/core-termux?style=flat&color=blueviolet" height="30">
   <img alt="Repo Size" src="https://img.shields.io/github/repo-size/DevCoreXOfficial/core-termux?style=flat&color=orange" height="30">
   <a href="https://youtube.com/@devcorex?si=NNuXTcjqGPGISetL"><img alt="YouTube" src="https://img.shields.io/badge/YouTube-FF0000?style=flat&logo=youtube&logoColor=white" height="30"></a>
@@ -21,6 +21,42 @@
 
 **Core-Termux** is a powerful tool designed to streamline the setup of a modern web development environment directly on your Android device using the Termux app. Whether you're a beginner or an experienced developer, this project will help you get started quickly and efficiently.
 
+
+## Quick Start
+
+```bash
+# clone
+git clone https://github.com/DevCoreXOfficial/core-termux.git
+cd core-termux
+
+# interactive menu
+bash core.sh menu
+
+# or direct install examples
+bash setup.sh --profile full --yes
+bash setup.sh --profile web --yes --no-db
+bash setup.sh --profile minimal --yes
+
+# diagnostics
+bash core.sh doctor
+
+# backup / restore
+bash core.sh backup
+bash core.sh restore
+```
+
+## Profiles
+
+- **full**: Full web dev stack + databases + editor
+- **web**: Web stack without databases
+- **cli**: Useful CLI dev tools only
+- **minimal**: Smallest setup for quick start
+
+## Extra Tools
+
+- **Doctor**: Detects common issues and offers quick fixes
+- **Backup/Restore**: Saves your Termux + Zsh + editor configs before changes
+- **Uninstall**: Removes Core-Termux configs and restores from your latest backup
 ### **What Makes Core-Termux Special?**
 
 Core-Termux stands out from other Termux setups because:
@@ -227,14 +263,6 @@ Follow these steps to prepare your device:
 ---
 
 ## **🛠️ Installation**
-
-
-### **Recent Improvements**
-
-- More reliable, idempotent installs (safe to re-run `setup.sh` without duplicating config lines)
-- Safer update checks using `origin/HEAD` and non-interactive-friendly behavior
-- Termux settings updates now replace existing values instead of appending duplicates
-- Guards around optional patches (e.g., localtunnel) to avoid errors if paths differ
 
 ### **Quick Start**
 
