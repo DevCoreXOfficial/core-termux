@@ -1,9 +1,43 @@
 #!/bin/bash
-source ~/.core-termux/config
+set -euo pipefail
+
+source "$HOME/.core-termux/config"
 echo -e "${D_CYAN}Starting Core-Termux Update... ${WHITE}"
 
 # global message only once
 echo -e "${D_CYAN}Checking required npm modules... ${WHITE}"
+
+# Helpers
+ensure_line_in_file() {
+  local line="$1"
+  local file="$2"
+  mkdir -p "$(dirname "$file")"
+  touch "$file"
+  if ! grep -Fqx "$line" "$file"; then
+    printf '\n%s\n' "$line" >>"$file"
+  fi
+}
+
+set_or_append_termux_prop() {
+  local key="$1"
+  local value="$2"
+  local file="$HOME/.termux/termux.properties"
+  mkdir -p "$HOME/.termux"
+  touch "$file"
+  if grep -qE "^${key}\s*=" "$file"; then
+    # Replace existing key
+    sed -i "s|^${key}\s*=.*|${key} = ${value}|" "$file"
+  else
+    printf '\n%s = %s\n' "$key" "$value" >>"$file"
+  fi
+}
+
+
+# Ensure npm is available
+if ! command -v npm >/dev/null 2>&1; then
+  echo -e "${RED}npm is not installed. Please run setup.sh first.${WHITE}"
+  exit 1
+fi
 
 # Check and install npm modules
 check_and_install() {
@@ -34,7 +68,7 @@ check_and_install "ngrok" "ngrok"
 # new extra-keys
 new_line="extra-keys = [['ESC','</>','-','HOME',{key: 'UP', display: '▲'},'END','PGUP'], ['TAB','CTRL','ALT',{key: 'LEFT', display: '◀'},{key: 'DOWN', display: '▼'},{key: 'RIGHT', display: '▶'},'PGDN']]"
 
-sed -i "s|^extra-keys =.*|${new_line}|" ~/.termux/termux.properties
+set_or_append_termux_prop "extra-keys" "${new_line#extra-keys = }"
 
 # new alias for bat
 if ! grep -q 'alias cat="bat --theme=Dracula --style=plain --paging=never"' ~/.zshrc; then
@@ -69,3 +103,8 @@ ${BLACK}[ ${CYAN}• ${BLACK}] ${YELLOW} Added intelligent real-time autocomplet
 
 ${GREEN}Please restart Termux (or run ${CYAN}exec zsh ${GREEN}) to apply the changes.${WHITE}
 "
+
+# Reload Termux settings if available
+if command -v termux-reload-settings >/dev/null 2>&1; then
+  termux-reload-settings || true
+fi

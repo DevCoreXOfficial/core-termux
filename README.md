@@ -228,6 +228,14 @@ Follow these steps to prepare your device:
 
 ## **🛠️ Installation**
 
+
+### **Recent Improvements**
+
+- More reliable, idempotent installs (safe to re-run `setup.sh` without duplicating config lines)
+- Safer update checks using `origin/HEAD` and non-interactive-friendly behavior
+- Termux settings updates now replace existing values instead of appending duplicates
+- Guards around optional patches (e.g., localtunnel) to avoid errors if paths differ
+
 ### **Quick Start**
 
 Get started with these simple commands:
