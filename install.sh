@@ -39,6 +39,13 @@ warn() {
 	echo -e "    ${YELLOW}⚠${NC} $1"
 }
 
+# Instalar dependencias requeridas
+install_dependencies() {
+	log "Installing required dependencies..."
+	pkg install -y git ncurses-utils &>/dev/null
+	success "Dependencies installed (git, ncurses-utils)"
+}
+
 # Crear directorios necesarios
 setup_directories() {
 	log "Creating directories..."
@@ -137,6 +144,7 @@ show_final_message() {
 
 # Main
 main() {
+	install_dependencies
 	setup_directories
 	clone_repo
 	create_symlink

@@ -17,10 +17,15 @@ install_oh_my_zsh() {
 
 	log_info "Downloading Oh My Zsh..."
 
-	if curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -o /tmp/omz_install.sh &>>"$LOG_FILE"; then
-		sed -i '/exec zsh -l/s/^/#/' /tmp/omz_install.sh
-		sh /tmp/omz_install.sh &>>"$LOG_FILE"
-		rm /tmp/omz_install.sh
+	# Usar $PREFIX/tmp en Termux (compatible con Android)
+	local temp_dir="${PREFIX:-/tmp}/tmp"
+	mkdir -p "$temp_dir"
+	local temp_file="$temp_dir/omz_install.sh"
+
+	if curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -o "$temp_file" &>>"$LOG_FILE"; then
+		sed -i '/exec zsh -l/s/^/#/' "$temp_file"
+		sh "$temp_file" &>>"$LOG_FILE"
+		rm "$temp_file"
 		log_success "Oh My Zsh installed successfully"
 		return 0
 	else
