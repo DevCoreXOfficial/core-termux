@@ -1,0 +1,85 @@
+#!/bin/bash
+
+SOURCE="${BASH_SOURCE[0]}"
+
+# resolver symlink si existe
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+
+BIN_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+
+# root del proyecto
+CORE_PATH="$(cd "$BIN_DIR/.." && pwd)"
+
+# cargar bootstrap
+source "$CORE_PATH/utils/bootstrap.sh"
+
+# cargar entorno
+import "@/utils/env"
+
+# ===== CHECK UPDATES =====
+check_for_updates() {
+  local version_file="$CORE_CACHE/last_version_check"
+  local current_time=$(date +%s)
+  local check_interval=86400  # 24 horas en segundos
+  local last_check=0
+
+  # Leer último check
+  if [[ -f "$version_file" ]]; then
+    last_check=$(cat "$version_file" 2>/dev/null | head -1)
+  fi
+
+  # Verificar si ya pasó 24 horas
+  if (( current_time - last_check < check_interval )); then
+    return 0
+  fi
+
+  # Guardar timestamp actual
+  mkdir -p "$CORE_CACHE"
+  echo "$current_time" > "$version_file"
+
+  # Verificar updates en background (no bloquear)
+  (
+    local remote_version=$(curl -fsSL "https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/core/utils/env.sh" 2>/dev/null | grep "CORE_VERSION=" | cut -d'"' -f2)
+    local local_version="$CORE_VERSION"
+
+    if [[ -n "$remote_version" ]] && [[ "$remote_version" != "$local_version" ]]; then
+      echo "$remote_version" > "$CORE_CACHE/new_version"
+    fi
+  ) &>/dev/null &
+}
+
+# Mostrar notificación de update
+show_update_notification() {
+  local new_version_file="$CORE_CACHE/new_version"
+
+  if [[ -f "$new_version_file" ]]; then
+    local new_version=$(cat "$new_version_file")
+    echo
+    separator_section "Update Available"
+    echo
+    log_warn "New version available: ${D_GREEN}$new_version${D_NC} (current: ${D_CYAN}$CORE_VERSION${D_NC})"
+    echo
+    list_item "Run: ${D_CYAN}core update core${D_NC} to update"
+    echo
+  fi
+}
+
+# Check updates (solo si no es comando de update)
+if [[ "$1" != "update" ]] && [[ "$1" != "uninstall" ]]; then
+  check_for_updates
+  
+  # Importar logs para la notificación
+  import "@/utils/log"
+  import "@/utils/colors"
+  
+  show_update_notification
+fi
+
+# cargar CLI
+import "@/cli/core"
+
+core_main "$@"

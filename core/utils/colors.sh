@@ -1,25 +1,15 @@
-# general settings
-PROJECT_NAME="core-termux"
-AUTHOR="DevCoreX"
-VERSION="2.7.0"
-DESCRIPTION="Automates the setup of a web development environment in Termux, enabling developers to quickly start building web applications on Android."
-
-# environment variables
-
-# system
-OS=$(uname -o)
-ARCH=$(uname -m)
-PWD=$(pwd)
+#!/bin/bash
 
 # light colors
 BLACK="\e[1;30m"
+GRAY="\033[0;90m"
 BLUE="\e[1;34m"
 GREEN="\e[1;32m"
 CYAN="\e[1;36m"
 RED="\e[1;31m"
 PURPLE="\e[1;35m"
 YELLOW="\e[1;33m"
-WHITE="\e[1;37m"
+NC="\e[1;37m" # no color or white
 
 # dark colors
 D_BLACK="\e[0;30m"
@@ -29,7 +19,7 @@ D_CYAN="\e[0;36m"
 D_RED="\e[0;31m"
 D_PURPLE="\e[0;35m"
 D_YELLOW="\e[0;33m"
-D_WHITE="\e[0;37m"
+D_NC="\e[0;37m" # no color or white
 
 # background colors
 BG_BLACK=$(setterm -background black)
@@ -39,5 +29,3 @@ BG_CYAN=$(setterm -background cyan)
 BG_RED=$(setterm -background red)
 BG_YELLOW=$(setterm -background yellow)
 BG_WHITE=$(setterm -background white)
-
-# user variables
