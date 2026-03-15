@@ -13,6 +13,10 @@ install_ai() {
 	echo
 
 	log_info "Installing AI tools..."
+	echo
+	log_info "☕ Grab a coffee! This process typically takes 15-30 minutes."
+	log_info "   Don't worry, it's normal for this to take a while..."
+	echo
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 

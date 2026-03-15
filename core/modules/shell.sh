@@ -16,6 +16,8 @@ install_oh_my_zsh() {
 	fi
 
 	log_info "Downloading Oh My Zsh..."
+	log_info "When prompted, enter (Y/n) to set ZSH as your default shell"
+	echo
 
 	# Usar $PREFIX/tmp en Termux (compatible con Android)
 	local temp_dir="${PREFIX:-/tmp}/tmp"
