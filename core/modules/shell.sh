@@ -8,6 +8,19 @@ ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 OH_MY_ZSH_DIR="$HOME/.oh-my-zsh"
 LOG_FILE="$CORE_CACHE/install_shell.log"
 
+# Instalar zsh y zoxide en Termux
+install_termux_packages() {
+	log_info "Installing zsh and zoxide in Termux..."
+
+	if pkg install -y zsh zoxide &>>"$LOG_FILE"; then
+		log_success "zsh and zoxide installed successfully"
+		return 0
+	else
+		log_error "Failed to install zsh and zoxide"
+		return 1
+	fi
+}
+
 # Instalar Oh My Zsh
 install_oh_my_zsh() {
 	if [[ -d "$OH_MY_ZSH_DIR" ]]; then
@@ -151,10 +164,8 @@ setupPersistentSession() {
 	# Crear directorio de caché si no existe
 	mkdir -p "$CORE_CACHE" 2>/dev/null || mkdir -p ~/.cache/core-termux
 
-	# Guardar directorio inicial
-	if [[ ! -f ~/.cache/core-termux/last_dir ]]; then
-		echo "$HOME" > ~/.cache/core-termux/last_dir
-	fi
+	# Guardar directorio inicial (home por defecto)
+	echo "$HOME" > ~/.cache/core-termux/last_dir
 
 	# Verificar si el código ya existe (idempotencia)
 	if grep -q "# ===== Persistent Directory =====" ~/.zshrc 2>/dev/null; then
@@ -166,21 +177,41 @@ setupPersistentSession() {
 	cat >>~/.zshrc <<'EOF'
 
 # ===== Persistent Directory =====
-# Guardar directorio actual al salir
+# Solo restaura directorio en nuevas sesiones dentro de Termux (no al abrir Termux desde cero)
+# Usa timestamp para detectar si Termux fue cerrado completamente
+
+LAST_DIR_FILE="$HOME/.cache/core-termux/last_dir"
+SESSION_TIMESTAMP="$HOME/.cache/core-termux/.session_time"
+SESSION_TIMEOUT=5  # Segundos para considerar que Termux fue reiniciado
+
 save_dir() {
   mkdir -p ~/.cache/core-termux 2>/dev/null
-  pwd > ~/.cache/core-termux/last_dir
+  pwd > "$LAST_DIR_FILE"
+  # Actualizar timestamp de sesión activa
+  date +%s > "$SESSION_TIMESTAMP"
 }
 
-# Restaurar directorio al iniciar
 restore_dir() {
-  if [[ -f ~/.cache/core-termux/last_dir ]]; then
-    local dir
-    dir=$(cat ~/.cache/core-termux/last_dir 2>/dev/null)
-    if [[ -d "$dir" ]]; then
-      cd "$dir" 2>/dev/null || cd "$HOME"
+  # Si existe el timestamp y es reciente (< SESSION_TIMEOUT segundos), es nueva sesión
+  if [[ -f "$SESSION_TIMESTAMP" ]] && [[ -f "$LAST_DIR_FILE" ]]; then
+    local current_time
+    local last_time
+    current_time=$(date +%s)
+    last_time=$(cat "$SESSION_TIMESTAMP" 2>/dev/null || echo 0)
+    local diff=$((current_time - last_time))
+
+    if [[ $diff -lt $SESSION_TIMEOUT ]]; then
+      # Sesión activa: restaurar directorio en nueva shell
+      local dir
+      dir=$(cat "$LAST_DIR_FILE" 2>/dev/null)
+      if [[ -d "$dir" ]] && [[ "$dir" != "$HOME" ]]; then
+        cd "$dir" 2>/dev/null
+      fi
     fi
+    # Si diff >= SESSION_TIMEOUT, Termux fue cerrado y abierto de nuevo -> home
   fi
+  # Actualizar timestamp para esta sesión
+  date +%s > "$SESSION_TIMESTAMP"
 }
 
 # Hooks para guardar/restaurar
@@ -196,7 +227,8 @@ fi
 EOF
 
 	log_success "Persistent session configured"
-	log_info "New sessions will start in the last directory"
+	log_info "New sessions within Termux will restore last directory"
+	log_info "Opening Termux from scratch will start in home"
 	log_info "Cache location: ~/.cache/core-termux"
 }
 
@@ -208,6 +240,14 @@ install_shell() {
 	echo
 
 	mkdir -p "$(dirname "$LOG_FILE")"
+
+	# Instalar paquetes base en Termux
+	if loading "Installing zsh and zoxide" install_termux_packages; then
+		log_success "Base packages installed"
+	else
+		log_error "Failed to install base packages"
+	fi
+	echo
 
 	# Instalar Oh My Zsh
 	install_oh_my_zsh
