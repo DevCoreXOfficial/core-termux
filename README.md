@@ -1,6 +1,6 @@
 # Core-Termux
 
-[![Version](https://img.shields.io/badge/version-3.0.1-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
+[![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Termux%20%7C%20Android-orange.svg)](https://termux.dev/)
 
@@ -76,6 +76,7 @@ core install full             # Install everything
 | `node` | Node.js global npm packages |
 | `shell` | ZSH + Oh My Zsh + 11 plugins |
 | `ui` | Termux UI (font, cursor, extra-keys) |
+| `automation` | Automation Tools (n8n) |
 
 ---
 
@@ -103,6 +104,8 @@ core update core              # Update framework only
 | `tools` | Development tools |
 | `node` | Node.js global modules |
 | `shell` | ZSH plugins |
+| `ui` | Termux UI |
+| `automation` | Automation Tools |
 
 ---
 
@@ -129,6 +132,7 @@ core uninstall all            # Remove everything (restore default)
 | `node` | Node.js modules |
 | `shell` | ZSH + Oh My Zsh |
 | `ui` | Restore Termux UI to default |
+| `automation` | Automation tools |
 
 ---
 
@@ -433,7 +437,8 @@ core-termux/
 │   │   ├── node-modules.sh   # Node.js npm packages
 │   │   ├── shell.sh          # ZSH + plugins
 │   │   ├── tools.sh          # Tools
-│   │   └── ui.sh             # Termux UI
+│   │   ├── ui.sh             # Termux UI
+│   │   └── automation.sh     # Automation Tools
 │   ├── fix/
 │   │   └── localtunnel.sh    # Android fix
 │   └── utils/
@@ -459,10 +464,8 @@ export CORE_DEBUG=1    # Enable debug logs
 
 | Directory | Description |
 |-----------|-------------|
-| `~/.core-termux` | Framework installation |
 | `~/.cache/core-termux` | Logs and cache |
 | `~/.config/core-termux` | User configuration |
-| `~/.local/share/core-termux-data` | User data |
 
 ### Log Files
 
@@ -478,6 +481,7 @@ All processes save logs to:
 ├── install_node_modules.log
 ├── install_shell.log
 ├── install_ui.log
+├── install_automation.log
 ├── fix_localtunnel.log
 ├── postgresql.log
 ├── last_version_check      # Last update check timestamp
@@ -499,7 +503,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.1.0 (current: 3.0.0)
+⚠ New version available: 3.2.0 (current: 3.1.0)
 
 ➜ Run: core update core to update
 ```

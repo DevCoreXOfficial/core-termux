@@ -22,6 +22,8 @@ update_main() {
 		list_item "tools      - Update development tools"
 		list_item "node       - Update Node.js global modules"
 		list_item "shell      - Update ZSH plugins"
+    list_item "ui         - Update Termux UI"
+    list_item "automation - Update Automation Tools"
 		echo
 		log_info "Note: 'core update core' updates the framework code,"
 		echo "      while 'core update all' updates everything including"
@@ -48,6 +50,7 @@ update_main() {
 			import "@/modules/node-modules"
 			import "@/modules/shell"
 			import "@/modules/ui"
+			import "@/modules/automation"
 
 			update_language
 			update_db
@@ -57,6 +60,7 @@ update_main() {
 			update_node
 			update_shell
 			update_ui
+      update_automation
 
 			separator
 			log_success "All updates completed"
@@ -98,6 +102,9 @@ update_main() {
 			import "@/modules/ui"
 			update_ui
 			;;
+    automation)
+      import "@/modules/automation"
+      update_automation
 		*)
 			log_warn "Unknown update target: $arg"
 			echo "Run 'core update' to see available targets"

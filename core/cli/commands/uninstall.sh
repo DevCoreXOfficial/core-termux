@@ -22,6 +22,7 @@ uninstall_main() {
 		list_item "node       - Remove Node.js global modules"
 		list_item "shell      - Remove ZSH + Oh My Zsh"
 		list_item "ui         - Restore Termux UI to default"
+    list_item "automation - Remove automation tools"
 		echo
 		log_warn "Warning: This will remove installed packages and configurations!"
 		echo
@@ -56,6 +57,7 @@ uninstall_main() {
 			import "@/modules/shell"
 			import "@/modules/ui"
 			import "@/fix/localtunnel"
+			import "@/modules/automation"
 
 			uninstall_ai
 			uninstall_db
@@ -66,6 +68,7 @@ uninstall_main() {
 			uninstall_shell
 			uninstall_ui
 			uninstall_localtunnel_fix
+      uninstall_automation
 
 			# Eliminar directorios de Core-Termux
 			log_info "Removing Core-Termux directories..."
@@ -118,6 +121,10 @@ uninstall_main() {
 			import "@/modules/ui"
 			uninstall_ui
 			;;
+    automation)
+      import "@/modules/automation"
+      uninstall_automation
+      ;;
 		*)
 			log_warn "Unknown uninstall target: $arg"
 			echo "Run 'core uninstall' to see available targets"

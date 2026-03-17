@@ -53,14 +53,16 @@ core_help() {
 	echo
 	log_info "Install, update, or uninstall:"
 	echo
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node.js, Python, Perl, PHP, Rust"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node.js, Python, Perl, PHP, Rust, Go, C, C++"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenCode"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad configuration"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 11 plugins"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Termux UI (font, cursor, extra-keys)"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "automation" "n8n"
+
 	echo
 	separator_section "Help"
 	echo

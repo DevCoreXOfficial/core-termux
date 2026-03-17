@@ -35,6 +35,7 @@ install_ai() {
 		list_item "Qwen Code"
 		list_item "Gemini CLI"
 		list_item "Mistral Vibe"
+		list_item "OpenCode"
 		echo
 	else
 		log_error "Failed to install AI tools"
@@ -46,8 +47,8 @@ install_ai() {
 # Función interna para instalar prerequisitos
 _install_ai_prerequisites() {
 	# Actualizar repositorios e instalar dependencias del sistema
-	pkg install nodejs-lts python git clang make rust libffi openssl pkg-config -y &>>"$LOG_FILE"
-	
+	pkg install nodejs-lts python git clang make rust libffi openssl pkg-config golang -y &>>"$LOG_FILE"
+
 	# Actualizar pip, setuptools y wheel para mistral-vibe
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
 }
@@ -56,9 +57,14 @@ _install_ai_prerequisites() {
 _install_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
 
 	npm install -g @qwen-code/qwen-code @google/gemini-cli &>>"$LOG_FILE"
 	pip install mistral-vibe &>>"$LOG_FILE"
+	git clone https://github.com/opencode-ai/opencode ~/.cache/core-termux/opencode &>>"$LOG_FILE"
+	go build -C ~/.cache/core-termux/opencode -o $PREFIX/bin/opencode &>>"$LOG_FILE"
 }
 
 # Desinstalar herramientas de IA
@@ -82,6 +88,7 @@ uninstall_ai() {
 _uninstall_ai_tools() {
 	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli &>"$LOG_FILE"
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
+  rm -rf ~/.cache/core-termux/opencode && rm $PREFIX/bin/opencode &>>"$LOG_FILE"
 }
 
 # Actualizar herramientas de IA
@@ -105,4 +112,6 @@ update_ai() {
 _update_ai_tools() {
 	npm update -g @qwen-code/qwen-code @google/gemini-cli &>"$LOG_FILE"
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
+  git -C ~/.cache/core-termux/opencode pull &>>"$LOG_FILE"
+  go build -C ~/.cache/core-termux/opencode -o $PREFIX/bin/opencode &>>"$LOG_FILE"
 }

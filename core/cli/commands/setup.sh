@@ -3,9 +3,6 @@
 import "@/utils/log"
 import "@/utils/colors"
 
-# Configuración global
-CORE_INSTALL_DIR="$HOME/.core-termux"
-
 # Mostrar banner de bienvenida
 show_banner() {
 	echo
@@ -29,9 +26,9 @@ show_menu() {
 }
 
 # Instalar paquetes base de Termux
-install_base_packages() {
+update_termux_repositories() {
 	separator
-	box "Installing Base Packages"
+	box "Updating Termux Repositories"
 	separator
 	echo
 
@@ -48,39 +45,12 @@ install_base_packages() {
 	fi
 
 	echo
-	log_info "Installing base packages..."
-
-	if loading "Installing base packages" _install_base; then
-		log_success "Base packages installed"
-	else
-		log_error "Failed to install base packages"
-		return 1
-	fi
-
-	echo
 }
 
 # Funciones internas para loading
 _update_repos() {
 	yes | pkg update &>"$LOG_FILE"
 	yes | pkg upgrade &>>"$LOG_FILE"
-}
-
-_install_base() {
-	pkg install git gh zsh neovim nodejs python perl php curl wget rust lua-language-server lsd bat tur-repo proot ncurses-utils ripgrep stylua tmate cloudflared translate-shell html2text jq postgresql mariadb sqlite bc tree fzf imagemagick shfmt zoxide -y &>"$LOG_FILE"
-}
-
-# Configurar directorio de Core-Termux
-setup_core_directory() {
-	log_info "Setting up Core-Termux directory..."
-
-	if [[ ! -d "$CORE_INSTALL_DIR" ]]; then
-		mkdir -p "$CORE_INSTALL_DIR"
-		log_success "Created Core-Termux directory: $CORE_INSTALL_DIR"
-	fi
-
-	log_success "Core-Termux directory configured"
-	echo
 }
 
 # Instalación completa (recomendada)
@@ -92,13 +62,14 @@ install_full() {
 	log_info "This will install:"
 	echo
 	list_item "All base packages"
-	list_item "Language packages (Node.js, Python, Perl, PHP, Rust)"
+	list_item "Language packages (Node.js, Python, Perl, PHP, Rust, Go, C, C++)"
 	list_item "Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-	list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe)"
+  list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenCode)"
 	list_item "Code editor (Neovim + NvChad)"
 	list_item "Development tools"
 	list_item "ZSH + Oh My Zsh + plugins"
 	list_item "Termux UI configuration"
+  list_item "Automation Tools (n8n)"
 	echo
 
 	read_confirm "Continue with full installation?" CONFIRM
@@ -108,26 +79,27 @@ install_full() {
 	fi
 
 	echo
-	install_base_packages
-	setup_core_directory
+	update_termux_repositories
 
 	import "@/modules/language"
+	import "@/modules/tools"
+	import "@/modules/node-modules"
 	import "@/modules/db"
 	import "@/modules/ai"
 	import "@/modules/editor"
-	import "@/modules/tools"
-	import "@/modules/node-modules"
 	import "@/modules/shell"
 	import "@/modules/ui"
+  import "@/modules/automation"
 
 	install_language
+	install_tools
+	install_node
 	install_db
 	install_ai
 	install_editor
-	install_tools
-	install_node
 	install_shell
 	setup_ui
+  install_automation
 
 	echo
 	separator
@@ -172,7 +144,7 @@ install_custom() {
 		# Leer selección con flechas
 		local choice=""
 		read_select "Select modules (↑↓ to navigate, Enter to toggle)" choice \
-			"language" "db" "ai" "editor" "tools" "node" "shell" "ui" \
+			"language" "db" "ai" "editor" "tools" "node" "shell" "ui" "automation" \
 			"start" "cancel"
 
 		echo
@@ -217,8 +189,7 @@ install_custom() {
 	fi
 
 	echo
-	install_base_packages
-	setup_core_directory
+	update_termux_repositories
 
 	# Instalar módulos seleccionados
 	for module in "${selected[@]}"; do
@@ -256,6 +227,10 @@ install_custom() {
 			import "@/modules/ui"
 			setup_ui
 			;;
+		automation)
+			import "@/modules/automation"
+			install_automation
+			;;
 		esac
 	done
 
@@ -284,8 +259,9 @@ install_base() {
 	fi
 
 	echo
-	install_base_packages
-	setup_core_directory
+	update_termux_repositories
+  import "@/modules/language"
+  install_language
 
 	echo
 	separator
