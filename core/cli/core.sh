@@ -59,7 +59,7 @@ core_help() {
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad configuration"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 11 plugins"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Termux UI (font, cursor, extra-keys)"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "automation" "n8n"
 

@@ -139,10 +139,6 @@ install_zsh_plugins() {
 	clone_plugin "https://github.com/lukechilds/zsh-better-npm-completion.git" "zsh-better-npm-completion"
 	add_to_zshrc 'source ~/.zsh-plugins/zsh-better-npm-completion/zsh-better-npm-completion.plugin.zsh'
 
-	# zsh-autocomplete
-	clone_plugin "https://github.com/marlonrichert/zsh-autocomplete.git" "zsh-autocomplete"
-	add_to_zshrc 'source ~/.zsh-plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh'
-
 	log_success "All ZSH plugins installed"
 }
 

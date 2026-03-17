@@ -1,6 +1,6 @@
 # Core-Termux
 
-[![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
+[![Version](https://img.shields.io/badge/version-3.1.1-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Termux%20%7C%20Android-orange.svg)](https://termux.dev/)
 
@@ -74,7 +74,7 @@ core install full             # Install everything
 | `editor` | Neovim + NvChad configuration |
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
-| `shell` | ZSH + Oh My Zsh + 11 plugins |
+| `shell` | ZSH + Oh My Zsh + 10 plugins |
 | `ui` | Termux UI (font, cursor, extra-keys) |
 | `automation` | Automation Tools (n8n) |
 
@@ -503,7 +503,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.2.0 (current: 3.1.0)
+⚠ New version available: 3.2.0 (current: 3.1.1)
 
 ➜ Run: core update core to update
 ```
@@ -534,7 +534,6 @@ When installing the `shell` module:
 | zsh-you-should-use | Command suggestions |
 | zsh-autopair | Auto-close parentheses |
 | zsh-better-npm-completion | Better npm completion |
-| zsh-autocomplete | Real-time autocompletion |
 
 ### Persistent Session
 
