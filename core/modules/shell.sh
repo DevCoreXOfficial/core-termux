@@ -220,6 +220,7 @@ else
   restore_dir  # Restaurar inmediatamente
   trap 'save_dir' EXIT  # Guardar al salir
 fi
+echo
 EOF
 
 	log_success "Persistent session configured"
