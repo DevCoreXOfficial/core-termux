@@ -105,6 +105,7 @@ update_main() {
     automation)
       import "@/modules/automation"
       update_automation
+      ;;
 		*)
 			log_warn "Unknown update target: $arg"
 			echo "Run 'core update' to see available targets"
