@@ -94,5 +94,7 @@ update_automation() {
 
 # Función interna para actualizar
 _update_automation_tools() {
+	export GYP_DEFINES="android_ndk_path=''"
+	export ANDROID_API_LEVEL=24
 	npm update -g n8n &>"$LOG_FILE"
 }

@@ -1,6 +1,6 @@
 # Core-Termux
 
-[![Version](https://img.shields.io/badge/version-3.1.1-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
+[![Version](https://img.shields.io/badge/version-3.1.2-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Termux%20%7C%20Android-orange.svg)](https://termux.dev/)
 
@@ -70,7 +70,7 @@ core install full             # Install everything
 |--------|-------------|
 | `language` | Node.js, Python, Perl, PHP, Rust |
 | `db` | PostgreSQL, MariaDB, SQLite, MongoDB |
-| `ai` | Qwen Code, Gemini CLI, Mistral Vibe |
+| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenCode |
 | `editor` | Neovim + NvChad configuration |
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
@@ -503,7 +503,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.2.0 (current: 3.1.1)
+⚠ New version available: 3.2.0 (current: 3.1.2)
 
 ➜ Run: core update core to update
 ```

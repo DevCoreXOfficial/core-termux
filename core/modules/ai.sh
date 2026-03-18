@@ -110,6 +110,11 @@ update_ai() {
 
 # Función interna para actualizar
 _update_ai_tools() {
+	export GYP_DEFINES="android_ndk_path=''"
+	export ANDROID_API_LEVEL=24
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
 	npm update -g @qwen-code/qwen-code @google/gemini-cli &>"$LOG_FILE"
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
   git -C ~/.cache/core-termux/opencode pull &>>"$LOG_FILE"
