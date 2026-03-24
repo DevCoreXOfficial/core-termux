@@ -405,9 +405,7 @@ DB_NAME=postgres
 DATABASE_URL=postgresql://user:password@localhost:5432/dbname
 JWT_SECRET=your-super-secret-jwt-key
 FRONTEND_URL=http://localhost:3000
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
+CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
 EOF
 	log_success "Created .env.example"
 
