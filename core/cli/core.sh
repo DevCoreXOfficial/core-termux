@@ -55,8 +55,8 @@ core_help() {
 	echo
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node.js, Python, Perl, PHP, Rust, Go, C, C++"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenCode"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad configuration"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenCode, Claude Code"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad + Plugins"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
