@@ -62,10 +62,56 @@ _install_ai_tools() {
 	export GOCACHE="$HOME/.cache/go"
 	export GOMODCACHE="$GOPATH/pkg/mod"
 
-	npm install -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code &>>"$LOG_FILE"
-	pip install mistral-vibe &>>"$LOG_FILE"
-	git clone https://github.com/opencode-ai/opencode ~/.cache/core-termux/opencode &>>"$LOG_FILE"
-	go build -C ~/.cache/core-termux/opencode -o $PREFIX/bin/opencode &>>"$LOG_FILE"
+	local has_changes=false
+
+	# Qwen Code
+	if command -v qwen &>/dev/null; then
+		log_info "Qwen Code ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Qwen Code..."
+		npm install -g @qwen-code/qwen-code &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Gemini CLI
+	if command -v gemini &>/dev/null; then
+		log_info "Gemini CLI ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Gemini CLI..."
+		npm install -g @google/gemini-cli &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Claude Code
+	if command -v claude &>/dev/null; then
+		log_info "Claude Code ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Claude Code..."
+		npm install -g @anthropic-ai/claude-code &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Mistral Vibe
+	if command -v vibe &>/dev/null; then
+		log_info "Mistral Vibe ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Mistral Vibe..."
+		pip install mistral-vibe &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# OpenCode
+	if command -v opencode &>/dev/null; then
+		log_info "OpenCode ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing OpenCode..."
+		git clone https://github.com/opencode-ai/opencode ~/.cache/core-termux/opencode &>>"$LOG_FILE"
+		go build -C ~/.cache/core-termux/opencode -o $PREFIX/bin/opencode &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Return success even if nothing was installed (all already present)
+	return 0
 }
 
 # Desinstalar herramientas de IA

@@ -50,7 +50,15 @@ _install_automation_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
 
-	npm install -g n8n &>>"$LOG_FILE"
+	# n8n
+	if command -v n8n &>/dev/null; then
+		log_info "n8n ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing n8n..."
+		npm install -g n8n &>>"$LOG_FILE"
+	fi
+
+	return 0
 }
 
 # Desinstalar herramientas de automatización

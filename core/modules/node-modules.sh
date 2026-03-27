@@ -56,7 +56,99 @@ install_node_modules() {
 
 # Función interna para instalar (usada por loading)
 _install_npm_packages() {
-	npm install -g "${NPM_GLOBAL_PACKAGES[@]}" &>"$LOG_FILE"
+	local has_changes=false
+
+	# TypeScript
+	if command -v tsc &>/dev/null; then
+		log_info "TypeScript ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing TypeScript..."
+		npm install -g typescript &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# NestJS CLI
+	if command -v nest &>/dev/null; then
+		log_info "NestJS CLI ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing NestJS CLI..."
+		npm install -g @nestjs/cli &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Prettier
+	if command -v prettier &>/dev/null; then
+		log_info "Prettier ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Prettier..."
+		npm install -g prettier &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Live Server
+	if command -v live-server &>/dev/null; then
+		log_info "Live Server ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Live Server..."
+		npm install -g live-server &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Local_tunnel
+	if command -v localtunnel &>/dev/null; then
+		log_info "Localtunnel ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Local_tunnel..."
+		npm install -g localtunnel &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Vercel CLI
+	if command -v vercel &>/dev/null; then
+		log_info "Vercel CLI ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Vercel CLI..."
+		npm install -g vercel &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Markserv
+	if command -v markserv &>/dev/null; then
+		log_info "Markserv ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Markserv..."
+		npm install -g markserv &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# PSQL Format
+	if command -v psqlformat &>/dev/null; then
+		log_info "PSQL Format ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing PSQL Format..."
+		npm install -g psqlformat &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# NPM Check Updates
+	if command -v ncu &>/dev/null; then
+		log_info "NPM Check Updates ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing NPM Check Updates..."
+		npm install -g npm-check-updates &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	# Ngrok
+	if command -v ngrok &>/dev/null; then
+		log_info "Ngrok ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Ngrok..."
+		npm install -g ngrok &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
+	return 0
 }
 
 # Aplicar fix de localtunnel
