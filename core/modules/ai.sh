@@ -37,6 +37,7 @@ install_ai() {
     list_item "Mistral Vibe ${GRAY}(${D_GREEN}vibe${GRAY})"
     list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
     list_item "Claude Code ${GRAY}(${D_GREEN}claude${GRAY})"
+    list_item "OpenClaw ${GRAY}(${D_GREEN}openclaw${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"
@@ -110,6 +111,15 @@ _install_ai_tools() {
 		has_changes=true
 	fi
 
+	# OpenClaw
+	if command -v openclaw &>/dev/null; then
+		log_info "OpenClaw ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing OpenClaw..."
+		npm install -g openclaw@latest &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
 	# Return success even if nothing was installed (all already present)
 	return 0
 }
@@ -133,7 +143,7 @@ uninstall_ai() {
 
 # Función interna para desinstalar
 _uninstall_ai_tools() {
-	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code &>"$LOG_FILE"
+	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw &>"$LOG_FILE"
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
   rm -rf ~/.cache/core-termux/opencode && rm $PREFIX/bin/opencode &>>"$LOG_FILE"
 }
@@ -162,7 +172,7 @@ _update_ai_tools() {
 	export GOPATH="$HOME/.local/go"
 	export GOCACHE="$HOME/.cache/go"
 	export GOMODCACHE="$GOPATH/pkg/mod"
-	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code &>"$LOG_FILE"
+	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw &>"$LOG_FILE"
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
   git -C ~/.cache/core-termux/opencode pull &>>"$LOG_FILE"
   go build -C ~/.cache/core-termux/opencode -o $PREFIX/bin/opencode &>>"$LOG_FILE"
