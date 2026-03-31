@@ -1,6 +1,6 @@
 # Core-Termux
 
-[![Version](https://img.shields.io/badge/version-3.3.0-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
+[![Version](https://img.shields.io/badge/version-3.3.1-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Termux%20%7C%20Android-orange.svg)](https://termux.dev/)
 
@@ -503,7 +503,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.4.0 (current: 3.3.0)
+⚠ New version available: 3.4.0 (current: 3.3.1)
 
 ➜ Run: core update core to update
 ```

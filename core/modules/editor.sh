@@ -44,7 +44,7 @@ install_editor() {
 
 # Función interna para instalar dependencias
 _install_editor_deps() {
-	pkg install neovim nodejs-lts python lua-language-server ripgrep stylua -y &>"$LOG_FILE"
+	pkg install git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter -y &>"$LOG_FILE"
 }
 
 # Función interna para instalar NvChad
