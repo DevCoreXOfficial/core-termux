@@ -52,6 +52,9 @@ _install_nvchad() {
 	rm -rf "$NVCHAD_DIR" &>>"$LOG_FILE"
 	git clone "$NVCHAD_REPO" "$NVCHAD_DIR" &>>"$LOG_FILE"
 	cp -r "$NVCHAD_DIR/nvim" ~/.config/ &>>"$LOG_FILE"
+  nvim --headless "+Lazy! sync" +qa &>>"$LOG_FILE"
+  nvim --headless "+Lazy! clean nvim-treesitter" +qa &>>"$LOG_FILE"
+  nvim --headless "+Lazy! install nvim-treesitter" +qa &>>"$LOG_FILE"
 }
 
 # Desinstalar editor de código
