@@ -14,9 +14,9 @@ install_main() {
 		log_info "Available targets:"
 		echo
 		list_item "full       - Install everything (recommended)"
-    list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, Go, C, C++)"
+    list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++)"
 		list_item "db         - Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-    list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenCode, Claude Code, OpenClaw)"
+    list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama)"
 		list_item "editor     - Code editor (Neovim + NvChad)"
 		list_item "tools      - Development tools"
 		list_item "node       - Node.js global modules (npm packages)"

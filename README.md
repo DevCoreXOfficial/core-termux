@@ -1,6 +1,6 @@
 # Core-Termux
 
-[![Version](https://img.shields.io/badge/version-3.3.2-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
+[![Version](https://img.shields.io/badge/version-3.4.0-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Termux%20%7C%20Android-orange.svg)](https://termux.dev/)
 
@@ -68,9 +68,9 @@ core install full             # Install everything
 
 | Module | Description |
 |--------|-------------|
-| `language` | Node.js, Python, Perl, PHP, Rust |
+| `language` | Node.js, Python, Perl, PHP, Rust, C/C++ |
 | `db` | PostgreSQL, MariaDB, SQLite, MongoDB |
-| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenCode, Claude Code, OpenClaw |
+| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama |
 | `editor` | Neovim + NvChad configuration |
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
@@ -313,6 +313,81 @@ bcryptjs, helmet, cloudinary
 
 ---
 
+## 🌐 Language Packages
+
+The `language` module installs the following programming languages and runtimes via `pkg`:
+
+```bash
+core install language
+```
+
+| Language/Runtime | Package | Description |
+|------------------|---------|-------------|
+| **Node.js LTS** | `nodejs-lts` | Long-term support release of Node.js |
+| **Python** | `python` | Python 3 interpreter |
+| **Perl** | `perl` | Perl scripting language |
+| **PHP** | `php` | PHP interpreter |
+| **Rust** | `rust` | Rust compiler and Cargo |
+| **C/C++** | `clang` | LLVM C/C++ compiler |
+
+---
+
+## 🛠️ Development Tools
+
+The `tools` module installs the following development utilities via `pkg`:
+
+```bash
+core install tools
+```
+
+| Tool | Package | Description |
+|------|---------|-------------|
+| **GitHub CLI** | `gh` | Official GitHub command-line tool |
+| **Wget** | `wget` | File downloader |
+| **Curl** | `curl` | HTTP client and transfer tool |
+| **LSD** | `lsd` | Modern `ls` replacement with icons and colors |
+| **Bat** | `bat` | Modern `cat` replacement with syntax highlighting |
+| **Proot** | `proot` | Chroot alternative for user-space |
+| **Ncurses Utils** | `ncurses-utils` | Terminal UI manipulation tools |
+| **Tmate** | `tmate` | Instant terminal sharing |
+| **Cloudflared** | `cloudflared` | Cloudflare Tunnel client |
+| **Translate Shell** | `translate-shell` | Command-line translator |
+| **html2text** | `html2text` | HTML to plain text converter |
+| **jq** | `jq` | Lightweight JSON processor |
+| **bc** | `bc` | Arbitrary precision calculator |
+| **Tree** | `tree` | Recursive directory listing |
+| **Fzf** | `fzf` | Command-line fuzzy finder |
+| **ImageMagick** | `imagemagick` | Image manipulation suite |
+| **Shfmt** | `shfmt` | Shell script formatter |
+| **Make** | `make` | Build automation tool |
+
+---
+
+## 📦 Node.js Global Modules
+
+The `node` module installs the following global npm packages:
+
+```bash
+core install node
+```
+
+| Package | Command | Description |
+|---------|---------|-------------|
+| **TypeScript** | `tsc` | TypeScript compiler |
+| **NestJS CLI** | `nest` | NestJS framework CLI |
+| **Prettier** | `prettier` | Code formatter |
+| **Live Server** | `live-server` | Development server with live reload |
+| **Localtunnel** | `lt` | Expose localhost to the internet |
+| **Vercel CLI** | `vercel` | Vercel deployment CLI |
+| **Markserv** | `markserv` | Markdown live-preview server |
+| **PSQL Format** | `psqlformat` | PostgreSQL query formatter |
+| **NPM Check Updates** | `ncu` | Find outdated dependencies |
+| **Ngrok** | `ngrok` | Secure tunnel to localhost |
+
+> **Note:** The `node` module automatically applies a [fix for localtunnel on Android](#localtunnel-for-android) to replace `openurl` with `termux-open-url`.
+
+---
+
 ## 💻 Code Editor
 
 The `editor` module installs **Neovim** with a custom configuration based on [NvChad](https://github.com/DevCoreXOfficial/nvchad-termux).
@@ -503,7 +578,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.4.0 (current: 3.3.2)
+⚠ New version available: 3.5.0 (current: 3.4.0)
 
 ➜ Run: core update core to update
 ```

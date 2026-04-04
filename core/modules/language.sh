@@ -12,6 +12,7 @@ LANGUAGE_PACKAGES=(
 	"perl"
 	"php"
 	"rust"
+	"clang"
 )
 
 # Instalar paquetes de lenguaje
@@ -34,6 +35,7 @@ install_language() {
 		list_item "Perl"
 		list_item "PHP"
 		list_item "Rust"
+		list_item "C/C++ (clang)"
 		echo
 	else
 		log_error "Failed to install language packages"

@@ -24,6 +24,7 @@ TOOLS_PACKAGES=(
 	"fzf"
 	"imagemagick"
 	"shfmt"
+	"make"
 )
 
 # Instalar herramientas
@@ -58,6 +59,7 @@ install_tools() {
 		list_item "Fzf (fuzzy finder)"
 		list_item "ImageMagick (image manipulation)"
 		list_item "Shfmt (shell script formatter)"
+		list_item "Make (build automation)"
 		echo
 	else
 		log_error "Failed to install tools"

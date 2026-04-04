@@ -53,9 +53,9 @@ core_help() {
 	echo
 	log_info "Install, update, or uninstall:"
 	echo
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node.js, Python, Perl, PHP, Rust, Go, C, C++"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node.js, Python, Perl, PHP, Rust, C, C++"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenCode, Claude Code, OpenClaw"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad + Plugins"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"

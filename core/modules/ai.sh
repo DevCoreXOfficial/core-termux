@@ -32,12 +32,14 @@ install_ai() {
 		log_success "AI tools installed successfully"
 		separator
 		echo
-    list_item "Qwen Code ${GRAY}(${D_GREEN}qwen${GRAY})"
-    list_item "Gemini CLI ${GRAY}(${D_GREEN}gemini${GRAY})"
-    list_item "Mistral Vibe ${GRAY}(${D_GREEN}vibe${GRAY})"
-    list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
-    list_item "Claude Code ${GRAY}(${D_GREEN}claude${GRAY})"
-    list_item "OpenClaw ${GRAY}(${D_GREEN}openclaw${GRAY})"
+		list_item "Qwen Code ${GRAY}(${D_GREEN}qwen${GRAY})"
+		list_item "Gemini CLI ${GRAY}(${D_GREEN}gemini${GRAY})"
+		list_item "Mistral Vibe ${GRAY}(${D_GREEN}vibe${GRAY})"
+		list_item "OpenClaude ${GRAY}(${D_GREEN}openclaude${GRAY})"
+		list_item "Claude Code ${GRAY}(${D_GREEN}claude${GRAY})"
+		list_item "OpenClaw ${GRAY}(${D_GREEN}openclaw${GRAY})"
+		list_item "Ollama
+    ${GRAY}(${D_GREEN}ollama${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"
@@ -49,7 +51,7 @@ install_ai() {
 # Función interna para instalar prerequisitos
 _install_ai_prerequisites() {
 	# Actualizar repositorios e instalar dependencias del sistema
-	pkg install nodejs-lts python git clang make rust libffi openssl pkg-config golang -y &>>"$LOG_FILE"
+	pkg install nodejs-lts python git clang make rust libffi openssl pkg-config ollama -y &>>"$LOG_FILE"
 
 	# Actualizar pip, setuptools y wheel para mistral-vibe
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
@@ -59,9 +61,6 @@ _install_ai_prerequisites() {
 _install_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
-	export GOPATH="$HOME/.local/go"
-	export GOCACHE="$HOME/.cache/go"
-	export GOMODCACHE="$GOPATH/pkg/mod"
 
 	local has_changes=false
 
@@ -101,13 +100,12 @@ _install_ai_tools() {
 		has_changes=true
 	fi
 
-	# OpenCode
-	if command -v opencode &>/dev/null; then
-		log_info "OpenCode ${D_GREEN}already installed${D_NC}"
+	# OpenClaude
+	if command -v openclaude &>/dev/null; then
+		log_info "OpenClaude ${D_GREEN}already installed${D_NC}"
 	else
-		log_info "Installing OpenCode..."
-		git clone https://github.com/opencode-ai/opencode ~/.cache/core-termux/opencode &>>"$LOG_FILE"
-		go build -C ~/.cache/core-termux/opencode -o $PREFIX/bin/opencode &>>"$LOG_FILE"
+		log_info "Installing OpenClaude..."
+		npm install -g @gitlawb/openclaude &>>"$LOG_FILE"
 		has_changes=true
 	fi
 
@@ -143,9 +141,8 @@ uninstall_ai() {
 
 # Función interna para desinstalar
 _uninstall_ai_tools() {
-	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw &>"$LOG_FILE"
+	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>"$LOG_FILE"
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
-  rm -rf ~/.cache/core-termux/opencode && rm $PREFIX/bin/opencode &>>"$LOG_FILE"
 }
 
 # Actualizar herramientas de IA
@@ -169,11 +166,6 @@ update_ai() {
 _update_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
-	export GOPATH="$HOME/.local/go"
-	export GOCACHE="$HOME/.cache/go"
-	export GOMODCACHE="$GOPATH/pkg/mod"
-	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw &>"$LOG_FILE"
+	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
-  git -C ~/.cache/core-termux/opencode pull &>>"$LOG_FILE"
-  go build -C ~/.cache/core-termux/opencode -o $PREFIX/bin/opencode &>>"$LOG_FILE"
 }
