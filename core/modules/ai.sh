@@ -38,8 +38,7 @@ install_ai() {
 		list_item "OpenClaude ${GRAY}(${D_GREEN}openclaude${GRAY})"
 		list_item "Claude Code ${GRAY}(${D_GREEN}claude${GRAY})"
 		list_item "OpenClaw ${GRAY}(${D_GREEN}openclaw${GRAY})"
-		list_item "Ollama
-    ${GRAY}(${D_GREEN}ollama${GRAY})"
+		list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"
