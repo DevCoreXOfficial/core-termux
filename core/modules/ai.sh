@@ -50,7 +50,7 @@ install_ai() {
 # Función interna para instalar prerequisitos
 _install_ai_prerequisites() {
 	# Actualizar repositorios e instalar dependencias del sistema
-	pkg install nodejs-lts python git clang make rust libffi openssl pkg-config ollama -y &>>"$LOG_FILE"
+	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama -y &>>"$LOG_FILE"
 
 	# Actualizar pip, setuptools y wheel para mistral-vibe
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
