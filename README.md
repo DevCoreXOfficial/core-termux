@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/assets/images/logo.svg" alt="Core-Termux Logo" width="120" height="120">
+  <img src="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/assets/images/logo.svg" alt="Core-Termux Logo" width="600">
 </p>
-
-<h1 align="center">Core-Termux</h1>
 
 <p align="center">
   <strong>Modular framework for setting up and managing development environments on Termux (Android)</strong>
