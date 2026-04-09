@@ -323,7 +323,7 @@ configure_express() {
 	if loading "Installing devDependencies" _install_express_dev; then
 		log_success "devDependencies installed"
 		echo
-		list_item "typescript, ts-node-dev, tsconfig-paths"
+		list_item "typescript, ts-node-dev, tsconfig-paths, tsc-alias"
 		list_item "@types/* (all type definitions)"
 		echo
 	else
@@ -352,7 +352,7 @@ _install_express_deps() {
 }
 
 _install_express_dev() {
-	npm install -D typescript ts-node-dev tsconfig-paths @types/node @types/multer @types/morgan @types/jsonwebtoken @types/helmet @types/express @types/cors @types/cookie-parser @types/bcryptjs &>>"$LOG_FILE"
+	npm install -D typescript ts-node-dev tsconfig-paths tsc-alias @types/node @types/multer @types/morgan @types/jsonwebtoken @types/helmet @types/express @types/cors @types/cookie-parser @types/bcryptjs &>>"$LOG_FILE"
 }
 
 _setup_express_structure() {
@@ -524,8 +524,8 @@ EOF
 		local temp=$(mktemp)
 		jq '.scripts += {
       "dev": "ts-node-dev --require tsconfig-paths/register --env-file=.env --respawn src/index.ts",
-      "build": "tsc",
-      "start": "ts-node-dev --require tsconfig-paths/register --respawn dist/index.js",
+      "build": "tsc && tsc-alias -p tsconfig.json",
+      "start": "node dist/index.js",
       "typeorm": "ts-node-dev --require tsconfig-paths/register --env-file=.env ./node_modules/typeorm/cli.js",
       "mg:gen": "npm run typeorm -- migration:generate -d src/database/data-source.ts",
       "mg:create": "npm run typeorm -- migration:create",
