@@ -40,6 +40,7 @@ core_help() {
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "install" "Install modules and packages"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "update" "Update modules or framework"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "uninstall" "Remove installed modules"
+	printf "    ${D_CYAN}%-12s${NC} %s\n" "list" "List available tools in modules"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "pg" "PostgreSQL database manager"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "init" "Configure existing projects"
 	echo

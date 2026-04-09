@@ -10,6 +10,7 @@ update_main() {
 		box "Core Update"
 		echo
 		log_info "Usage: core update <target>"
+		log_info "Usage: core update <target> --tool1 --tool2"
 		echo
 		log_info "Available targets:"
 		echo
@@ -25,93 +26,521 @@ update_main() {
     list_item "ui         - Update Termux UI"
     list_item "automation - Update Automation Tools"
 		echo
-		log_info "Note: 'core update core' updates the framework code,"
-		echo "      while 'core update all' updates everything including"
-		echo "      system packages and dependencies."
+		log_info "Update specific tools with flags:"
+		echo
+		list_item "core update ai --qwen-code --ollama"
+		list_item "core update db --postgresql --sqlite"
+		list_item "Run ${D_CYAN}core list <target>${NC} to see all available tools"
 		echo
 		return
 	fi
 
+	# Separate module target from tool flags
+	local module_target=""
+	local -a tool_flags=()
+
 	for arg in "$@"; do
-		case "$arg" in
-		all)
-			separator
-			box "Updating Everything"
-			separator
-			echo
+		if [[ "$arg" == --* ]]; then
+			local flag="${arg#--}"
+			tool_flags+=("$flag")
+		elif [[ -z "$module_target" ]]; then
+			module_target="$arg"
+		fi
+	done
 
-			update_core
+	# If no module target specified, show error
+	if [[ -z "$module_target" ]]; then
+		log_error "No target specified"
+		echo "Run 'core update' to see available targets"
+		return 1
+	fi
 
-			import "@/modules/language"
-			import "@/modules/db"
-			import "@/modules/ai"
-			import "@/modules/editor"
-			import "@/modules/tools"
-			import "@/modules/node-modules"
-			import "@/modules/shell"
-			import "@/modules/ui"
-			import "@/modules/automation"
+	# If no tool flags, update entire module (original behavior)
+	if [[ ${#tool_flags[@]} -eq 0 ]]; then
+		_update_full_module "$module_target"
+	else
+		# Update specific tools
+		_update_specific_tools "$module_target" "${tool_flags[@]}"
+	fi
+}
 
-			update_language
-			update_db
-			update_ai
-			update_editor
-			update_tools
-			update_node
-			update_shell
-			update_ui
+# Update entire module (original behavior)
+_update_full_module() {
+	local target="$1"
+
+	case "$target" in
+	all)
+		separator
+		box "Updating Everything"
+		separator
+		echo
+
+		update_core
+
+		import "@/modules/language"
+		import "@/modules/db"
+		import "@/modules/ai"
+		import "@/modules/editor"
+		import "@/modules/tools"
+		import "@/modules/node-modules"
+		import "@/modules/shell"
+		import "@/modules/ui"
+		import "@/modules/automation"
+
+		update_language
+		update_db
+		update_ai
+		update_editor
+		update_tools
+		update_node
+		update_shell
+		update_ui
       update_automation
 
-			separator
-			log_success "All updates completed"
-			separator
-			echo
-			;;
-		core)
-			update_core
-			;;
-		language)
-			import "@/modules/language"
-			update_language
-			;;
-		db)
-			import "@/modules/db"
-			update_db
-			;;
-		ai)
-			import "@/modules/ai"
-			update_ai
-			;;
-		editor)
-			import "@/modules/editor"
-			update_editor
-			;;
-		tools)
-			import "@/modules/tools"
-			update_tools
-			;;
-		node)
-			import "@/modules/node-modules"
-			update_node
-			;;
-		shell)
-			import "@/modules/shell"
-			update_shell
-			;;
-		ui)
-			import "@/modules/ui"
-			update_ui
-			;;
+		separator
+		log_success "All updates completed"
+		separator
+		echo
+		;;
+	core)
+		update_core
+		;;
+	language)
+		import "@/modules/language"
+		update_language
+		;;
+	db)
+		import "@/modules/db"
+		update_db
+		;;
+	ai)
+		import "@/modules/ai"
+		update_ai
+		;;
+	editor)
+		import "@/modules/editor"
+		update_editor
+		;;
+	tools)
+		import "@/modules/tools"
+		update_tools
+		;;
+	node)
+		import "@/modules/node-modules"
+		update_node
+		;;
+	shell)
+		import "@/modules/shell"
+		update_shell
+		;;
+	ui)
+		import "@/modules/ui"
+		update_ui
+		;;
     automation)
       import "@/modules/automation"
       update_automation
       ;;
-		*)
-			log_warn "Unknown update target: $arg"
-			echo "Run 'core update' to see available targets"
-			;;
-		esac
-	done
+	*)
+		log_warn "Unknown update target: $target"
+		echo "Run 'core update' to see available targets"
+		;;
+	esac
+}
+
+# Update specific tools within a module
+_update_specific_tools() {
+	local module="$1"
+	shift
+	local -a tools=("$@")
+
+	case "$module" in
+	ai)
+		import "@/tools/ai/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			qwen-code)
+				if update_qwen_code; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			gemini-cli)
+				if update_gemini_cli; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			claude-code)
+				if update_claude_code; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			mistral-vibe)
+				if update_mistral_vibe; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			openclaude)
+				if update_openclaude; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			openclaw)
+				if update_openclaw; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			ollama)
+				if update_ollama; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown AI tool: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count AI tool(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count tool(s) failed to update"
+		fi
+		echo
+		;;
+	db)
+		import "@/tools/db/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			postgresql)
+				if update_postgresql; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			mariadb)
+				if update_mariadb; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			sqlite)
+				if update_sqlite; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			mongodb)
+				if update_mongodb; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown database: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count database(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count database(s) failed to update"
+		fi
+		echo
+		;;
+	tools)
+		import "@/tools/tools/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			gh)
+				if update_gh; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			wget)
+				if update_wget; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			curl)
+				if update_curl; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			lsd)
+				if update_lsd; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			bat)
+				if update_bat; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			proot)
+				if update_proot; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			ncurses)
+				if update_ncurses; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			tmate)
+				if update_tmate; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			cloudflared)
+				if update_cloudflared; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			translate)
+				if update_translate; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			html2text)
+				if update_html2text; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			jq)
+				if update_jq; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			bc)
+				if update_bc; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			tree)
+				if update_tree; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			fzf)
+				if update_fzf; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			imagemagick)
+				if update_imagemagick; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			shfmt)
+				if update_shfmt; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			make)
+				if update_make; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown tool: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count tool(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count tool(s) failed to update"
+		fi
+		echo
+		;;
+	node)
+		import "@/tools/node/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			typescript)
+				if update_typescript; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			nestjs)
+				if update_nestjs; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			prettier)
+				if update_prettier; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			live-server)
+				if update_live_server; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			localtunnel)
+				if update_localtunnel; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			vercel)
+				if update_vercel; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			markserv)
+				if update_markserv; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			psqlformat)
+				if update_psqlformat; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			ncu)
+				if update_ncu; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			ngrok)
+				if update_ngrok; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown node module: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count Node.js module(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count module(s) failed to update"
+		fi
+		echo
+		;;
+	language)
+		import "@/tools/language/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			nodejs)
+				if update_nodejs; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			python)
+				if update_python; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			perl)
+				if update_perl; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			php)
+				if update_php; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			rust)
+				if update_rust; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			clang)
+				if update_clang; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown language: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count language(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count language(s) failed to update"
+		fi
+		echo
+		;;
+	shell)
+		import "@/tools/shell/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			powerlevel10k)
+				if update_powerlevel10k; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			zsh-defer)
+				if update_zsh_defer; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			zsh-autosuggestions)
+				if update_zsh_autosuggestions; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			zsh-syntax-highlighting)
+				if update_zsh_syntax_highlighting; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			history-substring)
+				if update_history_substring; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			zsh-completions)
+				if update_zsh_completions; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			fzf-tab)
+				if update_fzf_tab; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			you-should-use)
+				if update_you_should_use; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			zsh-autopair)
+				if update_zsh_autopair; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			better-npm)
+				if update_better_npm; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown plugin: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count plugin(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count plugin(s) failed to update"
+		fi
+		echo
+		;;
+	editor)
+		import "@/tools/editor/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			neovim)
+				if update_neovim; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			nvchad)
+				if update_nvchad; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown editor component: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count editor component(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count component(s) failed to update"
+		fi
+		echo
+		;;
+	ui)
+		import "@/tools/ui/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			font)
+				if update_font; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			extra-keys)
+				if update_extra_keys; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			cursor)
+				if update_cursor; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown UI component: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count UI component(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count component(s) failed to update"
+		fi
+		echo
+		;;
+	automation)
+		import "@/tools/automation/all"
+		local updated_count=0
+		local failed_count=0
+
+		for tool in "${tools[@]}"; do
+			case "$tool" in
+			n8n)
+				if update_n8n; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			*)
+				log_warn "Unknown automation tool: --$tool"
+				;;
+			esac
+		done
+
+		echo
+		if [[ $updated_count -gt 0 ]]; then
+			log_success "$updated_count automation tool(s) updated"
+		fi
+		if [[ $failed_count -gt 0 ]]; then
+			log_warn "$failed_count tool(s) failed to update"
+		fi
+		echo
+		;;
+	*)
+		log_warn "Unknown update target: $module"
+		echo "Run 'core update' to see available targets"
+		;;
+	esac
 }
 
 # Actualizar Core-Termux

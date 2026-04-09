@@ -1,10 +1,47 @@
-# Core-Termux
+<p align="center">
+  <img src="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/assets/images/logo.svg" alt="Core-Termux Logo" width="120" height="120">
+</p>
 
-[![Version](https://img.shields.io/badge/version-3.4.2-blue.svg)](https://github.com/DevCoreXOfficial/core-termux)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Termux%20%7C%20Android-orange.svg)](https://termux.dev/)
+<h1 align="center">Core-Termux</h1>
 
-Modular framework for setting up and managing development environments on Termux (Android).
+<p align="center">
+  <strong>Modular framework for setting up and managing development environments on Termux (Android)</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/DevCoreXOfficial/core-termux">
+    <img src="https://img.shields.io/badge/version-3.5.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+  </a>
+  <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
+  </a>
+  <a href="https://termux.dev/">
+    <img src="https://img.shields.io/badge/platform-Termux%20%7C%20Android-0078D4?style=for-the-badge&logo=android" alt="Platform">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/DevCoreXOfficial/core-termux/stargazers">
+    <img src="https://img.shields.io/github/stars/DevCoreXOfficial/core-termux?style=for-the-badge&logo=github&color=f5c542" alt="Stars">
+  </a>
+  <a href="https://github.com/DevCoreXOfficial/core-termux/network/members">
+    <img src="https://img.shields.io/github/forks/DevCoreXOfficial/core-termux?style=for-the-badge&logo=github&color=94a3b8" alt="Forks">
+  </a>
+  <a href="https://github.com/DevCoreXOfficial/core-termux/issues">
+    <img src="https://img.shields.io/github/issues/DevCoreXOfficial/core-termux?style=for-the-badge&logo=github&color=ef4444" alt="Issues">
+  </a>
+  <a href="https://github.com/DevCoreXOfficial/core-termux/pulls">
+    <img src="https://img.shields.io/github/issues-pr/DevCoreXOfficial/core-termux?style=for-the-badge&logo=github&color=22c55e" alt="Pull Requests">
+  </a>
+</p>
+
+<p align="center">
+  <a href="#-quick-installation">
+    <img src="https://img.shields.io/badge/%F0%9F%9A%80_Get%20Started-0078D4?style=for-the-badge" alt="Get Started">
+  </a>
+</p>
+
+<br>
 
 ---
 
@@ -30,6 +67,7 @@ core setup
 | [`core install`](#core-install) | Install specific modules |
 | [`core update`](#core-update) | Update modules or framework |
 | [`core uninstall`](#core-uninstall) | Remove installed modules |
+| [`core list`](#core-list) | List available tools in modules |
 | [`core pg`](#core-pg) | PostgreSQL database manager |
 | [`core init`](#core-init) | Configure existing projects |
 
@@ -54,13 +92,63 @@ core setup base               # Base packages only
 
 ---
 
+### `core list`
+
+List available tools in a module and their installation status.
+
+```bash
+core list                     # Show help
+core list <module>            # List tools in specific module
+```
+
+**Available targets:**
+
+| Target | Description |
+|--------|-------------|
+| `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++) |
+| `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
+| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama) |
+| `editor` | Code editor components (Neovim, NvChad) |
+| `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
+| `node` | Node.js global npm packages |
+| `shell` | ZSH plugins |
+| `ui` | Termux UI components |
+| `automation` | Automation tools (n8n) |
+
+**Example output:**
+
+```bash
+$ core list ai
+
+┌─────────────────────────────────────────┐
+│  AI Tools                               │
+└─────────────────────────────────────────┘
+
+    ➜ Available AI tools and install commands:
+
+┌────────────────┬──────────────────┬──────────┬────────────────┐
+│ Tool           │ Install Flag     │ Command  │ Status         │
+├────────────────┼──────────────────┼──────────┼────────────────┤
+│ Qwen Code      │ --qwen-code      │ qwen     │ not installed  │
+│ Gemini CLI     │ --gemini-cli     │ gemini   │ not installed  │
+│ Claude Code    │ --claude-code    │ claude   │ not installed  │
+│ ...            │ ...              │ ...      │ ...            │
+└────────────────┴──────────────────┴──────────┴────────────────┘
+
+    ➜ Install specific: core install ai --qwen-code --ollama
+    ➜ Install all: core install ai
+```
+
+---
+
 ### `core install`
 
-Install individual modules.
+Install individual modules or specific tools within modules.
 
 ```bash
 core install                  # Show help
-core install <module>         # Install specific module
+core install <module>         # Install entire module
+core install <module> --tool1 --tool2  # Install specific tools
 core install full             # Install everything
 ```
 
@@ -78,6 +166,25 @@ core install full             # Install everything
 | `ui` | Termux UI (font, cursor, extra-keys) |
 | `automation` | Automation Tools (n8n) |
 
+**Install entire module:**
+
+```bash
+core install ai               # Install all AI tools
+core install db               # Install all databases
+core install tools            # Install all development tools
+```
+
+**Install specific tools:**
+
+```bash
+core install ai --qwen-code --ollama          # Install only Qwen Code and Ollama
+core install db --postgresql --sqlite         # Install only PostgreSQL and SQLite
+core install tools --gh --fzf --jq            # Install only gh, fzf, and jq
+core install node --typescript --prettier     # Install only TypeScript and Prettier
+```
+
+> **Tip:** Run `core list <module>` to see all available tools and their flags.
+
 ---
 
 ### `core update`
@@ -87,6 +194,7 @@ Update modules or the complete framework.
 ```bash
 core update                   # Show help
 core update <target>          # Update specific target
+core update <target> --tool1 --tool2  # Update specific tools
 core update all               # Update everything
 core update core              # Update framework only
 ```
@@ -107,15 +215,31 @@ core update core              # Update framework only
 | `ui` | Termux UI |
 | `automation` | Automation Tools |
 
+**Update entire module:**
+
+```bash
+core update ai               # Update all AI tools
+core update db               # Update all databases
+```
+
+**Update specific tools:**
+
+```bash
+core update ai --qwen-code --ollama          # Update only Qwen Code and Ollama
+core update db --postgresql --sqlite         # Update only PostgreSQL and SQLite
+core update tools --gh --fzf --jq            # Update only gh, fzf, and jq
+```
+
 ---
 
 ### `core uninstall`
 
-Remove installed modules.
+Remove installed modules or specific tools.
 
 ```bash
 core uninstall                # Show help
 core uninstall <target>       # Uninstall specific target
+core uninstall <target> --tool1 --tool2  # Uninstall specific tools
 core uninstall all            # Remove everything (restore default)
 ```
 
@@ -133,6 +257,21 @@ core uninstall all            # Remove everything (restore default)
 | `shell` | ZSH + Oh My Zsh |
 | `ui` | Restore Termux UI to default |
 | `automation` | Automation tools |
+
+**Uninstall entire module:**
+
+```bash
+core uninstall ai            # Uninstall all AI tools
+core uninstall db            # Uninstall all databases
+```
+
+**Uninstall specific tools:**
+
+```bash
+core uninstall ai --qwen-code --ollama        # Uninstall only Qwen Code and Ollama
+core uninstall db --postgresql --sqlite       # Uninstall only PostgreSQL and SQLite
+core uninstall tools --gh --fzf               # Uninstall only gh and fzf
+```
 
 ---
 
@@ -502,6 +641,7 @@ core-termux/
 │   │       ├── setup.sh      # Setup command
 │   │       ├── update.sh     # Update command
 │   │       ├── uninstall.sh  # Uninstall command
+│   │       ├── list.sh       # List command
 │   │       ├── pg.sh         # PostgreSQL command
 │   │       └── init.sh       # Init command
 │   ├── modules/
@@ -514,6 +654,25 @@ core-termux/
 │   │   ├── tools.sh          # Tools
 │   │   ├── ui.sh             # Termux UI
 │   │   └── automation.sh     # Automation Tools
+│   ├── tools/
+│   │   ├── ai/
+│   │   │   └── all.sh        # Individual AI tool installers
+│   │   ├── db/
+│   │   │   └── all.sh        # Individual DB installers
+│   │   ├── tools/
+│   │   │   └── all.sh        # Individual tool installers
+│   │   ├── node/
+│   │   │   └── all.sh        # Individual node module installers
+│   │   ├── language/
+│   │   │   └── all.sh        # Individual language installers
+│   │   ├── shell/
+│   │   │   └── all.sh        # Individual shell plugin installers
+│   │   ├── editor/
+│   │   │   └── all.sh        # Individual editor installers
+│   │   ├── ui/
+│   │   │   └── all.sh        # Individual UI component installers
+│   │   └── automation/
+│   │       └── all.sh        # Individual automation installers
 │   ├── fix/
 │   │   └── localtunnel.sh    # Android fix
 │   └── utils/
@@ -578,7 +737,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.5.0 (current: 3.4.2)
+⚠ New version available: 3.5.1 (current: 3.5.0)
 
 ➜ Run: core update core to update
 ```
@@ -664,6 +823,15 @@ core install shell
 core install node
 ```
 
+### Install specific tools within a module
+
+```bash
+core list ai                                    # See available AI tools
+core install ai --qwen-code --ollama            # Install only Qwen Code and Ollama
+core install tools --gh --fzf --jq              # Install only gh, fzf, and jq
+core install node --typescript --prettier       # Install only TypeScript and Prettier
+```
+
 ### Configure Next.js project
 
 ```bash
@@ -688,13 +856,23 @@ core pg stop              # Stop
 core update all           # Update everything
 core update core          # Framework only
 core update shell         # ZSH plugins only
+core update ai --qwen     # Specific AI tool only
 ```
 
 ### Uninstall
 
 ```bash
 core uninstall node       # Remove Node.js modules
+core uninstall ai --ollama   # Remove only Ollama
 core uninstall all        # Restore everything to default
+```
+
+### List available tools
+
+```bash
+core list ai              # List all AI tools and their status
+core list tools           # List all development tools
+core list db              # List all databases
 ```
 
 ---
