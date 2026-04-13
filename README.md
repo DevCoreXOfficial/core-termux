@@ -113,30 +113,6 @@ core list <module>            # List tools in specific module
 | `ui` | Termux UI components |
 | `automation` | Automation tools (n8n) |
 
-**Example output:**
-
-```bash
-$ core list ai
-
-┌─────────────────────────────────────────┐
-│  AI Tools                               │
-└─────────────────────────────────────────┘
-
-    ➜ Available AI tools and install commands:
-
-┌────────────────┬──────────────────┬──────────┬────────────────┐
-│ Tool           │ Install Flag     │ Command  │ Status         │
-├────────────────┼──────────────────┼──────────┼────────────────┤
-│ Qwen Code      │ --qwen-code      │ qwen     │ not installed  │
-│ Gemini CLI     │ --gemini-cli     │ gemini   │ not installed  │
-│ Claude Code    │ --claude-code    │ claude   │ not installed  │
-│ ...            │ ...              │ ...      │ ...            │
-└────────────────┴──────────────────┴──────────┴────────────────┘
-
-    ➜ Install specific: core install ai --qwen-code --ollama
-    ➜ Install all: core install ai
-```
-
 ---
 
 ### `core install`
@@ -384,7 +360,7 @@ express-rate-limit, tsconfig-paths, zod
 
 **devDependencies:**
 ```
-typescript, ts-node-dev, tsconfig-paths
+typescript, ts-node-dev, tsconfig-paths, tsc-alias
 @types/node, @types/multer, @types/morgan
 @types/jsonwebtoken, @types/helmet
 @types/express, @types/cors
@@ -395,8 +371,8 @@ typescript, ts-node-dev, tsconfig-paths
 ```json
 {
   "dev": "ts-node-dev --require tsconfig-paths/register --env-file=.env --respawn src/index.ts",
-  "build": "tsc",
-  "start": "ts-node-dev --require tsconfig-paths/register --respawn dist/index.js",
+  "build": "tsc && tsc-alias -p tsconfig.json",
+  "start": "node dist/index.js",
   "typeorm": "ts-node-dev --require tsconfig-paths/register --env-file=.env ./node_modules/typeorm/cli.js",
   "mg:gen": "npm run typeorm -- migration:generate -d src/database/data-source.ts",
   "mg:create": "npm run typeorm -- migration:create",
