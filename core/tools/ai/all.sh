@@ -4,11 +4,34 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Prerequisites for npm-based AI tools (qwen, gemini, claude, openclaude, openclaw)
+_install_ai_npm_prereqs() {
+	if command -v node &>/dev/null && command -v npm &>/dev/null; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+	pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"
+}
+
+# Prerequisites for pip-based AI tools (mistral-vibe)
+_install_ai_pip_prereqs() {
+	if command -v python &>/dev/null && command -v pip &>/dev/null; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+	pkg install python clang make rust libffi openssl pkg-config git ripgrep -y &>>"$LOG_FILE"
+	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
+}
+
 # ===== QWEN CODE =====
 install_qwen_code() {
 	if command -v qwen &>/dev/null; then
 		return 0
 	fi
+
+	_install_ai_npm_prereqs
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
@@ -56,6 +79,8 @@ install_gemini_cli() {
 		return 0
 	fi
 
+	_install_ai_npm_prereqs
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
@@ -101,6 +126,8 @@ install_claude_code() {
 	if command -v claude &>/dev/null; then
 		return 0
 	fi
+
+	_install_ai_npm_prereqs
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
@@ -148,6 +175,8 @@ install_mistral_vibe() {
 		return 0
 	fi
 
+	_install_ai_pip_prereqs
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if pip install mistral-vibe &>>"$LOG_FILE"; then
@@ -189,6 +218,8 @@ install_openclaude() {
 	if command -v openclaude &>/dev/null; then
 		return 0
 	fi
+
+	_install_ai_npm_prereqs
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
@@ -235,6 +266,8 @@ install_openclaw() {
 	if command -v openclaw &>/dev/null; then
 		return 0
 	fi
+
+	_install_ai_npm_prereqs
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"

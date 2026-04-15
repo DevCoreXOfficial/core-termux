@@ -6,11 +6,33 @@ LOG_FILE="$CORE_CACHE/install_editor.log"
 NVCHAD_REPO="https://github.com/DevCoreXOfficial/nvchad-termux.git"
 NVCHAD_DIR="$HOME/.cache/core-termux/nvchad-termux"
 
+# Prerequisites for Neovim only
+_install_neovim_prereqs() {
+	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed"; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+	pkg install neovim -y &>>"$LOG_FILE"
+}
+
+# Prerequisites for NvChad (needs neovim + git + other deps)
+_install_nvchad_prereqs() {
+	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed" && command -v git &>/dev/null; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+	pkg install git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter -y &>>"$LOG_FILE"
+}
+
 # ===== NEOVIM =====
 install_neovim() {
 	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed"; then
 		return 0
 	fi
+
+	_install_neovim_prereqs
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -55,6 +77,8 @@ install_nvchad() {
 		log_info "NvChad ${D_GREEN}already installed${NC}"
 		return 0
 	fi
+
+	_install_nvchad_prereqs
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 

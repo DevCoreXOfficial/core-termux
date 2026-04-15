@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.5.1-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.5.2-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -711,7 +711,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.5.2 (current: 3.5.1)
+⚠ New version available: 3.5.3 (current: 3.5.2)
 
 ➜ Run: core update core to update
 ```

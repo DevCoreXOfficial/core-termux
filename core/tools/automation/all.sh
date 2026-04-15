@@ -4,11 +4,23 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_automation.log"
 
+# Prerequisites for n8n (npm-based)
+_install_automation_prerequisites() {
+	if command -v node &>/dev/null && command -v npm &>/dev/null; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+  pkg install nodejs-lts python sqlite build-essential binutils make clang -y &>>"$LOG_FILE"
+}
+
 # ===== N8N =====
 install_n8n() {
 	if command -v n8n &>/dev/null; then
 		return 0
 	fi
+
+	_install_automation_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"

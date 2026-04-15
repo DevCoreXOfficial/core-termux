@@ -17,9 +17,9 @@ CORE_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/core-termux"
 
 # Banner
 echo -e "${CYAN}"
-echo "╔══════════════════════════════════════╗"
-echo "║     Core-Termux Installer            ║"
-echo "╚══════════════════════════════════════╝"
+echo "╔════════════════════════════════╗"
+echo "║     Core-Termux Installer      ║"
+echo "╚════════════════════════════════╝"
 echo -e "${NC}"
 
 # Función de log básico

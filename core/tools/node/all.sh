@@ -5,11 +5,23 @@ import "@/fix/localtunnel"
 
 LOG_FILE="$CORE_CACHE/install_node_modules.log"
 
+# Install prerequisites for node modules
+_install_node_prerequisites() {
+	if command -v node &>/dev/null && command -v npm &>/dev/null; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+	pkg install nodejs-lts -y &>>"$LOG_FILE"
+}
+
 # ===== TYPESCRIPT=====
 install_typescript() {
 	if command -v tsc &>/dev/null; then
 		return 0
 	fi
+
+	_install_node_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -54,6 +66,8 @@ install_nestjs() {
 		return 0
 	fi
 
+	_install_node_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if npm install -g @nestjs/cli &>>"$LOG_FILE"; then
@@ -96,6 +110,8 @@ install_prettier() {
 	if command -v prettier &>/dev/null; then
 		return 0
 	fi
+
+	_install_node_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -140,6 +156,8 @@ install_live_server() {
 		return 0
 	fi
 
+	_install_node_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if npm install -g live-server &>>"$LOG_FILE"; then
@@ -182,6 +200,8 @@ install_localtunnel() {
 	if command -v lt &>/dev/null; then
 		return 0
 	fi
+
+	_install_node_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -228,6 +248,8 @@ install_vercel() {
 		return 0
 	fi
 
+	_install_node_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if npm install -g vercel &>>"$LOG_FILE"; then
@@ -270,6 +292,8 @@ install_markserv() {
 	if command -v markserv &>/dev/null; then
 		return 0
 	fi
+
+	_install_node_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -314,6 +338,8 @@ install_psqlformat() {
 		return 0
 	fi
 
+	_install_node_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if npm install -g psqlformat &>>"$LOG_FILE"; then
@@ -357,6 +383,8 @@ install_ncu() {
 		return 0
 	fi
 
+	_install_node_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if npm install -g npm-check-updates &>>"$LOG_FILE"; then
@@ -399,6 +427,8 @@ install_ngrok() {
 	if command -v ngrok &>/dev/null; then
 		return 0
 	fi
+
+	_install_node_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 

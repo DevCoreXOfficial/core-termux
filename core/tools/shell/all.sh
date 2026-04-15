@@ -5,12 +5,24 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 
+# Install prerequisites for shell plugins
+_install_shell_prerequisites() {
+	if command -v git &>/dev/null && command -v zsh &>/dev/null; then
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+	pkg install zsh zoxide git -y &>>"$LOG_FILE"
+}
+
 # ===== POWERLEVEL10K =====
 install_powerlevel10k() {
 	if [[ -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then
 		log_info "powerlevel10k ${D_GREEN}already installed${NC}"
 		return 0
 	fi
+
+	_install_shell_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -52,6 +64,8 @@ install_zsh_defer() {
 		return 0
 	fi
 
+	_install_shell_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if git clone --depth=1 "https://github.com/romkatv/zsh-defer.git" "$ZSH_PLUGINS_DIR/zsh-defer" &>>"$LOG_FILE"; then
@@ -91,6 +105,8 @@ install_zsh_autosuggestions() {
 		log_info "zsh-autosuggestions ${D_GREEN}already installed${NC}"
 		return 0
 	fi
+
+	_install_shell_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -132,6 +148,8 @@ install_zsh_syntax_highlighting() {
 		return 0
 	fi
 
+	_install_shell_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if git clone --depth=1 "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" &>>"$LOG_FILE"; then
@@ -171,6 +189,8 @@ install_history_substring() {
 		log_info "zsh-history-substring-search ${D_GREEN}already installed${NC}"
 		return 0
 	fi
+
+	_install_shell_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -212,6 +232,8 @@ install_zsh_completions() {
 		return 0
 	fi
 
+	_install_shell_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if git clone --depth=1 "https://github.com/zsh-users/zsh-completions.git" "$ZSH_PLUGINS_DIR/zsh-completions" &>>"$LOG_FILE"; then
@@ -251,6 +273,8 @@ install_fzf_tab() {
 		log_info "fzf-tab ${D_GREEN}already installed${NC}"
 		return 0
 	fi
+
+	_install_shell_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -292,6 +316,8 @@ install_you_should_use() {
 		return 0
 	fi
 
+	_install_shell_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if git clone --depth=1 "https://github.com/MichaelAquilina/zsh-you-should-use.git" "$ZSH_PLUGINS_DIR/zsh-you-should-use" &>>"$LOG_FILE"; then
@@ -332,6 +358,8 @@ install_zsh_autopair() {
 		return 0
 	fi
 
+	_install_shell_prerequisites
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if git clone --depth=1 "https://github.com/hlissner/zsh-autopair.git" "$ZSH_PLUGINS_DIR/zsh-autopair" &>>"$LOG_FILE"; then
@@ -371,6 +399,8 @@ install_better_npm() {
 		log_info "zsh-better-npm-completion ${D_GREEN}already installed${NC}"
 		return 0
 	fi
+
+	_install_shell_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
