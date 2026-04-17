@@ -9,7 +9,7 @@ YELLOW='\e[1;33m'
 CYAN='\e[1;36m'
 NC='\e[0m'
 
-REPO="https://github.com/DevCoreXOfficial/core-termux"
+REPO="https://github.com/KaienInkre/core-termux"
 BRANCH="main"
 CORE_DATA="${XDG_DATA_HOME:-$HOME/.local/share}/core-termux"
 CORE_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/core-termux"
