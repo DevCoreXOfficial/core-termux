@@ -39,6 +39,7 @@ install_ai() {
 		list_item "Claude Code ${GRAY}(${D_GREEN}claude${GRAY})"
 		list_item "OpenClaw ${GRAY}(${D_GREEN}openclaw${GRAY})"
 		list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
+		list_item "Codex ${GRAY}(${D_GREEN}codex${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"
@@ -50,7 +51,7 @@ install_ai() {
 # Función interna para instalar prerequisitos
 _install_ai_prerequisites() {
 	# Actualizar repositorios e instalar dependencias del sistema
-	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama -y &>>"$LOG_FILE"
+	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama tur-repo -y &>>"$LOG_FILE"
 
 	# Actualizar pip, setuptools y wheel para mistral-vibe
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
@@ -117,6 +118,24 @@ _install_ai_tools() {
 		has_changes=true
 	fi
 
+  # Ollama
+  if command -v ollama &>/dev/null; then
+    log_info "Ollama ${D_GREEN}already installed${D_NC}"
+else
+    log_info "Installing Ollama..."
+    pkg install ollama -y &>>"$LOG_FILE"
+    has_changes=true
+fi
+
+	# Codex
+	if command -v codex &>/dev/null; then
+		log_info "Codex ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Codex..."
+		pkg install codex -y &>>"$LOG_FILE"
+		has_changes=true
+	fi
+
 	# Return success even if nothing was installed (all already present)
 	return 0
 }
@@ -142,6 +161,7 @@ uninstall_ai() {
 _uninstall_ai_tools() {
 	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>"$LOG_FILE"
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
+  pkg uninstall codex -y &>>"$LOG_FILE"
 }
 
 # Actualizar herramientas de IA
@@ -167,4 +187,6 @@ _update_ai_tools() {
 	export ANDROID_API_LEVEL=24
 	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
+  pkg upgrade ollama -y &>>"$LOG_FILE"
+  pkg upgrade codex -y &>>"$LOG_FILE"
 }

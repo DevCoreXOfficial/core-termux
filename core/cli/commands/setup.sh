@@ -64,12 +64,12 @@ install_full() {
 	list_item "All base packages"
 	list_item "Language packages (Node.js, Python, Perl, PHP, Rust, C, C++)"
 	list_item "Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-  list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama)"
-  list_item "Code editor (Neovim + NvChad + Plugins)"
+	list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex)"
+	list_item "Code editor (Neovim + NvChad + Plugins)"
 	list_item "Development tools"
 	list_item "ZSH + Oh My Zsh + plugins"
 	list_item "Termux UI configuration"
-  list_item "Automation Tools (n8n)"
+	list_item "Automation Tools (n8n)"
 	echo
 
 	read_confirm "Continue with full installation?" CONFIRM
@@ -89,7 +89,7 @@ install_full() {
 	import "@/modules/editor"
 	import "@/modules/shell"
 	import "@/modules/ui"
-  import "@/modules/automation"
+	import "@/modules/automation"
 
 	install_language
 	install_tools
@@ -99,7 +99,7 @@ install_full() {
 	install_editor
 	install_shell
 	setup_ui
-  install_automation
+	install_automation
 
 	echo
 	separator
@@ -260,8 +260,8 @@ install_base() {
 
 	echo
 	update_termux_repositories
-  import "@/modules/language"
-  install_language
+	import "@/modules/language"
+	install_language
 
 	echo
 	separator

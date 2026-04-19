@@ -23,8 +23,8 @@ update_main() {
 		list_item "tools      - Update development tools"
 		list_item "node       - Update Node.js global modules"
 		list_item "shell      - Update ZSH plugins"
-    list_item "ui         - Update Termux UI"
-    list_item "automation - Update Automation Tools"
+		list_item "ui         - Update Termux UI"
+		list_item "automation - Update Automation Tools"
 		echo
 		log_info "Update specific tools with flags:"
 		echo
@@ -95,7 +95,7 @@ _update_full_module() {
 		update_node
 		update_shell
 		update_ui
-      update_automation
+		update_automation
 
 		separator
 		log_success "All updates completed"
@@ -137,10 +137,10 @@ _update_full_module() {
 		import "@/modules/ui"
 		update_ui
 		;;
-    automation)
-      import "@/modules/automation"
-      update_automation
-      ;;
+	automation)
+		import "@/modules/automation"
+		update_automation
+		;;
 	*)
 		log_warn "Unknown update target: $target"
 		echo "Run 'core update' to see available targets"
@@ -182,6 +182,9 @@ _update_specific_tools() {
 				;;
 			ollama)
 				if loading "Updating Ollama" update_ollama; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			codex)
+				if loading "Updating Codex" update_codex; then ((updated_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
@@ -558,11 +561,11 @@ update_core() {
 			echo
 			list_item "New features and bug fixes applied"
 			list_item "Commands and modules updated"
-			
+
 			# Limpiar notificación de update
 			rm -f "$CORE_CACHE/new_version"
 			rm -f "$CORE_CACHE/last_version_check"
-			
+
 			echo
 		else
 			log_success "Core-Termux is already up to date"

@@ -123,6 +123,7 @@ _list_ai() {
 	table_row "OpenClaude" "--openclaude" "openclaude" "$(_check_cmd "openclaude")"
 	table_row "OpenClaw" "--openclaw" "openclaw" "$(_check_cmd "openclaw")"
 	table_row "Ollama" "--ollama" "ollama" "$(_check_pkg "ollama")"
+	table_row "Codex" "--codex" "codex" "$(_check_pkg "codex")"
 	table_end
 
 	echo
