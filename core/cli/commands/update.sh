@@ -18,7 +18,7 @@ update_main() {
 		list_item "core       - Update only Core-Termux framework"
 		list_item "language   - Update language packages (pkg upgrade)"
 		list_item "db         - Update databases"
-		list_item "ai         - Update AI tools (npm/pip)"
+		list_item "ai         - Update AI tools (npm/pip/pkg)"
 		list_item "editor     - Update Neovim configuration"
 		list_item "tools      - Update development tools"
 		list_item "node       - Update Node.js global modules"
@@ -186,6 +186,9 @@ _update_specific_tools() {
 			codex)
 				if loading "Updating Codex" update_codex; then ((updated_count++)); else ((failed_count++)); fi
 				;;
+			opencode)
+				if loading "Updating OpenCode" update_opencode; then ((updated_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;
@@ -295,6 +298,9 @@ _update_specific_tools() {
 				;;
 			make)
 				if loading "Updating Make" update_make; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			udocker)
+				if loading "Updating Udocker" update_udocker; then ((updated_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown tool: --$tool"

@@ -17,7 +17,7 @@ install_main() {
 		list_item "full       - Install everything (recommended)"
 		list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++)"
 		list_item "db         - Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex)"
+		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode)"
 		list_item "editor     - Code editor (Neovim + NvChad)"
 		list_item "tools      - Development tools"
 		list_item "node       - Node.js global modules (npm packages)"
@@ -185,6 +185,9 @@ _install_specific_tools() {
 			codex)
 				if loading "Installing Codex" install_codex; then ((installed_count++)); else ((failed_count++)); fi
 				;;
+			opencode)
+				if loading "Installing OpenCode" install_opencode; then ((installed_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;
@@ -294,6 +297,9 @@ _install_specific_tools() {
 				;;
 			make)
 				if loading "Installing Make" install_make; then ((installed_count++)); else ((failed_count++)); fi
+				;;
+			udocker)
+				if loading "Installing udocker" install_udocker; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown tool: --$tool"

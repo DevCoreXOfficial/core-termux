@@ -209,6 +209,9 @@ _uninstall_specific_tools() {
 			codex)
 				if loading "Uninstalling Codex" uninstall_codex; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
+			opencode)
+				if loading "Uninstalling OpenCode" uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;
@@ -318,6 +321,9 @@ _uninstall_specific_tools() {
 				;;
 			make)
 				if loading "Uninstalling Make" uninstall_make; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
+			udocker)
+				if loading "Uninstalling Udocker" uninstall_udocker; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown tool: --$tool"

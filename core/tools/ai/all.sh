@@ -394,3 +394,56 @@ update_codex() {
 		return 1
 	fi
 }
+
+# ===== OPENCODE =====
+
+install_opencode() {
+	if command -v opencode &>/dev/null; then
+		return 0
+	fi
+
+	pkg install udocker -y &>>"$LOG_FILE"
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	mkdir -p ~/.opencode &>>"$LOG_FILE"
+
+	echo '#!/bin/bash
+
+udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode" &>>"$LOG_FILE"
+
+	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
+
+	if [ $? -eq 0 ]; then
+		return 0
+	else
+		log_error "Failed to install OpenCode"
+		return 1
+	fi
+}
+
+uninstall_opencode() {
+	log_info "Uninstalling OpenCode..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE" && rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
+		log_success "OpenCode uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall OpenCode"
+		return 1
+	fi
+}
+
+update_opencode() {
+	log_info "Updating OpenCode..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if udocker pull ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"; then
+		log_success "OpenCode updated"
+		return 0
+	else
+		log_error "Failed to update OpenCode"
+		return 1
+	fi
+}

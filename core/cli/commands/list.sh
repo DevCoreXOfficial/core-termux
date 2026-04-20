@@ -124,6 +124,7 @@ _list_ai() {
 	table_row "OpenClaw" "--openclaw" "openclaw" "$(_check_cmd "openclaw")"
 	table_row "Ollama" "--ollama" "ollama" "$(_check_pkg "ollama")"
 	table_row "Codex" "--codex" "codex" "$(_check_pkg "codex")"
+	table_row "OpenCode" "--opencode" "opencode" "$(_check_cmd "opencode")"
 	table_end
 
 	echo
@@ -178,6 +179,7 @@ _list_tools() {
 	table_row "ImageMagick" "--imagemagick" "$(_check_pkg "imagemagick")"
 	table_row "Shfmt" "--shfmt" "$(_check_pkg "shfmt")"
 	table_row "Make" "--make" "$(_check_pkg "make")"
+	table_row "Udocker" "--udocker" "$(_check_pkg "udocker")"
 	table_end
 
 	echo
