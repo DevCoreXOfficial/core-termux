@@ -25,6 +25,7 @@ TOOLS_PACKAGES=(
 	"imagemagick"
 	"shfmt"
 	"make"
+	"udocker"
 )
 
 # Instalar herramientas
@@ -60,6 +61,7 @@ install_tools() {
 		list_item "ImageMagick (image manipulation)"
 		list_item "Shfmt (shell script formatter)"
 		list_item "Make (build automation)"
+		list_item "Udocker (container management)"
 		echo
 	else
 		log_error "Failed to install tools"

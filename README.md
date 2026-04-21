@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.5.2-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.7.1-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -43,7 +43,7 @@
 
 ---
 
-## 🚀 Quick Installation
+## Quick Installation
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/install.sh | bash
@@ -57,7 +57,7 @@ core setup
 
 ---
 
-## 📋 Main Commands
+## Main Commands
 
 | Command | Description |
 |---------|-------------|
@@ -71,7 +71,7 @@ core setup
 
 ---
 
-## 📦 Detailed Commands
+## Detailed Commands
 
 ### `core setup`
 
@@ -105,7 +105,7 @@ core list <module>            # List tools in specific module
 |--------|-------------|
 | `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
-| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama) |
+| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode) |
 | `editor` | Code editor components (Neovim, NvChad) |
 | `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
 | `node` | Node.js global npm packages |
@@ -132,7 +132,7 @@ core install full             # Install everything
 |--------|-------------|
 | `language` | Node.js, Python, Perl, PHP, Rust, C/C++ |
 | `db` | PostgreSQL, MariaDB, SQLite, MongoDB |
-| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama |
+| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode |
 | `editor` | Neovim + NvChad configuration |
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
@@ -181,7 +181,7 @@ core update core              # Update framework only
 | `core` | Core-Termux framework only |
 | `language` | Language packages (pkg upgrade) |
 | `db` | Databases |
-| `ai` | AI tools (npm/pip) |
+| `ai` | AI tools (npm/pip/pkg) |
 | `editor` | Code editor configuration |
 | `tools` | Development tools |
 | `node` | Node.js global modules |
@@ -302,7 +302,7 @@ cd backend && core init nest
 
 ---
 
-## 🔧 Template Details
+## Template Details
 
 ### Next.js (`core init next`)
 
@@ -426,7 +426,7 @@ bcryptjs, helmet, cloudinary
 
 ---
 
-## 🌐 Language Packages
+## Language Packages
 
 The `language` module installs the following programming languages and runtimes via `pkg`:
 
@@ -445,7 +445,7 @@ core install language
 
 ---
 
-## 🛠️ Development Tools
+## Development Tools
 
 The `tools` module installs the following development utilities via `pkg`:
 
@@ -473,10 +473,11 @@ core install tools
 | **ImageMagick** | `imagemagick` | Image manipulation suite |
 | **Shfmt** | `shfmt` | Shell script formatter |
 | **Make** | `make` | Build automation tool |
+| **Udocker** | `udocker` | Run Docker containers without root |
 
 ---
 
-## 📦 Node.js Global Modules
+## Node.js Global Modules
 
 The `node` module installs the following global npm packages:
 
@@ -501,7 +502,7 @@ core install node
 
 ---
 
-## 💻 Code Editor
+## Code Editor
 
 The `editor` module installs **Neovim** with a custom configuration based on [NvChad](https://github.com/DevCoreXOfficial/nvchad-termux).
 
@@ -531,7 +532,7 @@ core install editor
 
 ---
 
-## 🎨 UI and Logs
+## UI and Logs
 
 The framework includes a professional logging system with colors, icons, and animations.
 
@@ -598,7 +599,7 @@ table_end
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 core-termux/
@@ -660,7 +661,7 @@ core-termux/
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -698,7 +699,7 @@ All processes save logs to:
 
 ---
 
-## 🔄 Automatic Updates
+## Automatic Updates
 
 The framework checks for updates automatically:
 
@@ -711,7 +712,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.5.3 (current: 3.5.2)
+⚠ New version available: 3.7.2 (current: 3.7.1)
 
 ➜ Run: core update core to update
 ```
@@ -724,7 +725,7 @@ core update core
 
 ---
 
-## 🐚 ZSH Shell
+## ZSH Shell
 
 When installing the `shell` module:
 
@@ -764,7 +765,7 @@ $ pwd
 
 ---
 
-## 🛠️ Included Fixes
+## Included Fixes
 
 ### localtunnel for Android
 
@@ -781,7 +782,7 @@ $PREFIX/lib/node_modules/localtunnel/node_modules/openurl/openurl.js
 
 ---
 
-## 📝 Usage Examples
+## Usage Examples
 
 ### Full installation
 
@@ -851,7 +852,7 @@ core list db              # List all databases
 
 ---
 
-## ⚠️ Important Notes
+## Important Notes
 
 1. **Restart Termux:** After installing `shell` or `ui`, restart Termux to apply changes
 2. **Permissions:** Ensure you have write permissions in the installation directory
@@ -860,6 +861,6 @@ core list db              # List all databases
 
 ---
 
-## 📄 License
+## License
 
 MIT License

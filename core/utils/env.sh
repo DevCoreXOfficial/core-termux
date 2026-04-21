@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CORE_VERSION="3.5.2"
+CORE_VERSION="3.7.1"
 
 # -------------------------
 # Directorios del usuario

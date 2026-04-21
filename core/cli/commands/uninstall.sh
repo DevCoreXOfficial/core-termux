@@ -23,7 +23,7 @@ uninstall_main() {
 		list_item "node       - Remove Node.js global modules"
 		list_item "shell      - Remove ZSH + Oh My Zsh"
 		list_item "ui         - Restore Termux UI to default"
-    list_item "automation - Remove automation tools"
+		list_item "automation - Remove automation tools"
 		echo
 		log_info "Uninstall specific tools with flags:"
 		echo
@@ -107,7 +107,7 @@ _uninstall_full_module() {
 		uninstall_shell
 		uninstall_ui
 		uninstall_localtunnel_fix
-      uninstall_automation
+		uninstall_automation
 
 		# Eliminar directorios de Core-Termux
 		log_info "Removing Core-Termux directories..."
@@ -160,10 +160,10 @@ _uninstall_full_module() {
 		import "@/modules/ui"
 		uninstall_ui
 		;;
-    automation)
-      import "@/modules/automation"
-      uninstall_automation
-      ;;
+	automation)
+		import "@/modules/automation"
+		uninstall_automation
+		;;
 	*)
 		log_warn "Unknown uninstall target: $target"
 		echo "Run 'core uninstall' to see available targets"
@@ -205,6 +205,12 @@ _uninstall_specific_tools() {
 				;;
 			ollama)
 				if loading "Uninstalling Ollama" uninstall_ollama; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
+			codex)
+				if loading "Uninstalling Codex" uninstall_codex; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
+			opencode)
+				if loading "Uninstalling OpenCode" uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
@@ -315,6 +321,9 @@ _uninstall_specific_tools() {
 				;;
 			make)
 				if loading "Uninstalling Make" uninstall_make; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
+			udocker)
+				if loading "Uninstalling Udocker" uninstall_udocker; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown tool: --$tool"

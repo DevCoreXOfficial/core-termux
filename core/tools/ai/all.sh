@@ -350,3 +350,100 @@ update_ollama() {
 		return 1
 	fi
 }
+
+# ===== CODEX =====
+install_codex() {
+	if command -v codex &>/dev/null; then
+		return 0
+	fi
+
+	pkg install tur-repo -y &>>"$LOG_FILE"
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg install codex -y &>>"$LOG_FILE"; then
+		return 0
+	else
+		log_error "Failed to install Codex"
+		return 1
+	fi
+}
+
+uninstall_codex() {
+	log_info "Uninstalling Codex..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg uninstall codex -y &>>"$LOG_FILE"; then
+		log_success "Codex uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall Codex"
+		return 1
+	fi
+}
+
+update_codex() {
+	log_info "Updating Codex..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg upgrade codex -y &>>"$LOG_FILE"; then
+		log_success "Codex updated"
+		return 0
+	else
+		log_error "Failed to update Codex"
+		return 1
+	fi
+}
+
+# ===== OPENCODE =====
+
+install_opencode() {
+	if command -v opencode &>/dev/null; then
+		return 0
+	fi
+
+	pkg install udocker -y &>>"$LOG_FILE"
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	mkdir -p ~/.opencode &>>"$LOG_FILE"
+
+	echo '#!/bin/bash
+
+udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode"
+
+	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
+
+	if [ $? -eq 0 ]; then
+		return 0
+	else
+		log_error "Failed to install OpenCode"
+		return 1
+	fi
+}
+
+uninstall_opencode() {
+	log_info "Uninstalling OpenCode..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE" && rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
+		log_success "OpenCode uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall OpenCode"
+		return 1
+	fi
+}
+
+update_opencode() {
+	log_info "Updating OpenCode..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if udocker pull ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"; then
+		log_success "OpenCode updated"
+		return 0
+	else
+		log_error "Failed to update OpenCode"
+		return 1
+	fi
+}
