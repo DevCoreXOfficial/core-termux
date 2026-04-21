@@ -410,7 +410,7 @@ install_opencode() {
 
 	echo '#!/bin/bash
 
-udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode" &>>"$LOG_FILE"
+udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode"
 
 	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
 
