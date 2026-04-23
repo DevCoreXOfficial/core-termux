@@ -115,7 +115,7 @@ _install_ai_tools() {
 		log_info "OpenClaw ${D_GREEN}already installed${D_NC}"
 	else
 		log_info "Installing OpenClaw..."
-		npm install -g openclaw@latest &>>"$LOG_FILE"
+		npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys openclaw@latest &>>"$LOG_FILE"
 		has_changes=true
 	fi
 
@@ -178,6 +178,7 @@ uninstall_ai() {
 # Función interna para desinstalar
 _uninstall_ai_tools() {
 	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>"$LOG_FILE"
+  npm uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
 	pkg uninstall codex -y &>>"$LOG_FILE"
 	udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"
@@ -206,6 +207,7 @@ _update_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
 	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
+  npm update -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
 	pkg upgrade ollama -y &>>"$LOG_FILE"
 	pkg upgrade codex -y &>>"$LOG_FILE"

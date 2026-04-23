@@ -269,6 +269,8 @@ install_openclaw() {
 
 	_install_ai_npm_prereqs
 
+  npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
@@ -285,7 +287,7 @@ uninstall_openclaw() {
 	log_info "Uninstalling OpenClaw..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if npm uninstall -g openclaw &>>"$LOG_FILE"; then
+	if npm uninstall -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
 		log_success "OpenClaw uninstalled"
 		return 0
 	else
@@ -300,7 +302,7 @@ update_openclaw() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
 
-	if npm update -g openclaw &>>"$LOG_FILE"; then
+	if npm update -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
 		log_success "OpenClaw updated"
 		return 0
 	else
