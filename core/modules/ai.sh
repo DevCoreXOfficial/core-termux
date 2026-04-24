@@ -145,9 +145,33 @@ _install_ai_tools() {
 
 		mkdir -p ~/.opencode &>>"$LOG_FILE"
 
-		echo '#!/bin/bash
+		cat <<'EOF' >"$PREFIX/bin/opencode"
+#!/bin/bash
 
-udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode"
+if [ -f ".env" ]; then
+    ENV_PATH=".env"
+elif [ -f "$HOME/.opencode/.env" ]; then
+    ENV_PATH="$HOME/.opencode/.env"
+else
+    ENV_PATH="$HOME/.env"
+fi
+
+ENV_FLAGS=()
+if [ -f "$ENV_PATH" ]; then
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        [[ "$line" =~ ^#.*$ ]] && continue
+        [[ -z "$line" ]] && continue
+        clean_line=$(echo "$line" | sed 's/["'\'']//g')
+        ENV_FLAGS+=("-e" "$clean_line")
+    done < "$ENV_PATH"
+fi
+
+udocker run --rm "${ENV_FLAGS[@]}" --nobanner --hostauth \
+    -v "$(pwd):/home/opencode/workspace" \
+    -v "$HOME/.opencode:/home/opencode/.opencode" \
+    -w /home/opencode/workspace \
+    ghcr.io/anomalyco/opencode "$@"
+EOF
 
 		chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
 
@@ -178,7 +202,7 @@ uninstall_ai() {
 # Función interna para desinstalar
 _uninstall_ai_tools() {
 	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>"$LOG_FILE"
-  npm uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+	npm uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
 	pkg uninstall codex -y &>>"$LOG_FILE"
 	udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"
@@ -207,7 +231,7 @@ _update_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
 	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
-  npm update -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+	npm update -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
 	pkg upgrade ollama -y &>>"$LOG_FILE"
 	pkg upgrade codex -y &>>"$LOG_FILE"

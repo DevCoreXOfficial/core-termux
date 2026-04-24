@@ -269,7 +269,7 @@ install_openclaw() {
 
 	_install_ai_npm_prereqs
 
-  npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+	npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
@@ -410,9 +410,33 @@ install_opencode() {
 
 	mkdir -p ~/.opencode &>>"$LOG_FILE"
 
-	echo '#!/bin/bash
+	cat <<'EOF' >"$PREFIX/bin/opencode"
+#!/bin/bash
 
-udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode"
+if [ -f ".env" ]; then
+    ENV_PATH=".env"
+elif [ -f "$HOME/.opencode/.env" ]; then
+    ENV_PATH="$HOME/.opencode/.env"
+else
+    ENV_PATH="$HOME/.env"
+fi
+
+ENV_FLAGS=()
+if [ -f "$ENV_PATH" ]; then
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        [[ "$line" =~ ^#.*$ ]] && continue
+        [[ -z "$line" ]] && continue
+        clean_line=$(echo "$line" | sed 's/["'\'']//g')
+        ENV_FLAGS+=("-e" "$clean_line")
+    done < "$ENV_PATH"
+fi
+
+udocker run --rm "${ENV_FLAGS[@]}" --nobanner --hostauth \
+    -v "$(pwd):/home/opencode/workspace" \
+    -v "$HOME/.opencode:/home/opencode/.opencode" \
+    -w /home/opencode/workspace \
+    ghcr.io/anomalyco/opencode "$@"
+EOF
 
 	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
 
