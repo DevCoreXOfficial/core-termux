@@ -404,38 +404,44 @@ install_opencode() {
 		return 0
 	fi
 
-	pkg install udocker -y &>>"$LOG_FILE"
+	pkg install proot-distro -y &>>"$LOG_FILE"
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	mkdir -p ~/.opencode &>>"$LOG_FILE"
+	if [ ! -d ~/.opencode ]; then
+		mkdir -p ~/.opencode &>>"$LOG_FILE"
+	fi
+
+	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+	if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
+		proot-distro install alpine &>>"$LOG_FILE"
+	fi
+
+	proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates libstdc++ libgcc gcompat' &>>"$LOG_FILE"
+
+	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+
+	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+
+	rm $TMPDIR/$TAR_NAME
+
+	chmod +x $ALPINE_ROOT/bin/opencode
 
 	cat <<'EOF' >"$PREFIX/bin/opencode"
-#!/bin/bash
+    #!/bin/bash
 
-if [ -f ".env" ]; then
-    ENV_PATH=".env"
-elif [ -f "$HOME/.opencode/.env" ]; then
-    ENV_PATH="$HOME/.opencode/.env"
-else
-    ENV_PATH="$HOME/.env"
-fi
+ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+LOADER="$ALPINE_ROOT/lib/ld-musl-aarch64.so.1"
+LIB_PATH="$ALPINE_ROOT/lib:$ALPINE_ROOT/usr/lib"
+BINARY_PATH="$ALPINE_ROOT/bin/opencode"
 
-ENV_FLAGS=()
-if [ -f "$ENV_PATH" ]; then
-    while IFS= read -r line || [[ -n "$line" ]]; do
-        [[ "$line" =~ ^#.*$ ]] && continue
-        [[ -z "$line" ]] && continue
-        clean_line=$(echo "$line" | sed 's/["'\'']//g')
-        ENV_FLAGS+=("-e" "$clean_line")
-    done < "$ENV_PATH"
-fi
+unset LD_PRELOAD
 
-udocker run --rm "${ENV_FLAGS[@]}" --nobanner --hostauth \
-    -v "$(pwd):/home/opencode/workspace" \
-    -v "$HOME/.opencode:/home/opencode/.opencode" \
-    -w /home/opencode/workspace \
-    ghcr.io/anomalyco/opencode "$@"
+$LOADER --library-path $LIB_PATH $BINARY_PATH "$@"
 EOF
 
 	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
@@ -452,7 +458,7 @@ uninstall_opencode() {
 	log_info "Uninstalling OpenCode..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE" && rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
+	if proot-distro remove alpine &>>"$LOG_FILE" && rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
 		log_success "OpenCode uninstalled"
 		return 0
 	else
@@ -464,8 +470,14 @@ uninstall_opencode() {
 update_opencode() {
 	log_info "Updating OpenCode..."
 	mkdir -p "$(dirname "$LOG_FILE")"
+	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
 
-	if udocker pull ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"; then
+
+
+	if rm $ALPINE_ROOT/bin/opencode && curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE" && tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin && rm $TMPDIR/$TAR_NAME && chmod +x $ALPINE_ROOT/bin/opencode &>>"$LOG_FILE"; then
 		log_success "OpenCode updated"
 		return 0
 	else

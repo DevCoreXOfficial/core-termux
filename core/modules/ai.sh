@@ -52,7 +52,7 @@ install_ai() {
 # Función interna para instalar prerequisitos
 _install_ai_prerequisites() {
 	# Actualizar repositorios e instalar dependencias del sistema
-	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama tur-repo udocker -y &>>"$LOG_FILE"
+	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama tur-repo udocker proot-distro -y &>>"$LOG_FILE"
 
 	# Actualizar pip, setuptools y wheel para mistral-vibe
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
@@ -143,34 +143,40 @@ _install_ai_tools() {
 	else
 		log_info "Installing OpenCode..."
 
-		mkdir -p ~/.opencode &>>"$LOG_FILE"
+		if [ ! -d ~/.opencode ]; then
+			mkdir -p ~/.opencode &>>"$LOG_FILE"
+		fi
+
+		LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+		TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+		REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+		ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+		if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
+			proot-distro install alpine &>>"$LOG_FILE"
+		fi
+
+		proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates libstdc++ libgcc gcompat' &>>"$LOG_FILE"
+
+		curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+
+		tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+
+		rm $TMPDIR/$TAR_NAME
+
+		chmod +x $ALPINE_ROOT/bin/opencode
 
 		cat <<'EOF' >"$PREFIX/bin/opencode"
-#!/bin/bash
+    #!/bin/bash
 
-if [ -f ".env" ]; then
-    ENV_PATH=".env"
-elif [ -f "$HOME/.opencode/.env" ]; then
-    ENV_PATH="$HOME/.opencode/.env"
-else
-    ENV_PATH="$HOME/.env"
-fi
+ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+LOADER="$ALPINE_ROOT/lib/ld-musl-aarch64.so.1"
+LIB_PATH="$ALPINE_ROOT/lib:$ALPINE_ROOT/usr/lib"
+BINARY_PATH="$ALPINE_ROOT/bin/opencode"
 
-ENV_FLAGS=()
-if [ -f "$ENV_PATH" ]; then
-    while IFS= read -r line || [[ -n "$line" ]]; do
-        [[ "$line" =~ ^#.*$ ]] && continue
-        [[ -z "$line" ]] && continue
-        clean_line=$(echo "$line" | sed 's/["'\'']//g')
-        ENV_FLAGS+=("-e" "$clean_line")
-    done < "$ENV_PATH"
-fi
+unset LD_PRELOAD
 
-udocker run --rm "${ENV_FLAGS[@]}" --nobanner --hostauth \
-    -v "$(pwd):/home/opencode/workspace" \
-    -v "$HOME/.opencode:/home/opencode/.opencode" \
-    -w /home/opencode/workspace \
-    ghcr.io/anomalyco/opencode "$@"
+$LOADER --library-path $LIB_PATH $BINARY_PATH "$@"
 EOF
 
 		chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
@@ -201,12 +207,21 @@ uninstall_ai() {
 
 # Función interna para desinstalar
 _uninstall_ai_tools() {
+	# qwen-code gemini-cli claude-code openclaude
 	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>"$LOG_FILE"
+
+	# openclaw
 	npm uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
+	# mistral-vibe
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
+
+	# codex
 	pkg uninstall codex -y &>>"$LOG_FILE"
-	udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"
-	rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"
+
+	# opencode
+	proot-distro remove alpine &>>"$LOG_FILE"
+	rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"
 }
 
 # Actualizar herramientas de IA
@@ -230,10 +245,31 @@ update_ai() {
 _update_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
+
+	# qwen-code gemini-cli claude-code openclaude
 	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
+
+	# openclaw
 	npm update -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
+	# mistral-vibe
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
+
+	# ollama
 	pkg upgrade ollama -y &>>"$LOG_FILE"
+
+	# codex
 	pkg upgrade codex -y &>>"$LOG_FILE"
-	udocker pull ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"
+
+	# opencode
+	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+	rm $ALPINE_ROOT/bin/opencode
+	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+	rm $TMPDIR/$TAR_NAME
+	chmod +x $ALPINE_ROOT/bin/opencode
 }
