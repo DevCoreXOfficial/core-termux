@@ -432,16 +432,29 @@ install_opencode() {
 	chmod +x $ALPINE_ROOT/bin/opencode
 
 	cat <<'EOF' >"$PREFIX/bin/opencode"
-    #!/bin/bash
+#!/bin/bash
 
-ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
-LOADER="$ALPINE_ROOT/lib/ld-musl-aarch64.so.1"
-LIB_PATH="$ALPINE_ROOT/lib:$ALPINE_ROOT/usr/lib"
-BINARY_PATH="$ALPINE_ROOT/bin/opencode"
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()                                                while IFS= read -r line; do
+        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
+                ENV_ARGS+=("--env" "$line")
+        fi
+done < <(env)
+
+ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+        "--env" "TERM=$TERM"
+        "--env" "HOME=/root"
+)
 
 unset LD_PRELOAD
-
-$LOADER --library-path $LIB_PATH $BINARY_PATH "$@"
+proot-distro login \
+        "${ENV_ARGS[@]}" \
+        --termux-home \
+        --shared-tmp \
+        --work-dir $PWD \
+        alpine \
+        -- /bin/opencode "$@"
 EOF
 
 	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
@@ -474,8 +487,6 @@ update_opencode() {
 	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
 	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
 	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
-
-
 
 	if rm $ALPINE_ROOT/bin/opencode && curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE" && tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin && rm $TMPDIR/$TAR_NAME && chmod +x $ALPINE_ROOT/bin/opencode &>>"$LOG_FILE"; then
 		log_success "OpenCode updated"
