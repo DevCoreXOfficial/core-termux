@@ -171,7 +171,8 @@ _install_ai_tools() {
 
 EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
 
-ENV_ARGS=()                                                while IFS= read -r line; do
+ENV_ARGS=()
+      while IFS= read -r line; do
         if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
                 ENV_ARGS+=("--env" "$line")
         fi
