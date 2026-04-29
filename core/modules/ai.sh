@@ -92,7 +92,58 @@ _install_ai_tools() {
 		log_info "Claude Code ${D_GREEN}already installed${D_NC}"
 	else
 		log_info "Installing Claude Code..."
-		npm install -g @anthropic-ai/claude-code &>>"$LOG_FILE"
+		if [ ! -d ~/.claude ]; then
+			mkdir -p ~/.claude &>>"$LOG_FILE"
+		fi
+
+		LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+		TAR_NAME="claude-linux-arm64-musl.tar.gz"
+		REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
+		ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+		if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
+			proot-distro install alpine &>>"$LOG_FILE"
+		fi
+
+		proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates' &>>"$LOG_FILE"
+
+		curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+
+		tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+
+		rm $TMPDIR/$TAR_NAME
+
+		chmod +x $ALPINE_ROOT/bin/claude
+
+		cat <<'EOF' >"$PREFIX/bin/claude"
+#!/bin/bash
+
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()
+      while IFS= read -r line; do
+        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
+                ENV_ARGS+=("--env" "$line")
+        fi
+done < <(env)
+
+ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+        "--env" "TERM=$TERM"
+        "--env" "HOME=/root"
+)
+
+unset LD_PRELOAD
+proot-distro login \
+        "${ENV_ARGS[@]}" \
+        --termux-home \
+        --shared-tmp \
+        --work-dir $PWD \
+        alpine \
+        -- /bin/claude "$@"
+EOF
+
+		chmod +x "$PREFIX/bin/claude" &>>"$LOG_FILE"
+
 		has_changes=true
 	fi
 
@@ -234,8 +285,12 @@ uninstall_ai() {
 
 # Función interna para desinstalar
 _uninstall_ai_tools() {
-	# qwen-code gemini-cli claude-code openclaude
+	# qwen-code gemini-cli openclaude
 	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>"$LOG_FILE"
+
+	# claude-code
+	proot-distro remove alpine &>>"$LOG_FILE"
+	rm "$PREFIX/bin/claude" &>>"$LOG_FILE"
 
 	# openclaw
 	npm uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
@@ -279,8 +334,20 @@ _update_ai_tools() {
 	export GOCACHE="$HOME/.cache/go"
 	export GOMODCACHE="$GOPATH/pkg/mod"
 
-	# qwen-code gemini-cli claude-code openclaude
+	# qwen-code gemini-cli openclaude
 	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
+
+	# claude-code
+	LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="claude-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+	rm $ALPINE_ROOT/bin/claude
+	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+	rm $TMPDIR/$TAR_NAME
+	chmod +x $ALPINE_ROOT/bin/claude
 
 	# openclaw
 	npm update -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
