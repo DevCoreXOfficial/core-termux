@@ -189,6 +189,9 @@ _update_specific_tools() {
 			opencode)
 				if loading "Updating OpenCode" update_opencode; then ((updated_count++)); else ((failed_count++)); fi
 				;;
+			engram)
+				if loading "Updating Engram" update_engram; then ((updated_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;
@@ -393,6 +396,9 @@ _update_specific_tools() {
 				;;
 			clang)
 				if loading "Updating C/C++ (clang)" update_clang; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+			golang)
+				if loading "Updating Go (golang)" update_golang; then ((updated_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown language: --$tool"

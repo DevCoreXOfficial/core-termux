@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.7.5-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.8.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -103,9 +103,9 @@ core list <module>            # List tools in specific module
 
 | Target | Description |
 |--------|-------------|
-| `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++) |
+| `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
-| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode) |
+| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram) |
 | `editor` | Code editor components (Neovim, NvChad) |
 | `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
 | `node` | Node.js global npm packages |
@@ -130,9 +130,9 @@ core install full             # Install everything
 
 | Module | Description |
 |--------|-------------|
-| `language` | Node.js, Python, Perl, PHP, Rust, C/C++ |
+| `language` | Node.js, Python, Perl, PHP, Rust, C/C++, Go |
 | `db` | PostgreSQL, MariaDB, SQLite, MongoDB |
-| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode |
+| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram |
 | `editor` | Neovim + NvChad configuration |
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
@@ -442,6 +442,7 @@ core install language
 | **PHP** | `php` | PHP interpreter |
 | **Rust** | `rust` | Rust compiler and Cargo |
 | **C/C++** | `clang` | LLVM C/C++ compiler |
+| **Go** | `golang` | Go programming language |
 
 ---
 
@@ -712,7 +713,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.7.6 (current: 3.7.5)
+⚠ New version available: 3.8.1 (current: 3.8.0)
 
 ➜ Run: core update core to update
 ```

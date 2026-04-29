@@ -41,6 +41,7 @@ install_ai() {
 		list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
 		list_item "Codex ${GRAY}(${D_GREEN}codex${GRAY})"
 		list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
+		list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"
@@ -52,7 +53,7 @@ install_ai() {
 # Función interna para instalar prerequisitos
 _install_ai_prerequisites() {
 	# Actualizar repositorios e instalar dependencias del sistema
-	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama tur-repo udocker proot-distro -y &>>"$LOG_FILE"
+	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama tur-repo udocker proot-distro golang sqlite -y &>>"$LOG_FILE"
 
 	# Actualizar pip, setuptools y wheel para mistral-vibe
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
@@ -62,6 +63,9 @@ _install_ai_prerequisites() {
 _install_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
 
 	local has_changes=false
 
@@ -198,6 +202,15 @@ EOF
 		has_changes=true
 	fi
 
+	# Engram
+	if command -v engram &>/dev/null; then
+		log_info "Engram ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Engram..."
+		git clone https://github.com/Gentleman-Programming/engram ~/.cache/core-termux/engram &>>"$LOG_FILE"
+		go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"
+		has_changes=true
+	fi
 	# Return success even if nothing was installed (all already present)
 	return 0
 }
@@ -236,6 +249,9 @@ _uninstall_ai_tools() {
 	# opencode
 	proot-distro remove alpine &>>"$LOG_FILE"
 	rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"
+
+	# engram
+	rm -rf ~/.cache/core-termux/engram && rm "$PREFIX/bin/engram" &>>"$LOG_FILE"
 }
 
 # Actualizar herramientas de IA
@@ -259,6 +275,9 @@ update_ai() {
 _update_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
 
 	# qwen-code gemini-cli claude-code openclaude
 	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
@@ -286,4 +305,8 @@ _update_ai_tools() {
 	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
 	rm $TMPDIR/$TAR_NAME
 	chmod +x $ALPINE_ROOT/bin/opencode
+
+	# engram
+	git -C ~/.cache/core-termux/engram pull &>>"$LOG_FILE"
+	go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"
 }

@@ -212,6 +212,9 @@ _uninstall_specific_tools() {
 			opencode)
 				if loading "Uninstalling OpenCode" uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
+			engram)
+				if loading "Uninstalling Engram" uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;
@@ -416,6 +419,9 @@ _uninstall_specific_tools() {
 				;;
 			clang)
 				if loading "Uninstalling C/C++ (clang)" uninstall_clang; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
+			golang)
+				if loading "Uninstalling Go (golang)" uninstall_golang; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown language: --$tool"

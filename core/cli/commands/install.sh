@@ -15,9 +15,9 @@ install_main() {
 		log_info "Available targets:"
 		echo
 		list_item "full       - Install everything (recommended)"
-		list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++)"
+		list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++, Go)"
 		list_item "db         - Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode)"
+		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram)"
 		list_item "editor     - Code editor (Neovim + NvChad)"
 		list_item "tools      - Development tools"
 		list_item "node       - Node.js global modules (npm packages)"
@@ -187,6 +187,9 @@ _install_specific_tools() {
 				;;
 			opencode)
 				if loading "Installing OpenCode" install_opencode; then ((installed_count++)); else ((failed_count++)); fi
+				;;
+			engram)
+				if loading "Installing Engram" install_engram; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
@@ -392,6 +395,9 @@ _install_specific_tools() {
 				;;
 			clang)
 				if loading "Installing C/C++ (clang)" install_clang; then ((installed_count++)); else ((failed_count++)); fi
+				;;
+			golang)
+				if loading "Installing Go (golang)" install_golang; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown language: --$tool"
