@@ -78,6 +78,7 @@ _list_language() {
 	table_row "PHP" "--php" "$(_check_pkg "php")"
 	table_row "Rust" "--rust" "$(_check_pkg "rust")"
 	table_row "C/C++ (clang)" "--clang" "$(_check_pkg "clang")"
+	table_row "Go (golang)" "--golang" "$(_check_pkg "golang")"
 	table_end
 
 	echo
@@ -125,6 +126,7 @@ _list_ai() {
 	table_row "Ollama" "--ollama" "ollama" "$(_check_pkg "ollama")"
 	table_row "Codex" "--codex" "codex" "$(_check_pkg "codex")"
 	table_row "OpenCode" "--opencode" "opencode" "$(_check_cmd "opencode")"
+	table_row "Engram" "--engram" "engram" "$(_check_cmd "engram")"
 	table_end
 
 	echo

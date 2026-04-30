@@ -127,25 +127,76 @@ install_claude_code() {
 		return 0
 	fi
 
-	_install_ai_npm_prereqs
+	pkg install proot-distro -y &>>"$LOG_FILE"
 
 	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
 
-	if npm install -g @anthropic-ai/claude-code &>>"$LOG_FILE"; then
+	if [ ! -d ~/.claude ]; then
+		mkdir -p ~/.claude &>>"$LOG_FILE"
+	fi
+
+	LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="claude-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+	if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
+		proot-distro install alpine &>>"$LOG_FILE"
+	fi
+
+	proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates' &>>"$LOG_FILE"
+
+	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+
+	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+
+	rm $TMPDIR/$TAR_NAME
+
+	chmod +x $ALPINE_ROOT/bin/claude
+
+	cat <<'EOF' >"$PREFIX/bin/claude"
+#!/bin/bash
+
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()
+      while IFS= read -r line; do
+        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
+                ENV_ARGS+=("--env" "$line")
+        fi
+done < <(env)
+
+ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+        "--env" "TERM=$TERM"
+        "--env" "HOME=/root"
+)
+
+unset LD_PRELOAD
+proot-distro login \
+        "${ENV_ARGS[@]}" \
+        --termux-home \
+        --shared-tmp \
+        --work-dir $PWD \
+        alpine \
+        -- /bin/claude "$@"
+EOF
+
+	chmod +x "$PREFIX/bin/claude" &>>"$LOG_FILE"
+
+	if [ $? -eq 0 ]; then
 		return 0
 	else
 		log_error "Failed to install Claude Code"
 		return 1
 	fi
+
 }
 
 uninstall_claude_code() {
 	log_info "Uninstalling Claude Code..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if npm uninstall -g @anthropic-ai/claude-code &>>"$LOG_FILE"; then
+	if proot-distro remove alpine &>>"$LOG_FILE" && rm "$PREFIX/bin/claude" &>>"$LOG_FILE"; then
 		log_success "Claude Code uninstalled"
 		return 0
 	else
@@ -157,16 +208,19 @@ uninstall_claude_code() {
 update_claude_code() {
 	log_info "Updating Claude Code..."
 	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
+	LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="claude-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
 
-	if npm update -g @anthropic-ai/claude-code &>>"$LOG_FILE"; then
+	if rm $ALPINE_ROOT/bin/claude && curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE" && tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin && rm $TMPDIR/$TAR_NAME && chmod +x $ALPINE_ROOT/bin/claude &>>"$LOG_FILE"; then
 		log_success "Claude Code updated"
 		return 0
 	else
 		log_error "Failed to update Claude Code"
 		return 1
 	fi
+
 }
 
 # ===== MISTRAL VIBE =====
@@ -269,6 +323,8 @@ install_openclaw() {
 
 	_install_ai_npm_prereqs
 
+	npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
@@ -285,7 +341,7 @@ uninstall_openclaw() {
 	log_info "Uninstalling OpenClaw..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if npm uninstall -g openclaw &>>"$LOG_FILE"; then
+	if npm uninstall -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
 		log_success "OpenClaw uninstalled"
 		return 0
 	else
@@ -300,7 +356,7 @@ update_openclaw() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
 
-	if npm update -g openclaw &>>"$LOG_FILE"; then
+	if npm update -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
 		log_success "OpenClaw updated"
 		return 0
 	else
@@ -402,15 +458,59 @@ install_opencode() {
 		return 0
 	fi
 
-	pkg install udocker -y &>>"$LOG_FILE"
+	pkg install proot-distro -y &>>"$LOG_FILE"
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	mkdir -p ~/.opencode &>>"$LOG_FILE"
+	if [ ! -d ~/.opencode ]; then
+		mkdir -p ~/.opencode &>>"$LOG_FILE"
+	fi
 
-	echo '#!/bin/bash
+	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
 
-udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode"
+	if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
+		proot-distro install alpine &>>"$LOG_FILE"
+	fi
+
+	proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates libstdc++ libgcc gcompat' &>>"$LOG_FILE"
+
+	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+
+	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+
+	rm $TMPDIR/$TAR_NAME
+
+	chmod +x $ALPINE_ROOT/bin/opencode
+
+	cat <<'EOF' >"$PREFIX/bin/opencode"
+#!/bin/bash
+
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()
+      while IFS= read -r line; do
+        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
+                ENV_ARGS+=("--env" "$line")
+        fi
+done < <(env)
+
+ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+        "--env" "TERM=$TERM"
+        "--env" "HOME=/root"
+)
+
+unset LD_PRELOAD
+proot-distro login \
+        "${ENV_ARGS[@]}" \
+        --termux-home \
+        --shared-tmp \
+        --work-dir $PWD \
+        alpine \
+        -- /bin/opencode "$@"
+EOF
 
 	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
 
@@ -426,7 +526,7 @@ uninstall_opencode() {
 	log_info "Uninstalling OpenCode..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE" && rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
+	if proot-distro remove alpine &>>"$LOG_FILE" && rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
 		log_success "OpenCode uninstalled"
 		return 0
 	else
@@ -438,12 +538,67 @@ uninstall_opencode() {
 update_opencode() {
 	log_info "Updating OpenCode..."
 	mkdir -p "$(dirname "$LOG_FILE")"
+	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
 
-	if udocker pull ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"; then
+	if rm $ALPINE_ROOT/bin/opencode && curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE" && tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin && rm $TMPDIR/$TAR_NAME && chmod +x $ALPINE_ROOT/bin/opencode &>>"$LOG_FILE"; then
 		log_success "OpenCode updated"
 		return 0
 	else
 		log_error "Failed to update OpenCode"
+		return 1
+	fi
+}
+
+# ===== ENGRAM =====
+install_engram() {
+	if command -v engram &>/dev/null; then
+		return 0
+	fi
+
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
+
+	pkg install golang git sqlite -y &>>"$LOG_FILE"
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if git clone https://github.com/Gentleman-Programming/engram ~/.cache/core-termux/engram && go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
+		return 0
+	else
+		log_error "Failed to install Engram"
+		return 1
+	fi
+}
+
+uninstall_engram() {
+	log_info "Uninstalling Engram..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if rm -rf ~/.cache/core-termux/engram && rm "$PREFIX/bin/engram" &>>"$LOG_FILE"; then
+		log_success "Engram uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall Engram"
+		return 1
+	fi
+}
+
+update_engram() {
+	log_info "Updating Engram..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
+
+	if git -C ~/.cache/core-termux/engram pull &>>"$LOG_FILE" && go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
+		log_success "Engram updated"
+		return 0
+	else
+		log_error "Failed to update Engram"
 		return 1
 	fi
 }

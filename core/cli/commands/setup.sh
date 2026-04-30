@@ -62,9 +62,9 @@ install_full() {
 	log_info "This will install:"
 	echo
 	list_item "All base packages"
-	list_item "Language packages (Node.js, Python, Perl, PHP, Rust, C, C++)"
+	list_item "Language packages (Node.js, Python, Perl, PHP, Rust, C, C++, Go)"
 	list_item "Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-	list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode)"
+	list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram)"
 	list_item "Code editor (Neovim + NvChad + Plugins)"
 	list_item "Development tools"
 	list_item "ZSH + Oh My Zsh + plugins"

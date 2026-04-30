@@ -41,6 +41,7 @@ install_ai() {
 		list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
 		list_item "Codex ${GRAY}(${D_GREEN}codex${GRAY})"
 		list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
+		list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"
@@ -52,7 +53,7 @@ install_ai() {
 # Función interna para instalar prerequisitos
 _install_ai_prerequisites() {
 	# Actualizar repositorios e instalar dependencias del sistema
-	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama tur-repo udocker -y &>>"$LOG_FILE"
+	pkg install nodejs-lts python git ripgrep clang make rust libffi openssl pkg-config ollama tur-repo udocker proot-distro golang sqlite -y &>>"$LOG_FILE"
 
 	# Actualizar pip, setuptools y wheel para mistral-vibe
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
@@ -62,6 +63,9 @@ _install_ai_prerequisites() {
 _install_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
 
 	local has_changes=false
 
@@ -88,7 +92,58 @@ _install_ai_tools() {
 		log_info "Claude Code ${D_GREEN}already installed${D_NC}"
 	else
 		log_info "Installing Claude Code..."
-		npm install -g @anthropic-ai/claude-code &>>"$LOG_FILE"
+		if [ ! -d ~/.claude ]; then
+			mkdir -p ~/.claude &>>"$LOG_FILE"
+		fi
+
+		LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+		TAR_NAME="claude-linux-arm64-musl.tar.gz"
+		REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
+		ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+		if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
+			proot-distro install alpine &>>"$LOG_FILE"
+		fi
+
+		proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates' &>>"$LOG_FILE"
+
+		curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+
+		tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+
+		rm $TMPDIR/$TAR_NAME
+
+		chmod +x $ALPINE_ROOT/bin/claude
+
+		cat <<'EOF' >"$PREFIX/bin/claude"
+#!/bin/bash
+
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()
+      while IFS= read -r line; do
+        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
+                ENV_ARGS+=("--env" "$line")
+        fi
+done < <(env)
+
+ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+        "--env" "TERM=$TERM"
+        "--env" "HOME=/root"
+)
+
+unset LD_PRELOAD
+proot-distro login \
+        "${ENV_ARGS[@]}" \
+        --termux-home \
+        --shared-tmp \
+        --work-dir $PWD \
+        alpine \
+        -- /bin/claude "$@"
+EOF
+
+		chmod +x "$PREFIX/bin/claude" &>>"$LOG_FILE"
+
 		has_changes=true
 	fi
 
@@ -115,7 +170,7 @@ _install_ai_tools() {
 		log_info "OpenClaw ${D_GREEN}already installed${D_NC}"
 	else
 		log_info "Installing OpenClaw..."
-		npm install -g openclaw@latest &>>"$LOG_FILE"
+		npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys openclaw@latest &>>"$LOG_FILE"
 		has_changes=true
 	fi
 
@@ -143,17 +198,70 @@ _install_ai_tools() {
 	else
 		log_info "Installing OpenCode..."
 
-		mkdir -p ~/.opencode &>>"$LOG_FILE"
+		if [ ! -d ~/.opencode ]; then
+			mkdir -p ~/.opencode &>>"$LOG_FILE"
+		fi
 
-		echo '#!/bin/bash
+		LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+		TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+		REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+		ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
 
-udocker run --rm -v $(pwd):/home/opencode/workspace -v $HOME/.opencode:/home/opencode/.opencode -w /home/opencode/workspace ghcr.io/anomalyco/opencode "$@"' >"$PREFIX/bin/opencode"
+		if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
+			proot-distro install alpine &>>"$LOG_FILE"
+		fi
+
+		proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates libstdc++ libgcc gcompat' &>>"$LOG_FILE"
+
+		curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+
+		tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+
+		rm $TMPDIR/$TAR_NAME
+
+		chmod +x $ALPINE_ROOT/bin/opencode
+
+		cat <<'EOF' >"$PREFIX/bin/opencode"
+#!/bin/bash
+
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()
+      while IFS= read -r line; do
+        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
+                ENV_ARGS+=("--env" "$line")
+        fi
+done < <(env)
+
+ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+        "--env" "TERM=$TERM"
+        "--env" "HOME=/root"
+)
+
+unset LD_PRELOAD
+proot-distro login \
+        "${ENV_ARGS[@]}" \
+        --termux-home \
+        --shared-tmp \
+        --work-dir $PWD \
+        alpine \
+        -- /bin/opencode "$@"
+EOF
 
 		chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
 
 		has_changes=true
 	fi
 
+	# Engram
+	if command -v engram &>/dev/null; then
+		log_info "Engram ${D_GREEN}already installed${D_NC}"
+	else
+		log_info "Installing Engram..."
+		git clone https://github.com/Gentleman-Programming/engram ~/.cache/core-termux/engram &>>"$LOG_FILE"
+		go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"
+		has_changes=true
+	fi
 	# Return success even if nothing was installed (all already present)
 	return 0
 }
@@ -177,11 +285,28 @@ uninstall_ai() {
 
 # Función interna para desinstalar
 _uninstall_ai_tools() {
+	# qwen-code gemini-cli openclaude
 	npm uninstall -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>"$LOG_FILE"
+
+	# claude-code
+	proot-distro remove alpine &>>"$LOG_FILE"
+	rm "$PREFIX/bin/claude" &>>"$LOG_FILE"
+
+	# openclaw
+	npm uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
+	# mistral-vibe
 	pip uninstall mistral-vibe -y &>>"$LOG_FILE"
+
+	# codex
 	pkg uninstall codex -y &>>"$LOG_FILE"
-	udocker rmi ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"
-	rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"
+
+	# opencode
+	proot-distro remove alpine &>>"$LOG_FILE"
+	rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"
+
+	# engram
+	rm -rf ~/.cache/core-termux/engram && rm "$PREFIX/bin/engram" &>>"$LOG_FILE"
 }
 
 # Actualizar herramientas de IA
@@ -205,9 +330,50 @@ update_ai() {
 _update_ai_tools() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
+	export GOPATH="$HOME/.local/go"
+	export GOCACHE="$HOME/.cache/go"
+	export GOMODCACHE="$GOPATH/pkg/mod"
+
+	# qwen-code gemini-cli openclaude
 	npm update -g @qwen-code/qwen-code @google/gemini-cli @anthropic-ai/claude-code openclaw @gitlawb/openclaude &>>"$LOG_FILE"
+
+	# claude-code
+	LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="claude-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+	rm $ALPINE_ROOT/bin/claude
+	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+	rm $TMPDIR/$TAR_NAME
+	chmod +x $ALPINE_ROOT/bin/claude
+
+	# openclaw
+	npm update -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
+	# mistral-vibe
 	pip install --upgrade mistral-vibe &>>"$LOG_FILE"
+
+	# ollama
 	pkg upgrade ollama -y &>>"$LOG_FILE"
+
+	# codex
 	pkg upgrade codex -y &>>"$LOG_FILE"
-	udocker pull ghcr.io/anomalyco/opencode:latest &>>"$LOG_FILE"
+
+	# opencode
+	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
+	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
+	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
+
+	rm $ALPINE_ROOT/bin/opencode
+	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
+	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
+	rm $TMPDIR/$TAR_NAME
+	chmod +x $ALPINE_ROOT/bin/opencode
+
+	# engram
+	git -C ~/.cache/core-termux/engram pull &>>"$LOG_FILE"
+	go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"
 }
