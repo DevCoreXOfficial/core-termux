@@ -130,7 +130,7 @@ _list_ai() {
 	table_end
 
 	echo
-	log_info "Install specific: ${D_CYAN}core install ai --qwen-code --ollama${NC}"
+	log_info "Install specific: ${D_CYAN}core install ai --opencode --engram${NC}"
 	log_info "Install all: ${D_CYAN}core install ai${NC}"
 	echo
 }

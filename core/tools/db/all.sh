@@ -4,146 +4,86 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
-# ===== POSTGRESQL =====
-install_postgresql() {
-	if dpkg -s postgresql 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
+DB_TOOLS=(
+	"postgresql"
+	"mariadb"
+	"sqlite"
+	"mongodb"
+)
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install postgresql -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
+source "$(dirname "$BASH_SOURCE")/postgresql.sh"
+source "$(dirname "$BASH_SOURCE")/mariadb.sh"
+source "$(dirname "$BASH_SOURCE")/sqlite.sh"
+source "$(dirname "$BASH_SOURCE")/mongodb.sh"
+
+install_all_db_tools() {
+	local installed_count=0
+	local failed_count=0
+
+	for tool in "${DB_TOOLS[@]}"; do
+		case "$tool" in
+		postgresql)
+			if install_postgresql; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		mariadb)
+			if install_mariadb; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		sqlite)
+			if install_sqlite; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		mongodb)
+			if install_mongodb; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
+
+	return 0
 }
 
-uninstall_postgresql() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall postgresql -y &>>"$LOG_FILE"; then
-		log_success "PostgreSQL uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall PostgreSQL"
-		return 1
-	fi
+uninstall_all_db_tools() {
+	local uninstalled_count=0
+	local failed_count=0
+
+	for tool in "${DB_TOOLS[@]}"; do
+		case "$tool" in
+		postgresql)
+			if uninstall_postgresql; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		mariadb)
+			if uninstall_mariadb; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		sqlite)
+			if uninstall_sqlite; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		mongodb)
+			if uninstall_mongodb; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
+
+	return 0
 }
 
-update_postgresql() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade postgresql -y &>>"$LOG_FILE"; then
-		log_success "PostgreSQL updated"
-		return 0
-	else
-		log_error "Failed to update PostgreSQL"
-		return 1
-	fi
-}
+update_all_db_tools() {
+	local updated_count=0
+	local failed_count=0
 
-# ===== MARIADB =====
-install_mariadb() {
-	if dpkg -s mariadb 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
+	for tool in "${DB_TOOLS[@]}"; do
+		case "$tool" in
+		postgresql)
+			if update_postgresql; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		mariadb)
+			if update_mariadb; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		sqlite)
+			if update_sqlite; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		mongodb)
+			if update_mongodb; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install mariadb -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_mariadb() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall mariadb -y &>>"$LOG_FILE"; then
-		log_success "MariaDB uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall MariaDB"
-		return 1
-	fi
-}
-
-update_mariadb() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade mariadb -y &>>"$LOG_FILE"; then
-		log_success "MariaDB updated"
-		return 0
-	else
-		log_error "Failed to update MariaDB"
-		return 1
-	fi
-}
-
-# ===== SQLITE =====
-install_sqlite() {
-	if dpkg -s sqlite 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install sqlite -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_sqlite() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall sqlite -y &>>"$LOG_FILE"; then
-		log_success "SQLite uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall SQLite"
-		return 1
-	fi
-}
-
-update_sqlite() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade sqlite -y &>>"$LOG_FILE"; then
-		log_success "SQLite updated"
-		return 0
-	else
-		log_error "Failed to update SQLite"
-		return 1
-	fi
-}
-
-# ===== MONGODB =====
-install_mongodb() {
-	if dpkg -s mongodb 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install mongodb -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_mongodb() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall mongodb -y &>>"$LOG_FILE"; then
-		log_success "MongoDB uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall MongoDB"
-		return 1
-	fi
-}
-
-update_mongodb() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade mongodb -y &>>"$LOG_FILE"; then
-		log_success "MongoDB updated"
-		return 0
-	else
-		log_error "Failed to update MongoDB"
-		return 1
-	fi
+	return 0
 }

@@ -5,7 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_automation.log"
 
-# Instalar herramientas de automatización
 install_automation() {
 	separator
 	box "Installing Automation Tools"
@@ -16,14 +15,7 @@ install_automation() {
 	echo
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	# Instalar prerequisitos
-	if loading "Installing Automation prerequisites" _install_automation_prerequisites; then
-		log_success "Automation prerequisites installed"
-	else
-		log_warn "Some prerequisites may have failed"
-	fi
-	# Instalar herramientas de automatización
-	if loading "Installing Automation Tools" _install_automation_tools; then
+	if loading "Installing Automation Tools" _install_automation_wrapper; then
 		log_success "Automation Tools installed successfully"
 		separator
 		echo
@@ -36,32 +28,11 @@ install_automation() {
 	fi
 }
 
-# Función interna para instalar prerequisitos
-_install_automation_prerequisites() {
-	# Actualizar repositorios e instalar dependencias del sistema
-  pkg install nodejs-lts python sqlite build-essential binutils make clang -y &>>"$LOG_FILE"
-
-	# Instalar setuptools
-	pip install setuptools &>>"$LOG_FILE"
+_install_automation_wrapper() {
+	import "@/tools/automation/all"
+	install_all_automation_tools
 }
 
-# Función interna para instalar herramientas
-_install_automation_tools() {
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	# n8n
-	if command -v n8n &>/dev/null; then
-		log_info "n8n ${D_GREEN}already installed${D_NC}"
-	else
-		log_info "Installing n8n..."
-		npm install -g n8n &>>"$LOG_FILE"
-	fi
-
-	return 0
-}
-
-# Desinstalar herramientas de automatización
 uninstall_automation() {
 	separator
 	box "Uninstalling Automation Tools"
@@ -70,7 +41,7 @@ uninstall_automation() {
 
 	log_info "Uninstalling Automation Tools..."
 
-	if loading "Uninstalling Automation Tools" _uninstall_automation_tools; then
+	if loading "Uninstalling Automation Tools" _uninstall_automation_wrapper; then
 		log_success "Automation Tools uninstalled"
 	else
 		log_error "Failed to uninstall Automation Tools"
@@ -78,12 +49,11 @@ uninstall_automation() {
 	fi
 }
 
-# Función interna para desinstalar
-_uninstall_automation_tools() {
-	npm uninstall -g n8n &>"$LOG_FILE"
+_uninstall_automation_wrapper() {
+	import "@/tools/automation/all"
+	uninstall_all_automation_tools
 }
 
-# Actualizar herramientas de IA
 update_automation() {
 	separator
 	box "Updating Automation Tools"
@@ -92,7 +62,7 @@ update_automation() {
 
 	log_info "Updating Automation Tools..."
 
-	if loading "Updating Automation Tools" _update_automation_tools; then
+	if loading "Updating Automation Tools" _update_automation_wrapper; then
 		log_success "Automation Tools updated"
 	else
 		log_error "Failed to update Automation Tools"
@@ -100,9 +70,7 @@ update_automation() {
 	fi
 }
 
-# Función interna para actualizar
-_update_automation_tools() {
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-	npm update -g n8n &>"$LOG_FILE"
+_update_automation_wrapper() {
+	import "@/tools/automation/all"
+	update_all_automation_tools
 }

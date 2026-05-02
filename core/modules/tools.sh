@@ -5,30 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
-# Paquetes de herramientas
-TOOLS_PACKAGES=(
-	"gh"
-	"wget"
-	"curl"
-	"lsd"
-	"bat"
-	"proot"
-	"ncurses-utils"
-	"tmate"
-	"cloudflared"
-	"translate-shell"
-	"html2text"
-	"jq"
-	"bc"
-	"tree"
-	"fzf"
-	"imagemagick"
-	"shfmt"
-	"make"
-	"udocker"
-)
-
-# Instalar herramientas
 install_tools() {
 	separator
 	box "Installing Development Tools"
@@ -39,7 +15,7 @@ install_tools() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing tools" _install_tools_packages; then
+	if loading "Installing tools" _install_tools_wrapper; then
 		log_success "Tools installed successfully"
 		separator
 		echo
@@ -70,12 +46,11 @@ install_tools() {
 	fi
 }
 
-# Función interna para instalar
-_install_tools_packages() {
-	pkg install "${TOOLS_PACKAGES[@]}" -y &>"$LOG_FILE"
+_install_tools_wrapper() {
+	import "@/tools/tools/all"
+	install_all_tools
 }
 
-# Desinstalar herramientas
 uninstall_tools() {
 	separator
 	box "Uninstalling Development Tools"
@@ -84,7 +59,7 @@ uninstall_tools() {
 
 	log_info "Uninstalling development tools..."
 
-	if loading "Uninstalling tools" _uninstall_tools_packages; then
+	if loading "Uninstalling tools" _uninstall_tools_wrapper; then
 		log_success "Tools uninstalled"
 	else
 		log_error "Failed to uninstall tools"
@@ -92,12 +67,11 @@ uninstall_tools() {
 	fi
 }
 
-# Función interna para desinstalar
-_uninstall_tools_packages() {
-	pkg uninstall "${TOOLS_PACKAGES[@]}" -y &>"$LOG_FILE"
+_uninstall_tools_wrapper() {
+	import "@/tools/tools/all"
+	uninstall_all_tools
 }
 
-# Actualizar herramientas
 update_tools() {
 	separator
 	box "Updating Development Tools"
@@ -106,7 +80,7 @@ update_tools() {
 
 	log_info "Updating development tools..."
 
-	if loading "Updating tools" _update_tools_packages; then
+	if loading "Updating tools" _update_tools_wrapper; then
 		log_success "Tools updated"
 	else
 		log_error "Failed to update tools"
@@ -114,7 +88,7 @@ update_tools() {
 	fi
 }
 
-# Función interna para actualizar
-_update_tools_packages() {
-	pkg upgrade "${TOOLS_PACKAGES[@]}" -y &>"$LOG_FILE"
+_update_tools_wrapper() {
+	import "@/tools/tools/all"
+	update_all_tools
 }

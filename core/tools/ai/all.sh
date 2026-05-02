@@ -4,601 +4,152 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-# Prerequisites for npm-based AI tools (qwen, gemini, claude, openclaude, openclaw)
-_install_ai_npm_prereqs() {
-	if command -v node &>/dev/null && command -v npm &>/dev/null; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"
-}
-
-# Prerequisites for pip-based AI tools (mistral-vibe)
-_install_ai_pip_prereqs() {
-	if command -v python &>/dev/null && command -v pip &>/dev/null; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install python clang make rust libffi openssl pkg-config git ripgrep -y &>>"$LOG_FILE"
-	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
-}
-
-# ===== QWEN CODE =====
-install_qwen_code() {
-	if command -v qwen &>/dev/null; then
-		return 0
-	fi
-
-	_install_ai_npm_prereqs
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm install -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install Qwen Code"
-		return 1
-	fi
-}
-
-uninstall_qwen_code() {
-	log_info "Uninstalling Qwen Code..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if npm uninstall -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-		log_success "Qwen Code uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Qwen Code"
-		return 1
-	fi
-}
-
-update_qwen_code() {
-	log_info "Updating Qwen Code..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm update -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-		log_success "Qwen Code updated"
-		return 0
-	else
-		log_error "Failed to update Qwen Code"
-		return 1
-	fi
-}
-
-# ===== GEMINI CLI =====
-install_gemini_cli() {
-	if command -v gemini &>/dev/null; then
-		return 0
-	fi
-
-	_install_ai_npm_prereqs
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm install -g @google/gemini-cli &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install Gemini CLI"
-		return 1
-	fi
-}
-
-uninstall_gemini_cli() {
-	log_info "Uninstalling Gemini CLI..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if npm uninstall -g @google/gemini-cli &>>"$LOG_FILE"; then
-		log_success "Gemini CLI uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Gemini CLI"
-		return 1
-	fi
-}
-
-update_gemini_cli() {
-	log_info "Updating Gemini CLI..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm update -g @google/gemini-cli &>>"$LOG_FILE"; then
-		log_success "Gemini CLI updated"
-		return 0
-	else
-		log_error "Failed to update Gemini CLI"
-		return 1
-	fi
-}
-
-# ===== CLAUDE CODE =====
-install_claude_code() {
-	if command -v claude &>/dev/null; then
-		return 0
-	fi
-
-	pkg install proot-distro -y &>>"$LOG_FILE"
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if [ ! -d ~/.claude ]; then
-		mkdir -p ~/.claude &>>"$LOG_FILE"
-	fi
-
-	LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
-	TAR_NAME="claude-linux-arm64-musl.tar.gz"
-	REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
-	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
-
-	if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
-		proot-distro install alpine &>>"$LOG_FILE"
-	fi
-
-	proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates' &>>"$LOG_FILE"
-
-	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
-
-	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
-
-	rm $TMPDIR/$TAR_NAME
-
-	chmod +x $ALPINE_ROOT/bin/claude
-
-	cat <<'EOF' >"$PREFIX/bin/claude"
-#!/bin/bash
-
-EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
-
-ENV_ARGS=()
-      while IFS= read -r line; do
-        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
-                ENV_ARGS+=("--env" "$line")
-        fi
-done < <(env)
-
-ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
-        "--env" "TERM=$TERM"
-        "--env" "HOME=/root"
+AI_TOOLS=(
+	"qwen-code"
+	"gemini-cli"
+	"claude-code"
+	"mistral-vibe"
+	"openclaude"
+	"openclaw"
+	"ollama"
+	"codex"
+	"opencode"
+	"engram"
 )
 
-unset LD_PRELOAD
-proot-distro login \
-        "${ENV_ARGS[@]}" \
-        --termux-home \
-        --shared-tmp \
-        --work-dir $PWD \
-        alpine \
-        -- /bin/claude "$@"
-EOF
+source "$(dirname "$BASH_SOURCE")/qwen-code.sh"
+source "$(dirname "$BASH_SOURCE")/gemini-cli.sh"
+source "$(dirname "$BASH_SOURCE")/claude-code.sh"
+source "$(dirname "$BASH_SOURCE")/mistral-vibe.sh"
+source "$(dirname "$BASH_SOURCE")/openclaude.sh"
+source "$(dirname "$BASH_SOURCE")/openclaw.sh"
+source "$(dirname "$BASH_SOURCE")/ollama.sh"
+source "$(dirname "$BASH_SOURCE")/codex.sh"
+source "$(dirname "$BASH_SOURCE")/opencode.sh"
+source "$(dirname "$BASH_SOURCE")/engram.sh"
 
-	chmod +x "$PREFIX/bin/claude" &>>"$LOG_FILE"
+install_all_ai_tools() {
+	local installed_count=0
+	local failed_count=0
 
-	if [ $? -eq 0 ]; then
-		return 0
-	else
-		log_error "Failed to install Claude Code"
-		return 1
-	fi
+	for tool in "${AI_TOOLS[@]}"; do
+		case "$tool" in
+		qwen-code)
+			if install_qwen_code; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		gemini-cli)
+			if install_gemini_cli; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		claude-code)
+			if install_claude_code; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		mistral-vibe)
+			if install_mistral_vibe; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		openclaude)
+			if install_openclaude; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		openclaw)
+			if install_openclaw; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		ollama)
+			if install_ollama; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		codex)
+			if install_codex; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		opencode)
+			if install_opencode; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		engram)
+			if install_engram; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
 
+	return 0
 }
 
-uninstall_claude_code() {
-	log_info "Uninstalling Claude Code..."
-	mkdir -p "$(dirname "$LOG_FILE")"
+uninstall_all_ai_tools() {
+	local uninstalled_count=0
+	local failed_count=0
 
-	if proot-distro remove alpine &>>"$LOG_FILE" && rm "$PREFIX/bin/claude" &>>"$LOG_FILE"; then
-		log_success "Claude Code uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Claude Code"
-		return 1
-	fi
+	for tool in "${AI_TOOLS[@]}"; do
+		case "$tool" in
+		qwen-code)
+			if uninstall_qwen_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		gemini-cli)
+			if uninstall_gemini_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		claude-code)
+			if uninstall_claude_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		mistral-vibe)
+			if uninstall_mistral_vibe; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		openclaude)
+			if uninstall_openclaude; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		openclaw)
+			if uninstall_openclaw; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		ollama)
+			if uninstall_ollama; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		codex)
+			if uninstall_codex; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		opencode)
+			if uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		engram)
+			if uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
+
+	return 0
 }
 
-update_claude_code() {
-	log_info "Updating Claude Code..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	LATEST_VERSION=$(curl -sI https://github.com/anthropics/claude-code/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
-	TAR_NAME="claude-linux-arm64-musl.tar.gz"
-	REPO="https://github.com/anthropics/claude-code/releases/download/$LATEST_VERSION/$TAR_NAME"
-	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
-
-	if rm $ALPINE_ROOT/bin/claude && curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE" && tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin && rm $TMPDIR/$TAR_NAME && chmod +x $ALPINE_ROOT/bin/claude &>>"$LOG_FILE"; then
-		log_success "Claude Code updated"
-		return 0
-	else
-		log_error "Failed to update Claude Code"
-		return 1
-	fi
-
-}
-
-# ===== MISTRAL VIBE =====
-install_mistral_vibe() {
-	if command -v vibe &>/dev/null; then
-		return 0
-	fi
-
-	_install_ai_pip_prereqs
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pip install mistral-vibe &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install Mistral Vibe"
-		return 1
-	fi
-}
-
-uninstall_mistral_vibe() {
-	log_info "Uninstalling Mistral Vibe..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pip uninstall mistral-vibe -y &>>"$LOG_FILE"; then
-		log_success "Mistral Vibe uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Mistral Vibe"
-		return 1
-	fi
-}
-
-update_mistral_vibe() {
-	log_info "Updating Mistral Vibe..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pip install --upgrade mistral-vibe &>>"$LOG_FILE"; then
-		log_success "Mistral Vibe updated"
-		return 0
-	else
-		log_error "Failed to update Mistral Vibe"
-		return 1
-	fi
-}
-
-# ===== OPENCLAUDE =====
-install_openclaude() {
-	if command -v openclaude &>/dev/null; then
-		return 0
-	fi
-
-	_install_ai_npm_prereqs
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm install -g @gitlawb/openclaude &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install OpenClaude"
-		return 1
-	fi
-}
-
-uninstall_openclaude() {
-	log_info "Uninstalling OpenClaude..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if npm uninstall -g @gitlawb/openclaude &>>"$LOG_FILE"; then
-		log_success "OpenClaude uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall OpenClaude"
-		return 1
-	fi
-}
-
-update_openclaude() {
-	log_info "Updating OpenClaude..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm update -g @gitlawb/openclaude &>>"$LOG_FILE"; then
-		log_success "OpenClaude updated"
-		return 0
-	else
-		log_error "Failed to update OpenClaude"
-		return 1
-	fi
-}
-
-# ===== OPENCLAW =====
-install_openclaw() {
-	if command -v openclaw &>/dev/null; then
-		return 0
-	fi
-
-	_install_ai_npm_prereqs
-
-	npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm install -g openclaw@latest &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install OpenClaw"
-		return 1
-	fi
-}
-
-uninstall_openclaw() {
-	log_info "Uninstalling OpenClaw..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if npm uninstall -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
-		log_success "OpenClaw uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall OpenClaw"
-		return 1
-	fi
-}
-
-update_openclaw() {
-	log_info "Updating OpenClaw..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm update -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
-		log_success "OpenClaw updated"
-		return 0
-	else
-		log_error "Failed to update OpenClaw"
-		return 1
-	fi
-}
-
-# ===== OLLAMA =====
-install_ollama() {
-	if command -v ollama &>/dev/null; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pkg install ollama -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install Ollama"
-		return 1
-	fi
-}
-
-uninstall_ollama() {
-	log_info "Uninstalling Ollama..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pkg uninstall ollama -y &>>"$LOG_FILE"; then
-		log_success "Ollama uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Ollama"
-		return 1
-	fi
-}
-
-update_ollama() {
-	log_info "Updating Ollama..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pkg upgrade ollama -y &>>"$LOG_FILE"; then
-		log_success "Ollama updated"
-		return 0
-	else
-		log_error "Failed to update Ollama"
-		return 1
-	fi
-}
-
-# ===== CODEX =====
-install_codex() {
-	if command -v codex &>/dev/null; then
-		return 0
-	fi
-
-	pkg install tur-repo -y &>>"$LOG_FILE"
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pkg install codex -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install Codex"
-		return 1
-	fi
-}
-
-uninstall_codex() {
-	log_info "Uninstalling Codex..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pkg uninstall codex -y &>>"$LOG_FILE"; then
-		log_success "Codex uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Codex"
-		return 1
-	fi
-}
-
-update_codex() {
-	log_info "Updating Codex..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if pkg upgrade codex -y &>>"$LOG_FILE"; then
-		log_success "Codex updated"
-		return 0
-	else
-		log_error "Failed to update Codex"
-		return 1
-	fi
-}
-
-# ===== OPENCODE =====
-
-install_opencode() {
-	if command -v opencode &>/dev/null; then
-		return 0
-	fi
-
-	pkg install proot-distro -y &>>"$LOG_FILE"
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if [ ! -d ~/.opencode ]; then
-		mkdir -p ~/.opencode &>>"$LOG_FILE"
-	fi
-
-	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
-	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
-	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
-	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
-
-	if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/alpine" ]; then
-		proot-distro install alpine &>>"$LOG_FILE"
-	fi
-
-	proot-distro login alpine --shared-tmp -- /bin/ash -c 'apk update && apk upgrade && apk add --no-cache musl ca-certificates libstdc++ libgcc gcompat' &>>"$LOG_FILE"
-
-	curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE"
-
-	tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin
-
-	rm $TMPDIR/$TAR_NAME
-
-	chmod +x $ALPINE_ROOT/bin/opencode
-
-	cat <<'EOF' >"$PREFIX/bin/opencode"
-#!/bin/bash
-
-EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
-
-ENV_ARGS=()
-      while IFS= read -r line; do
-        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
-                ENV_ARGS+=("--env" "$line")
-        fi
-done < <(env)
-
-ENV_ARGS+=(                                                        "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
-        "--env" "TERM=$TERM"
-        "--env" "HOME=/root"
-)
-
-unset LD_PRELOAD
-proot-distro login \
-        "${ENV_ARGS[@]}" \
-        --termux-home \
-        --shared-tmp \
-        --work-dir $PWD \
-        alpine \
-        -- /bin/opencode "$@"
-EOF
-
-	chmod +x "$PREFIX/bin/opencode" &>>"$LOG_FILE"
-
-	if [ $? -eq 0 ]; then
-		return 0
-	else
-		log_error "Failed to install OpenCode"
-		return 1
-	fi
-}
-
-uninstall_opencode() {
-	log_info "Uninstalling OpenCode..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if proot-distro remove alpine &>>"$LOG_FILE" && rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
-		log_success "OpenCode uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall OpenCode"
-		return 1
-	fi
-}
-
-update_opencode() {
-	log_info "Updating OpenCode..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	LATEST_VERSION=$(curl -sI https://github.com/anomalyco/opencode/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
-	TAR_NAME="opencode-linux-arm64-musl.tar.gz"
-	REPO="https://github.com/anomalyco/opencode/releases/download/$LATEST_VERSION/$TAR_NAME"
-	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
-
-	if rm $ALPINE_ROOT/bin/opencode && curl -L $REPO -o $TMPDIR/$TAR_NAME &>>"$LOG_FILE" && tar -zxf $TMPDIR/$TAR_NAME -C $ALPINE_ROOT/bin && rm $TMPDIR/$TAR_NAME && chmod +x $ALPINE_ROOT/bin/opencode &>>"$LOG_FILE"; then
-		log_success "OpenCode updated"
-		return 0
-	else
-		log_error "Failed to update OpenCode"
-		return 1
-	fi
-}
-
-# ===== ENGRAM =====
-install_engram() {
-	if command -v engram &>/dev/null; then
-		return 0
-	fi
-
-	export GOPATH="$HOME/.local/go"
-	export GOCACHE="$HOME/.cache/go"
-	export GOMODCACHE="$GOPATH/pkg/mod"
-
-	pkg install golang git sqlite -y &>>"$LOG_FILE"
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if git clone https://github.com/Gentleman-Programming/engram ~/.cache/core-termux/engram && go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
-		return 0
-	else
-		log_error "Failed to install Engram"
-		return 1
-	fi
-}
-
-uninstall_engram() {
-	log_info "Uninstalling Engram..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if rm -rf ~/.cache/core-termux/engram && rm "$PREFIX/bin/engram" &>>"$LOG_FILE"; then
-		log_success "Engram uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Engram"
-		return 1
-	fi
-}
-
-update_engram() {
-	log_info "Updating Engram..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GOPATH="$HOME/.local/go"
-	export GOCACHE="$HOME/.cache/go"
-	export GOMODCACHE="$GOPATH/pkg/mod"
-
-	if git -C ~/.cache/core-termux/engram pull &>>"$LOG_FILE" && go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
-		log_success "Engram updated"
-		return 0
-	else
-		log_error "Failed to update Engram"
-		return 1
-	fi
+update_all_ai_tools() {
+	local updated_count=0
+	local failed_count=0
+
+	for tool in "${AI_TOOLS[@]}"; do
+		case "$tool" in
+		qwen-code)
+			if update_qwen_code; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		gemini-cli)
+			if update_gemini_cli; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		claude-code)
+			if update_claude_code; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		mistral-vibe)
+			if update_mistral_vibe; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		openclaude)
+			if update_openclaude; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		openclaw)
+			if update_openclaw; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		ollama)
+			if update_ollama; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		codex)
+			if update_codex; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		opencode)
+			if update_opencode; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		engram)
+			if update_engram; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
+
+	return 0
 }

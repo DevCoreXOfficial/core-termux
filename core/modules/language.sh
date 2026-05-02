@@ -5,18 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_language.log"
 
-# Paquetes de lenguaje
-LANGUAGE_PACKAGES=(
-	"nodejs-lts"
-	"python"
-	"perl"
-	"php"
-	"rust"
-	"clang"
-	"golang"
-)
-
-# Instalar paquetes de lenguaje
 install_language() {
 	separator
 	box "Installing Language Packages"
@@ -27,7 +15,7 @@ install_language() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing language packages" _install_language_packages; then
+	if loading "Installing language packages" _install_language_wrapper; then
 		log_success "Language packages installed successfully"
 		separator
 		echo
@@ -46,12 +34,11 @@ install_language() {
 	fi
 }
 
-# Función interna para instalar
-_install_language_packages() {
-	pkg install "${LANGUAGE_PACKAGES[@]}" -y &>"$LOG_FILE"
+_install_language_wrapper() {
+	import "@/tools/language/all"
+	install_all_language_packages
 }
 
-# Desinstalar paquetes de lenguaje
 uninstall_language() {
 	separator
 	box "Uninstalling Language Packages"
@@ -60,7 +47,7 @@ uninstall_language() {
 
 	log_info "Uninstalling language packages..."
 
-	if loading "Uninstalling language packages" _uninstall_language_packages; then
+	if loading "Uninstalling language packages" _uninstall_language_wrapper; then
 		log_success "Language packages uninstalled"
 	else
 		log_error "Failed to uninstall language packages"
@@ -68,12 +55,11 @@ uninstall_language() {
 	fi
 }
 
-# Función interna para desinstalar
-_uninstall_language_packages() {
-	pkg uninstall "${LANGUAGE_PACKAGES[@]}" -y &>"$LOG_FILE"
+_uninstall_language_wrapper() {
+	import "@/tools/language/all"
+	uninstall_all_language_packages
 }
 
-# Actualizar paquetes de lenguaje
 update_language() {
 	separator
 	box "Updating Language Packages"
@@ -82,7 +68,7 @@ update_language() {
 
 	log_info "Updating language packages..."
 
-	if loading "Updating language packages" _update_language_packages; then
+	if loading "Updating language packages" _update_language_wrapper; then
 		log_success "Language packages updated"
 	else
 		log_error "Failed to update language packages"
@@ -90,7 +76,7 @@ update_language() {
 	fi
 }
 
-# Función interna para actualizar
-_update_language_packages() {
-	pkg upgrade "${LANGUAGE_PACKAGES[@]}" -y &>"$LOG_FILE"
+_update_language_wrapper() {
+	import "@/tools/language/all"
+	update_all_language_packages
 }

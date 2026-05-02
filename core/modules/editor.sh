@@ -7,7 +7,6 @@ LOG_FILE="$CORE_CACHE/install_editor.log"
 NVCHAD_REPO="https://github.com/DevCoreXOfficial/nvchad-termux.git"
 NVCHAD_DIR="$HOME/.cache/core-termux/nvchad-termux"
 
-# Instalar editor de código
 install_editor() {
 	separator
 	box "Installing Code Editor"
@@ -18,15 +17,13 @@ install_editor() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	# Instalar prerequisitos
 	if loading "Installing Neovim dependencies" _install_editor_deps; then
 		log_success "Neovim dependencies installed"
 	else
 		log_warn "Some dependencies may have failed"
 	fi
 
-	# Clonar e instalar NvChad
-	if loading "Installing NvChad configuration" _install_nvchad; then
+	if loading "Installing NvChad configuration" _install_editor_wrapper; then
 		log_success "Code editor installed successfully"
 		separator
 		echo
@@ -42,22 +39,15 @@ install_editor() {
 	fi
 }
 
-# Función interna para instalar dependencias
 _install_editor_deps() {
 	pkg install git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter -y &>"$LOG_FILE"
 }
 
-# Función interna para instalar NvChad
-_install_nvchad() {
-	rm -rf "$NVCHAD_DIR" &>>"$LOG_FILE"
-	git clone "$NVCHAD_REPO" "$NVCHAD_DIR" &>>"$LOG_FILE"
-	cp -r "$NVCHAD_DIR/nvim" ~/.config/ &>>"$LOG_FILE"
-  nvim --headless "+Lazy! sync" +qa &>>"$LOG_FILE"
-  nvim --headless "+Lazy! clean nvim-treesitter" +qa &>>"$LOG_FILE"
-  nvim --headless "+Lazy! install nvim-treesitter" +qa &>>"$LOG_FILE"
+_install_editor_wrapper() {
+	import "@/tools/editor/all"
+	install_all_editor_components
 }
 
-# Desinstalar editor de código
 uninstall_editor() {
 	separator
 	box "Uninstalling Code Editor"
@@ -66,7 +56,7 @@ uninstall_editor() {
 
 	log_info "Uninstalling Neovim configuration..."
 
-	if loading "Uninstalling NvChad" _uninstall_nvchad; then
+	if loading "Uninstalling NvChad" _uninstall_editor_wrapper; then
 		log_success "Code editor uninstalled"
 	else
 		log_error "Failed to uninstall code editor"
@@ -74,15 +64,11 @@ uninstall_editor() {
 	fi
 }
 
-# Función interna para desinstalar
-_uninstall_nvchad() {
-	rm -rf ~/.config/nvim &>>"$LOG_FILE"
-	rm -rf ~/.local/state/nvim &>>"$LOG_FILE"
-	rm -rf ~/.local/share/nvim &>>"$LOG_FILE"
-	rm -rf "$NVCHAD_DIR" &>>"$LOG_FILE"
+_uninstall_editor_wrapper() {
+	import "@/tools/editor/all"
+	uninstall_all_editor_components
 }
 
-# Actualizar editor de código
 update_editor() {
 	separator
 	box "Updating Code Editor"
@@ -91,7 +77,7 @@ update_editor() {
 
 	log_info "Updating NvChad configuration..."
 
-	if loading "Updating NvChad" _update_nvchad; then
+	if loading "Updating NvChad" _update_editor_wrapper; then
 		log_success "Code editor updated"
 	else
 		log_error "Failed to update code editor"
@@ -99,9 +85,7 @@ update_editor() {
 	fi
 }
 
-# Función interna para actualizar
-_update_nvchad() {
-	rm -rf "$NVCHAD_DIR" &>>"$LOG_FILE"
-	git clone "$NVCHAD_REPO" "$NVCHAD_DIR" &>>"$LOG_FILE"
-	cp -r "$NVCHAD_DIR/nvim" ~/.config/ &>>"$LOG_FILE"
+_update_editor_wrapper() {
+	import "@/tools/editor/all"
+	update_all_editor_components
 }

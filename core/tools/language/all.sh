@@ -4,254 +4,119 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_language.log"
 
-# ===== NODEJS LTS =====
-install_nodejs() {
-	if dpkg -s nodejs-lts 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
+LANGUAGE_PACKAGES=(
+	"nodejs"
+	"python"
+	"perl"
+	"php"
+	"rust"
+	"clang"
+	"golang"
+)
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install nodejs-lts -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
+source "$(dirname "$BASH_SOURCE")/nodejs.sh"
+source "$(dirname "$BASH_SOURCE")/python.sh"
+source "$(dirname "$BASH_SOURCE")/perl.sh"
+source "$(dirname "$BASH_SOURCE")/php.sh"
+source "$(dirname "$BASH_SOURCE")/rust.sh"
+source "$(dirname "$BASH_SOURCE")/clang.sh"
+source "$(dirname "$BASH_SOURCE")/golang.sh"
+
+install_all_language_packages() {
+	local installed_count=0
+	local failed_count=0
+
+	for tool in "${LANGUAGE_PACKAGES[@]}"; do
+		case "$tool" in
+		nodejs)
+			if install_nodejs; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		python)
+			if install_python; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		perl)
+			if install_perl; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		php)
+			if install_php; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		rust)
+			if install_rust; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		clang)
+			if install_clang; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		golang)
+			if install_golang; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
+
+	return 0
 }
 
-uninstall_nodejs() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall nodejs-lts -y &>>"$LOG_FILE"; then
-		log_success "Node.js LTS uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Node.js LTS"
-		return 1
-	fi
+uninstall_all_language_packages() {
+	local uninstalled_count=0
+	local failed_count=0
+
+	for tool in "${LANGUAGE_PACKAGES[@]}"; do
+		case "$tool" in
+		nodejs)
+			if uninstall_nodejs; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		python)
+			if uninstall_python; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		perl)
+			if uninstall_perl; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		php)
+			if uninstall_php; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		rust)
+			if uninstall_rust; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		clang)
+			if uninstall_clang; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		golang)
+			if uninstall_golang; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
+
+	return 0
 }
 
-update_nodejs() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade nodejs-lts -y &>>"$LOG_FILE"; then
-		log_success "Node.js LTS updated"
-		return 0
-	else
-		log_error "Failed to update Node.js LTS"
-		return 1
-	fi
-}
+update_all_language_packages() {
+	local updated_count=0
+	local failed_count=0
 
-# ===== PYTHON =====
-install_python() {
-	if dpkg -s python 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
+	for tool in "${LANGUAGE_PACKAGES[@]}"; do
+		case "$tool" in
+		nodejs)
+			if update_nodejs; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		python)
+			if update_python; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		perl)
+			if update_perl; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		php)
+			if update_php; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		rust)
+			if update_rust; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		clang)
+			if update_clang; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		golang)
+			if update_golang; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install python -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_python() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall python -y &>>"$LOG_FILE"; then
-		log_success "Python uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Python"
-		return 1
-	fi
-}
-
-update_python() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade python -y &>>"$LOG_FILE"; then
-		log_success "Python updated"
-		return 0
-	else
-		log_error "Failed to update Python"
-		return 1
-	fi
-}
-
-# ===== PERL =====
-install_perl() {
-	if dpkg -s perl 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install perl -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_perl() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall perl -y &>>"$LOG_FILE"; then
-		log_success "Perl uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Perl"
-		return 1
-	fi
-}
-
-update_perl() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade perl -y &>>"$LOG_FILE"; then
-		log_success "Perl updated"
-		return 0
-	else
-		log_error "Failed to update Perl"
-		return 1
-	fi
-}
-
-# ===== PHP =====
-install_php() {
-	if dpkg -s php 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install php -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_php() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall php -y &>>"$LOG_FILE"; then
-		log_success "PHP uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall PHP"
-		return 1
-	fi
-}
-
-update_php() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade php -y &>>"$LOG_FILE"; then
-		log_success "PHP updated"
-		return 0
-	else
-		log_error "Failed to update PHP"
-		return 1
-	fi
-}
-
-# ===== RUST =====
-install_rust() {
-	if dpkg -s rust 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install rust -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_rust() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall rust -y &>>"$LOG_FILE"; then
-		log_success "Rust uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Rust"
-		return 1
-	fi
-}
-
-update_rust() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade rust -y &>>"$LOG_FILE"; then
-		log_success "Rust updated"
-		return 0
-	else
-		log_error "Failed to update Rust"
-		return 1
-	fi
-}
-
-# ===== CLANG (C/C++) =====
-install_clang() {
-	if dpkg -s clang 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install clang -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_clang() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall clang -y &>>"$LOG_FILE"; then
-		log_success "C/C++ (clang) uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall C/C++ (clang)"
-		return 1
-	fi
-}
-
-update_clang() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade clang -y &>>"$LOG_FILE"; then
-		log_success "C/C++ (clang) updated"
-		return 0
-	else
-		log_error "Failed to update C/C++ (clang)"
-		return 1
-	fi
-}
-
-# ===== GO (GOLANG) =====
-install_golang() {
-	if dpkg -s golang 2>/dev/null | grep -q "Status: install ok installed"; then
-		return 0
-	fi
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install golang -y &>>"$LOG_FILE"; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-uninstall_golang() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall golang -y &>>"$LOG_FILE"; then
-		log_success "Go (golang) uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Go (golang)"
-		return 1
-	fi
-}
-
-update_golang() {
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade golang -y &>>"$LOG_FILE"; then
-		log_success "Go (golang) updated"
-		return 0
-	else
-		log_error "Failed to update Go (golang)"
-		return 1
-	fi
+	return 0
 }

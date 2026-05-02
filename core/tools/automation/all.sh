@@ -4,61 +4,53 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_automation.log"
 
-# Prerequisites for n8n (npm-based)
-_install_automation_prerequisites() {
-	if command -v node &>/dev/null && command -v npm &>/dev/null; then
-		return 0
-	fi
+AUTOMATION_TOOLS=(
+	"n8n"
+)
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-  pkg install nodejs-lts python sqlite build-essential binutils make clang -y &>>"$LOG_FILE"
+source "$(dirname "$BASH_SOURCE")/n8n.sh"
+
+install_all_automation_tools() {
+	local installed_count=0
+	local failed_count=0
+
+	for tool in "${AUTOMATION_TOOLS[@]}"; do
+		case "$tool" in
+		n8n)
+			if install_n8n; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
+
+	return 0
 }
 
-# ===== N8N =====
-install_n8n() {
-	if command -v n8n &>/dev/null; then
-		return 0
-	fi
+uninstall_all_automation_tools() {
+	local uninstalled_count=0
+	local failed_count=0
 
-	_install_automation_prerequisites
+	for tool in "${AUTOMATION_TOOLS[@]}"; do
+		case "$tool" in
+		n8n)
+			if uninstall_n8n; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm install -g n8n &>>"$LOG_FILE"; then
-		log_success "n8n installed"
-		return 0
-	else
-		log_error "Failed to install n8n"
-		return 1
-	fi
+	return 0
 }
 
-uninstall_n8n() {
-	log_info "Uninstalling n8n..."
-	mkdir -p "$(dirname "$LOG_FILE")"
+update_all_automation_tools() {
+	local updated_count=0
+	local failed_count=0
 
-	if npm uninstall -g n8n &>>"$LOG_FILE"; then
-		log_success "n8n uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall n8n"
-		return 1
-	fi
-}
+	for tool in "${AUTOMATION_TOOLS[@]}"; do
+		case "$tool" in
+		n8n)
+			if update_n8n; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		esac
+	done
 
-update_n8n() {
-	log_info "Updating n8n..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
-
-	if npm update -g n8n &>>"$LOG_FILE"; then
-		log_success "n8n updated"
-		return 0
-	else
-		log_error "Failed to update n8n"
-		return 1
-	fi
+	return 0
 }

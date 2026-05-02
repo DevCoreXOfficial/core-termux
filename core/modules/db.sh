@@ -5,17 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
-# Paquetes de base de datos
-DB_PACKAGES=(
-	"postgresql"
-	"mariadb"
-	"sqlite"
-	"tur-repo"
-)
-
-DB_EXTRA="mongodb"
-
-# Instalar bases de datos
 install_db() {
 	separator
 	box "Installing Databases"
@@ -26,7 +15,7 @@ install_db() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing databases" _install_db_packages; then
+	if loading "Installing databases" _install_db_tools_wrapper; then
 		log_success "Databases installed successfully"
 		separator
 		echo
@@ -42,13 +31,11 @@ install_db() {
 	fi
 }
 
-# Función interna para instalar
-_install_db_packages() {
-	pkg install "${DB_PACKAGES[@]}" -y &>"$LOG_FILE"
-	pkg install "$DB_EXTRA" -y &>>"$LOG_FILE"
+_install_db_tools_wrapper() {
+	import "@/tools/db/all"
+	install_all_db_tools
 }
 
-# Desinstalar bases de datos
 uninstall_db() {
 	separator
 	box "Uninstalling Databases"
@@ -57,7 +44,7 @@ uninstall_db() {
 
 	log_info "Uninstalling databases..."
 
-	if loading "Uninstalling databases" _uninstall_db_packages; then
+	if loading "Uninstalling databases" _uninstall_db_tools_wrapper; then
 		log_success "Databases uninstalled"
 	else
 		log_error "Failed to uninstall databases"
@@ -65,12 +52,11 @@ uninstall_db() {
 	fi
 }
 
-# Función interna para desinstalar
-_uninstall_db_packages() {
-	pkg uninstall "${DB_PACKAGES[@]}" "$DB_EXTRA" -y &>"$LOG_FILE"
+_uninstall_db_tools_wrapper() {
+	import "@/tools/db/all"
+	uninstall_all_db_tools
 }
 
-# Actualizar bases de datos
 update_db() {
 	separator
 	box "Updating Databases"
@@ -79,7 +65,7 @@ update_db() {
 
 	log_info "Updating databases..."
 
-	if loading "Updating databases" _update_db_packages; then
+	if loading "Updating databases" _update_db_tools_wrapper; then
 		log_success "Databases updated"
 	else
 		log_error "Failed to update databases"
@@ -87,7 +73,7 @@ update_db() {
 	fi
 }
 
-# Función interna para actualizar
-_update_db_packages() {
-	pkg upgrade "${DB_PACKAGES[@]}" "$DB_EXTRA" -y &>"$LOG_FILE"
+_update_db_tools_wrapper() {
+	import "@/tools/db/all"
+	update_all_db_tools
 }
