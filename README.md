@@ -604,60 +604,124 @@ table_end
 
 ```
 core-termux/
-├── assets/
-│   └── fonts/
-│       └── font.ttf          # Meslo Nerd Font (downloaded)
-├── core/
-│   ├── bin/
-│   │   └── core              # Entry point
-│   ├── cli/
-│   │   ├── core.sh           # CLI logic
-│   │   └── commands/
-│   │       ├── install.sh    # Install command
-│   │       ├── setup.sh      # Setup command
-│   │       ├── update.sh     # Update command
-│   │       ├── uninstall.sh  # Uninstall command
-│   │       ├── list.sh       # List command
-│   │       ├── pg.sh         # PostgreSQL command
-│   │       └── init.sh       # Init command
-│   ├── modules/
-│   │   ├── ai.sh             # AI tools
-│   │   ├── db.sh             # Databases
-│   │   ├── editor.sh         # Code editor
-│   │   ├── language.sh       # Language packages
-│   │   ├── node-modules.sh   # Node.js npm packages
-│   │   ├── shell.sh          # ZSH + plugins
-│   │   ├── tools.sh          # Tools
-│   │   ├── ui.sh             # Termux UI
-│   │   └── automation.sh     # Automation Tools
-│   ├── tools/
-│   │   ├── ai/
-│   │   │   └── all.sh        # Individual AI tool installers
-│   │   ├── db/
-│   │   │   └── all.sh        # Individual DB installers
-│   │   ├── tools/
-│   │   │   └── all.sh        # Individual tool installers
-│   │   ├── node/
-│   │   │   └── all.sh        # Individual node module installers
-│   │   ├── language/
-│   │   │   └── all.sh        # Individual language installers
-│   │   ├── shell/
-│   │   │   └── all.sh        # Individual shell plugin installers
-│   │   ├── editor/
-│   │   │   └── all.sh        # Individual editor installers
-│   │   ├── ui/
-│   │   │   └── all.sh        # Individual UI component installers
-│   │   └── automation/
-│   │       └── all.sh        # Individual automation installers
-│   ├── fix/
-│   │   └── localtunnel.sh    # Android fix
-│   └── utils/
-│       ├── bootstrap.sh      # Framework bootstrap
-│       ├── colors.sh         # ANSI colors
-│       ├── env.sh            # Environment variables
-│       └── log.sh            # Log functions
-├── install.sh                # Auto-installer
-└── README.md                 # This file
+├── LICENSE
+├── README.md
+├── assets                                              │   ├── fonts
+│   │   └── font.ttf
+│   └── images
+│       └── logo.svg
+├── core
+│   ├── bin
+│   │   └── core                                    │   ├── cli
+│   │   ├── commands
+│   │   │   ├── init.sh                             │   │   │   ├── install.sh
+│   │   │   ├── list.sh                             │   │   │   ├── pg.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── uninstall.sh                        │   │   │   └── update.sh
+│   │   └── core.sh
+│   ├── fix
+│   │   └── localtunnel.sh
+│   ├── modules
+│   │   ├── ai.sh
+│   │   ├── automation.sh
+│   │   ├── db.sh
+│   │   ├── editor.sh
+│   │   ├── language.sh
+│   │   ├── node-modules.sh
+│   │   ├── shell.sh
+│   │   ├── tools.sh
+│   │   └── ui.sh
+│   ├── tools
+│   │   ├── ai
+│   │   │   ├── all.sh
+│   │   │   ├── claude-code.sh
+│   │   │   ├── codex.sh
+│   │   │   ├── engram.sh
+│   │   │   ├── gemini-cli.sh
+│   │   │   ├── mistral-vibe.sh
+│   │   │   ├── ollama.sh
+│   │   │   ├── openclaude.sh
+│   │   │   ├── openclaw.sh
+│   │   │   ├── opencode.sh
+│   │   │   └── qwen-code.sh
+│   │   ├── automation
+│   │   │   ├── all.sh
+│   │   │   └── n8n.sh
+│   │   ├── db
+│   │   │   ├── all.sh
+│   │   │   ├── mariadb.sh
+│   │   │   ├── mongodb.sh
+│   │   │   ├── postgresql.sh
+│   │   │   └── sqlite.sh
+│   │   ├── editor
+│   │   │   ├── all.sh
+│   │   │   ├── neovim.sh
+│   │   │   └── nvchad.sh
+│   │   ├── language
+│   │   │   ├── all.sh
+│   │   │   ├── clang.sh
+│   │   │   ├── golang.sh
+│   │   │   ├── nodejs.sh
+│   │   │   ├── perl.sh
+│   │   │   ├── php.sh
+│   │   │   ├── python.sh
+│   │   │   └── rust.sh
+│   │   ├── node
+│   │   │   ├── all.sh
+│   │   │   ├── live-server.sh
+│   │   │   ├── localtunnel.sh
+│   │   │   ├── markserv.sh
+│   │   │   ├── ncu.sh
+│   │   │   ├── nestjs.sh
+│   │   │   ├── ngrok.sh
+│   │   │   ├── prettier.sh
+│   │   │   ├── psqlformat.sh
+│   │   │   ├── typescript.sh
+│   │   │   └── vercel.sh
+│   │   ├── shell
+│   │   │   ├── all.sh
+│   │   │   ├── better-npm.sh
+│   │   │   ├── fzf-tab.sh
+│   │   │   ├── history-substring.sh
+│   │   │   ├── powerlevel10k.sh
+│   │   │   ├── you-should-use.sh
+│   │   │   ├── zsh-autopair.sh
+│   │   │   ├── zsh-autosuggestions.sh
+│   │   │   ├── zsh-completions.sh
+│   │   │   ├── zsh-defer.sh
+│   │   │   └── zsh-syntax-highlighting.sh
+│   │   ├── tools
+│   │   │   ├── all.sh
+│   │   │   ├── bat.sh
+│   │   │   ├── bc.sh
+│   │   │   ├── cloudflared.sh
+│   │   │   ├── curl.sh
+│   │   │   ├── fzf.sh
+│   │   │   ├── gh.sh
+│   │   │   ├── html2text.sh
+│   │   │   ├── imagemagick.sh
+│   │   │   ├── jq.sh
+│   │   │   ├── lsd.sh
+│   │   │   ├── make.sh
+│   │   │   ├── ncurses.sh
+│   │   │   ├── proot.sh
+│   │   │   ├── shfmt.sh
+│   │   │   ├── tmate.sh
+│   │   │   ├── translate.sh
+│   │   │   ├── tree.sh
+│   │   │   ├── udocker.sh
+│   │   │   └── wget.sh
+│   │   └── ui
+│   │       ├── all.sh
+│   │       ├── cursor.sh
+│   │       ├── extra-keys.sh
+│   │       └── font.sh
+│   └── utils
+│       ├── bootstrap.sh
+│       ├── colors.sh
+│       ├── env.sh
+│       └── log.sh
+└── install.sh
 ```
 
 ---
