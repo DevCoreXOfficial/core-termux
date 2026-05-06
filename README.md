@@ -34,7 +34,7 @@
 </p>
 
 <p align="center">
-  <a href="https://devcorex-web.vercel.app">
+  <a href="https://devcorex-web.vercel.app/core-termux">
     <img src="https://img.shields.io/badge/%F0%9F%9A%80_Get%20Started-0078D4?style=for-the-badge" alt="Get Started">
   </a>
 </p>
