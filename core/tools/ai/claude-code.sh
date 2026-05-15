@@ -76,8 +76,9 @@ EOF
 uninstall_claude_code() {
 	log_info "Uninstalling Claude Code..."
 	mkdir -p "$(dirname "$LOG_FILE")"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
 
-	if proot-distro remove alpine &>>"$LOG_FILE" && rm "$PREFIX/bin/claude" &>>"$LOG_FILE"; then
+	if rm "$ALPINE_ROOT/bin/claude" &>>"$LOG_FILE" && rm "$PREFIX/bin/claude" &>>"$LOG_FILE"; then
 		log_success "Claude Code uninstalled"
 		return 0
 	else

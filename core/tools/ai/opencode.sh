@@ -76,8 +76,9 @@ EOF
 uninstall_opencode() {
 	log_info "Uninstalling OpenCode..."
 	mkdir -p "$(dirname "$LOG_FILE")"
+	ALPINE_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/alpine"
 
-	if proot-distro remove alpine &>>"$LOG_FILE" && rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
+	if rm "$ALPINE_ROOT/bin/opencode" &>>"$LOG_FILE" && rm "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
 		log_success "OpenCode uninstalled"
 		return 0
 	else
