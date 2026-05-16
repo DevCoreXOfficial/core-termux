@@ -5,45 +5,25 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 UBUNTU_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu"
 OPENCODE_BIN="$UBUNTU_ROOT/root/.opencode/bin/opencode"
+UBUNTU_BASHRC="$UBUNTU_ROOT/root/.bashrc"
 
 _proot_ubuntu() {
 	proot-distro login \
-		--termux-home \
 		--shared-tmp \
 		ubuntu \
 		-- "$@"
 }
 
-install_opencode() {
-	if command -v opencode &>/dev/null; then
-		return 0
-	fi
+_install_binary() {
+	_proot_ubuntu /bin/bash -c '
+                export SHELL=/bin/bash
+                export TMPDIR=/tmp
+                export HOME=/root
+                curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
+        ' &>>"$LOG_FILE"
+}
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install proot-distro -y &>>"$LOG_FILE"
-
-	if [ ! -d "$UBUNTU_ROOT" ]; then
-		proot-distro install ubuntu &>>"$LOG_FILE"
-	fi
-
-	# Actualizar repos sin entrar a shell interactiva
-	_proot_ubuntu /bin/bash -c \
-		'apt-get update -y && apt-get upgrade -y' \
-		&>>"$LOG_FILE"
-
-	# Instalar opencode con el instalador oficial
-	# HOME=/root es crítico para que el instalador escriba en el rootfs de Ubuntu
-	# y no en el home de Termux (que sería sobreescrito por --termux-home)
-	_proot_ubuntu /bin/bash -c \
-		'HOME=/root curl -fsSL https://opencode.ai/install | bash' \
-		&>>"$LOG_FILE"
-
-	# Verificar que el binario quedó en el rootfs de Ubuntu
-	if [ ! -f "$OPENCODE_BIN" ]; then
-		log_error "OpenCode binary not found after install"
-		return 1
-	fi
-
+_write_wrapper() {
 	cat <<'EOF' >"$PREFIX/bin/opencode"
 #!/bin/bash
 
@@ -74,35 +54,54 @@ proot-distro login \
         ubuntu \
         -- /root/.opencode/bin/opencode "$@"
 EOF
-
 	chmod +x "$PREFIX/bin/opencode"
+}
 
-	if [ $? -eq 0 ]; then
+_write_path() {
+	if ! grep -q '.opencode/bin' "$UBUNTU_BASHRC" 2>/dev/null; then
+		printf '\n# opencode\nexport PATH=/root/.opencode/bin:$PATH\n' >>"$UBUNTU_BASHRC"
+	fi
+}
+
+install_opencode() {
+	if command -v opencode &>/dev/null; then
 		return 0
-	else
-		log_error "Failed to install OpenCode"
+	fi
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+	pkg install proot-distro -y &>>"$LOG_FILE"
+
+	if [ ! -d "$UBUNTU_ROOT" ]; then
+		proot-distro install ubuntu &>>"$LOG_FILE"
+	fi
+
+	_proot_ubuntu /bin/bash -c \
+		'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
+		&>>"$LOG_FILE"
+
+	_install_binary
+
+	if [ ! -f "$OPENCODE_BIN" ]; then
+		log_error "OpenCode binary not found after install"
 		return 1
 	fi
+
+	_write_wrapper
+	_write_path
+
+	log_success "OpenCode installed"
+	return 0
 }
 
 uninstall_opencode() {
 	log_info "Uninstalling OpenCode..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	# Eliminar binario y directorio desde el rootfs (sin --termux-home para ver /root real)
-	proot-distro login \
-		--shared-tmp \
-		ubuntu \
-		-- /bin/bash -c 'rm -rf /root/.opencode' \
-		&>>"$LOG_FILE"
+	_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
 
-	# Limpiar entrada del PATH en .bashrc del rootfs
-	proot-distro login \
-		--shared-tmp \
-		ubuntu \
-		-- /bin/bash -c \
-		'sed -i "/# opencode/d; /export PATH=\/root\/.opencode\/bin/d" /root/.bashrc' \
-		&>>"$LOG_FILE"
+	if [ -f "$UBUNTU_BASHRC" ]; then
+		sed -i '/# opencode/d; /export PATH=\/root\/.opencode\/bin/d' "$UBUNTU_BASHRC"
+	fi
 
 	if rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
 		log_success "OpenCode uninstalled"
@@ -117,13 +116,9 @@ update_opencode() {
 	log_info "Updating OpenCode..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	# Eliminar binario anterior y reinstalar con el instalador oficial
-	proot-distro login \
-		--shared-tmp \
-		ubuntu \
-		-- /bin/bash -c \
-		'rm -rf /root/.opencode && HOME=/root curl -fsSL https://opencode.ai/install | bash' \
-		&>>"$LOG_FILE"
+	_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
+
+	_install_binary
 
 	if [ ! -f "$OPENCODE_BIN" ]; then
 		log_error "OpenCode binary not found after update"
