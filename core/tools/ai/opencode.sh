@@ -14,7 +14,7 @@ _proot_ubuntu() {
 		-- "$@"
 }
 
-_install_binary() {
+_install_opencode_binary() {
 	_proot_ubuntu /bin/bash -c '
                 export SHELL=/bin/bash
                 export TMPDIR=/tmp
@@ -23,7 +23,7 @@ _install_binary() {
         ' &>>"$LOG_FILE"
 }
 
-_write_wrapper() {
+_write_opencode_wrapper() {
 	cat <<'EOF' >"$PREFIX/bin/opencode"
 #!/bin/bash
 
@@ -57,7 +57,7 @@ EOF
 	chmod +x "$PREFIX/bin/opencode"
 }
 
-_write_path() {
+_write_opencode_path() {
 	if ! grep -q '.opencode/bin' "$UBUNTU_BASHRC" 2>/dev/null; then
 		printf '\n# opencode\nexport PATH=/root/.opencode/bin:$PATH\n' >>"$UBUNTU_BASHRC"
 	fi
@@ -79,15 +79,15 @@ install_opencode() {
 		'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
 		&>>"$LOG_FILE"
 
-	_install_binary
+	_install_opencode_binary
 
 	if [ ! -f "$OPENCODE_BIN" ]; then
 		log_error "OpenCode binary not found after install"
 		return 1
 	fi
 
-	_write_wrapper
-	_write_path
+	_write_opencode_wrapper
+	_write_opencode_path
 
 	log_success "OpenCode installed"
 	return 0
@@ -118,7 +118,7 @@ update_opencode() {
 
 	_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
 
-	_install_binary
+	_install_opencode_binary
 
 	if [ ! -f "$OPENCODE_BIN" ]; then
 		log_error "OpenCode binary not found after update"
