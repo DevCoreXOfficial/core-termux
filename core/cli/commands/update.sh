@@ -192,6 +192,9 @@ _update_specific_tools() {
 			engram)
 				if loading "Updating Engram" update_engram; then ((updated_count++)); else ((failed_count++)); fi
 				;;
+			codegraph)
+				if loading "Updating CodeGraph" update_codegraph; then ((updated_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;

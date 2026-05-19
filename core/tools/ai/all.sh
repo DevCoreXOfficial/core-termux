@@ -27,6 +27,7 @@ source "$(dirname "$BASH_SOURCE")/ollama.sh"
 source "$(dirname "$BASH_SOURCE")/codex.sh"
 source "$(dirname "$BASH_SOURCE")/opencode.sh"
 source "$(dirname "$BASH_SOURCE")/engram.sh"
+source "$(dirname "$BASH_SOURCE")/codegraph.sh"
 
 install_all_ai_tools() {
 	local installed_count=0
@@ -63,6 +64,9 @@ install_all_ai_tools() {
 			;;
 		engram)
 			if install_engram; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		codegraph)
+			if install_codegraph; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -106,6 +110,9 @@ uninstall_all_ai_tools() {
 		engram)
 			if uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
+		codegraph)
+			if uninstall_codegraph; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
 		esac
 	done
 
@@ -147,6 +154,9 @@ update_all_ai_tools() {
 			;;
 		engram)
 			if update_engram; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		codegraph)
+			if update_codegraph; then ((updated_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done

@@ -17,7 +17,7 @@ install_main() {
 		list_item "full       - Install everything (recommended)"
 		list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++, Go)"
 		list_item "db         - Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram)"
+		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph)"
 		list_item "editor     - Code editor (Neovim + NvChad)"
 		list_item "tools      - Development tools"
 		list_item "node       - Node.js global modules (npm packages)"
@@ -190,6 +190,9 @@ _install_specific_tools() {
 				;;
 			engram)
 				if loading "Installing Engram" install_engram; then ((installed_count++)); else ((failed_count++)); fi
+				;;
+			codegraph)
+				if loading "Installing CodeGraph" install_codegraph; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"

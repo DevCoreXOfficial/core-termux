@@ -215,6 +215,9 @@ _uninstall_specific_tools() {
 			engram)
 				if loading "Uninstalling Engram" uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
+			codegraph)
+				if loading "Uninstalling CodeGraph" uninstall_codegraph; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;
