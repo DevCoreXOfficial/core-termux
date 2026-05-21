@@ -3,8 +3,18 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-UBUNTU_ROOT="$PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu"
-UBUNTU_BASHRC="$UBUNTU_ROOT/root/.bashrc"
+_detect_ubuntu_root() {
+	local root
+	root="$(find /data/data/com.termux -maxdepth 10 -type d \
+		-name "rootfs" -path "*/containers/ubuntu/*" 2>/dev/null | head -1)"
+
+	if [ -z "$root" ]; then
+		root="$(find /data/data/com.termux -maxdepth 10 -type d \
+			-name "ubuntu" -path "*/installed-rootfs/*" 2>/dev/null | head -1)"
+	fi
+
+	echo "$root"
+}
 
 _proot_ubuntu() {
 	proot-distro login \
@@ -23,43 +33,45 @@ _install_claude_binary() {
 }
 
 _write_claude_wrapper() {
-	cat <<'EOF' >"$PREFIX/bin/claude"
+	local ubuntu_root="$1"
+	cat <<EOF >"$PREFIX/bin/claude"
 #!/bin/bash
 
-UBUNTU_ROOTFS="$PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu"
+UBUNTU_ROOTFS="$ubuntu_root"
 
 EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
 
 ENV_ARGS=()
 while IFS= read -r line; do
-        if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
-                ENV_ARGS+=("--env" "$line")
+        if [[ -n "\$line" && ! "\$line" =~ \$EXCLUDE_REGEX ]]; then
+                ENV_ARGS+=("--env" "\$line")
         fi
 done < <(env)
 
 ENV_ARGS+=(
         "--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
-        "--env" "TERM=$TERM"
+        "--env" "TERM=\$TERM"
         "--env" "HOME=/root"
 )
 
 unset LD_PRELOAD
-proot-distro login \
-        "${ENV_ARGS[@]}" \
-        --termux-home \
-        --shared-tmp \
-        --bind "$UBUNTU_ROOTFS/root/.local:/root/.local" \
-        --bind "$UBUNTU_ROOTFS/root/.claude:/root/.claude" \
-        --work-dir "$PWD" \
-        ubuntu \
-        -- /root/.local/bin/claude "$@"
+proot-distro login \\
+        "\${ENV_ARGS[@]}" \\
+        --termux-home \\
+        --shared-tmp \\
+        --bind "\$UBUNTU_ROOTFS/root/.local:/root/.local" \\
+        --bind "\$UBUNTU_ROOTFS/root/.claude:/root/.claude" \\
+        --work-dir "\$PWD" \\
+        ubuntu \\
+        -- /root/.local/bin/claude "\$@"
 EOF
 	chmod +x "$PREFIX/bin/claude"
 }
 
 _write_claude_path() {
-	if ! grep -q '.local/bin' "$UBUNTU_BASHRC" 2>/dev/null; then
-		printf '\n# claude-code\nexport PATH=/root/.local/bin:$PATH\n' >>"$UBUNTU_BASHRC"
+	local ubuntu_bashrc="$1"
+	if ! grep -q '.local/bin' "$ubuntu_bashrc" 2>/dev/null; then
+		printf '\n# claude-code\nexport PATH=/root/.local/bin:$PATH\n' >>"$ubuntu_bashrc"
 	fi
 }
 
@@ -69,9 +81,12 @@ install_claude_code() {
 	fi
 
 	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install proot-distro -y &>>"$LOG_FILE"
 
-	if [ ! -d "$UBUNTU_ROOT" ]; then
+	if ! command -v proot-distro &>/dev/null; then
+		pkg install proot-distro -y &>>"$LOG_FILE"
+	fi
+
+	if [ ! -d "$(_detect_ubuntu_root)" ]; then
 		proot-distro install ubuntu &>>"$LOG_FILE"
 	fi
 
@@ -81,13 +96,21 @@ install_claude_code() {
 
 	_install_claude_binary
 
+	local ubuntu_root
+	ubuntu_root="$(_detect_ubuntu_root)"
+
+	if [ -z "$ubuntu_root" ]; then
+		log_error "Ubuntu rootfs not found"
+		return 1
+	fi
+
 	if ! _proot_ubuntu test -x /root/.local/bin/claude &>>"$LOG_FILE"; then
 		log_error "Claude Code binary not found after install"
 		return 1
 	fi
 
-	_write_claude_wrapper
-	_write_claude_path
+	_write_claude_wrapper "$ubuntu_root"
+	_write_claude_path "$ubuntu_root/root/.bashrc"
 
 	log_success "Claude Code installed"
 	return 0
@@ -101,8 +124,11 @@ uninstall_claude_code() {
 		'rm -f /root/.local/bin/claude && rm -rf /root/.claude && rm -rf /root/.local/share/claude' \
 		&>>"$LOG_FILE"
 
-	if [ -f "$UBUNTU_BASHRC" ]; then
-		sed -i '/# claude-code/d; /export PATH=\/root\/.local\/bin/d' "$UBUNTU_BASHRC"
+	local ubuntu_bashrc
+	ubuntu_bashrc="$(_detect_ubuntu_root)/root/.bashrc"
+
+	if [ -f "$ubuntu_bashrc" ]; then
+		sed -i '/# claude-code/d; /export PATH=\/root\/.local\/bin/d' "$ubuntu_bashrc"
 	fi
 
 	if rm -f "$PREFIX/bin/claude" &>>"$LOG_FILE"; then
