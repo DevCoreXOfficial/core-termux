@@ -253,7 +253,7 @@ EOF
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-function cn(...inputs: any[]) { return twMerge(clsx(inputs)) }
+function cn(...inputs: any[]) { return twMerge(...clsx(inputs)) }
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
