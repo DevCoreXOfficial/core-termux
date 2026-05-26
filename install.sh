@@ -2,7 +2,6 @@
 
 set -e
 
-# Colores básicos (sin importar logs aún)
 RED='\e[1;31m'
 GREEN='\e[1;32m'
 YELLOW='\e[1;33m'
@@ -42,7 +41,12 @@ warn() {
 # Instalar dependencias requeridas
 install_dependencies() {
 	log "Installing required dependencies..."
-	pkg install -y git ncurses-utils &>/dev/null
+	if ! command -v git >/dev/null 2>&1; then
+		pkg install -y git &>/dev/null
+	fi
+	if ! command -v tput >/dev/null 2>&1; then
+		pkg install -y ncurses-utils &>/dev/null
+	fi
 	success "Dependencies installed (git, ncurses-utils)"
 }
 
@@ -139,6 +143,7 @@ show_final_message() {
 	echo -e "  core install tools"
 	echo -e "  core install shell"
 	echo -e "  core install ui"
+	echo -e "  core install automation"
 	echo
 }
 

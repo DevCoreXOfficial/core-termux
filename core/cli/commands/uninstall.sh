@@ -218,6 +218,9 @@ _uninstall_specific_tools() {
 			codegraph)
 				if loading "Uninstalling CodeGraph" uninstall_codegraph; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
+			pi)
+				if loading "Uninstalling Pi Coding Agent" uninstall_pi; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;

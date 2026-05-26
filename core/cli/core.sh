@@ -36,6 +36,7 @@ core_help() {
 	echo
 	separator_section "Available Commands"
 	echo
+  printf "    ${D_CYAN}%-12s${NC} %s\n" "--version" "Show current version"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "setup" "Interactive installation wizard"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "install" "Install modules and packages"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "update" "Update modules or framework"
@@ -56,7 +57,7 @@ core_help() {
 	echo
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node.js, Python, Perl, PHP, Rust, C, C++, Go"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Pi"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad + Plugins"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"

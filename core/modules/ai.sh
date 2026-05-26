@@ -34,6 +34,7 @@ install_ai() {
 		list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
 		list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
 		list_item "CodeGraph ${GRAY}(${D_GREEN}codegraph${GRAY})"
+		list_item "Pi ${GRAY}(${D_GREEN}pi${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"

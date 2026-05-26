@@ -15,6 +15,8 @@ AI_TOOLS=(
 	"codex"
 	"opencode"
 	"engram"
+  "codegraph"
+  "pi"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code.sh"
@@ -28,6 +30,7 @@ source "$(dirname "$BASH_SOURCE")/codex.sh"
 source "$(dirname "$BASH_SOURCE")/opencode.sh"
 source "$(dirname "$BASH_SOURCE")/engram.sh"
 source "$(dirname "$BASH_SOURCE")/codegraph.sh"
+source "$(dirname "$BASH_SOURCE")/pi.sh"
 
 install_all_ai_tools() {
 	local installed_count=0
@@ -67,6 +70,9 @@ install_all_ai_tools() {
 			;;
 		codegraph)
 			if install_codegraph; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		pi)
+			if install_pi; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -113,6 +119,9 @@ uninstall_all_ai_tools() {
 		codegraph)
 			if uninstall_codegraph; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
+		pi)
+			if uninstall_pi; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
 		esac
 	done
 
@@ -157,6 +166,9 @@ update_all_ai_tools() {
 			;;
 		codegraph)
 			if update_codegraph; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		pi)
+			if update_pi; then ((updated_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done

@@ -195,6 +195,9 @@ _update_specific_tools() {
 			codegraph)
 				if loading "Updating CodeGraph" update_codegraph; then ((updated_count++)); else ((failed_count++)); fi
 				;;
+			pi)
+				if loading "Updating Pi Coding Agent" update_pi; then ((updated_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;

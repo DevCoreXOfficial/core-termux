@@ -128,6 +128,7 @@ _list_ai() {
 	table_row "OpenCode" "--opencode" "opencode" "$(_check_cmd "opencode")"
 	table_row "Engram" "--engram" "engram" "$(_check_cmd "engram")"
 	table_row "CodeGraph" "--codegraph" "codegraph" "$(_check_cmd "codegraph")"
+	table_row "Pi Coding Agent" "--pi" "pi" "$(_check_cmd "pi")"
 	table_end
 
 	echo
