@@ -168,7 +168,8 @@ _install_specific_tools() {
 				if loading "Installing Gemini CLI" install_gemini_cli; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			claude-code)
-				if loading "Installing Claude Code" install_claude_code; then ((installed_count++)); else ((failed_count++)); fi
+				install_claude_code
+				if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			mistral-vibe)
 				if loading "Installing Mistral Vibe" install_mistral_vibe; then ((installed_count++)); else ((failed_count++)); fi

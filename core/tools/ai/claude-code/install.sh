@@ -1,8 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
+CLAUDE_DATA_DIR="$HOME/.local/share/core-termux-data/claude"
+HELPER_SRC="$CORE_PATH/tools/ai/claude-code/helper/claude_helper.c"
 
 _detect_ubuntu_root() {
 	local root
@@ -24,64 +27,98 @@ _proot_ubuntu() {
 		-- "$@"
 }
 
-_install_claude_binary() {
-	_proot_ubuntu /bin/bash -c '
-		export SHELL=/bin/bash
-		export TMPDIR=/tmp
-		export HOME=/root
-		curl -fsSL https://claude.ai/install.sh | bash
-	' &>>"$LOG_FILE"
+_get_latest_claude_version() {
+	curl -fsSL https://api.github.com/repos/anthropics/claude-code/releases/latest \
+		| grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
 }
 
-_write_claude_wrapper() {
-	local ubuntu_root="$1"
-	cat <<WRAPPER >"$PREFIX/bin/claude"
-#!/data/data/com.termux/files/usr/bin/bash
-
-UBUNTU_ROOTFS="$ubuntu_root"
-
-EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
-
-ENV_ARGS=()
-while IFS= read -r line; do
-	if [[ -n "\$line" && ! "\$line" =~ \$EXCLUDE_REGEX ]]; then
-		ENV_ARGS+=("--env" "\$line")
+_install_deps_native() {
+	if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
+		log_error "Failed to install glibc-repo"
+		return 1
 	fi
-done < <(env)
 
-ENV_ARGS+=(
-	"--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
-	"--env" "TERM=\$TERM"
-	"--env" "HOME=/root"
-)
+	if ! pkg install glibc clang curl tar -y &>>"$LOG_FILE"; then
+		log_error "Failed to install native dependencies"
+		return 1
+	fi
 
-unset LD_PRELOAD
-proot-distro login \\
-	"\${ENV_ARGS[@]}" \\
-	--termux-home \\
-	--shared-tmp \\
-	--bind "\$UBUNTU_ROOTFS/root/.local:/root/.local" \\
-	--bind "\$UBUNTU_ROOTFS/root/.claude:/root/.claude" \\
-	--work-dir "\$PWD" \\
-	ubuntu \\
-	-- /root/.local/bin/claude "\$@"
-WRAPPER
+	log_success "Dependencies installed"
+	return 0
+}
+
+_download_claude_binary() {
+	local latest_version
+	latest_version=$(_get_latest_claude_version)
+	if [ -z "$latest_version" ]; then
+		log_error "Failed to fetch latest Claude Code version"
+		return 1
+	fi
+
+	log_info "Latest version: ${D_CYAN}$latest_version${NC}"
+
+	mkdir -p "$CLAUDE_DATA_DIR"
+
+	local tarball="claude-linux-arm64.tar.gz"
+	local download_url="https://github.com/anthropics/claude-code/releases/download/$latest_version/$tarball"
+
+	if ! curl -fsSL "$download_url" -o "$CLAUDE_DATA_DIR/$tarball" &>>"$LOG_FILE"; then
+		log_error "Failed to download Claude Code binary"
+		return 1
+	fi
+
+	if ! tar -zxf "$CLAUDE_DATA_DIR/$tarball" -C "$CLAUDE_DATA_DIR" &>>"$LOG_FILE"; then
+		log_error "Failed to extract Claude Code binary"
+		return 1
+	fi
+
+	rm -f "$CLAUDE_DATA_DIR/$tarball"
+
+	if [ ! -f "$CLAUDE_DATA_DIR/claude" ]; then
+		log_error "Claude Code binary not found after extraction"
+		return 1
+	fi
+
+	chmod +x "$CLAUDE_DATA_DIR/claude"
+	log_success "Claude Code binary downloaded"
+	return 0
+}
+
+_compile_claude_helper() {
+	if [ ! -f "$HELPER_SRC" ]; then
+		log_error "Helper source not found at $HELPER_SRC"
+		return 1
+	fi
+
+	if ! clang -O2 -o "$PREFIX/bin/claude" "$HELPER_SRC" &>>"$LOG_FILE"; then
+		log_error "Failed to compile claude helper"
+		return 1
+	fi
+
 	chmod +x "$PREFIX/bin/claude"
+	log_success "Bootstrapper compiled"
+	return 0
 }
 
-_write_claude_path() {
-	local ubuntu_bashrc="$1"
-	if ! grep -q '.local/bin' "$ubuntu_bashrc" 2>/dev/null; then
-		printf '\n# claude-code\nexport PATH=/root/.local/bin:$PATH\n' >>"$ubuntu_bashrc"
+_install_claude_native() {
+	if ! loading "Installing dependencies" _install_deps_native; then
+		return 1
 	fi
+
+	if ! loading "Downloading Claude Code" _download_claude_binary; then
+		return 1
+	fi
+
+	if ! loading "Compiling bootstrapper" _compile_claude_helper; then
+		return 1
+	fi
+
+	log_success "Claude Code installed natively"
+	return 0
 }
 
-install_claude_code() {
-	if command -v claude &>/dev/null; then
-		return 0
-	fi
-
-	log_info "Installing Claude Code..."
+_install_claude_proot() {
+	log_info "Installing Claude Code (proot-distro)..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -97,7 +134,12 @@ install_claude_code() {
 		'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
 		&>>"$LOG_FILE"
 
-	_install_claude_binary
+	_proot_ubuntu /bin/bash -c '
+		export SHELL=/bin/bash
+		export TMPDIR=/tmp
+		export HOME=/root
+		curl -fsSL https://claude.ai/install.sh | bash
+	' &>>"$LOG_FILE"
 
 	local ubuntu_root
 	ubuntu_root="$(_detect_ubuntu_root)"
@@ -112,16 +154,53 @@ install_claude_code() {
 		return 1
 	fi
 
-	_write_claude_wrapper "$ubuntu_root"
-	_write_claude_path "$ubuntu_root/root/.bashrc"
+	local wrapper_src="$CORE_PATH/tools/ai/claude-code/bin/claude"
+	if [ ! -f "$wrapper_src" ]; then
+		log_error "Wrapper template not found at $wrapper_src"
+		return 1
+	fi
+	sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" > "$PREFIX/bin/claude"
+	chmod +x "$PREFIX/bin/claude"
 
-	log_success "Claude Code installed"
+	if ! grep -q '.local/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
+		printf '\n# claude-code\nexport PATH=/root/.local/bin:$PATH\n' >>"$ubuntu_root/root/.bashrc"
+	fi
+
+	log_success "Claude Code installed (proot-distro)"
 	return 0
+}
+
+install_claude_code() {
+	if command -v claude &>/dev/null; then
+		return 0
+	fi
+
+	log_info "Select installation method for Claude Code:"
+
+	read_select "Installation method" SELECTED_METHOD \
+		"Native (recommended) - Run with glibc support" \
+		"Proot-distro (alternative) - Ubuntu container"
+
+	case "$SELECTED_METHOD" in
+	*Native*)
+		_install_claude_native
+		;;
+	*Proot-distro*)
+		_install_claude_proot
+		;;
+	esac
 }
 
 uninstall_claude_code() {
 	log_info "Uninstalling Claude Code..."
 	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if [ -f "$CLAUDE_DATA_DIR/claude" ]; then
+		rm -f "$PREFIX/bin/claude"
+		rm -rf "$CLAUDE_DATA_DIR"
+		log_success "Claude Code (native) uninstalled"
+		return 0
+	fi
 
 	_proot_ubuntu /bin/bash -c \
 		'rm -f /root/.local/bin/claude && rm -rf /root/.claude && rm -rf /root/.local/share/claude' \
@@ -135,7 +214,7 @@ uninstall_claude_code() {
 	fi
 
 	if rm -f "$PREFIX/bin/claude" &>>"$LOG_FILE"; then
-		log_success "Claude Code uninstalled"
+		log_success "Claude Code (proot-distro) uninstalled"
 		return 0
 	else
 		log_error "Failed to uninstall Claude Code"
@@ -147,6 +226,11 @@ update_claude_code() {
 	log_info "Updating Claude Code..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
+	if [ -f "$CLAUDE_DATA_DIR/claude" ]; then
+		_install_claude_native
+		return $?
+	fi
+
 	_proot_ubuntu /bin/bash -c '
 		export HOME=/root
 		curl -fsSL https://claude.ai/install.sh | bash
@@ -157,6 +241,6 @@ update_claude_code() {
 		return 1
 	fi
 
-	log_success "Claude Code updated"
+	log_success "Claude Code (proot-distro) updated"
 	return 0
 }

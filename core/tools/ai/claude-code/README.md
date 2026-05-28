@@ -22,4 +22,6 @@ core update ai --claude-code
 
 ## Notes
 
-- Runs inside an Ubuntu proot-distro container for compatibility
+- Native installation (recommended): runs directly with glibc support via a C bootstrapper
+- Proot-distro (alternative): runs inside an Ubuntu container for compatibility
+- The installer will prompt you to select which method to use
