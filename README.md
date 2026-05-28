@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.12.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.12.1-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -85,7 +85,7 @@ core --version
 
 **Output:**
 ```
-Core-Termux v3.12.0
+Core-Termux v3.12.1
 ```
 
 ---
@@ -759,7 +759,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.12.1 (current: 3.12.0)
+⚠ New version available: 3.12.2 (current: 3.12.1)
 
 ➜ Run: core update core to update
 ```

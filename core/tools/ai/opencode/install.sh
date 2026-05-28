@@ -5,7 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
-HELPER_SRC="$CORE_PATH/tools/ai/opencode/helper/opencode_helper.c"
 
 _detect_ubuntu_root() {
 	local root
@@ -85,6 +84,7 @@ _download_opencode_binary() {
 }
 
 _compile_opencode_helper() {
+	local HELPER_SRC="$CORE_PATH/tools/ai/opencode/helper/opencode_helper.c"
 	if [ ! -f "$HELPER_SRC" ]; then
 		log_error "Helper source not found at $HELPER_SRC"
 		return 1

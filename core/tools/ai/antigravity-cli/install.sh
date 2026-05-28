@@ -5,7 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 AGY_DATA_DIR="$HOME/.local/share/core-termux-data/antigravity-cli"
-HELPER_SRC="$CORE_PATH/tools/ai/antigravity-cli/helper/agy_helper.c"
 MANIFEST_URL="https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_arm64.json"
 
 _get_latest_agy_version() {
@@ -132,6 +131,7 @@ PY
 }
 
 _compile_agy_helper() {
+    local HELPER_SRC="$CORE_PATH/tools/ai/antigravity-cli/helper/agy_helper.c"
     if [ ! -f "$HELPER_SRC" ]; then
         log_error "Helper source not found at $HELPER_SRC"
         return 1

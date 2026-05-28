@@ -5,7 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CLAUDE_DATA_DIR="$HOME/.local/share/core-termux-data/claude"
-HELPER_SRC="$CORE_PATH/tools/ai/claude-code/helper/claude_helper.c"
 
 _detect_ubuntu_root() {
 	local root
@@ -85,6 +84,7 @@ _download_claude_binary() {
 }
 
 _compile_claude_helper() {
+	local HELPER_SRC="$CORE_PATH/tools/ai/claude-code/helper/claude_helper.c"
 	if [ ! -f "$HELPER_SRC" ]; then
 		log_error "Helper source not found at $HELPER_SRC"
 		return 1
