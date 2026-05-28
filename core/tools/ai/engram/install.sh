@@ -18,7 +18,7 @@ install_engram() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if git clone https://github.com/Gentleman-Programming/engram ~/.cache/core-termux/engram && go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
+	if git clone https://github.com/Gentleman-Programming/engram "$CORE_DATA/engram" && go build -C "$CORE_DATA/engram/cmd/engram" -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
 		return 0
 	else
 		log_error "Failed to install Engram"
@@ -30,7 +30,7 @@ uninstall_engram() {
 	log_info "Uninstalling Engram..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if rm -rf ~/.cache/core-termux/engram && rm "$PREFIX/bin/engram" &>>"$LOG_FILE"; then
+	if rm -rf "$CORE_DATA/engram" && rm "$PREFIX/bin/engram" &>>"$LOG_FILE"; then
 		log_success "Engram uninstalled"
 		return 0
 	else
@@ -46,7 +46,7 @@ update_engram() {
 	export GOCACHE="$HOME/.cache/go"
 	export GOMODCACHE="$GOPATH/pkg/mod"
 
-	if git -C ~/.cache/core-termux/engram pull &>>"$LOG_FILE" && go build -C ~/.cache/core-termux/engram/cmd/engram -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
+	if git -C "$CORE_DATA/engram" pull &>>"$LOG_FILE" && go build -C "$CORE_DATA/engram/cmd/engram" -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
 		log_success "Engram updated"
 		return 0
 	else

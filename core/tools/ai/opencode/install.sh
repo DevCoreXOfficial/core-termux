@@ -156,36 +156,12 @@ _install_opencode_proot() {
 		return 1
 	fi
 
-	cat <<WRAPPER >"$PREFIX/bin/opencode"
-#!/data/data/com.termux/files/usr/bin/bash
-
-UBUNTU_ROOTFS="$ubuntu_root"
-
-EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
-
-ENV_ARGS=()
-while IFS= read -r line; do
-	if [[ -n "\$line" && ! "\$line" =~ \$EXCLUDE_REGEX ]]; then
-		ENV_ARGS+=("--env" "\$line")
+	local wrapper_src="$CORE_PATH/tools/ai/opencode/bin/opencode"
+	if [ ! -f "$wrapper_src" ]; then
+		log_error "Wrapper template not found at $wrapper_src"
+		return 1
 	fi
-done < <(env)
-
-ENV_ARGS+=(
-	"--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
-	"--env" "TERM=\$TERM"
-	"--env" "HOME=/root"
-)
-
-unset LD_PRELOAD
-proot-distro login \\
-	"\${ENV_ARGS[@]}" \\
-	--termux-home \\
-	--shared-tmp \\
-	--bind "\$UBUNTU_ROOTFS/root/.opencode:/root/.opencode" \\
-	--work-dir \$PWD \\
-	ubuntu \\
-	-- /root/.opencode/bin/opencode "\$@"
-WRAPPER
+	sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" > "$PREFIX/bin/opencode"
 	chmod +x "$PREFIX/bin/opencode"
 
 	if ! grep -q '.opencode/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
@@ -205,7 +181,7 @@ install_opencode() {
 
 	read_select "Installation method" SELECTED_METHOD \
 		"Native (recommended) - Compile with glibc support" \
-		"Proot-distro (alternative) - Run inside Ubuntu container"
+		"Proot-distro (alternative) - Ubuntu container"
 
 	case "$SELECTED_METHOD" in
 	*Native*)

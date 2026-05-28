@@ -23,11 +23,12 @@ _install_codegraph_dependencies() {
 }
 
 _write_codegraph_wrapper() {
-	cat <<EOF >"$PREFIX/bin/codegraph"
-#!/data/data/com.termux/files/usr/bin/bash
-
-node ~/.cache/core-termux/codegraph-linux-arm64/lib/dist/bin/codegraph.js "\$@"
-EOF
+	local wrapper_src="$CORE_PATH/tools/ai/codegraph/bin/codegraph"
+	if [ ! -f "$wrapper_src" ]; then
+		log_error "Wrapper template not found at $wrapper_src"
+		return 1
+	fi
+	cp "$wrapper_src" "$PREFIX/bin/codegraph"
 	chmod +x "$PREFIX/bin/codegraph"
 }
 
@@ -56,7 +57,7 @@ install_codegraph() {
 		return 1
 	fi
 
-	if ! tar -xzf $PREFIX/tmp/codegraph-linux-arm64.tar.gz -C ~/.cache/core-termux/ &>>"$LOG_FILE"; then
+	if ! tar -xzf $PREFIX/tmp/codegraph-linux-arm64.tar.gz -C "$CORE_DATA" &>>"$LOG_FILE"; then
 		log_error "Failed to extract CodeGraph"
 		return 1
 	fi
@@ -79,7 +80,7 @@ uninstall_codegraph() {
 	log_info "Uninstalling CodeGraph..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if rm -rf ~/.cache/core-termux/codegraph-linux-arm64 && rm -f "$PREFIX/bin/codegraph" &>>"$LOG_FILE"; then
+	if rm -rf "$CORE_DATA/codegraph-linux-arm64" && rm -f "$PREFIX/bin/codegraph" &>>"$LOG_FILE"; then
 		log_success "CodeGraph uninstalled"
 		return 0
 	else
@@ -92,7 +93,7 @@ update_codegraph() {
 	log_info "Updating CodeGraph..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if ! rm -rf ~/.cache/core-termux/codegraph-linux-arm64 &>>"$LOG_FILE"; then
+	if ! rm -rf "$CORE_DATA/codegraph-linux-arm64" &>>"$LOG_FILE"; then
 		log_error "Failed to remove old CodeGraph installation"
 		return 1
 	fi
@@ -119,7 +120,7 @@ update_codegraph() {
 		return 1
 	fi
 
-	if ! tar -xzf $PREFIX/tmp/codegraph-linux-arm64.tar.gz -C ~/.cache/core-termux/ &>>"$LOG_FILE"; then
+	if ! tar -xzf $PREFIX/tmp/codegraph-linux-arm64.tar.gz -C "$CORE_DATA" &>>"$LOG_FILE"; then
 		log_error "Failed to extract CodeGraph"
 		return 1
 	fi

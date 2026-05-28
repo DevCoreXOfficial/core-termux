@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-UBUNTU_ROOTFS="__UBUNTU_ROOTFS__"
+UBUNTU_ROOTFS="$PREFIX/var/lib/proot-distro/containers/ubuntu/rootfs"
 
 EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
 
