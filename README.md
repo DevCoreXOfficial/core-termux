@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.10.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.11.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -61,8 +61,10 @@ core setup
 
 | Command | Description |
 |---------|-------------|
+| [`core --version`](#core---version) | Show current version |
 | [`core setup`](#core-setup) | Interactive installation wizard |
 | [`core install`](#core-install) | Install specific modules |
+| [`core show`](#core-show) | Show tool documentation |
 | [`core update`](#core-update) | Update modules or framework |
 | [`core uninstall`](#core-uninstall) | Remove installed modules |
 | [`core list`](#core-list) | List available tools in modules |
@@ -72,6 +74,43 @@ core setup
 ---
 
 ## Detailed Commands
+
+### `core --version`
+
+Display the installed version of Core-Termux.
+
+```bash
+core --version
+```
+
+**Output:**
+```
+Core-Termux v3.11.0
+```
+
+---
+
+### `core show`
+
+Display help documentation for any installed tool. Documentation is loaded from the tool's `README.md` file in its module directory.
+
+```bash
+core show                    # Show help
+core show <module>           # List all tools in a module
+core show <module> --<tool>  # Show specific tool documentation
+```
+
+**Examples:**
+
+```bash
+core show ai --opencode      # Show OpenCode documentation
+core show db --postgresql    # Show PostgreSQL documentation
+core show node --typescript  # Show TypeScript documentation
+```
+
+**Colorized output:** If `bat` is installed, documentation is displayed with syntax highlighting. Otherwise, plain text is shown.
+
+---
 
 ### `core setup`
 
@@ -105,7 +144,7 @@ core list <module>            # List tools in specific module
 |--------|-------------|
 | `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
-| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph) |
+| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI) |
 | `editor` | Code editor components (Neovim, NvChad) |
 | `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
 | `node` | Node.js global npm packages |
@@ -132,7 +171,7 @@ core install full             # Install everything
 |--------|-------------|
 | `language` | Node.js, Python, Perl, PHP, Rust, C/C++, Go |
 | `db` | PostgreSQL, MariaDB, SQLite, MongoDB |
-| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph |
+| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI |
 | `editor` | Neovim + NvChad configuration |
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
@@ -606,121 +645,64 @@ table_end
 core-termux/
 ├── LICENSE
 ├── README.md
-├── assets                                              │   ├── fonts
-│   │   └── font.ttf
-│   └── images
-│       └── logo.svg
+├── assets
+│   ├── fonts
+│   │   └── font.ttf
+│   └── images
+│       └── logo.svg
 ├── core
-│   ├── bin
-│   │   └── core                                    │   ├── cli
-│   │   ├── commands
-│   │   │   ├── init.sh                             │   │   │   ├── install.sh
-│   │   │   ├── list.sh                             │   │   │   ├── pg.sh
-│   │   │   ├── setup.sh
-│   │   │   ├── uninstall.sh                        │   │   │   └── update.sh
-│   │   └── core.sh
-│   ├── fix
-│   │   └── localtunnel.sh
-│   ├── modules
-│   │   ├── ai.sh
-│   │   ├── automation.sh
-│   │   ├── db.sh
-│   │   ├── editor.sh
-│   │   ├── language.sh
-│   │   ├── node-modules.sh
-│   │   ├── shell.sh
-│   │   ├── tools.sh
-│   │   └── ui.sh
-│   ├── tools
-│   │   ├── ai
-│   │   │   ├── all.sh
-│   │   │   ├── claude-code.sh
-│   │   │   ├── codex.sh
-│   │   │   ├── engram.sh
-│   │   │   ├── gemini-cli.sh
-│   │   │   ├── mistral-vibe.sh
-│   │   │   ├── ollama.sh
-│   │   │   ├── openclaude.sh
-│   │   │   ├── openclaw.sh
-│   │   │   ├── opencode.sh
-│   │   │   └── qwen-code.sh
-│   │   ├── automation
-│   │   │   ├── all.sh
-│   │   │   └── n8n.sh
-│   │   ├── db
-│   │   │   ├── all.sh
-│   │   │   ├── mariadb.sh
-│   │   │   ├── mongodb.sh
-│   │   │   ├── postgresql.sh
-│   │   │   └── sqlite.sh
-│   │   ├── editor
-│   │   │   ├── all.sh
-│   │   │   ├── neovim.sh
-│   │   │   └── nvchad.sh
-│   │   ├── language
-│   │   │   ├── all.sh
-│   │   │   ├── clang.sh
-│   │   │   ├── golang.sh
-│   │   │   ├── nodejs.sh
-│   │   │   ├── perl.sh
-│   │   │   ├── php.sh
-│   │   │   ├── python.sh
-│   │   │   └── rust.sh
-│   │   ├── node
-│   │   │   ├── all.sh
-│   │   │   ├── live-server.sh
-│   │   │   ├── localtunnel.sh
-│   │   │   ├── markserv.sh
-│   │   │   ├── ncu.sh
-│   │   │   ├── nestjs.sh
-│   │   │   ├── ngrok.sh
-│   │   │   ├── prettier.sh
-│   │   │   ├── psqlformat.sh
-│   │   │   ├── typescript.sh
-│   │   │   └── vercel.sh
-│   │   ├── shell
-│   │   │   ├── all.sh
-│   │   │   ├── better-npm.sh
-│   │   │   ├── fzf-tab.sh
-│   │   │   ├── history-substring.sh
-│   │   │   ├── powerlevel10k.sh
-│   │   │   ├── you-should-use.sh
-│   │   │   ├── zsh-autopair.sh
-│   │   │   ├── zsh-autosuggestions.sh
-│   │   │   ├── zsh-completions.sh
-│   │   │   ├── zsh-defer.sh
-│   │   │   └── zsh-syntax-highlighting.sh
-│   │   ├── tools
-│   │   │   ├── all.sh
-│   │   │   ├── bat.sh
-│   │   │   ├── bc.sh
-│   │   │   ├── cloudflared.sh
-│   │   │   ├── curl.sh
-│   │   │   ├── fzf.sh
-│   │   │   ├── gh.sh
-│   │   │   ├── html2text.sh
-│   │   │   ├── imagemagick.sh
-│   │   │   ├── jq.sh
-│   │   │   ├── lsd.sh
-│   │   │   ├── make.sh
-│   │   │   ├── ncurses.sh
-│   │   │   ├── proot.sh
-│   │   │   ├── shfmt.sh
-│   │   │   ├── tmate.sh
-│   │   │   ├── translate.sh
-│   │   │   ├── tree.sh
-│   │   │   ├── udocker.sh
-│   │   │   └── wget.sh
-│   │   └── ui
-│   │       ├── all.sh
-│   │       ├── cursor.sh
-│   │       ├── extra-keys.sh
-│   │       └── font.sh
-│   └── utils
-│       ├── bootstrap.sh
-│       ├── colors.sh
-│       ├── env.sh
-│       └── log.sh
+│   ├── bin
+│   │   └── core
+│   ├── cli
+│   │   ├── commands
+│   │   │   ├── --version.sh
+│   │   │   ├── init.sh
+│   │   │   ├── install.sh
+│   │   │   ├── list.sh
+│   │   │   ├── pg.sh
+│   │   │   ├── setup.sh
+│   │   │   ├── show.sh
+│   │   │   ├── uninstall.sh
+│   │   │   └── update.sh
+│   │   └── core.sh
+│   ├── modules
+│   │   ├── ai.sh
+│   │   ├── automation.sh
+│   │   ├── db.sh
+│   │   ├── editor.sh
+│   │   ├── language.sh
+│   │   ├── node-modules.sh
+│   │   ├── shell.sh
+│   │   ├── tools.sh
+│   │   └── ui.sh
+│   ├── tools
+│   │   ├── ai/
+│   │   │   ├── all.sh
+│   │   │   ├── qwen-code/
+│   │   │   │   ├── install.sh
+│   │   │   │   └── README.md
+│   │   │   ├── claude-code/
+│   │   │   │   ├── install.sh
+│   │   │   │   ├── bin/claude
+│   │   │   │   └── README.md
+│   │   │   ├── opencode/
+│   │   │   │   ├── install.sh
+│   │   │   │   ├── bin/opencode
+│   │   │   │   └── README.md
+│   │   │   └── ... (12 tools, each with own directory)
+│   │   ├── node/
+│   │   ├── language/
+│   │   ├── db/
+│   │   ├── editor/
+│   │   ├── tools/
+│   │   ├── shell/
+│   │   ├── ui/
+│   │   └── automation/
+│   └── utils
+│       ├── bootstrap.sh
+│       ├── colors.sh
+│       ├── env.sh
+│       └── log.sh
 └── install.sh
 ```
 
@@ -738,6 +720,7 @@ export CORE_DEBUG=1    # Enable debug logs
 
 | Directory | Description |
 |-----------|-------------|
+| `~/.local/share/core-termux-data` | Persistent tool data (codegraph, engram, nvchad) |
 | `~/.cache/core-termux` | Logs and cache |
 | `~/.config/core-termux` | User configuration |
 
@@ -756,7 +739,6 @@ All processes save logs to:
 ├── install_shell.log
 ├── install_ui.log
 ├── install_automation.log
-├── fix_localtunnel.log
 ├── postgresql.log
 ├── last_version_check      # Last update check timestamp
 └── new_version             # New version available (if exists)
@@ -777,7 +759,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.10.1 (current: 3.10.0)
+⚠ New version available: 3.11.1 (current: 3.11.0)
 
 ➜ Run: core update core to update
 ```
@@ -837,13 +819,9 @@ $ pwd
 The fix corrects the `openurl` error on Android by using `termux-open-url`.
 
 **Automatic application:**
-- Applied when installing the `node` module
+- Applied when installing localtunnel via the `node` module
 - No user intervention required
-
-**Fix location:**
-```
-$PREFIX/lib/node_modules/localtunnel/node_modules/openurl/openurl.js
-```
+- Integrated directly into the localtunnel installer at `core/tools/node/localtunnel/install.sh`
 
 ---
 

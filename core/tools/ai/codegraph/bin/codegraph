@@ -1,0 +1,3 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+exec node "$CORE_DATA/codegraph-linux-arm64/lib/dist/bin/codegraph.js" "$@"

@@ -18,16 +18,16 @@ SHELL_PLUGINS=(
 	"better-npm"
 )
 
-source "$(dirname "$BASH_SOURCE")/powerlevel10k.sh"
-source "$(dirname "$BASH_SOURCE")/zsh-defer.sh"
-source "$(dirname "$BASH_SOURCE")/zsh-autosuggestions.sh"
-source "$(dirname "$BASH_SOURCE")/zsh-syntax-highlighting.sh"
-source "$(dirname "$BASH_SOURCE")/history-substring.sh"
-source "$(dirname "$BASH_SOURCE")/zsh-completions.sh"
-source "$(dirname "$BASH_SOURCE")/fzf-tab.sh"
-source "$(dirname "$BASH_SOURCE")/you-should-use.sh"
-source "$(dirname "$BASH_SOURCE")/zsh-autopair.sh"
-source "$(dirname "$BASH_SOURCE")/better-npm.sh"
+source "$(dirname "$BASH_SOURCE")/powerlevel10k/install.sh"
+source "$(dirname "$BASH_SOURCE")/zsh-defer/install.sh"
+source "$(dirname "$BASH_SOURCE")/zsh-autosuggestions/install.sh"
+source "$(dirname "$BASH_SOURCE")/zsh-syntax-highlighting/install.sh"
+source "$(dirname "$BASH_SOURCE")/history-substring/install.sh"
+source "$(dirname "$BASH_SOURCE")/zsh-completions/install.sh"
+source "$(dirname "$BASH_SOURCE")/fzf-tab/install.sh"
+source "$(dirname "$BASH_SOURCE")/you-should-use/install.sh"
+source "$(dirname "$BASH_SOURCE")/zsh-autopair/install.sh"
+source "$(dirname "$BASH_SOURCE")/better-npm/install.sh"
 
 install_all_shell_plugins() {
 	local installed_count=0

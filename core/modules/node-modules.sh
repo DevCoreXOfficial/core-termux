@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
 import "@/utils/colors"
-import "@/fix/localtunnel"
 
 LOG_FILE="$CORE_CACHE/install_node_modules.log"
 

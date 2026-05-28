@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -129,6 +129,7 @@ _list_ai() {
 	table_row "Engram" "--engram" "engram" "$(_check_cmd "engram")"
 	table_row "CodeGraph" "--codegraph" "codegraph" "$(_check_cmd "codegraph")"
 	table_row "Pi Coding Agent" "--pi" "pi" "$(_check_cmd "pi")"
+	table_row "Antigravity CLI" "--antigravity-cli" "agy" "$(_check_cmd "agy")"
 	table_end
 
 	echo

@@ -11,9 +11,9 @@ UI_COMPONENTS=(
 	"cursor"
 )
 
-source "$(dirname "$BASH_SOURCE")/font.sh"
-source "$(dirname "$BASH_SOURCE")/extra-keys.sh"
-source "$(dirname "$BASH_SOURCE")/cursor.sh"
+source "$(dirname "$BASH_SOURCE")/font/install.sh"
+source "$(dirname "$BASH_SOURCE")/extra-keys/install.sh"
+source "$(dirname "$BASH_SOURCE")/cursor/install.sh"
 
 install_all_ui_components() {
 	local installed_count=0

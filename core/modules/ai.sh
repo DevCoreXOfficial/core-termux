@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -35,6 +35,7 @@ install_ai() {
 		list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
 		list_item "CodeGraph ${GRAY}(${D_GREEN}codegraph${GRAY})"
 		list_item "Pi ${GRAY}(${D_GREEN}pi${GRAY})"
+		list_item "Antigravity CLI ${GRAY}(${D_GREEN}agy${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"

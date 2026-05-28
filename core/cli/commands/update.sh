@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -197,6 +197,9 @@ _update_specific_tools() {
 				;;
 			pi)
 				if loading "Updating Pi Coding Agent" update_pi; then ((updated_count++)); else ((failed_count++)); fi
+				;;
+		antigravity-cli)
+				if loading "Updating Antigravity CLI" update_antigravity_cli; then ((updated_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"

@@ -18,16 +18,16 @@ NODE_PACKAGES=(
 	"ngrok"
 )
 
-source "$(dirname "$BASH_SOURCE")/typescript.sh"
-source "$(dirname "$BASH_SOURCE")/nestjs.sh"
-source "$(dirname "$BASH_SOURCE")/prettier.sh"
-source "$(dirname "$BASH_SOURCE")/live-server.sh"
-source "$(dirname "$BASH_SOURCE")/localtunnel.sh"
-source "$(dirname "$BASH_SOURCE")/vercel.sh"
-source "$(dirname "$BASH_SOURCE")/markserv.sh"
-source "$(dirname "$BASH_SOURCE")/psqlformat.sh"
-source "$(dirname "$BASH_SOURCE")/ncu.sh"
-source "$(dirname "$BASH_SOURCE")/ngrok.sh"
+source "$(dirname "$BASH_SOURCE")/typescript/install.sh"
+source "$(dirname "$BASH_SOURCE")/nestjs/install.sh"
+source "$(dirname "$BASH_SOURCE")/prettier/install.sh"
+source "$(dirname "$BASH_SOURCE")/live-server/install.sh"
+source "$(dirname "$BASH_SOURCE")/localtunnel/install.sh"
+source "$(dirname "$BASH_SOURCE")/vercel/install.sh"
+source "$(dirname "$BASH_SOURCE")/markserv/install.sh"
+source "$(dirname "$BASH_SOURCE")/psqlformat/install.sh"
+source "$(dirname "$BASH_SOURCE")/ncu/install.sh"
+source "$(dirname "$BASH_SOURCE")/ngrok/install.sh"
 
 install_all_node_packages() {
 	local installed_count=0

@@ -1,0 +1,278 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+import "@/utils/log"
+import "@/utils/colors"
+
+LOG_FILE="$CORE_CACHE/install_ai.log"
+OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
+HELPER_SRC="$CORE_PATH/tools/ai/opencode/helper/opencode_helper.c"
+
+_detect_ubuntu_root() {
+	local root
+	root="$(find /data/data/com.termux -maxdepth 10 -type d \
+		-name "rootfs" -path "*/containers/ubuntu/*" 2>/dev/null | head -1)"
+
+	if [ -z "$root" ]; then
+		root="$(find /data/data/com.termux -maxdepth 10 -type d \
+			-name "ubuntu" -path "*/installed-rootfs/*" 2>/dev/null | head -1)"
+	fi
+
+	echo "$root"
+}
+
+_proot_ubuntu() {
+	proot-distro login \
+		--shared-tmp \
+		ubuntu \
+		-- "$@"
+}
+
+_get_latest_opencode_version() {
+	curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest \
+		| grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
+}
+
+_install_deps_native() {
+	if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
+		log_error "Failed to install glibc-repo"
+		return 1
+	fi
+
+	if ! pkg install glibc git ripgrep python clang jq nodejs-lts curl tar -y &>>"$LOG_FILE"; then
+		log_error "Failed to install native dependencies"
+		return 1
+	fi
+
+	log_success "Dependencies installed"
+	return 0
+}
+
+_download_opencode_binary() {
+	local latest_version
+	latest_version=$(_get_latest_opencode_version)
+	if [ -z "$latest_version" ]; then
+		log_error "Failed to fetch latest OpenCode version"
+		return 1
+	fi
+
+	log_info "Latest version: ${D_CYAN}$latest_version${NC}"
+
+	mkdir -p "$OPENCODE_DATA_DIR"
+
+	local tarball="opencode-linux-arm64.tar.gz"
+	local download_url="https://github.com/anomalyco/opencode/releases/download/$latest_version/$tarball"
+
+	if ! curl -fsSL "$download_url" -o "$OPENCODE_DATA_DIR/$tarball" &>>"$LOG_FILE"; then
+		log_error "Failed to download OpenCode binary"
+		return 1
+	fi
+
+	if ! tar -zxf "$OPENCODE_DATA_DIR/$tarball" -C "$OPENCODE_DATA_DIR" &>>"$LOG_FILE"; then
+		log_error "Failed to extract OpenCode binary"
+		return 1
+	fi
+
+	rm -f "$OPENCODE_DATA_DIR/$tarball"
+
+	if [ ! -f "$OPENCODE_DATA_DIR/opencode" ]; then
+		log_error "OpenCode binary not found after extraction"
+		return 1
+	fi
+
+	chmod +x "$OPENCODE_DATA_DIR/opencode"
+	log_success "OpenCode binary downloaded"
+	return 0
+}
+
+_compile_opencode_helper() {
+	if [ ! -f "$HELPER_SRC" ]; then
+		log_error "Helper source not found at $HELPER_SRC"
+		return 1
+	fi
+
+	if ! clang -O2 -o "$PREFIX/bin/opencode" "$HELPER_SRC" &>>"$LOG_FILE"; then
+		log_error "Failed to compile opencode helper"
+		return 1
+	fi
+
+	chmod +x "$PREFIX/bin/opencode"
+	log_success "Bootstrapper compiled"
+	return 0
+}
+
+_install_opencode_native() {
+	if ! loading "Installing dependencies" _install_deps_native; then
+		return 1
+	fi
+
+	if ! loading "Downloading OpenCode" _download_opencode_binary; then
+		return 1
+	fi
+
+	if ! loading "Compiling bootstrapper" _compile_opencode_helper; then
+		return 1
+	fi
+
+	log_success "OpenCode installed natively"
+	return 0
+}
+
+_install_opencode_proot() {
+	log_info "Installing OpenCode (proot-distro)..."
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if ! command -v proot-distro &>/dev/null; then
+		pkg install proot-distro -y &>>"$LOG_FILE"
+	fi
+
+	if [ ! -d "$(_detect_ubuntu_root)" ]; then
+		proot-distro install ubuntu &>>"$LOG_FILE"
+	fi
+
+	_proot_ubuntu /bin/bash -c \
+		'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
+		&>>"$LOG_FILE"
+
+	_proot_ubuntu /bin/bash -c '
+		export SHELL=/bin/bash
+		export TMPDIR=/tmp
+		export HOME=/root
+		curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
+	' &>>"$LOG_FILE"
+
+	local ubuntu_root
+	ubuntu_root="$(_detect_ubuntu_root)"
+
+	if [ -z "$ubuntu_root" ]; then
+		log_error "Ubuntu rootfs not found"
+		return 1
+	fi
+
+	local opencode_bin="$ubuntu_root/root/.opencode/bin/opencode"
+
+	if [ ! -f "$opencode_bin" ]; then
+		log_error "OpenCode binary not found after install"
+		return 1
+	fi
+
+	cat <<WRAPPER >"$PREFIX/bin/opencode"
+#!/data/data/com.termux/files/usr/bin/bash
+
+UBUNTU_ROOTFS="$ubuntu_root"
+
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()
+while IFS= read -r line; do
+	if [[ -n "\$line" && ! "\$line" =~ \$EXCLUDE_REGEX ]]; then
+		ENV_ARGS+=("--env" "\$line")
+	fi
+done < <(env)
+
+ENV_ARGS+=(
+	"--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+	"--env" "TERM=\$TERM"
+	"--env" "HOME=/root"
+)
+
+unset LD_PRELOAD
+proot-distro login \\
+	"\${ENV_ARGS[@]}" \\
+	--termux-home \\
+	--shared-tmp \\
+	--bind "\$UBUNTU_ROOTFS/root/.opencode:/root/.opencode" \\
+	--work-dir \$PWD \\
+	ubuntu \\
+	-- /root/.opencode/bin/opencode "\$@"
+WRAPPER
+	chmod +x "$PREFIX/bin/opencode"
+
+	if ! grep -q '.opencode/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
+		printf '\n# opencode\nexport PATH=/root/.opencode/bin:$PATH\n' >>"$ubuntu_root/root/.bashrc"
+	fi
+
+	log_success "OpenCode installed (proot-distro)"
+	return 0
+}
+
+install_opencode() {
+	if command -v opencode &>/dev/null; then
+		return 0
+	fi
+
+	log_info "Select installation method for OpenCode:"
+
+	read_select "Installation method" SELECTED_METHOD \
+		"Native (recommended) - Compile with glibc support" \
+		"Proot-distro (alternative) - Run inside Ubuntu container"
+
+	case "$SELECTED_METHOD" in
+	*Native*)
+		_install_opencode_native
+		;;
+	*Proot-distro*)
+		_install_opencode_proot
+		;;
+	esac
+}
+
+uninstall_opencode() {
+	log_info "Uninstalling OpenCode..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
+		rm -f "$PREFIX/bin/opencode"
+		rm -rf "$OPENCODE_DATA_DIR"
+		log_success "OpenCode (native) uninstalled"
+		return 0
+	fi
+
+	_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
+
+	local ubuntu_bashrc
+	ubuntu_bashrc="$(_detect_ubuntu_root)/root/.bashrc"
+
+	if [ -f "$ubuntu_bashrc" ]; then
+		sed -i '/# opencode/d; /export PATH=\/root\/.opencode\/bin/d' "$ubuntu_bashrc"
+	fi
+
+	if rm -f "$PREFIX/bin/opencode" &>>"$LOG_FILE"; then
+		log_success "OpenCode (proot-distro) uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall OpenCode"
+		return 1
+	fi
+}
+
+update_opencode() {
+	log_info "Updating OpenCode..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
+		_install_opencode_native
+		return $?
+	fi
+
+	_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
+
+	_proot_ubuntu /bin/bash -c '
+		export SHELL=/bin/bash
+		export TMPDIR=/tmp
+		export HOME=/root
+		curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
+	' &>>"$LOG_FILE"
+
+	local ubuntu_root
+	ubuntu_root="$(_detect_ubuntu_root)"
+	local opencode_bin="$ubuntu_root/root/.opencode/bin/opencode"
+
+	if [ ! -f "$opencode_bin" ]; then
+		log_error "OpenCode binary not found after update"
+		return 1
+	fi
+
+	log_success "OpenCode (proot-distro) updated"
+	return 0
+}

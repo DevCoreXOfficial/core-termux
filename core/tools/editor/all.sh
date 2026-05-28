@@ -9,8 +9,8 @@ EDITOR_COMPONENTS=(
 	"nvchad"
 )
 
-source "$(dirname "$BASH_SOURCE")/neovim.sh"
-source "$(dirname "$BASH_SOURCE")/nvchad.sh"
+source "$(dirname "$BASH_SOURCE")/neovim/install.sh"
+source "$(dirname "$BASH_SOURCE")/nvchad/install.sh"
 
 install_all_editor_components() {
 	local installed_count=0

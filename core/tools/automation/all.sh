@@ -8,7 +8,7 @@ AUTOMATION_TOOLS=(
 	"n8n"
 )
 
-source "$(dirname "$BASH_SOURCE")/n8n.sh"
+source "$(dirname "$BASH_SOURCE")/n8n/install.sh"
 
 install_all_automation_tools() {
 	local installed_count=0

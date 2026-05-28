@@ -11,10 +11,10 @@ DB_TOOLS=(
 	"mongodb"
 )
 
-source "$(dirname "$BASH_SOURCE")/postgresql.sh"
-source "$(dirname "$BASH_SOURCE")/mariadb.sh"
-source "$(dirname "$BASH_SOURCE")/sqlite.sh"
-source "$(dirname "$BASH_SOURCE")/mongodb.sh"
+source "$(dirname "$BASH_SOURCE")/postgresql/install.sh"
+source "$(dirname "$BASH_SOURCE")/mariadb/install.sh"
+source "$(dirname "$BASH_SOURCE")/sqlite/install.sh"
+source "$(dirname "$BASH_SOURCE")/mongodb/install.sh"
 
 install_all_db_tools() {
 	local installed_count=0

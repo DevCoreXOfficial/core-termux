@@ -1,0 +1,29 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+UBUNTU_ROOTFS="__UBUNTU_ROOTFS__"
+
+EXCLUDE_REGEX="^(PATH|LD_PRELOAD|LD_LIBRARY_PATH|PREFIX|HOME|PWD|OLDPWD|SHELL|IFS|_|SHLVL|PROMPT_COMMAND|TERMCAP|LS_COLORS|TERM)="
+
+ENV_ARGS=()
+while IFS= read -r line; do
+	if [[ -n "$line" && ! "$line" =~ $EXCLUDE_REGEX ]]; then
+		ENV_ARGS+=("--env" "$line")
+	fi
+done < <(env)
+
+ENV_ARGS+=(
+	"--env" "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+	"--env" "TERM=$TERM"
+	"--env" "HOME=/root"
+)
+
+unset LD_PRELOAD
+proot-distro login \
+	"${ENV_ARGS[@]}" \
+	--termux-home \
+	--shared-tmp \
+	--bind "$UBUNTU_ROOTFS/root/.local:/root/.local" \
+	--bind "$UBUNTU_ROOTFS/root/.claude:/root/.claude" \
+	--work-dir "$PWD" \
+	ubuntu \
+	-- /root/.local/bin/claude "$@"

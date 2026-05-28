@@ -15,22 +15,24 @@ AI_TOOLS=(
 	"codex"
 	"opencode"
 	"engram"
-  "codegraph"
-  "pi"
+	"codegraph"
+	"pi"
+	"antigravity-cli"
 )
 
-source "$(dirname "$BASH_SOURCE")/qwen-code.sh"
-source "$(dirname "$BASH_SOURCE")/gemini-cli.sh"
-source "$(dirname "$BASH_SOURCE")/claude-code.sh"
-source "$(dirname "$BASH_SOURCE")/mistral-vibe.sh"
-source "$(dirname "$BASH_SOURCE")/openclaude.sh"
-source "$(dirname "$BASH_SOURCE")/openclaw.sh"
-source "$(dirname "$BASH_SOURCE")/ollama.sh"
-source "$(dirname "$BASH_SOURCE")/codex.sh"
-source "$(dirname "$BASH_SOURCE")/opencode.sh"
-source "$(dirname "$BASH_SOURCE")/engram.sh"
-source "$(dirname "$BASH_SOURCE")/codegraph.sh"
-source "$(dirname "$BASH_SOURCE")/pi.sh"
+source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
+source "$(dirname "$BASH_SOURCE")/gemini-cli/install.sh"
+source "$(dirname "$BASH_SOURCE")/claude-code/install.sh"
+source "$(dirname "$BASH_SOURCE")/mistral-vibe/install.sh"
+source "$(dirname "$BASH_SOURCE")/openclaude/install.sh"
+source "$(dirname "$BASH_SOURCE")/openclaw/install.sh"
+source "$(dirname "$BASH_SOURCE")/ollama/install.sh"
+source "$(dirname "$BASH_SOURCE")/codex/install.sh"
+source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
+source "$(dirname "$BASH_SOURCE")/engram/install.sh"
+source "$(dirname "$BASH_SOURCE")/codegraph/install.sh"
+source "$(dirname "$BASH_SOURCE")/pi/install.sh"
+source "$(dirname "$BASH_SOURCE")/antigravity-cli/install.sh"
 
 install_all_ai_tools() {
 	local installed_count=0
@@ -73,6 +75,9 @@ install_all_ai_tools() {
 			;;
 		pi)
 			if install_pi; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		antigravity-cli)
+			if install_antigravity_cli; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -122,6 +127,9 @@ uninstall_all_ai_tools() {
 		pi)
 			if uninstall_pi; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
+		antigravity-cli)
+			if uninstall_antigravity_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
 		esac
 	done
 
@@ -169,6 +177,9 @@ update_all_ai_tools() {
 			;;
 		pi)
 			if update_pi; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		antigravity-cli)
+			if update_antigravity_cli; then ((updated_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done

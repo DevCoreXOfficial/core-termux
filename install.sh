@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 set -e
 
@@ -6,149 +6,194 @@ RED='\e[1;31m'
 GREEN='\e[1;32m'
 YELLOW='\e[1;33m'
 CYAN='\e[1;36m'
+BLUE='\e[1;34m'
 NC='\e[0m'
 
 REPO="https://github.com/DevCoreXOfficial/core-termux"
 BRANCH="main"
 CORE_DATA="${XDG_DATA_HOME:-$HOME/.local/share}/core-termux"
+CORE_TOOL_DATA="${XDG_DATA_HOME:-$HOME/.local/share}/core-termux-data"
 CORE_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/core-termux"
 CORE_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/core-termux"
 
-# Banner
-echo -e "${CYAN}"
-echo "╔════════════════════════════════╗"
-echo "║     Core-Termux Installer      ║"
-echo "╚════════════════════════════════╝"
-echo -e "${NC}"
+TOTAL_STEPS=5
+CURRENT_STEP=0
 
-# Función de log básico
-log() {
-	echo -e "    ${CYAN}➜${NC} $1"
+progress_bar() {
+	local current=$1
+	local total=$2
+	local width=${3:-40}
+	local percentage=$((current * 100 / total))
+	local filled=$((current * width / total))
+	local empty=$((width - filled))
+
+	printf -v bar "%*s" "$filled" ""
+	bar="${bar// /█}"
+	printf -v space "%*s" "$empty" ""
+	space="${space// /░}"
+
+	printf "\r${CYAN}[${NC}${GREEN}%s${NC}${CYAN}]${NC} %3d%%" "${bar}${space}" "$percentage"
 }
 
-success() {
-	echo -e "    ${GREEN}✔${NC} $1"
+log_step() {
+	local step="$1"
+	local desc="$2"
+	CURRENT_STEP=$((CURRENT_STEP + 1))
+	printf "\r%*s\r" "$(tput cols)" ""
+	echo -e "\n  ${BLUE}[${CURRENT_STEP}/${TOTAL_STEPS}]${NC} ${CYAN}${desc}${NC}"
 }
 
-error() {
-	echo -e "    ${RED}✖${NC} $1" >&2
+log_ok() {
+	echo -e "  ${GREEN}✔${NC} $1"
 }
 
-warn() {
-	echo -e "    ${YELLOW}⚠${NC} $1"
+log_fail() {
+	echo -e "  ${RED}✖${NC} $1" >&2
 }
 
-# Instalar dependencias requeridas
+log_info() {
+	echo -e "  ${CYAN}→${NC} $1"
+}
+
+separator() {
+	local cols=$(tput cols)
+	local line=$(printf "%${cols}s")
+	echo -e "${YELLOW}${line// /─}${NC}"
+}
+
+banner() {
+	echo -e "${CYAN}"
+	cat << 'EOF'
+╔══════════════════════════════════════╗
+║         Core-Termux Installer        ║
+║   Modular Dev Environment for Termux ║
+╚══════════════════════════════════════╝
+EOF
+	echo -e "${NC}"
+}
+
 install_dependencies() {
-	log "Installing required dependencies..."
-	if ! command -v git >/dev/null 2>&1; then
+	log_step 1 "Installing dependencies"
+
+	progress_bar 0 10
+	if ! command -v git &>/dev/null; then
 		pkg install -y git &>/dev/null
 	fi
-	if ! command -v tput >/dev/null 2>&1; then
+	progress_bar 5 10
+	if ! command -v tput &>/dev/null; then
 		pkg install -y ncurses-utils &>/dev/null
 	fi
-	success "Dependencies installed (git, ncurses-utils)"
+	progress_bar 10 10
+	echo
+	log_ok "Dependencies installed (git, ncurses-utils)"
 }
 
-# Crear directorios necesarios
 setup_directories() {
-	log "Creating directories..."
-	mkdir -p "$CORE_DATA" "$CORE_CACHE" "$CORE_CONFIG"
-	success "Directories created"
+	log_step 2 "Setting up directories"
+
+	mkdir -p "$CORE_DATA" "$CORE_TOOL_DATA" "$CORE_CACHE" "$CORE_CONFIG"
+
+	log_info "Repo:    $CORE_DATA"
+	log_info "Data:    $CORE_TOOL_DATA"
+	log_info "Cache:   $CORE_CACHE"
+	log_info "Config:  $CORE_CONFIG"
+	log_ok "Directories created"
 }
 
-# Clonar o actualizar repositorio
-# Detecta si es instalación de dev (repo local) o usuario (curl | bash)
 clone_repo() {
-	log "Setting up Core-Termux repository..."
+	log_step 3 "Cloning repository"
 
-	# Detectar si se está ejecutando desde el repo de desarrollo
-	local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+	local script_dir
+	script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 	local is_dev_install=0
 
-	# Si el script está en un repo git y NO está en CORE_DATA, es instalación de dev
 	if [[ -d "$script_dir/.git" ]] && [[ "$script_dir" != "$CORE_DATA" ]]; then
 		is_dev_install=1
 	fi
 
 	if [[ $is_dev_install -eq 1 ]]; then
-		# Instalación de desarrollador: usar el repo local existente
-		log "Developer installation detected, using local repository..."
 		CORE_DATA="$script_dir"
-		success "Using local repository: $CORE_DATA"
+		log_info "Developer installation detected"
+		log_ok "Using local repository"
+	elif [[ -d "$CORE_DATA/.git" ]]; then
+		progress_bar 3 10
+		git -C "$CORE_DATA" pull origin "$BRANCH" &>/dev/null
+		progress_bar 10 10
+		echo
+		log_ok "Repository updated"
 	else
-		# Instalación de usuario: clonar o actualizar
-		if [[ -d "$CORE_DATA/.git" ]]; then
-			git -C "$CORE_DATA" pull origin "$BRANCH" &>/dev/null
-			success "Repository updated"
-		else
-			git clone --depth=1 -b "$BRANCH" "$REPO" "$CORE_DATA" &>/dev/null
-			success "Repository cloned"
-		fi
+		progress_bar 0 10
+		git clone --depth=1 -b "$BRANCH" "$REPO" "$CORE_DATA" &>/dev/null &
+		local pid=$!
+		while kill -0 "$pid" 2>/dev/null; do
+			for i in $(seq 0 10); do
+				progress_bar $i 10
+				sleep 0.1
+			done
+		done
+		wait "$pid"
+		progress_bar 10 10
+		echo
+		log_ok "Repository cloned"
 	fi
 
-	# Exportar CORE_DATA para que lo usen las demás funciones
 	export CORE_DATA
 }
 
-# Crear symlink del comando core
 create_symlink() {
-	log "Creating core command symlink..."
+	log_step 4 "Creating core command"
 
-	# Eliminar symlink anterior si existe
 	rm -f "$PREFIX/bin/core"
-
-	# Crear nuevo symlink apuntando a $CORE_DATA/core/bin/core
 	ln -sf "$CORE_DATA/core/bin/core" "$PREFIX/bin/core"
 
-	if [[ -x "$PREFIX/bin/core" ]] || [[ -L "$PREFIX/bin/core" ]]; then
-		success "Symlink created: $PREFIX/bin/core"
+	if [[ -L "$PREFIX/bin/core" ]]; then
+		log_ok "Symlink created: core → ${CORE_DATA}/core/bin/core"
 	else
-		error "Failed to create symlink"
+		log_fail "Failed to create symlink"
 		return 1
 	fi
 }
 
-# Guardar configuración de instalación
 save_config() {
-	log "Saving configuration..."
+	log_step 5 "Saving configuration"
 
 	cat >"$CORE_CONFIG/config" <<EOF
 core_data='$CORE_DATA'
 core_cache='$CORE_CACHE'
 core_config='$CORE_CONFIG'
 core_source='$CORE_DATA'
+core_tool_data='$CORE_TOOL_DATA'
 EOF
 
-	success "Configuration saved"
+	log_ok "Configuration saved"
 }
 
-# Mostrar mensaje final
 show_final_message() {
 	echo
-	echo -e "${GREEN}╔══════════════════════════════════════╗${NC}"
-	echo -e "${GREEN}║  Core installed successfully!        ║${NC}"
-	echo -e "${GREEN}╚══════════════════════════════════════╝${NC}"
+	separator
+	echo -e "${GREEN}  Core-Termux installed successfully!${NC}"
+	separator
 	echo
-	echo -e "${CYAN}Next steps:${NC}"
+	echo -e "  ${CYAN}Next steps:${NC}"
 	echo
-	echo -e "  1. Run: ${GREEN}core${NC}"
-	echo -e "  2. Run: ${GREEN}core setup full${NC} (recommended)"
+	echo -e "  ${GREEN}1.${NC} Run: ${CYAN}core${NC}"
+	echo -e "  ${GREEN}2.${NC} Run: ${CYAN}core setup full${NC} (recommended)"
 	echo
-	echo -e "${YELLOW}Or install modules individually:${NC}"
-	echo -e "  core install language"
-	echo -e "  core install db"
-	echo -e "  core install ai"
-	echo -e "  core install editor"
-	echo -e "  core install tools"
-	echo -e "  core install shell"
-	echo -e "  core install ui"
-	echo -e "  core install automation"
+	echo -e "  ${YELLOW}Or install individually:${NC}"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install language" "Programming languages"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install db" "Databases"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install ai" "AI tools"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install editor" "Code editor"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install tools" "Dev tools"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install shell" "ZSH shell"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install ui" "Termux UI"
+	printf "    ${CYAN}%-20s${NC} %s\n" "core install automation" "n8n"
 	echo
 }
 
-# Main
 main() {
+	banner
+	echo
 	install_dependencies
 	setup_directories
 	clone_repo

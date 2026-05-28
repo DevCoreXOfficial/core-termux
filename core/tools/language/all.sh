@@ -14,13 +14,13 @@ LANGUAGE_PACKAGES=(
 	"golang"
 )
 
-source "$(dirname "$BASH_SOURCE")/nodejs.sh"
-source "$(dirname "$BASH_SOURCE")/python.sh"
-source "$(dirname "$BASH_SOURCE")/perl.sh"
-source "$(dirname "$BASH_SOURCE")/php.sh"
-source "$(dirname "$BASH_SOURCE")/rust.sh"
-source "$(dirname "$BASH_SOURCE")/clang.sh"
-source "$(dirname "$BASH_SOURCE")/golang.sh"
+source "$(dirname "$BASH_SOURCE")/nodejs/install.sh"
+source "$(dirname "$BASH_SOURCE")/python/install.sh"
+source "$(dirname "$BASH_SOURCE")/perl/install.sh"
+source "$(dirname "$BASH_SOURCE")/php/install.sh"
+source "$(dirname "$BASH_SOURCE")/rust/install.sh"
+source "$(dirname "$BASH_SOURCE")/clang/install.sh"
+source "$(dirname "$BASH_SOURCE")/golang/install.sh"
 
 install_all_language_packages() {
 	local installed_count=0

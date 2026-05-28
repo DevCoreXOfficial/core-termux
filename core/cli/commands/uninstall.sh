@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -95,7 +95,6 @@ _uninstall_full_module() {
 		import "@/modules/tools"
 		import "@/modules/shell"
 		import "@/modules/ui"
-		import "@/fix/localtunnel"
 		import "@/modules/automation"
 
 		uninstall_ai
@@ -106,7 +105,7 @@ _uninstall_full_module() {
 		uninstall_tools
 		uninstall_shell
 		uninstall_ui
-		uninstall_localtunnel_fix
+		echo "Localtunnel fix: already integrated"
 		uninstall_automation
 
 		# Eliminar directorios de Core-Termux
@@ -220,6 +219,9 @@ _uninstall_specific_tools() {
 				;;
 			pi)
 				if loading "Uninstalling Pi Coding Agent" uninstall_pi; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
+		antigravity-cli)
+				if loading "Uninstalling Antigravity CLI" uninstall_antigravity_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"

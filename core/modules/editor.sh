@@ -1,11 +1,9 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
 import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_editor.log"
-NVCHAD_REPO="https://github.com/DevCoreXOfficial/nvchad-termux.git"
-NVCHAD_DIR="$HOME/.cache/core-termux/nvchad-termux"
 
 install_editor() {
 	separator

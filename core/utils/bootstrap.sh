@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 # evitar redeclaraciones
 [[ -n "${__CORE_BOOTSTRAP_LOADED:-}" ]] && return

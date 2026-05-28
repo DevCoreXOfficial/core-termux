@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/colors"
 
@@ -351,7 +351,12 @@ loading() {
 	local frames=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
 	local delay=0.08
 
-	"$@" &>/dev/null &
+	local tmpdir="${CORE_CACHE:-/tmp}"
+	mkdir -p "$tmpdir"
+	local tmpfile
+	tmpfile="$(mktemp "$tmpdir/loading.XXXXXX")"
+
+	"$@" >"$tmpfile" 2>&1 &
 	local pid=$!
 
 	local i=0
@@ -367,6 +372,11 @@ loading() {
 	local exit_code=$?
 
 	printf "\r"
+
+	if [[ -f "$tmpfile" ]]; then
+		cat "$tmpfile"
+		rm -f "$tmpfile"
+	fi
 
 	return $exit_code
 }

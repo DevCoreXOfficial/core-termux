@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -64,7 +64,7 @@ install_full() {
 	list_item "All base packages"
 	list_item "Language packages (Node.js, Python, Perl, PHP, Rust, C, C++, Go)"
 	list_item "Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-	list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Pi)"
+	list_item "AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Pi, Antigravity CLI)"
 	list_item "Code editor (Neovim + NvChad + Plugins)"
 	list_item "Development tools"
 	list_item "ZSH + Oh My Zsh + plugins"
