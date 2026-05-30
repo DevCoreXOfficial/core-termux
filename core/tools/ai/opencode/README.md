@@ -2,6 +2,22 @@
 
 AI coding agent that runs natively in Termux with glibc support
 
+**Package:** opencode  
+**Author:** DevCoreX  
+**Repository:** https://github.com/DevCoreXOfficial/core-termux  
+**Official:** https://opencode.ai  
+**Type:** AI coding agent (Binary + glibc bootstrapper)  
+**License:** MIT
+
+## Description
+
+OpenCode is an AI-powered coding agent developed by anomalyco that operates directly in your terminal. It provides intelligent code completion, refactoring suggestions, and natural language code generation. Core-Termux offers two installation methods: native with glibc support for best performance, or via proot-distro Ubuntu container for maximum compatibility.
+
+## Dependencies
+
+- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, python, jq, nodejs-lts, curl, tar
+- **Proot mode:** proot-distro, curl, ca-certificates
+
 ## Install
 
 ```bash
@@ -31,3 +47,5 @@ core update ai --opencode
 - The native binary is stored in `~/.local/share/core-termux-data/opencode/`
 - A small C bootstrapper (`opencode_helper.c`) handles ELF loading via the glibc dynamic linker
 - **Proot mode** uses `proot-distro ubuntu` and installs via the official opencode.ai installer
+- Data directory: `~/.local/share/core-termux-data/opencode/`
+

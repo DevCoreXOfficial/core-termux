@@ -149,6 +149,7 @@ _compile_agy_helper() {
 
 install_antigravity_cli() {
     if command -v agy &>/dev/null; then
+		log_success "Antigravity CLI is already installed"
         return 0
     fi
 

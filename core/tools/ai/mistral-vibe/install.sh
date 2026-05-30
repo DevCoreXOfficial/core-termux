@@ -6,9 +6,11 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _install_ai_pip_prereqs() {
 	if command -v python &>/dev/null && command -v pip &>/dev/null; then
+		log_success "Python and pip are already installed"
 		return 0
 	fi
 
+	log_info "Installing Python and pip prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install python clang make rust libffi openssl pkg-config git ripgrep -y &>>"$LOG_FILE"
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
@@ -16,6 +18,7 @@ _install_ai_pip_prereqs() {
 
 install_mistral_vibe() {
 	if command -v vibe &>/dev/null; then
+		log_success "Mistral Vibe is already installed"
 		return 0
 	fi
 
@@ -26,6 +29,7 @@ install_mistral_vibe() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if pip install mistral-vibe &>>"$LOG_FILE"; then
+		log_success "Mistral Vibe installed"
 		return 0
 	else
 		log_error "Failed to install Mistral Vibe"

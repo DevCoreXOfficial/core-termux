@@ -20,6 +20,7 @@ _install_pi_dependencies() {
 
 install_pi() {
 	if command -v pi &>/dev/null; then
+		log_success "Pi Coding Agent is already installed"
 		return 0
 	fi
 	log_info "Installing Pi Coding Agent..."
@@ -32,6 +33,7 @@ install_pi() {
 	fi
 
 	if npm install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
+		log_success "Pi Coding Agent installed"
 		return 0
 	else
 		log_error "Failed to install Pi"

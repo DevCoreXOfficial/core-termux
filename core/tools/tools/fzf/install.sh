@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_fzf() {
 	if dpkg -s fzf 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Fzf is already installed"
 		return 0
 	fi
 	log_info "Installing Fzf..."

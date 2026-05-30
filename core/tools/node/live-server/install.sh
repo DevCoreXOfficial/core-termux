@@ -6,9 +6,11 @@ LOG_FILE="$CORE_CACHE/install_node_modules.log"
 
 _install_node_prerequisites() {
 	if command -v node &>/dev/null && command -v npm &>/dev/null; then
+		log_success "Node.js and npm are already installed"
 		return 0
 	fi
 
+	log_info "Installing Node.js and npm prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install nodejs-lts -y &>>"$LOG_FILE"
 }

@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_python() {
 	if dpkg -s python 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Python is already installed"
 		return 0
 	fi
 	log_info "Installing Python..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install python -y &>>"$LOG_FILE"; then
+		log_success "Python installed"
 		return 0
 	else
 		return 1

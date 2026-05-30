@@ -6,15 +6,18 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _install_ai_npm_prereqs() {
 	if command -v node &>/dev/null && command -v npm &>/dev/null; then
+		log_success "Node.js and npm are already installed"
 		return 0
 	fi
 
+	log_info "Installing Node.js and npm prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"
 }
 
 install_openclaude() {
 	if command -v openclaude &>/dev/null; then
+		log_success "OpenClaude is already installed"
 		return 0
 	fi
 	log_info "Installing OpenClaude..."
@@ -26,6 +29,7 @@ install_openclaude() {
 	export ANDROID_API_LEVEL=24
 
 	if npm install -g @gitlawb/openclaude &>>"$LOG_FILE"; then
+		log_success "OpenClaude installed"
 		return 0
 	else
 		log_error "Failed to install OpenClaude"

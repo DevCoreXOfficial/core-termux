@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_tmate() {
 	if dpkg -s tmate 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Tmate is already installed"
 		return 0
 	fi
 	log_info "Installing Tmate..."

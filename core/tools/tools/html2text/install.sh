@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_html2text() {
 	if dpkg -s html2text 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "HTML2Text is already installed"
 		return 0
 	fi
 	log_info "Installing html2text..."

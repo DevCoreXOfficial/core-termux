@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_perl() {
 	if dpkg -s perl 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Perl is already installed"
 		return 0
 	fi
 	log_info "Installing Perl..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install perl -y &>>"$LOG_FILE"; then
+		log_success "Perl installed"
 		return 0
 	else
 		return 1

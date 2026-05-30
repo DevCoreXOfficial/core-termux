@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 install_ollama() {
 	if command -v ollama &>/dev/null; then
+		log_success "Ollama is already installed"
 		return 0
 	fi
 	log_info "Installing Ollama..."
@@ -13,6 +14,7 @@ install_ollama() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if pkg install ollama -y &>>"$LOG_FILE"; then
+		log_success "Ollama installed"
 		return 0
 	else
 		log_error "Failed to install Ollama"

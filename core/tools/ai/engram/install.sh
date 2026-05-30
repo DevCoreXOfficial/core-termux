@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 install_engram() {
 	if command -v engram &>/dev/null; then
+		log_success "Engram is already installed"
 		return 0
 	fi
 	log_info "Installing Engram..."
@@ -19,6 +20,7 @@ install_engram() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if git clone https://github.com/Gentleman-Programming/engram "$CORE_DATA/engram" && go build -C "$CORE_DATA/engram/cmd/engram" -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
+		log_success "Engram installed"
 		return 0
 	else
 		log_error "Failed to install Engram"

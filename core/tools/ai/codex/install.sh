@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 install_codex() {
 	if command -v codex &>/dev/null; then
+		log_success "Codex is already installed"
 		return 0
 	fi
 	log_info "Installing Codex..."
@@ -15,6 +16,7 @@ install_codex() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if pkg install codex -y &>>"$LOG_FILE"; then
+		log_success "Codex installed"
 		return 0
 	else
 		log_error "Failed to install Codex"

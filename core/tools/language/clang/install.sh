@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_clang() {
 	if dpkg -s clang 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "C/C++ (Clang) is already installed"
 		return 0
 	fi
 	log_info "Installing C/C++ (Clang)..."

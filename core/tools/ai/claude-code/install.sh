@@ -172,6 +172,7 @@ _install_claude_proot() {
 
 install_claude_code() {
 	if command -v claude &>/dev/null; then
+		log_success "Claude Code is already installed"
 		return 0
 	fi
 

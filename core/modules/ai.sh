@@ -36,6 +36,7 @@ install_ai() {
 		list_item "CodeGraph ${GRAY}(${D_GREEN}codegraph${GRAY})"
 		list_item "Pi ${GRAY}(${D_GREEN}pi${GRAY})"
 		list_item "Antigravity CLI ${GRAY}(${D_GREEN}agy${GRAY})"
+		list_item "Minimax CLI ${GRAY}(${D_GREEN}mmx${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"

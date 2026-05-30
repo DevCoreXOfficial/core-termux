@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_translate() {
 	if dpkg -s translate-shell 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Translate Shell is already installed"
 		return 0
 	fi
 	log_info "Installing Translate Shell..."

@@ -130,6 +130,7 @@ _list_ai() {
 	table_row "CodeGraph" "--codegraph" "codegraph" "$(_check_cmd "codegraph")"
 	table_row "Pi Coding Agent" "--pi" "pi" "$(_check_cmd "pi")"
 	table_row "Antigravity CLI" "--antigravity-cli" "agy" "$(_check_cmd "agy")"
+	table_row "Minimax CLI" "--minimax-cli" "mmx" "$(_check_cmd "mmx")"
 	table_end
 
 	echo

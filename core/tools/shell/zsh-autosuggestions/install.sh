@@ -7,9 +7,11 @@ ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 
 _install_shell_prerequisites() {
 	if command -v git &>/dev/null && command -v zsh &>/dev/null; then
+		log_success "Git and ZSH are already installed"
 		return 0
 	fi
 
+	log_info "Installing shell prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install zsh zoxide git -y &>>"$LOG_FILE"
 }

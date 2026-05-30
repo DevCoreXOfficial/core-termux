@@ -2,6 +2,21 @@
 
 Code analysis and visualization tool for understanding codebases
 
+**Package:** codegraph  
+**Author:** DevCoreX  
+**Repository:** https://github.com/DevCoreXOfficial/core-termux  
+**Official:** https://github.com/colbymchenry/codegraph  
+**Type:** Code analysis tool (Binary)  
+**License:** MIT
+
+## Description
+
+CodeGraph is a code analysis and visualization tool that helps developers understand complex codebases. It generates interactive graphs showing relationships between files, functions, classes, and modules, making it easier to navigate and refactor large projects.
+
+## Dependencies
+
+- nodejs-lts, ripgrep, sqlite, git, python, clang, make, curl
+
 ## Install
 
 ```bash
@@ -19,3 +34,10 @@ core uninstall ai --codegraph
 ```bash
 core update ai --codegraph
 ```
+
+## Notes
+
+- Downloads the latest ARM64 binary from GitHub releases
+- Wrapper script installed to `$PREFIX/bin/codegraph`
+- Data stored in `$CORE_DATA/codegraph-linux-arm64/`
+

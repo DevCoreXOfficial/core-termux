@@ -8,9 +8,11 @@ NVCHAD_DIR="$CORE_DATA/nvchad-termux"
 
 _install_nvchad_prereqs() {
 	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed" && command -v git &>/dev/null; then
+		log_success "Neovim and Git are already installed"
 		return 0
 	fi
 
+	log_info "Installing NvChad prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter -y &>>"$LOG_FILE"
 }

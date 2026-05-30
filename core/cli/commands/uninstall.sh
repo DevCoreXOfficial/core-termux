@@ -220,8 +220,11 @@ _uninstall_specific_tools() {
 			pi)
 				if loading "Uninstalling Pi Coding Agent" uninstall_pi; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
-		antigravity-cli)
+			antigravity-cli)
 				if loading "Uninstalling Antigravity CLI" uninstall_antigravity_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
+			minimax-cli)
+				if loading "Uninstalling Minimax CLI" uninstall_minimax_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"

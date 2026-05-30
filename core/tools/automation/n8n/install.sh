@@ -6,9 +6,11 @@ LOG_FILE="$CORE_CACHE/install_automation.log"
 
 _install_automation_prerequisites() {
 	if command -v node &>/dev/null && command -v npm &>/dev/null; then
+		log_success "Node.js and npm are already installed"
 		return 0
 	fi
 
+	log_info "Installing automation prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install nodejs-lts python sqlite build-essential binutils make clang -y &>>"$LOG_FILE"
 }

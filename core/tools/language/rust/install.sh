@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_rust() {
 	if dpkg -s rust 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Rust is already installed"
 		return 0
 	fi
 	log_info "Installing Rust..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install rust -y &>>"$LOG_FILE"; then
+		log_success "Rust installed"
 		return 0
 	else
 		return 1

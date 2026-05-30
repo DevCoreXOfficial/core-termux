@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_php() {
 	if dpkg -s php 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "PHP is already installed"
 		return 0
 	fi
 	log_info "Installing PHP..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install php -y &>>"$LOG_FILE"; then
+		log_success "PHP installed"
 		return 0
 	else
 		return 1

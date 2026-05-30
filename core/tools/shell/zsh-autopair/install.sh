@@ -6,10 +6,13 @@ LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 
 _install_shell_prerequisites() {
+	log_info "Installing shell prerequisites..."
 	if command -v git &>/dev/null && command -v zsh &>/dev/null; then
+		log_success "Git and ZSH are already installed"
 		return 0
 	fi
 
+	log_info "Installing shell prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install zsh zoxide git -y &>>"$LOG_FILE"
 }
@@ -22,6 +25,7 @@ install_zsh_autopair() {
 
 	_install_shell_prerequisites
 
+	log_info "Installing shell prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if git clone --depth=1 "https://github.com/hlissner/zsh-autopair.git" "$ZSH_PLUGINS_DIR/zsh-autopair" &>>"$LOG_FILE"; then

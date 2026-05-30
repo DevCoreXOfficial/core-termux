@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_sqlite() {
 	if dpkg -s sqlite 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "SQLite is already installed"
 		return 0
 	fi
 	log_info "Installing SQLite..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install sqlite -y &>>"$LOG_FILE"; then
+		log_success "SQLite installed"
 		return 0
 	else
 		return 1

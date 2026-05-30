@@ -6,27 +6,41 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _install_ai_npm_prereqs() {
 	if command -v node &>/dev/null && command -v npm &>/dev/null; then
+		log_success "Node.js and npm are already installed"
 		return 0
 	fi
 
+	log_info "Installing Node.js and npm prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"
+	if pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"; then
+		log_success "Node.js and npm prerequisites installed successfully"
+		return 0
+	else
+		log_error "Failed to install Node.js and npm prerequisites"
+		return 1
+	fi
 }
 
 install_qwen_code() {
 	if command -v qwen &>/dev/null; then
+		log_info "Qwen Code is already installed"
 		return 0
 	fi
 
 	log_info "Installing Qwen Code..."
 
-	_install_ai_npm_prereqs
+	if ! _install_ai_npm_prereqs; then
+		log_error "Prerequisites installation failed"
+		return 1
+	fi
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
 
+	log_info "Running npm install for @qwen-code/qwen-code..."
 	if npm install -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+		log_success "Qwen Code installed successfully"
 		return 0
 	else
 		log_error "Failed to install Qwen Code"
@@ -53,8 +67,9 @@ update_qwen_code() {
 	export GYP_DEFINES="android_ndk_path=''"
 	export ANDROID_API_LEVEL=24
 
+	log_info "Running npm update for @qwen-code/qwen-code..."
 	if npm update -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-		log_success "Qwen Code updated"
+		log_success "Qwen Code updated successfully"
 		return 0
 	else
 		log_error "Failed to update Qwen Code"

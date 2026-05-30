@@ -2,6 +2,23 @@
 
 Open-source Claude AI client for the terminal
 
+**Package:** @gitlawb/openclaude  
+**Author:** DevCoreX  
+**Repository:** https://github.com/DevCoreXOfficial/core-termux  
+**Official:** https://github.com/gitlawb/openclaude  
+**Type:** AI client (npm global package)  
+**License:** MIT
+
+## Description
+
+OpenClaude is an open-source terminal client for Anthropic's Claude AI. It provides a CLI interface to interact with Claude models for code generation, analysis, and general AI assistance.
+
+## Dependencies
+
+- Node.js LTS (nodejs-lts)
+- npm
+- git, ripgrep
+
 ## Install
 
 ```bash
@@ -19,3 +36,11 @@ core uninstall ai --openclaude
 ```bash
 core update ai --openclaude
 ```
+
+## Notes
+
+- Installed as a global npm package: `@gitlawb/openclaude`
+- Command: `openclaude`
+- Requires an Anthropic API key
+- Environment variable: `ANTHROPIC_API_KEY`
+

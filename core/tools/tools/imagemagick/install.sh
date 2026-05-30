@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_imagemagick() {
 	if dpkg -s imagemagick 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "ImageMagick is already installed"
 		return 0
 	fi
 	log_info "Installing ImageMagick..."

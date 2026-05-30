@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_mongodb() {
 	if dpkg -s mongodb 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "MongoDB is already installed"
 		return 0
 	fi
 	log_info "Installing MongoDB..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install mongodb -y &>>"$LOG_FILE"; then
+		log_success "MongoDB installed"
 		return 0
 	else
 		return 1

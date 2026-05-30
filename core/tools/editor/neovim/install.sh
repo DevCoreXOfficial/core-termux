@@ -8,9 +8,11 @@ NVCHAD_DIR="$HOME/.cache/core-termux/nvchad-termux"
 
 _install_neovim_prereqs() {
 	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Neovim is already installed"
 		return 0
 	fi
 
+	log_info "Installing Neovim prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	pkg install neovim -y &>>"$LOG_FILE"
 }

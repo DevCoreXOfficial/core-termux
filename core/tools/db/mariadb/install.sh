@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_mariadb() {
 	if dpkg -s mariadb 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "MariaDB is already installed"
 		return 0
 	fi
 	log_info "Installing MariaDB..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install mariadb -y &>>"$LOG_FILE"; then
+		log_success "MariaDB installed"
 		return 0
 	else
 		return 1

@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_ncurses() {
 	if dpkg -s ncurses-utils 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Ncurses Utils is already installed"
 		return 0
 	fi
 	log_info "Installing Ncurses Utils..."

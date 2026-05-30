@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_shfmt() {
 	if dpkg -s shfmt 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Shfmt is already installed"
 		return 0
 	fi
 	log_info "Installing Shfmt..."

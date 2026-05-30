@@ -174,6 +174,7 @@ _install_opencode_proot() {
 
 install_opencode() {
 	if command -v opencode &>/dev/null; then
+		log_success "OpenCode is already installed"
 		return 0
 	fi
 

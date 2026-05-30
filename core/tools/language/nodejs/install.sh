@@ -6,12 +6,14 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_nodejs() {
 	if dpkg -s nodejs-lts 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Node.js LTS is already installed"
 		return 0
 	fi
 	log_info "Installing Node.js LTS..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install nodejs-lts -y &>>"$LOG_FILE"; then
+		log_success "Node.js LTS installed"
 		return 0
 	else
 		return 1

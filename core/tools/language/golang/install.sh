@@ -6,6 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_golang() {
 	if dpkg -s golang 2>/dev/null | grep -q "Status: install ok installed"; then
+		log_success "Go (Golang) is already installed"
 		return 0
 	fi
 	log_info "Installing Go (Golang)..."
