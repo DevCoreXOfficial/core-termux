@@ -1,9 +1,22 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
-import "@/fix/localtunnel"
 
 LOG_FILE="$CORE_CACHE/install_node_modules.log"
+
+fix_localtunnel_openurl() {
+	local openurl_js
+	openurl_js="$(npm root -g)/localtunnel/node_modules/openurl/openurl.js"
+	if [[ ! -f "$openurl_js" ]]; then
+		openurl_js="$(npm root -g)/openurl/openurl.js"
+	fi
+	if [[ -f "$openurl_js" ]]; then
+		sed -i "/default:/i\\
+    case 'android':\\
+        command = 'termux-open-url';\\
+        break;" "$openurl_js"
+	fi
+}
 
 _install_node_prerequisites() {
 	if command -v node &>/dev/null && command -v npm &>/dev/null; then

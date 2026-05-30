@@ -1,7 +1,6 @@
 #!/bin/bash
 
 import "@/utils/log"
-import "@/fix/localtunnel"
 
 LOG_FILE="$CORE_CACHE/install_node_modules.log"
 
