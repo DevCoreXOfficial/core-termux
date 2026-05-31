@@ -204,6 +204,9 @@ _update_specific_tools() {
 			minimax-cli)
 				if loading "Updating Minimax CLI" update_minimax_cli; then ((updated_count++)); else ((failed_count++)); fi
 				;;
+			gentle-ai)
+				if loading "Updating gentle-ai" update_gentle_ai; then ((updated_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;

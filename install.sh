@@ -185,6 +185,7 @@ show_final_message() {
 	printf "    ${CYAN}%-20s${NC} %s\n" "core install ai" "AI tools"
 	printf "    ${CYAN}%-20s${NC} %s\n" "core install editor" "Code editor"
 	printf "    ${CYAN}%-20s${NC} %s\n" "core install tools" "Dev tools"
+  printf "    ${CYAN}%-20s${NC} %s\n" "core install node" "Node.js tools"
 	printf "    ${CYAN}%-20s${NC} %s\n" "core install shell" "ZSH shell"
 	printf "    ${CYAN}%-20s${NC} %s\n" "core install ui" "Termux UI"
 	printf "    ${CYAN}%-20s${NC} %s\n" "core install automation" "n8n"

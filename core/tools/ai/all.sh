@@ -18,6 +18,7 @@ AI_TOOLS=(
 	"codegraph"
 	"pi"
 	"antigravity-cli"
+	"gentle-ai"
 	"minimax-cli"
 )
 
@@ -34,6 +35,7 @@ source "$(dirname "$BASH_SOURCE")/engram/install.sh"
 source "$(dirname "$BASH_SOURCE")/codegraph/install.sh"
 source "$(dirname "$BASH_SOURCE")/pi/install.sh"
 source "$(dirname "$BASH_SOURCE")/antigravity-cli/install.sh"
+source "$(dirname "$BASH_SOURCE")/gentle-ai/install.sh"
 source "$(dirname "$BASH_SOURCE")/minimax-cli/install.sh"
 
 install_all_ai_tools() {
@@ -80,6 +82,9 @@ install_all_ai_tools() {
 			;;
 		antigravity-cli)
 			if install_antigravity_cli; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		gentle-ai)
+			if install_gentle_ai; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		minimax-cli)
 			if install_minimax_cli; then ((installed_count++)); else ((failed_count++)); fi
@@ -135,6 +140,9 @@ uninstall_all_ai_tools() {
 		antigravity-cli)
 			if uninstall_antigravity_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
+		gentle-ai)
+			if uninstall_gentle_ai; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
 		minimax-cli)
 			if uninstall_minimax_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
@@ -188,6 +196,9 @@ update_all_ai_tools() {
 			;;
 		antigravity-cli)
 			if update_antigravity_cli; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		gentle-ai)
+			if update_gentle_ai; then ((updated_count++)); else ((failed_count++)); fi
 			;;
 		minimax-cli)
 			if update_minimax_cli; then ((updated_count++)); else ((failed_count++)); fi

@@ -226,6 +226,9 @@ _uninstall_specific_tools() {
 			minimax-cli)
 				if loading "Uninstalling Minimax CLI" uninstall_minimax_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
+			gentle-ai)
+				if loading "Uninstalling gentle-ai" uninstall_gentle_ai; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;

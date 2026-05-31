@@ -17,7 +17,7 @@ install_main() {
 		list_item "full       - Install everything (recommended)"
 		list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++, Go)"
 		list_item "db         - Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
-		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Pi, Antigravity CLI, Minimax CLI)"
+		list_item "ai         - AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Pi, Antigravity CLI, Minimax CLI, Gentle AI)"
 		list_item "editor     - Code editor (Neovim + NvChad)"
 		list_item "tools      - Development tools"
 		list_item "node       - Node.js global modules (npm packages)"
@@ -204,6 +204,9 @@ _install_specific_tools() {
 				;;
 			minimax-cli)
 				if loading "Installing Minimax CLI" install_minimax_cli; then ((installed_count++)); else ((failed_count++)); fi
+				;;
+			gentle-ai)
+				if loading "Installing Gentle AI" install_gentle_ai; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
