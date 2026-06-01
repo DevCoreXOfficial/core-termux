@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_bc() {
-	if dpkg -s bc 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v bc &>/dev/null; then
 		log_success "bc is already installed"
 		return 0
 	fi

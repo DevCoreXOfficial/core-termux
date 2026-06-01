@@ -4,21 +4,26 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-_install_ai_npm_prereqs() {
-	if command -v node &>/dev/null && command -v npm &>/dev/null; then
-		log_success "Node.js and npm are already installed"
-		return 0
-	fi
+_qwen_code_install_ai_npm_prereqs() {
+	declare -A DEPS=(
+		["nodejs-lts"]="node"
+		["git"]="git"
+		["ripgrep"]="rg"
+	)
 
-	log_info "Installing Node.js and npm prerequisites..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"; then
-		log_success "Node.js and npm prerequisites installed successfully"
-		return 0
-	else
-		log_error "Failed to install Node.js and npm prerequisites"
-		return 1
-	fi
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
+
+	log_success "Node.js and npm prerequisites installed"
+	return 0
 }
 
 install_qwen_code() {
@@ -29,7 +34,7 @@ install_qwen_code() {
 
 	log_info "Installing Qwen Code..."
 
-	if ! _install_ai_npm_prereqs; then
+	if ! _qwen_code_install_ai_npm_prereqs; then
 		log_error "Prerequisites installation failed"
 		return 1
 	fi

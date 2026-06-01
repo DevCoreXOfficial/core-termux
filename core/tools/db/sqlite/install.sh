@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_sqlite() {
-	if dpkg -s sqlite 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v sqlite &>/dev/null; then
 		log_success "SQLite is already installed"
 		return 0
 	fi

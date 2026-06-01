@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_make() {
-	if dpkg -s make 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v make &>/dev/null; then
 		log_success "Make is already installed"
 		return 0
 	fi

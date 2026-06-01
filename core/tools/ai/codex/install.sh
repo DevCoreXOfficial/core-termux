@@ -11,9 +11,14 @@ install_codex() {
 	fi
 	log_info "Installing Codex..."
 
-	pkg install tur-repo -y &>>"$LOG_FILE"
-
 	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if [[ ! -f $PREFIX/etc/apt/sources.list.d/tur.list ]]; then
+		if ! pkg install tur-repo -y &>>"$LOG_FILE"; then
+			log_error "Failed to install tur-repo"
+			return 1
+		fi
+	fi
 
 	if pkg install codex -y &>>"$LOG_FILE"; then
 		log_success "Codex installed"

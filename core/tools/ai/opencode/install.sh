@@ -6,7 +6,7 @@ import "@/utils/colors"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
 
-_detect_ubuntu_root() {
+_opencode_opencode_detect_ubuntu_root() {
 	local root
 	root="$(find /data/data/com.termux -maxdepth 10 -type d \
 		-name "rootfs" -path "*/containers/ubuntu/*" 2>/dev/null | head -1)"
@@ -19,7 +19,7 @@ _detect_ubuntu_root() {
 	echo "$root"
 }
 
-_proot_ubuntu() {
+_opencode_opencode_proot_ubuntu() {
 	proot-distro login \
 		--shared-tmp \
 		ubuntu \
@@ -27,20 +27,39 @@ _proot_ubuntu() {
 }
 
 _get_latest_opencode_version() {
-	curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest \
-		| grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
+	curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest |
+		grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
 }
 
-_install_deps_native() {
-	if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
-		log_error "Failed to install glibc-repo"
-		return 1
+_opencode_install_deps_native() {
+	if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
+		if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc-repo"
+			return 1
+		fi
 	fi
 
-	if ! pkg install glibc git ripgrep python clang jq nodejs-lts curl tar -y &>>"$LOG_FILE"; then
-		log_error "Failed to install native dependencies"
-		return 1
-	fi
+	declare -A DEPS=(
+		["git"]="git"
+		["ripgrep"]="rg"
+		["python"]="python"
+		["clang"]="clang"
+		["jq"]="jq"
+		["nodejs-lts"]="node"
+		["curl"]="curl"
+		["tar"]="tar"
+	)
+
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
 
 	log_success "Dependencies installed"
 	return 0
@@ -101,7 +120,7 @@ _compile_opencode_helper() {
 }
 
 _install_opencode_native() {
-	if ! loading "Installing dependencies" _install_deps_native; then
+	if ! loading "Installing dependencies" _opencode_install_deps_native; then
 		return 1
 	fi
 
@@ -126,15 +145,15 @@ _install_opencode_proot() {
 		pkg install proot-distro -y &>>"$LOG_FILE"
 	fi
 
-	if [ ! -d "$(_detect_ubuntu_root)" ]; then
+	if [ ! -d "$(_opencode_detect_ubuntu_root)" ]; then
 		proot-distro install ubuntu &>>"$LOG_FILE"
 	fi
 
-	_proot_ubuntu /bin/bash -c \
+	_opencode_proot_ubuntu /bin/bash -c \
 		'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
 		&>>"$LOG_FILE"
 
-	_proot_ubuntu /bin/bash -c '
+	_opencode_proot_ubuntu /bin/bash -c '
 		export SHELL=/bin/bash
 		export TMPDIR=/tmp
 		export HOME=/root
@@ -142,7 +161,7 @@ _install_opencode_proot() {
 	' &>>"$LOG_FILE"
 
 	local ubuntu_root
-	ubuntu_root="$(_detect_ubuntu_root)"
+	ubuntu_root="$(_opencode_detect_ubuntu_root)"
 
 	if [ -z "$ubuntu_root" ]; then
 		log_error "Ubuntu rootfs not found"
@@ -161,7 +180,7 @@ _install_opencode_proot() {
 		log_error "Wrapper template not found at $wrapper_src"
 		return 1
 	fi
-	sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" > "$PREFIX/bin/opencode"
+	sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/opencode"
 	chmod +x "$PREFIX/bin/opencode"
 
 	if ! grep -q '.opencode/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
@@ -205,10 +224,10 @@ uninstall_opencode() {
 		return 0
 	fi
 
-	_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
+	_opencode_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
 
 	local ubuntu_bashrc
-	ubuntu_bashrc="$(_detect_ubuntu_root)/root/.bashrc"
+	ubuntu_bashrc="$(_opencode_detect_ubuntu_root)/root/.bashrc"
 
 	if [ -f "$ubuntu_bashrc" ]; then
 		sed -i '/# opencode/d; /export PATH=\/root\/.opencode\/bin/d' "$ubuntu_bashrc"
@@ -232,9 +251,9 @@ update_opencode() {
 		return $?
 	fi
 
-	_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
+	_opencode_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
 
-	_proot_ubuntu /bin/bash -c '
+	_opencode_proot_ubuntu /bin/bash -c '
 		export SHELL=/bin/bash
 		export TMPDIR=/tmp
 		export HOME=/root
@@ -242,7 +261,7 @@ update_opencode() {
 	' &>>"$LOG_FILE"
 
 	local ubuntu_root
-	ubuntu_root="$(_detect_ubuntu_root)"
+	ubuntu_root="$(_opencode_detect_ubuntu_root)"
 	local opencode_bin="$ubuntu_root/root/.opencode/bin/opencode"
 
 	if [ ! -f "$opencode_bin" ]; then

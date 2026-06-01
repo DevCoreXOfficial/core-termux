@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_nodejs() {
-	if dpkg -s nodejs-lts 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v node &>/dev/null; then
 		log_success "Node.js LTS is already installed"
 		return 0
 	fi

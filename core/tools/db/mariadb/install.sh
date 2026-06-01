@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_mariadb() {
-	if dpkg -s mariadb 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v mariadbd &>/dev/null; then
 		log_success "MariaDB is already installed"
 		return 0
 	fi

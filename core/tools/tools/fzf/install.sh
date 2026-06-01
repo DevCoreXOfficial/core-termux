@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_fzf() {
-	if dpkg -s fzf 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v fzf &>/dev/null; then
 		log_success "Fzf is already installed"
 		return 0
 	fi

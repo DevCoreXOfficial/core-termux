@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_cloudflared() {
-	if dpkg -s cloudflared 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v cloudflared &>/dev/null; then
 		log_success "Cloudflared is already installed"
 		return 0
 	fi

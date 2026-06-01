@@ -3,11 +3,9 @@
 import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_editor.log"
-NVCHAD_REPO="https://github.com/DevCoreXOfficial/nvchad-termux.git"
-NVCHAD_DIR="$HOME/.cache/core-termux/nvchad-termux"
 
 _install_neovim_prereqs() {
-	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v nvim &>/dev/null; then
 		log_success "Neovim is already installed"
 		return 0
 	fi
@@ -18,7 +16,7 @@ _install_neovim_prereqs() {
 }
 
 install_neovim() {
-	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v nvim &>/dev/null; then
 		return 0
 	fi
 	log_info "Installing Neovim..."

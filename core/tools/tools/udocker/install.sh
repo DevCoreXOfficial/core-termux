@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_udocker() {
-	if dpkg -s udocker 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v udocker &>/dev/null; then
 		log_success "Udocker is already installed"
 		return 0
 	fi

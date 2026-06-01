@@ -2,12 +2,13 @@
 
 set -e
 
-RED='\e[1;31m'
-GREEN='\e[1;32m'
-YELLOW='\e[1;33m'
-CYAN='\e[1;36m'
-BLUE='\e[1;34m'
-NC='\e[0m'
+readonly P_BORDER='\e[38;5;33m'
+readonly P_PRIMARY='\e[38;5;39m'
+readonly P_DIM='\e[38;5;244m'
+readonly P_OK='\e[38;5;42m'
+readonly P_FAIL='\e[1;31m'
+readonly P_HL='\e[38;5;213m'
+readonly P_NC='\e[0m'
 
 REPO="https://github.com/DevCoreXOfficial/core-termux"
 BRANCH="main"
@@ -32,7 +33,7 @@ progress_bar() {
 	printf -v space "%*s" "$empty" ""
 	space="${space// /░}"
 
-	printf "\r${CYAN}[${NC}${GREEN}%s${NC}${CYAN}]${NC} %3d%%" "${bar}${space}" "$percentage"
+	printf "\r  ${P_BORDER}│${P_NC}${P_OK}%s${P_NC}${P_DIM}%s${P_NC}${P_BORDER}│${P_NC} ${P_PRIMARY}%3d%%${P_NC}" "${bar}" "${space}" "$percentage"
 }
 
 log_step() {
@@ -40,36 +41,34 @@ log_step() {
 	local desc="$2"
 	CURRENT_STEP=$((CURRENT_STEP + 1))
 	printf "\r%*s\r" "$(tput cols)" ""
-	echo -e "\n  ${BLUE}[${CURRENT_STEP}/${TOTAL_STEPS}]${NC} ${CYAN}${desc}${NC}"
+	echo -e "\n  ${P_BORDER}◆${P_NC}  ${P_PRIMARY}${CURRENT_STEP}/${TOTAL_STEPS}${P_NC}  ${desc}"
 }
 
 log_ok() {
-	echo -e "  ${GREEN}✔${NC} $1"
+	echo -e "  ${P_OK}✔${P_NC}  $1"
 }
 
 log_fail() {
-	echo -e "  ${RED}✖${NC} $1" >&2
+	echo -e "  ${P_FAIL}✖${P_NC}  $1" >&2
 }
 
 log_info() {
-	echo -e "  ${CYAN}→${NC} $1"
+	echo -e "  ${P_BORDER}→${P_NC}  $1"
 }
 
 separator() {
 	local cols=$(tput cols)
 	local line=$(printf "%${cols}s")
-	echo -e "${YELLOW}${line// /─}${NC}"
+	echo -e "${P_DIM}${line// /─}${P_NC}"
 }
 
 banner() {
-	echo -e "${CYAN}"
-	cat << 'EOF'
-╔══════════════════════════════════════╗
-║         Core-Termux Installer        ║
-║   Modular Dev Environment for Termux ║
-╚══════════════════════════════════════╝
-EOF
-	echo -e "${NC}"
+	echo
+	echo -e "  ${P_BORDER}┌─────────────────────────────────┐${P_NC}"
+	echo -e "  ${P_BORDER}│${P_NC}        ${P_PRIMARY} ◈ CORE-TERMUX ◈${P_NC}         ${P_BORDER}│${P_NC}"
+	echo -e "  ${P_BORDER}│${P_NC}     ${P_DIM}Modular Dev Environment${P_NC}     ${P_BORDER}│${P_NC}"
+	echo -e "  ${P_BORDER}└─────────────────────────────────┘${P_NC}"
+	echo
 }
 
 install_dependencies() {
@@ -93,10 +92,10 @@ setup_directories() {
 
 	mkdir -p "$CORE_DATA" "$CORE_TOOL_DATA" "$CORE_CACHE" "$CORE_CONFIG"
 
-	log_info "Repo:    $CORE_DATA"
-	log_info "Data:    $CORE_TOOL_DATA"
-	log_info "Cache:   $CORE_CACHE"
-	log_info "Config:  $CORE_CONFIG"
+	log_info "Repo    $CORE_DATA"
+	log_info "Data    $CORE_TOOL_DATA"
+	log_info "Cache   $CORE_CACHE"
+	log_info "Config  $CORE_CONFIG"
 	log_ok "Directories created"
 }
 
@@ -171,30 +170,27 @@ EOF
 show_final_message() {
 	echo
 	separator
-	echo -e "${GREEN}  Core-Termux installed successfully!${NC}"
+	echo -e "  ${P_OK}◆${P_NC}  ${P_PRIMARY}Installation Complete${P_NC}"
 	separator
 	echo
-	echo -e "  ${CYAN}Next steps:${NC}"
+	echo -e "  ${P_DIM}Run${P_NC}  ${P_HL}core${P_NC}  ${P_DIM}to get started${P_NC}"
 	echo
-	echo -e "  ${GREEN}1.${NC} Run: ${CYAN}core${NC}"
-	echo -e "  ${GREEN}2.${NC} Run: ${CYAN}core setup full${NC} (recommended)"
+	echo -e "  ${P_DIM}Install modules:${P_NC}"
 	echo
-	echo -e "  ${YELLOW}Or install individually:${NC}"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install language" "Programming languages"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install db" "Databases"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install ai" "AI tools"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install editor" "Code editor"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install tools" "Dev tools"
-  printf "    ${CYAN}%-20s${NC} %s\n" "core install node" "Node.js tools"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install shell" "ZSH shell"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install ui" "Termux UI"
-	printf "    ${CYAN}%-20s${NC} %s\n" "core install automation" "n8n"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install language" "Programming languages"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install db" "Databases"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install ai" "AI tools"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install editor" "Code editor"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install tools" "Dev tools"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install node" "Node.js tools"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install shell" "ZSH shell"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install ui" "Termux UI"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install automation" "n8n"
 	echo
 }
 
 main() {
 	banner
-	echo
 	install_dependencies
 	setup_directories
 	clone_repo

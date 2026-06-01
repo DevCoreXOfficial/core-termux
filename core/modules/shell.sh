@@ -8,10 +8,10 @@ OH_MY_ZSH_DIR="$HOME/.oh-my-zsh"
 LOG_FILE="$CORE_CACHE/install_shell.log"
 
 install_termux_packages() {
-	log_info "Installing zsh and zoxide in Termux..."
+	log_info "Installing dependencies..."
 
-	if pkg install -y zsh zoxide &>>"$LOG_FILE"; then
-		log_success "zsh and zoxide installed successfully"
+	if pkg install -y zsh lsd bat fzf zoxide &>>"$LOG_FILE"; then
+		log_success "Dependencies installed successfully"
 		return 0
 	else
 		log_error "Failed to install zsh and zoxide"

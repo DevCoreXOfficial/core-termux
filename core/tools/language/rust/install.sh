@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_rust() {
-	if dpkg -s rust 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v rust &>/dev/null; then
 		log_success "Rust is already installed"
 		return 0
 	fi

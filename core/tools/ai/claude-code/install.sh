@@ -6,7 +6,7 @@ import "@/utils/colors"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CLAUDE_DATA_DIR="$HOME/.local/share/core-termux-data/claude"
 
-_detect_ubuntu_root() {
+_claude_detect_ubuntu_root() {
 	local root
 	root="$(find /data/data/com.termux -maxdepth 10 -type d \
 		-name "rootfs" -path "*/containers/ubuntu/*" 2>/dev/null | head -1)"
@@ -19,7 +19,7 @@ _detect_ubuntu_root() {
 	echo "$root"
 }
 
-_proot_ubuntu() {
+_claude_proot_ubuntu() {
 	proot-distro login \
 		--shared-tmp \
 		ubuntu \
@@ -31,16 +31,32 @@ _get_latest_claude_version() {
 		| grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
 }
 
-_install_deps_native() {
-	if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
-		log_error "Failed to install glibc-repo"
-		return 1
+_claude_install_deps_native() {
+	if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
+		if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc-repo"
+			return 1
+		fi
 	fi
 
-	if ! pkg install glibc clang curl tar -y &>>"$LOG_FILE"; then
-		log_error "Failed to install native dependencies"
-		return 1
-	fi
+	declare -A DEPS=(
+		["glibc"]=""
+		["clang"]="clang"
+		["curl"]="curl"
+		["tar"]="tar"
+	)
+
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if [[ -n "$bin_name" ]] && command -v "$bin_name" &>/dev/null; then
+			continue
+		fi
+		if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+			log_error "Failed to install $pkg_name"
+			return 1
+		fi
+	done
 
 	log_success "Dependencies installed"
 	return 0
@@ -101,7 +117,7 @@ _compile_claude_helper() {
 }
 
 _install_claude_native() {
-	if ! loading "Installing dependencies" _install_deps_native; then
+	if ! loading "Installing dependencies" _claude_install_deps_native; then
 		return 1
 	fi
 
@@ -126,15 +142,15 @@ _install_claude_proot() {
 		pkg install proot-distro -y &>>"$LOG_FILE"
 	fi
 
-	if [ ! -d "$(_detect_ubuntu_root)" ]; then
+	if [ ! -d "$(_claude_detect_ubuntu_root)" ]; then
 		proot-distro install ubuntu &>>"$LOG_FILE"
 	fi
 
-	_proot_ubuntu /bin/bash -c \
+	_claude_proot_ubuntu /bin/bash -c \
 		'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
 		&>>"$LOG_FILE"
 
-	_proot_ubuntu /bin/bash -c '
+	_claude_proot_ubuntu /bin/bash -c '
 		export SHELL=/bin/bash
 		export TMPDIR=/tmp
 		export HOME=/root
@@ -142,14 +158,14 @@ _install_claude_proot() {
 	' &>>"$LOG_FILE"
 
 	local ubuntu_root
-	ubuntu_root="$(_detect_ubuntu_root)"
+	ubuntu_root="$(_claude_detect_ubuntu_root)"
 
 	if [ -z "$ubuntu_root" ]; then
 		log_error "Ubuntu rootfs not found"
 		return 1
 	fi
 
-	if ! _proot_ubuntu test -x /root/.local/bin/claude &>>"$LOG_FILE"; then
+	if ! _claude_proot_ubuntu test -x /root/.local/bin/claude &>>"$LOG_FILE"; then
 		log_error "Claude Code binary not found after install"
 		return 1
 	fi
@@ -203,12 +219,12 @@ uninstall_claude_code() {
 		return 0
 	fi
 
-	_proot_ubuntu /bin/bash -c \
+	_claude_proot_ubuntu /bin/bash -c \
 		'rm -f /root/.local/bin/claude && rm -rf /root/.claude && rm -rf /root/.local/share/claude' \
 		&>>"$LOG_FILE"
 
 	local ubuntu_bashrc
-	ubuntu_bashrc="$(_detect_ubuntu_root)/root/.bashrc"
+	ubuntu_bashrc="$(_claude_detect_ubuntu_root)/root/.bashrc"
 
 	if [ -f "$ubuntu_bashrc" ]; then
 		sed -i '/# claude-code/d; /export PATH=\/root\/.local\/bin/d' "$ubuntu_bashrc"
@@ -232,12 +248,12 @@ update_claude_code() {
 		return $?
 	fi
 
-	_proot_ubuntu /bin/bash -c '
+	_claude_proot_ubuntu /bin/bash -c '
 		export HOME=/root
 		curl -fsSL https://claude.ai/install.sh | bash
 	' &>>"$LOG_FILE"
 
-	if ! _proot_ubuntu test -x /root/.local/bin/claude &>>"$LOG_FILE"; then
+	if ! _claude_proot_ubuntu test -x /root/.local/bin/claude &>>"$LOG_FILE"; then
 		log_error "Claude Code binary not found after update"
 		return 1
 	fi

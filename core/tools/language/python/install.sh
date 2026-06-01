@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_python() {
-	if dpkg -s python 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v python &>/dev/null; then
 		log_success "Python is already installed"
 		return 0
 	fi

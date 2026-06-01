@@ -4,7 +4,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _install_codegraph_dependencies() {
-	declare -A packages=(
+	declare -A DEPS=(
 		["nodejs-lts"]="node"
 		["ripgrep"]="rg"
 		["sqlite"]="sqlite"
@@ -15,11 +15,19 @@ _install_codegraph_dependencies() {
 		["curl"]="curl"
 	)
 
-	for pkg_name in "${!packages[@]}"; do
-		if ! command -v "${packages[$pkg_name]}" &>/dev/null; then
-			pkg install "$pkg_name" -y &>>"$LOG_FILE"
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
 		fi
 	done
+
+	log_success "Dependencies installed"
+	return 0
 }
 
 _write_codegraph_wrapper() {

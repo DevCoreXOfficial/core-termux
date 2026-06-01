@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_bat() {
-	if dpkg -s bat 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v bat &>/dev/null; then
 		log_success "Bat is already installed"
 		return 0
 	fi

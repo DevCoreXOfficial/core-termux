@@ -5,14 +5,30 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_automation.log"
 
 _install_automation_prerequisites() {
-	if command -v node &>/dev/null && command -v npm &>/dev/null; then
-		log_success "Node.js and npm are already installed"
-		return 0
-	fi
+	declare -A DEPS=(
+		["nodejs-lts"]="node"
+		["python"]="python"
+		["sqlite"]="sqlite"
+		["build-essential"]=""
+		["binutils"]=""
+		["make"]="make"
+		["clang"]="clang"
+	)
 
-	log_info "Installing automation prerequisites..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install nodejs-lts python sqlite build-essential binutils make clang -y &>>"$LOG_FILE"
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if [[ -n "$bin_name" ]] && command -v "$bin_name" &>/dev/null; then
+			continue
+		fi
+		if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+			log_error "Failed to install $pkg_name"
+			return 1
+		fi
+	done
+
+	log_success "Automation prerequisites installed"
+	return 0
 }
 
 install_n8n() {

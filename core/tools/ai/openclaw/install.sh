@@ -4,15 +4,26 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-_install_ai_npm_prereqs() {
-	if command -v node &>/dev/null && command -v npm &>/dev/null; then
-		log_success "Node.js and npm are already installed"
-		return 0
-	fi
+_openclaw_install_ai_npm_prereqs() {
+	declare -A DEPS=(
+		["nodejs-lts"]="node"
+		["git"]="git"
+		["ripgrep"]="rg"
+	)
 
-	log_info "Installing Node.js and npm prerequisites..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
+
+	log_success "Node.js and npm prerequisites installed"
+	return 0
 }
 
 install_openclaw() {
@@ -22,7 +33,7 @@ install_openclaw() {
 	fi
 	log_info "Installing OpenClaw..."
 
-	_install_ai_npm_prereqs
+	_openclaw_install_ai_npm_prereqs
 
 	npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 

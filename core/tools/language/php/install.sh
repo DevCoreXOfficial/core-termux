@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_php() {
-	if dpkg -s php 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v php &>/dev/null; then
 		log_success "PHP is already installed"
 		return 0
 	fi

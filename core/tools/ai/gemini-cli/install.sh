@@ -4,15 +4,26 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-_install_ai_npm_prereqs() {
-	if command -v node &>/dev/null && command -v npm &>/dev/null; then
-		log_success "Node.js and npm are already installed"
-		return 0
-	fi
+_gemini_cli_install_ai_npm_prereqs() {
+	declare -A DEPS=(
+		["nodejs-lts"]="node"
+		["git"]="git"
+		["ripgrep"]="rg"
+	)
 
-	log_info "Installing Node.js and npm prerequisites..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install nodejs-lts git ripgrep -y &>>"$LOG_FILE"
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
+
+	log_success "Node.js and npm prerequisites installed"
+	return 0
 }
 
 install_gemini_cli() {
@@ -23,7 +34,7 @@ install_gemini_cli() {
 
 	log_info "Installing Gemini CLI..."
 
-	_install_ai_npm_prereqs
+	_gemini_cli_install_ai_npm_prereqs
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	export GYP_DEFINES="android_ndk_path=''"

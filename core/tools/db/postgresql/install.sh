@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_postgresql() {
-	if dpkg -s postgresql 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v postgres &>/dev/null; then
 		log_success "PostgreSQL is already installed"
 		return 0
 	fi

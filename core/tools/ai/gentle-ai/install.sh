@@ -7,27 +7,23 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 GENTLE_AI_DATA_DIR="$HOME/.local/share/core-termux-data/gentle-ai"
 GITHUB_REPO_URL="https://github.com/Gentleman-Programming/gentle-ai.git"
 
-_install_deps() {
-    if ! command -v go &>/dev/null; then
-        if ! pkg install golang -y &>>"$LOG_FILE"; then
-            log_error "Failed to install golang"
-            return 1
-        fi
-    fi
+_gentle_ai_install_deps() {
+    declare -A DEPS=(
+        ["golang"]="go"
+        ["git"]="git"
+        ["curl"]="curl"
+    )
 
-    if ! command -v git &>/dev/null; then
-        if ! pkg install git -y &>>"$LOG_FILE"; then
-            log_error "Failed to install git"
-            return 1
+    local pkg_name bin_name
+    for pkg_name in "${!DEPS[@]}"; do
+        bin_name="${DEPS[$pkg_name]}"
+        if ! command -v "$bin_name" &>/dev/null; then
+            if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+                log_error "Failed to install $pkg_name"
+                return 1
+            fi
         fi
-    fi
-
-    if ! command -v curl &>/dev/null; then
-        if ! pkg install curl -y &>>"$LOG_FILE"; then
-            log_error "Failed to install curl"
-            return 1
-        fi
-    fi
+    done
 
     local go_version
     go_version=$(go version | sed -n 's/.*go\([0-9]*\.[0-9]*\).*/\1/p')
@@ -133,7 +129,7 @@ install_gentle_ai() {
 
     log_info "Installing gentle-ai..."
 
-    if ! loading "Installing dependencies" _install_deps; then
+    if ! loading "Installing dependencies" _gentle_ai_install_deps; then
         return 1
     fi
 

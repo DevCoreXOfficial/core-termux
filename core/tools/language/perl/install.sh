@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_perl() {
-	if dpkg -s perl 2>/dev/null | grep -q "Status: install ok installed"; then
+	if command -v perl &>/dev/null; then
 		log_success "Perl is already installed"
 		return 0
 	fi

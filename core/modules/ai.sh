@@ -13,7 +13,7 @@ install_ai() {
 
 	log_info "Installing AI tools..."
 	echo
-	log_info "☕ Grab a coffee! This process typically takes 15-30 minutes."
+	log_info "☕ Grab a coffee! This process typically takes 30-45 minutes."
 	log_info "   Don't worry, it's normal for this to take a while..."
 	echo
 
@@ -37,6 +37,7 @@ install_ai() {
 		list_item "Pi ${GRAY}(${D_GREEN}pi${GRAY})"
 		list_item "Antigravity CLI ${GRAY}(${D_GREEN}agy${GRAY})"
 		list_item "Minimax CLI ${GRAY}(${D_GREEN}mmx${GRAY})"
+		list_item "Gentle AI ${GRAY}(${D_GREEN}gentle-ai${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"

@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 
-_install_shell_prerequisites() {
+_zsh_syntax_highlighting_install_shell_prerequisites() {
 	log_info "Installing shell prerequisites..."
 	if command -v git &>/dev/null && command -v zsh &>/dev/null; then
 		log_success "Git and ZSH are already installed"
@@ -23,7 +23,7 @@ install_zsh_syntax_highlighting() {
 		return 0
 	fi
 
-	_install_shell_prerequisites
+	_zsh_syntax_highlighting_install_shell_prerequisites
 
 	log_info "Installing shell prerequisites..."
 	mkdir -p "$(dirname "$LOG_FILE")"

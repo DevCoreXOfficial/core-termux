@@ -7,14 +7,33 @@ NVCHAD_REPO="https://github.com/DevCoreXOfficial/nvchad-termux.git"
 NVCHAD_DIR="$CORE_DATA/nvchad-termux"
 
 _install_nvchad_prereqs() {
-	if dpkg -s neovim 2>/dev/null | grep -q "Status: install ok installed" && command -v git &>/dev/null; then
-		log_success "Neovim and Git are already installed"
-		return 0
-	fi
+	declare -A DEPS=(
+		["git"]="git"
+		["neovim"]="nvim"
+		["nodejs-lts"]="node"
+		["python"]="python"
+		["perl"]="perl"
+		["curl"]="curl"
+		["wget"]="wget"
+		["lua-language-server"]="lua-language-server"
+		["ripgrep"]="rg"
+		["stylua"]="stylua"
+		["tree-sitter"]="tree-sitter"
+	)
 
-	log_info "Installing NvChad prerequisites..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter -y &>>"$LOG_FILE"
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
+
+	log_success "NvChad prerequisites installed"
+	return 0
 }
 
 install_nvchad() {

@@ -30,7 +30,7 @@ core_main() {
 
 core_help() {
 	echo
-	box_large "Core-Termux CLI v${CORE_VERSION}"
+	box_large "◈ CORE-TERMUX v${CORE_VERSION} ◈"
 	echo
 	log_info "Usage: core <command> [options]"
 	echo
@@ -42,15 +42,16 @@ core_help() {
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "show" "Show tool documentation"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "update" "Update modules or framework"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "uninstall" "Remove installed modules"
+	printf "    ${D_CYAN}%-12s${NC} %s\n" "open" "Open documentation in browser"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "list" "List available tools in modules"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "pg" "PostgreSQL database manager"
 	printf "    ${D_CYAN}%-12s${NC} %s\n" "init" "Configure existing projects"
 	echo
 	separator_section "Quick Start"
 	echo
-	list_item "Run: ${D_CYAN}core setup full${NC} (recommended)"
-	list_item "Run: ${D_CYAN}core install full${NC} (alternative)"
-	list_item "Run: ${D_CYAN}core update all${NC} (update all packages)"
+	list_item "Run: ${D_CYAN}core${NC} to see available commands"
+	list_item "Run: ${D_CYAN}core open${NC} for official documentation"
+	list_item "Run: ${D_CYAN}core install <module>${NC} to install modules"
 	echo
 	separator_section "Module Targets"
 	echo
@@ -71,5 +72,6 @@ core_help() {
 	echo
 	list_item "Run ${D_CYAN}core <command>${NC} for command-specific help"
 	list_item "Example: ${D_CYAN}core pg${NC}, ${D_CYAN}core init${NC}"
+	list_item "Docs: ${D_CYAN}core open${NC} — https://devcorex-web.vercel.app"
 	echo
 }

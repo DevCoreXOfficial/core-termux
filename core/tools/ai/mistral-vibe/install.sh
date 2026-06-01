@@ -5,15 +5,33 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _install_ai_pip_prereqs() {
-	if command -v python &>/dev/null && command -v pip &>/dev/null; then
-		log_success "Python and pip are already installed"
-		return 0
-	fi
+	declare -A DEPS=(
+		["python"]="python"
+		["clang"]="clang"
+		["make"]="make"
+		["rust"]="rust"
+		["libffi"]=""
+		["openssl"]=""
+		["pkg-config"]=""
+		["git"]="git"
+		["ripgrep"]="rg"
+	)
 
-	log_info "Installing Python and pip prerequisites..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install python clang make rust libffi openssl pkg-config git ripgrep -y &>>"$LOG_FILE"
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if [[ -n "$bin_name" ]] && command -v "$bin_name" &>/dev/null; then
+			continue
+		fi
+		if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+			log_error "Failed to install $pkg_name"
+			return 1
+		fi
+	done
+
 	pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
+	log_success "Python and pip prerequisites installed"
+	return 0
 }
 
 install_mistral_vibe() {

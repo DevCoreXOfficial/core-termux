@@ -5,15 +5,26 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 
-_install_shell_prerequisites() {
-	if command -v git &>/dev/null && command -v zsh &>/dev/null; then
-		log_success "Git and ZSH are already installed"
-		return 0
-	fi
+_powerlevel10k_install_shell_prerequisites() {
+	declare -A DEPS=(
+		["zsh"]="zsh"
+		["zoxide"]="zoxide"
+		["git"]="git"
+	)
 
-	log_info "Installing shell prerequisites..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	pkg install zsh zoxide git -y &>>"$LOG_FILE"
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
+
+	log_success "Shell prerequisites installed"
+	return 0
 }
 
 install_powerlevel10k() {
@@ -23,7 +34,7 @@ install_powerlevel10k() {
 	fi
 	log_info "Installing powerlevel10k..."
 
-	_install_shell_prerequisites
+	_powerlevel10k_install_shell_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -4,7 +4,7 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_node_modules.log"
 
-fix_localtunnel_openurl() {
+_localtunnel_fix_openurl() {
 	local openurl_js
 	openurl_js="$(npm root -g)/localtunnel/node_modules/openurl/openurl.js"
 	if [[ ! -f "$openurl_js" ]]; then
@@ -18,7 +18,7 @@ fix_localtunnel_openurl() {
 	fi
 }
 
-_install_node_prerequisites() {
+_localtunnel_install_node_prerequisites() {
 	if command -v node &>/dev/null && command -v npm &>/dev/null; then
 		log_success "Node.js and npm are already installed"
 		return 0
@@ -35,14 +35,14 @@ install_localtunnel() {
 	fi
 	log_info "Installing Localtunnel..."
 
-	_install_node_prerequisites
+	_localtunnel_install_node_prerequisites
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if npm install -g localtunnel &>>"$LOG_FILE"; then
 		log_success "Localtunnel installed"
 		log_info "Applying localtunnel fix for Android..."
-		fix_localtunnel_openurl &>>"$LOG_FILE"
+		_localtunnel_fix_openurl &>>"$LOG_FILE"
 		return 0
 	else
 		log_error "Failed to install Localtunnel"

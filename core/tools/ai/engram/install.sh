@@ -15,9 +15,24 @@ install_engram() {
 	export GOCACHE="$HOME/.cache/go"
 	export GOMODCACHE="$GOPATH/pkg/mod"
 
-	pkg install golang git sqlite -y &>>"$LOG_FILE"
-
 	mkdir -p "$(dirname "$LOG_FILE")"
+
+	declare -A DEPS=(
+		["golang"]="go"
+		["git"]="git"
+		["sqlite"]="sqlite"
+	)
+
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
 
 	if git clone https://github.com/Gentleman-Programming/engram "$CORE_DATA/engram" && go build -C "$CORE_DATA/engram/cmd/engram" -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
 		log_success "Engram installed"
