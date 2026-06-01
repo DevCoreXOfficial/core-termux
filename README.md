@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>Modular framework for setting up and managing development environments on Termux (Android)</strong>
+  <strong>Modular Dev Environment for Termux</strong>
 </p>
 
 <p align="center">
@@ -67,6 +67,7 @@ core setup
 | [`core show`](#core-show) | Show tool documentation |
 | [`core update`](#core-update) | Update modules or framework |
 | [`core uninstall`](#core-uninstall) | Remove installed modules |
+| [`core open`](#core-open) | Open documentation in browser |
 | [`core list`](#core-list) | List available tools in modules |
 | [`core pg`](#core-pg) | PostgreSQL database manager |
 | [`core init`](#core-init) | Configure existing projects |
@@ -285,6 +286,33 @@ core uninstall ai --qwen-code --ollama        # Uninstall only Qwen Code and Oll
 core uninstall db --postgresql --sqlite       # Uninstall only PostgreSQL and SQLite
 core uninstall tools --gh --fzf               # Uninstall only gh and fzf
 ```
+
+---
+
+### `core open`
+
+Open official documentation in browser
+
+```bash
+core open                     # Show help
+core open <target>            # Open official documentation in browser
+```
+
+**Available targets:**
+
+| Target | Description |
+|--------|-------------|
+| `core` | Core-Termux documentation |
+| `devcorex` | DevCoreX official website |
+| `language` | Language packages documentation |
+| `db` | Database documentation |
+| `ai` | AI tools documentation |
+| `editor` | Code editor documentation |
+| `tools` | Development tools documentation |
+| `node` | Node.js global modules documentation |
+| `shell` | ZSH shell documentation |
+| `ui` | Termux UI customization documentation |
+| `automation` | Automation tools documentation |
 
 ---
 

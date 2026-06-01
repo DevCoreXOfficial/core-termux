@@ -64,10 +64,10 @@ separator() {
 
 banner() {
 	echo
-	echo -e "  ${P_BORDER}┌─────────────────────────────────┐${P_NC}"
-	echo -e "  ${P_BORDER}│${P_NC}        ${P_PRIMARY} ◈ CORE-TERMUX ◈${P_NC}         ${P_BORDER}│${P_NC}"
-	echo -e "  ${P_BORDER}│${P_NC}     ${P_DIM}Modular Dev Environment${P_NC}     ${P_BORDER}│${P_NC}"
-	echo -e "  ${P_BORDER}└─────────────────────────────────┘${P_NC}"
+	echo -e "  ${P_BORDER}┌────────────────────────────────────┐${P_NC}"
+	echo -e "  ${P_BORDER}│${P_NC}        ${P_PRIMARY}  ◈ CORE-TERMUX ◈${P_NC}           ${P_BORDER}│${P_NC}"
+	echo -e "  ${P_BORDER}│${P_NC} ${P_DIM}Modular Dev Environment for Termux${P_NC} ${P_BORDER}│${P_NC}"
+	echo -e "  ${P_BORDER}└────────────────────────────────────┘${P_NC}"
 	echo
 }
 
