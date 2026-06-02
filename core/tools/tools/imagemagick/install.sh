@@ -5,7 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_imagemagick() {
-	if command -v convert &>/dev/null; then
+	if command -v magick &>/dev/null; then
 		log_success "ImageMagick is already installed"
 		return 0
 	fi

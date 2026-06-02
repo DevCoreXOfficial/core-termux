@@ -6,7 +6,7 @@ import "@/utils/colors"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
 
-_opencode_opencode_detect_ubuntu_root() {
+_opencode_detect_ubuntu_root() {
 	local root
 	root="$(find /data/data/com.termux -maxdepth 10 -type d \
 		-name "rootfs" -path "*/containers/ubuntu/*" 2>/dev/null | head -1)"
@@ -19,7 +19,7 @@ _opencode_opencode_detect_ubuntu_root() {
 	echo "$root"
 }
 
-_opencode_opencode_proot_ubuntu() {
+_opencode_proot_ubuntu() {
 	proot-distro login \
 		--shared-tmp \
 		ubuntu \
