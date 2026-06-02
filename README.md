@@ -1,9 +1,11 @@
+# 📲 Core-Termux — Modular Dev Environment
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/assets/images/logo.svg" alt="Core-Termux Logo" width="600">
 </p>
 
 <p align="center">
-  <strong>Modular Dev Environment for Termux</strong>
+  <strong>BUILD. CODE. AUTOMATE.</strong>
 </p>
 
 <p align="center">
@@ -40,6 +42,11 @@
 </p>
 
 <br>
+
+**CORE-TERMUX** is a modular dev environment that turns Termux into a complete development workstation. Through a single core CLI, it provides an interactive installation wizard and a modular system that covers the full developer stack: programming languages, databases, AI agents, code editors, shell configuration, and automation — all manageable with simple, consistent commands like !`core install`, `core update`, and `core uninstall`.
+
+> [!IMPORTANT]
+> This project is designed exclusively for **Termux on Android** and is not supported on other platforms.
 
 ---
 
