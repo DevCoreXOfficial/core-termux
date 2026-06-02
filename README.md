@@ -43,7 +43,7 @@
 
 <br>
 
-**CORE-TERMUX** is a modular dev environment that turns Termux into a complete development workstation. Through a single core CLI, it provides an interactive installation wizard and a modular system that covers the full developer stack: programming languages, databases, AI agents, code editors, shell configuration, and automation — all manageable with simple, consistent commands like !`core install`, `core update`, and `core uninstall`.
+**CORE-TERMUX** is a _modular dev environment_ that turns Termux into a complete development workstation. Through a single core CLI, it provides an interactive installation wizard and a modular system that covers the full developer stack: programming languages, databases, AI agents, code editors, shell configuration, and automation — all manageable with simple, consistent commands like !`core install`, `core update`, and `core uninstall`.
 
 > [!IMPORTANT]
 > This project is designed exclusively for **Termux on Android** and is not supported on other platforms.
@@ -59,7 +59,7 @@ curl -fsSL https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/i
 Then run:
 
 ```bash
-core setup
+core
 ```
 
 ---
