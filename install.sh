@@ -20,6 +20,14 @@ CORE_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/core-termux"
 TOTAL_STEPS=5
 CURRENT_STEP=0
 
+_cols() {
+	if command -v tput &>/dev/null; then
+		tput cols
+	else
+		echo 80
+	fi
+}
+
 progress_bar() {
 	local current=$1
 	local total=$2
@@ -40,7 +48,7 @@ log_step() {
 	local step="$1"
 	local desc="$2"
 	CURRENT_STEP=$((CURRENT_STEP + 1))
-	printf "\r%*s\r" "$(tput cols)" ""
+	printf "\r%*s\r" "$(_cols)" ""
 	echo -e "\n  ${P_BORDER}◆${P_NC}  ${P_PRIMARY}${CURRENT_STEP}/${TOTAL_STEPS}${P_NC}  ${desc}"
 }
 
@@ -57,7 +65,7 @@ log_info() {
 }
 
 separator() {
-	local cols=$(tput cols)
+	local cols=$(_cols)
 	local line=$(printf "%${cols}s")
 	echo -e "${P_DIM}${line// /─}${P_NC}"
 }
@@ -71,20 +79,28 @@ banner() {
 	echo
 }
 
-install_dependencies() {
-	log_step 1 "Installing dependencies"
+bootstrap_dependencies() {
+	local needed=0
 
-	progress_bar 0 10
 	if ! command -v git &>/dev/null; then
 		pkg install -y git &>/dev/null
+		needed=1
 	fi
-	progress_bar 5 10
+
 	if ! command -v tput &>/dev/null; then
 		pkg install -y ncurses-utils &>/dev/null
+		needed=1
 	fi
+
+	[[ $needed -eq 1 ]] && return 0 || return 0
+}
+
+install_dependencies() {
+	log_step 1 "Verifying dependencies"
+	progress_bar 5 10
 	progress_bar 10 10
 	echo
-	log_ok "Dependencies installed (git, ncurses-utils)"
+	log_ok "Dependencies ready (git, ncurses-utils)"
 }
 
 setup_directories() {
@@ -190,6 +206,7 @@ show_final_message() {
 }
 
 main() {
+	bootstrap_dependencies
 	banner
 	install_dependencies
 	setup_directories
