@@ -27,8 +27,8 @@ _claude_proot_ubuntu() {
 }
 
 _get_latest_claude_version() {
-	curl -fsSL https://api.github.com/repos/anthropics/claude-code/releases/latest \
-		| grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
+	curl -fsSL https://api.github.com/repos/anthropics/claude-code/releases/latest |
+		grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
 }
 
 _claude_install_deps_native() {
@@ -39,8 +39,14 @@ _claude_install_deps_native() {
 		fi
 	fi
 
+	if [[ ! -f $PREFIX/glibc/lib/libc.so.6 ]]; then
+		if ! pkg install glibc -y &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc"
+			return 1
+		fi
+	fi
+
 	declare -A DEPS=(
-		["glibc"]=""
 		["clang"]="clang"
 		["curl"]="curl"
 		["tar"]="tar"
@@ -175,7 +181,7 @@ _install_claude_proot() {
 		log_error "Wrapper template not found at $wrapper_src"
 		return 1
 	fi
-	sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" > "$PREFIX/bin/claude"
+	sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/claude"
 	chmod +x "$PREFIX/bin/claude"
 
 	if ! grep -q '.local/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then

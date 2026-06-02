@@ -39,6 +39,13 @@ _opencode_install_deps_native() {
 		fi
 	fi
 
+	if [[ ! -f $PREFIX/glibc/lib/libc.so.6 ]]; then
+		if ! pkg install glibc -y &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc"
+			return 1
+		fi
+	fi
+
 	declare -A DEPS=(
 		["git"]="git"
 		["ripgrep"]="rg"

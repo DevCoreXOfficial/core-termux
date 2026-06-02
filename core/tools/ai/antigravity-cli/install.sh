@@ -8,103 +8,109 @@ AGY_DATA_DIR="$HOME/.local/share/core-termux-data/antigravity-cli"
 MANIFEST_URL="https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_arm64.json"
 
 _antigravity_get_latest_version() {
-    curl -fsSL "$MANIFEST_URL" | jq -r .version
+	curl -fsSL "$MANIFEST_URL" | jq -r .version
 }
 
 _antigravity_get_download_url() {
-    curl -fsSL "$MANIFEST_URL" | jq -r .url
+	curl -fsSL "$MANIFEST_URL" | jq -r .url
 }
 
 _antigravity_install_deps() {
-    if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
-        if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
-            log_error "Failed to install glibc-repo"
-            return 1
-        fi
-    fi
+	if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
+		if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc-repo"
+			return 1
+		fi
+	fi
 
-    declare -A DEPS=(
-        ["glibc"]=""
-        ["clang"]="clang"
-        ["python"]="python"
-        ["jq"]="jq"
-        ["curl"]="curl"
-        ["tar"]="tar"
-    )
+	if [[ ! -f $PREFIX/glibc/lib/libc.so.6 ]]; then
+		if ! pkg install glibc -y &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc"
+			return 1
+		fi
+	fi
 
-    local pkg_name bin_name
-    for pkg_name in "${!DEPS[@]}"; do
-        bin_name="${DEPS[$pkg_name]}"
-        if [[ -n "$bin_name" ]] && command -v "$bin_name" &>/dev/null; then
-            continue
-        fi
-        if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
-            log_error "Failed to install $pkg_name"
-            return 1
-        fi
-    done
+	declare -A DEPS=(
+		["clang"]="clang"
+		["python"]="python"
+		["jq"]="jq"
+		["curl"]="curl"
+		["tar"]="tar"
+	)
 
-    log_success "Dependencies installed"
-    return 0
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if [[ -n "$bin_name" ]] && command -v "$bin_name" &>/dev/null; then
+			continue
+		fi
+		if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+			log_error "Failed to install $pkg_name"
+			return 1
+		fi
+	done
+
+	log_success "Dependencies installed"
+	return 0
 }
 
 _antigravity_download_binary() {
-    local latest_version
-    latest_version=$(_antigravity_get_latest_version)
-    if [ -z "$latest_version" ]; then
-        log_error "Failed to fetch latest Antigravity version"
-        return 1
-    fi
+	local latest_version
+	latest_version=$(_antigravity_get_latest_version)
+	if [ -z "$latest_version" ]; then
+		log_error "Failed to fetch latest Antigravity version"
+		return 1
+	fi
 
-    log_info "Latest version: ${D_CYAN}$latest_version${NC}"
+	log_info "Latest version: ${D_CYAN}$latest_version${NC}"
 
-    mkdir -p "$AGY_DATA_DIR"
+	mkdir -p "$AGY_DATA_DIR"
 
-    local download_url
-    download_url=$(_antigravity_get_download_url)
-    local tarball="$AGY_DATA_DIR/agy.tar.gz"
+	local download_url
+	download_url=$(_antigravity_get_download_url)
+	local tarball="$AGY_DATA_DIR/agy.tar.gz"
 
-    if ! curl -fsSL -o "$tarball" "$download_url" &>>"$LOG_FILE"; then
-        log_error "Failed to download Antigravity CLI binary"
-        return 1
-    fi
+	if ! curl -fsSL -o "$tarball" "$download_url" &>>"$LOG_FILE"; then
+		log_error "Failed to download Antigravity CLI binary"
+		return 1
+	fi
 
-    if ! tar -xzf "$tarball" -C "$AGY_DATA_DIR" &>>"$LOG_FILE"; then
-        log_error "Failed to extract Antigravity CLI binary"
-        return 1
-    fi
+	if ! tar -xzf "$tarball" -C "$AGY_DATA_DIR" &>>"$LOG_FILE"; then
+		log_error "Failed to extract Antigravity CLI binary"
+		return 1
+	fi
 
-    rm -f "$tarball"
+	rm -f "$tarball"
 
-    local upstream_bin=""
-    if [ -f "$AGY_DATA_DIR/antigravity" ]; then
-        upstream_bin="$AGY_DATA_DIR/antigravity"
-    elif [ -f "$AGY_DATA_DIR/agy" ]; then
-        upstream_bin="$AGY_DATA_DIR/agy"
-    else
-        log_error "Could not find binary in extracted archive"
-        return 1
-    fi
+	local upstream_bin=""
+	if [ -f "$AGY_DATA_DIR/antigravity" ]; then
+		upstream_bin="$AGY_DATA_DIR/antigravity"
+	elif [ -f "$AGY_DATA_DIR/agy" ]; then
+		upstream_bin="$AGY_DATA_DIR/agy"
+	else
+		log_error "Could not find binary in extracted archive"
+		return 1
+	fi
 
-    chmod +x "$upstream_bin"
-    log_success "Antigravity CLI binary downloaded"
-    return 0
+	chmod +x "$upstream_bin"
+	log_success "Antigravity CLI binary downloaded"
+	return 0
 }
 
 _antigravity_apply_va39_patches() {
-    local upstream_bin=""
-    if [ -f "$AGY_DATA_DIR/antigravity" ]; then
-        upstream_bin="$AGY_DATA_DIR/antigravity"
-    elif [ -f "$AGY_DATA_DIR/agy" ]; then
-        upstream_bin="$AGY_DATA_DIR/agy"
-    else
-        log_error "Binary not found for patching"
-        return 1
-    fi
+	local upstream_bin=""
+	if [ -f "$AGY_DATA_DIR/antigravity" ]; then
+		upstream_bin="$AGY_DATA_DIR/antigravity"
+	elif [ -f "$AGY_DATA_DIR/agy" ]; then
+		upstream_bin="$AGY_DATA_DIR/agy"
+	else
+		log_error "Binary not found for patching"
+		return 1
+	fi
 
-    log_info "Applying VA39 memory patches..."
+	log_info "Applying VA39 memory patches..."
 
-    python3 - "$upstream_bin" "${AGY_DATA_DIR}/agy.va39" <<'PY'
+	python3 - "$upstream_bin" "${AGY_DATA_DIR}/agy.va39" <<'PY'
 import sys, shutil, struct, pathlib
 src = pathlib.Path(sys.argv[1])
 dst = pathlib.Path(sys.argv[2])
@@ -143,84 +149,84 @@ for off in range(0, len(data) - 12, 4):
 dst.write_bytes(data)
 PY
 
-    chmod +x "$AGY_DATA_DIR/agy.va39"
-    log_success "VA39 patches applied"
-    return 0
+	chmod +x "$AGY_DATA_DIR/agy.va39"
+	log_success "VA39 patches applied"
+	return 0
 }
 
 _antigravity_compile_helper() {
-    local HELPER_SRC="$CORE_PATH/tools/ai/antigravity-cli/helper/agy_helper.c"
-    if [ ! -f "$HELPER_SRC" ]; then
-        log_error "Helper source not found at $HELPER_SRC"
-        return 1
-    fi
+	local HELPER_SRC="$CORE_PATH/tools/ai/antigravity-cli/helper/agy_helper.c"
+	if [ ! -f "$HELPER_SRC" ]; then
+		log_error "Helper source not found at $HELPER_SRC"
+		return 1
+	fi
 
-    if ! clang -O2 -o "$PREFIX/bin/agy" "$HELPER_SRC" &>>"$LOG_FILE"; then
-        log_error "Failed to compile agy helper"
-        return 1
-    fi
+	if ! clang -O2 -o "$PREFIX/bin/agy" "$HELPER_SRC" &>>"$LOG_FILE"; then
+		log_error "Failed to compile agy helper"
+		return 1
+	fi
 
-    chmod +x "$PREFIX/bin/agy"
-    log_success "Bootstrapper compiled to $PREFIX/bin/agy"
-    return 0
+	chmod +x "$PREFIX/bin/agy"
+	log_success "Bootstrapper compiled to $PREFIX/bin/agy"
+	return 0
 }
 
 install_antigravity_cli() {
-    if command -v agy &>/dev/null; then
+	if command -v agy &>/dev/null; then
 		log_success "Antigravity CLI is already installed"
-        return 0
-    fi
+		return 0
+	fi
 
-    log_info "Installing Antigravity CLI..."
+	log_info "Installing Antigravity CLI..."
 
-    if ! loading "Installing dependencies" _antigravity_install_deps; then
-        return 1
-    fi
+	if ! loading "Installing dependencies" _antigravity_install_deps; then
+		return 1
+	fi
 
-    if ! loading "Downloading Antigravity CLI" _antigravity_download_binary; then
-        return 1
-    fi
+	if ! loading "Downloading Antigravity CLI" _antigravity_download_binary; then
+		return 1
+	fi
 
-    if ! loading "Applying VA39 patches" _antigravity_apply_va39_patches; then
-        return 1
-    fi
+	if ! loading "Applying VA39 patches" _antigravity_apply_va39_patches; then
+		return 1
+	fi
 
-    if ! loading "Compiling bootstrapper" _antigravity_compile_helper; then
-        return 1
-    fi
+	if ! loading "Compiling bootstrapper" _antigravity_compile_helper; then
+		return 1
+	fi
 
-    log_success "Antigravity CLI installed"
-    return 0
+	log_success "Antigravity CLI installed"
+	return 0
 }
 
 uninstall_antigravity_cli() {
-    log_info "Uninstalling Antigravity CLI..."
-    mkdir -p "$(dirname "$LOG_FILE")"
+	log_info "Uninstalling Antigravity CLI..."
+	mkdir -p "$(dirname "$LOG_FILE")"
 
-    rm -f "$PREFIX/bin/agy"
-    rm -rf "$AGY_DATA_DIR"
+	rm -f "$PREFIX/bin/agy"
+	rm -rf "$AGY_DATA_DIR"
 
-    if [ ! -f "$PREFIX/bin/agy" ] && [ ! -d "$AGY_DATA_DIR" ]; then
-        log_success "Antigravity CLI uninstalled"
-        return 0
-    else
-        log_error "Failed to uninstall Antigravity CLI"
-        return 1
-    fi
+	if [ ! -f "$PREFIX/bin/agy" ] && [ ! -d "$AGY_DATA_DIR" ]; then
+		log_success "Antigravity CLI uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall Antigravity CLI"
+		return 1
+	fi
 }
 
 update_antigravity_cli() {
-    log_info "Updating Antigravity CLI..."
-    mkdir -p "$(dirname "$LOG_FILE")"
+	log_info "Updating Antigravity CLI..."
+	mkdir -p "$(dirname "$LOG_FILE")"
 
-    if ! loading "Downloading Antigravity CLI" _antigravity_download_binary; then
-        return 1
-    fi
+	if ! loading "Downloading Antigravity CLI" _antigravity_download_binary; then
+		return 1
+	fi
 
-    if ! loading "Applying VA39 patches" _antigravity_apply_va39_patches; then
-        return 1
-    fi
+	if ! loading "Applying VA39 patches" _antigravity_apply_va39_patches; then
+		return 1
+	fi
 
-    log_success "Antigravity CLI updated"
-    return 0
+	log_success "Antigravity CLI updated"
+	return 0
 }
