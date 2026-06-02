@@ -22,7 +22,7 @@ install_main() {
 		list_item "tools      - Development tools"
 		list_item "node       - Node.js global modules (npm packages)"
 		list_item "shell      - ZSH + Oh My Zsh + plugins"
-		list_item "ui         - Termux UI (font, cursor, extra-keys)"
+		list_item "ui         - Termux UI (font, cursor, extra-keys, banner)"
 		list_item "automation - Automation Tools (n8n)"
 
 		echo
@@ -526,6 +526,9 @@ _install_specific_tools() {
 				;;
 			cursor)
 				if loading "Configuring Cursor Color" install_cursor; then ((installed_count++)); else ((failed_count++)); fi
+				;;
+			banner)
+				if loading "Installing Core-Termux Banner" install_banner; then ((installed_count++)); else ((failed_count++)); fi
 				;;
 			*)
 				log_warn "Unknown UI component: --$tool"

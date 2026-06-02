@@ -261,6 +261,7 @@ _list_ui() {
 	table_row "Meslo Nerd Font" "--font" "$(_check_file "$HOME/.termux/font.ttf")"
 	table_row "Extra Keys" "--extra-keys" "$(_check_file "$HOME/.termux/termux.properties")"
 	table_row "Cursor Color" "--cursor" "$(_check_file "$HOME/.termux/colors.properties")"
+	table_row "Startup Banner" "--banner" "$(_grep_config "$HOME/.zshrc" "# ===== Core-Termux Banner =====" "$HOME/.bashrc")"
 	table_end
 
 	echo
@@ -333,6 +334,21 @@ _check_file() {
 _check_plugin() {
 	local plugin="$1"
 	if [[ -d "$HOME/.zsh-plugins/$plugin" ]]; then
+		echo -e "${D_GREEN}installed${NC}"
+	else
+		echo -e "${D_RED}not installed${NC}"
+	fi
+}
+
+# Check if pattern exists in config file (with fallback)
+_grep_config() {
+	local primary="$1"
+	local pattern="$2"
+	local fallback="$3"
+
+	if [[ -f "$primary" ]] && grep -qF "$pattern" "$primary" 2>/dev/null; then
+		echo -e "${D_GREEN}installed${NC}"
+	elif [[ -n "$fallback" && -f "$fallback" ]] && grep -qF "$pattern" "$fallback" 2>/dev/null; then
 		echo -e "${D_GREEN}installed${NC}"
 	else
 		echo -e "${D_RED}not installed${NC}"

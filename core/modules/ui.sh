@@ -28,6 +28,7 @@ setup_ui() {
 		list_item "Cursor: Green (#00FF00)"
 		list_item "Extra-keys: Custom layout with navigation"
 		list_item "Font: Meslo Nerd Font"
+		list_item "Banner: Core-Termux startup banner"
 		echo
 		log_warn "Please restart Termux to apply all changes"
 		echo

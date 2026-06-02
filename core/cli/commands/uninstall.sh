@@ -548,6 +548,9 @@ _uninstall_specific_tools() {
 			cursor)
 				if loading "Uninstalling Cursor Color" uninstall_cursor; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
+			banner)
+				if loading "Uninstalling Core-Termux Banner" uninstall_banner; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown UI component: --$tool"
 				;;

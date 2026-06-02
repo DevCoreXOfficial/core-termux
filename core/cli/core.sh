@@ -30,7 +30,7 @@ core_main() {
 
 core_help() {
 	echo
-	box_large "◈ CORE-TERMUX v${CORE_VERSION} ◈"
+	box "◈ CORE-TERMUX v${CORE_VERSION} ◈"
 	echo
 	log_info "Usage: core <command> [options]"
 	echo
@@ -64,7 +64,7 @@ core_help() {
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Termux UI (font, cursor, extra-keys)"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Termux UI (font, cursor, extra-keys, banner)"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "automation" "n8n"
 
 	echo

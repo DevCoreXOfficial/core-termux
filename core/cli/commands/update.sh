@@ -526,6 +526,9 @@ _update_specific_tools() {
 			cursor)
 				if loading "Updating Cursor Color" update_cursor; then ((updated_count++)); else ((failed_count++)); fi
 				;;
+			banner)
+				if loading "Updating Core-Termux Banner" update_banner; then ((updated_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown UI component: --$tool"
 				;;

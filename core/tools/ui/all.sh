@@ -9,11 +9,13 @@ UI_COMPONENTS=(
 	"font"
 	"extra-keys"
 	"cursor"
+	"banner"
 )
 
 source "$(dirname "$BASH_SOURCE")/font/install.sh"
 source "$(dirname "$BASH_SOURCE")/extra-keys/install.sh"
 source "$(dirname "$BASH_SOURCE")/cursor/install.sh"
+source "$(dirname "$BASH_SOURCE")/banner/install.sh"
 
 install_all_ui_components() {
 	local installed_count=0
@@ -29,6 +31,9 @@ install_all_ui_components() {
 			;;
 		cursor)
 			if install_cursor; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		banner)
+			if install_banner; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -51,6 +56,9 @@ uninstall_all_ui_components() {
 		cursor)
 			if uninstall_cursor; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
+		banner)
+			if uninstall_banner; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
 		esac
 	done
 
@@ -71,6 +79,9 @@ update_all_ui_components() {
 			;;
 		cursor)
 			if update_cursor; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		banner)
+			if update_banner; then ((updated_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done

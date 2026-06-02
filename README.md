@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.15.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.16.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -93,7 +93,7 @@ core --version
 
 **Output:**
 ```
-Core-Termux v3.15.0
+Core-Termux v3.16.0
 ```
 
 ---
@@ -184,7 +184,7 @@ core install full             # Install everything
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
 | `shell` | ZSH + Oh My Zsh + 10 plugins |
-| `ui` | Termux UI (font, cursor, extra-keys) |
+| `ui` | Termux UI (font, cursor, extra-keys, banner) |
 | `automation` | Automation Tools (n8n) |
 
 **Install entire module:**
@@ -794,7 +794,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.15.1 (current: 3.15.0)
+⚠ New version available: 3.16.1 (current: 3.16.0)
 
 ➜ Run: core update core to update
 ```
