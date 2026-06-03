@@ -6,11 +6,6 @@ LOG_FILE="$CORE_CACHE/install_ui.log"
 TERMUX_DIR="$HOME/.termux"
 
 install_extra_keys() {
-	if [[ -f "$TERMUX_DIR/termux.properties" ]]; then
-		log_info "Extra Keys ${D_GREEN}already configured${NC}"
-		return 0
-	fi
-
 	log_info "Configuring Termux extra-keys..."
 	mkdir -p "$(dirname "$LOG_FILE")" "$TERMUX_DIR"
 

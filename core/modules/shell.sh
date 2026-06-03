@@ -14,7 +14,7 @@ install_termux_packages() {
 		log_success "Dependencies installed successfully"
 		return 0
 	else
-		log_error "Failed to install zsh and zoxide"
+		log_error "Failed to install dependencies"
 		return 1
 	fi
 }
@@ -128,7 +128,7 @@ install_shell() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing zsh and zoxide" install_termux_packages; then
+	if loading "Installing base packages" install_termux_packages; then
 		log_success "Base packages installed"
 	else
 		log_error "Failed to install base packages"
