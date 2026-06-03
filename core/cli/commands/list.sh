@@ -124,7 +124,7 @@ _list_ai() {
 	table_row "OpenClaude" "--openclaude" "openclaude" "$(_check_cmd "openclaude")"
 	table_row "OpenClaw" "--openclaw" "openclaw" "$(_check_cmd "openclaw")"
 	table_row "Ollama" "--ollama" "ollama" "$(_check_pkg "ollama")"
-	table_row "Codex" "--codex" "codex" "$(_check_pkg "codex")"
+	table_row "Codex CLI" "--codex" "codex" "$(_check_cmd "codex")"
 	table_row "OpenCode" "--opencode" "opencode" "$(_check_cmd "opencode")"
 	table_row "Engram" "--engram" "engram" "$(_check_cmd "engram")"
 	table_row "CodeGraph" "--codegraph" "codegraph" "$(_check_cmd "codegraph")"

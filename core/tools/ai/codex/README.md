@@ -1,12 +1,12 @@
-# Codex
+# Codex CLI
 
-Termux-native AI coding assistant from the tur-repo
+Codex CLI is a coding agent from OpenAI that runs locally on your computer
 
 **Package:** codex  
 **Author:** DevCoreX  
 **Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://github.com/termux-user-repository/tur  
-**Type:** AI coding assistant (pkg, tur-repo)  
+**Official:** https://github.com/openai/codex
+**Type:** AI coding assistant (npm global package)
 **License:** MIT
 
 ## Description
@@ -15,8 +15,9 @@ Codex is an AI coding assistant available through the Termux User Repository (tu
 
 ## Dependencies
 
-- tur-repo (Termux User Repository)
-- Installed via pkg
+- Node.js LTS (nodejs-lts)
+- npm
+- git, ripgrep
 
 ## Install
 
@@ -38,7 +39,6 @@ core update ai --codex
 
 ## Notes
 
-- Requires tur-repo (installed automatically)
+- Installed as a global npm package: `@mmmbuto/codex-cli-termux`
 - Command: `codex`
-- Installed as a system package via pkg
-
+- Requires Node.js LTS (installed automatically if missing)
