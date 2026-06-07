@@ -229,6 +229,9 @@ _uninstall_specific_tools() {
 			gentle-ai)
 				if loading "Uninstalling gentle-ai" uninstall_gentle_ai; then ((uninstalled_count++)); else ((failed_count++)); fi
 				;;
+			gga)
+				if loading "Uninstalling GGA" uninstall_gga; then ((uninstalled_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;

@@ -1,0 +1,132 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+import "@/utils/log"
+import "@/utils/colors"
+
+LOG_FILE="$CORE_CACHE/install_ai.log"
+GGA_DATA_DIR="$CORE_DATA/gga-termux"
+GITHUB_REPO_URL="https://github.com/DevCoreXOfficial/gga-termux.git"
+
+_gga_install_deps() {
+	declare -A DEPS=(
+		["git"]="git"
+		["curl"]="curl"
+	)
+
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
+
+	log_success "Dependencies installed"
+	return 0
+}
+
+_gga_clone_or_update_repo() {
+	if [ -d "$GGA_DATA_DIR/.git" ]; then
+		log_info "Updating existing clone..."
+		if ! git -C "$GGA_DATA_DIR" pull --ff-only &>>"$LOG_FILE"; then
+			log_error "Failed to update gga-termux repo"
+			return 1
+		fi
+	else
+		mkdir -p "$(dirname "$GGA_DATA_DIR")"
+		log_info "Cloning gga-termux repo..."
+		if ! git clone "$GITHUB_REPO_URL" "$GGA_DATA_DIR" &>>"$LOG_FILE"; then
+			log_error "Failed to clone gga-termux repo"
+			return 1
+		fi
+	fi
+
+	log_success "Source ready at $GGA_DATA_DIR"
+	return 0
+}
+
+_gga_run_installer() {
+	if [ ! -d "$GGA_DATA_DIR" ] || [ ! -f "$GGA_DATA_DIR/install.sh" ]; then
+		log_error "gga-termux repo not found at $GGA_DATA_DIR"
+		return 1
+	fi
+
+	log_info "Running gga-termux installer..."
+
+	if ! (cd "$GGA_DATA_DIR" && bash ./install.sh < /dev/null) &>>"$LOG_FILE"; then
+		log_error "gga-termux install.sh failed (see $LOG_FILE)"
+		return 1
+	fi
+
+	log_success "gga-termux installer finished"
+	return 0
+}
+
+install_gga() {
+	if command -v gga &>/dev/null; then
+		log_success "GGA is already installed"
+		return 0
+	fi
+
+	log_info "Installing GGA..."
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if ! loading "Installing dependencies" _gga_install_deps; then
+		return 1
+	fi
+
+	if ! loading "Cloning/updating source" _gga_clone_or_update_repo; then
+		return 1
+	fi
+
+	if ! loading "Running gga-termux installer" _gga_run_installer; then
+		return 1
+	fi
+
+	log_success "GGA installed"
+	return 0
+}
+
+uninstall_gga() {
+	log_info "Uninstalling GGA..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if [ -d "$GGA_DATA_DIR" ] && [ -f "$GGA_DATA_DIR/uninstall.sh" ]; then
+		log_info "Running gga-termux uninstaller..."
+		if ! (cd "$GGA_DATA_DIR" && printf "n\n" | bash ./uninstall.sh) &>>"$LOG_FILE"; then
+			log_warn "gga-termux uninstall.sh failed, falling back to manual cleanup"
+		fi
+	fi
+
+	rm -f "$PREFIX/bin/gga"
+	rm -rf "${PREFIX:-/data/data/com.termux/files/usr}/share/gga"
+	rm -rf "$GGA_DATA_DIR"
+
+	if [ ! -f "$PREFIX/bin/gga" ] && [ ! -d "$GGA_DATA_DIR" ]; then
+		log_success "GGA uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall GGA"
+		return 1
+	fi
+}
+
+update_gga() {
+	log_info "Updating GGA..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if ! loading "Updating source" _gga_clone_or_update_repo; then
+		return 1
+	fi
+
+	if ! loading "Running gga-termux installer" _gga_run_installer; then
+		return 1
+	fi
+
+	log_success "GGA updated"
+	return 0
+}

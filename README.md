@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.16.7-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.17.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -93,7 +93,7 @@ core --version
 
 **Output:**
 ```
-Core-Termux v3.16.7
+Core-Termux v3.17.0
 ```
 
 ---
@@ -152,7 +152,7 @@ core list <module>            # List tools in specific module
 |--------|-------------|
 | `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
-| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI) |
+| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA) |
 | `editor` | Code editor components (Neovim, NvChad) |
 | `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
 | `node` | Node.js global npm packages |
@@ -179,7 +179,7 @@ core install full             # Install everything
 |--------|-------------|
 | `language` | Node.js, Python, Perl, PHP, Rust, C/C++, Go |
 | `db` | PostgreSQL, MariaDB, SQLite, MongoDB |
-| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI |
+| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA |
 | `editor` | Neovim + NvChad configuration |
 | `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
 | `node` | Node.js global npm packages |
@@ -794,7 +794,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.16.8 (current: 3.16.7)
+⚠ New version available: 3.17.1 (current: 3.17.0)
 
 ➜ Run: core update core to update
 ```

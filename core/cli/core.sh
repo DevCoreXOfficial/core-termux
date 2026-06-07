@@ -55,17 +55,17 @@ core_help() {
 	echo
 	separator_section "Module Targets"
 	echo
-	log_info "Install, update, or uninstall:"
+	log_info "Install, update, uninstall, list, show or open:"
 	echo
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node.js, Python, Perl, PHP, Rust, C, C++, Go"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node, Python, Perl, PHP, Rust, C/C++, Go"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex CLI, OpenCode, Engram, CodeGraph, Pi, Antigravity CLI, Minimax CLI, Gentle AI"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "OpenCode, Gentle AI, Claude Code, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad + Plugins"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"
 	printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Termux UI (font, cursor, extra-keys, banner)"
-	printf "    ${D_GREEN}%-14s${NC} %s\n" "automation" "n8n"
+	printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Font, Cursor, Extra-keys, Banner"
+  printf "    ${D_GREEN}%-14s${NC} %s\n" "automation" "Automation Tools (n8n)"
 
 	echo
 	separator_section "Help"

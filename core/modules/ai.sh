@@ -38,6 +38,7 @@ install_ai() {
 		list_item "Antigravity CLI ${GRAY}(${D_GREEN}agy${GRAY})"
 		list_item "Minimax CLI ${GRAY}(${D_GREEN}mmx${GRAY})"
 		list_item "Gentle AI ${GRAY}(${D_GREEN}gentle-ai${GRAY})"
+		list_item "GGA ${GRAY}(${D_GREEN}gga${GRAY})"
 		echo
 	else
 		log_error "Failed to install AI tools"

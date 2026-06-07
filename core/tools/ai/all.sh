@@ -20,6 +20,7 @@ AI_TOOLS=(
 	"antigravity-cli"
 	"gentle-ai"
 	"minimax-cli"
+	"gga"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -37,6 +38,7 @@ source "$(dirname "$BASH_SOURCE")/pi/install.sh"
 source "$(dirname "$BASH_SOURCE")/antigravity-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/gentle-ai/install.sh"
 source "$(dirname "$BASH_SOURCE")/minimax-cli/install.sh"
+source "$(dirname "$BASH_SOURCE")/gga/install.sh"
 
 install_all_ai_tools() {
 	local installed_count=0
@@ -88,6 +90,9 @@ install_all_ai_tools() {
 			;;
 		minimax-cli)
 			if install_minimax_cli; then ((installed_count++)); else ((failed_count++)); fi
+			;;
+		gga)
+			if install_gga; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -146,6 +151,9 @@ uninstall_all_ai_tools() {
 		minimax-cli)
 			if uninstall_minimax_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
+		gga)
+			if uninstall_gga; then ((uninstalled_count++)); else ((failed_count++)); fi
+			;;
 		esac
 	done
 
@@ -202,6 +210,9 @@ update_all_ai_tools() {
 			;;
 		minimax-cli)
 			if update_minimax_cli; then ((updated_count++)); else ((failed_count++)); fi
+			;;
+		gga)
+			if update_gga; then ((updated_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done

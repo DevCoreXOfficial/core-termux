@@ -207,6 +207,9 @@ _update_specific_tools() {
 			gentle-ai)
 				if loading "Updating gentle-ai" update_gentle_ai; then ((updated_count++)); else ((failed_count++)); fi
 				;;
+			gga)
+				if loading "Updating GGA" update_gga; then ((updated_count++)); else ((failed_count++)); fi
+				;;
 			*)
 				log_warn "Unknown AI tool: --$tool"
 				;;

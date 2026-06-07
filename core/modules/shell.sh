@@ -62,6 +62,19 @@ setup_zsh_aliases() {
 	log_success "ZSH aliases configured"
 }
 
+setup_shell_env() {
+	log_info "Setting up shell environment..."
+
+	add_to_zshrc "unalias gga 2>/dev/null"
+	add_to_zshrc "export GOPATH=\"\$HOME/.local/go\""
+	add_to_zshrc "export GOCACHE=\"\$HOME/.cache/go\""
+	add_to_zshrc "export GOMODCACHE=\"\$GOPATH/pkg/mod\""
+	add_to_zshrc "export PATH=\$PATH:\$HOME/go/bin"
+	add_to_zshrc "export OPENCLAW_DISABLE_BONJOUR=1"
+
+	log_success "Shell environment configured"
+}
+
 setupPersistentSession() {
 	log_info "Configuring persistent session..."
 
@@ -146,6 +159,9 @@ install_shell() {
 	echo
 
 	setup_zsh_aliases
+	echo
+
+	setup_shell_env
 	echo
 
 	setupPersistentSession
@@ -252,7 +268,9 @@ update_shell() {
 		log_error "Failed to update ZSH plugins"
 	fi
 
+	setup_shell_env
 	echo
+
 	separator
 	log_success "ZSH update completed"
 	separator

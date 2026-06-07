@@ -1,4 +1,4 @@
-# Qwen Code CLI
+# Qwen Code
 
 AI-powered coding assistant by Alibaba for code generation and completion
 

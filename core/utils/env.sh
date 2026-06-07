@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-CORE_VERSION="3.16.7"
+CORE_VERSION="3.17.0"
 
 # -------------------------
 # Directorios del usuario
