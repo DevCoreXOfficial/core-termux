@@ -30,8 +30,8 @@ _gentle_ai_install_deps() {
     local go_major="${go_version%.*}"
     local go_minor="${go_version#*.}"
 
-    if [ "$go_major" -lt 1 ] || { [ "$go_major" -eq 1 ] && [ "$go_minor" -lt 23 ]; }; then
-        log_error "Go 1.23+ required (detected $go_version). Run: pkg upgrade golang"
+    if [ "$go_major" -lt 1 ] || { [ "$go_major" -eq 1 ] && [ "$go_minor" -lt 25 ]; }; then
+        log_error "Go 1.25+ required (detected $go_version). Run: pkg upgrade golang"
         return 1
     fi
 
@@ -42,11 +42,13 @@ _gentle_ai_install_deps() {
 _clone_or_update_repo() {
     if [ -d "$GENTLE_AI_DATA_DIR/.git" ]; then
         log_info "Updating existing clone..."
-        git -C "$GENTLE_AI_DATA_DIR" checkout -- . &>>"$LOG_FILE"
+        git -C "$GENTLE_AI_DATA_DIR" stash --include-untracked &>>"$LOG_FILE"
         if ! git -C "$GENTLE_AI_DATA_DIR" pull --ff-only &>>"$LOG_FILE"; then
+            git -C "$GENTLE_AI_DATA_DIR" stash pop &>>"$LOG_FILE" 2>/dev/null || true
             log_error "Failed to update gentle-ai repo"
             return 1
         fi
+        git -C "$GENTLE_AI_DATA_DIR" stash drop &>>"$LOG_FILE" 2>/dev/null || true
     else
         mkdir -p "$(dirname "$GENTLE_AI_DATA_DIR")"
         log_info "Cloning gentle-ai repo..."

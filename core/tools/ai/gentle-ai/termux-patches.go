@@ -64,9 +64,12 @@ func main() {
 // helpers
 // ---------------------------------------------------------------------------
 
-// tab returns n tab characters.
 func tab(n int) string {
 	return strings.Repeat("\t", n)
+}
+
+func replaceOne(src, old, new string) string {
+	return strings.Replace(src, old, new, 1)
 }
 
 // ---------------------------------------------------------------------------
@@ -75,9 +78,10 @@ func tab(n int) string {
 
 func patchDetectGo(src string) string {
 	// 1a. IsSupportedOS: add android to the list.
-	old1 := tab(1) + `return goos == "darwin" || goos == "linux" || goos == "windows"`
-	new1 := tab(1) + `return goos == "darwin" || goos == "linux" || goos == "windows" || goos == "android"`
-	src = strings.ReplaceAll(src, old1, new1)
+	// Include the closing \n} so old1 is NOT a substring of new1 (idempotent).
+	old1 := tab(1) + `return goos == "darwin" || goos == "linux" || goos == "windows"` + "\n}"
+	new1 := tab(1) + `return goos == "darwin" || goos == "linux" || goos == "windows" || goos == "android"` + "\n}"
+	src = replaceOne(src, old1, new1)
 
 	// 1b. resolvePlatformProfile: add case "android" before default.
 	old2 := "" +
@@ -101,7 +105,7 @@ func patchDetectGo(src string) string {
 		tab(2) + `}` + "\n" +
 		tab(2) + `return profile` + "\n" +
 		tab(1) + `default:`
-	src = strings.ReplaceAll(src, old2, new2)
+	src = replaceOne(src, old2, new2)
 
 	// 1c. osReleaseContent: read $PREFIX/etc/os-release on android.
 	old3 := "" +
@@ -123,7 +127,7 @@ func patchDetectGo(src string) string {
 		tab(1) + `if goos != "linux" {` + "\n" +
 		tab(2) + `return "", nil` + "\n" +
 		tab(1) + `}`
-	src = strings.ReplaceAll(src, old3, new3)
+	src = replaceOne(src, old3, new3)
 
 	return src
 }
@@ -135,14 +139,18 @@ func patchDetectGo(src string) string {
 func patchDownloadGo(src string) string {
 	// On Android/Termux, download linux binaries (no android releases on
 	// GitHub). profile is passed by value so the modification is local.
-	old1 := tab(1) + `if profile.OS == "windows" {`
-	new1 := "" +
+	//
+	// Match the function signature + first statement so the old pattern
+	// no longer appears after replacement (idempotent).
+	old1 := `func Download(ctx context.Context, r update.UpdateResult, profile system.PlatformProfile) error {` + "\n" +
+		tab(1) + `if profile.OS == "windows" {`
+	new1 := `func Download(ctx context.Context, r update.UpdateResult, profile system.PlatformProfile) error {` + "\n" +
 		tab(1) + `if profile.OS == "android" {` + "\n" +
 		tab(2) + `profile.OS = "linux"` + "\n" +
 		tab(1) + `}` + "\n" +
 		"\n" +
 		tab(1) + `if profile.OS == "windows" {`
-	src = strings.ReplaceAll(src, old1, new1)
+	src = replaceOne(src, old1, new1)
 	return src
 }
 
@@ -152,15 +160,21 @@ func patchDownloadGo(src string) string {
 
 func patchModelGo(src string) string {
 	// openBrowserCmd: use termux-open-url on android.
+	// Include the preceding case "windows" line so old1 is NOT a
+	// substring of new1 (idempotent).
 	old1 := "" +
+		tab(2) + `case "windows":` + "\n" +
+		tab(3) + `cmd = execCommandFn("rundll32", "url.dll,FileProtocolHandler", url)` + "\n" +
 		tab(2) + `default:` + "\n" +
 		tab(3) + `cmd = execCommandFn("xdg-open", url)`
 	new1 := "" +
+		tab(2) + `case "windows":` + "\n" +
+		tab(3) + `cmd = execCommandFn("rundll32", "url.dll,FileProtocolHandler", url)` + "\n" +
 		tab(2) + `case "android":` + "\n" +
 		tab(3) + `cmd = execCommandFn("termux-open-url", url)` + "\n" +
 		tab(2) + `default:` + "\n" +
 		tab(3) + `cmd = execCommandFn("xdg-open", url)`
-	src = strings.ReplaceAll(src, old1, new1)
+	src = replaceOne(src, old1, new1)
 	return src
 }
 
@@ -179,9 +193,11 @@ func patchEngramDownloadGo(src string) string {
 		tab(2) + `goos = "linux"` + "\n" +
 		tab(1) + `}` + "\n" +
 		tab(1) + `goarch := normalizeArch(runtime.GOARCH)`
-	src = strings.ReplaceAll(src, old1, new1)
+	src = replaceOne(src, old1, new1)
 
 	// 4b. engramInstallDir: use $PREFIX/bin on Termux.
+	// Match the function signature + first statement so the old pattern
+	// no longer appears after replacement (idempotent).
 	old2 := "" +
 		`func engramInstallDir(goos string) string {` + "\n" +
 		tab(1) + `if goos == "windows" {`
@@ -196,6 +212,6 @@ func patchEngramDownloadGo(src string) string {
 		tab(1) + `}` + "\n" +
 		"\n" +
 		tab(1) + `if goos == "windows" {`
-	src = strings.ReplaceAll(src, old2, new2)
+	src = replaceOne(src, old2, new2)
 	return src
 }
