@@ -74,8 +74,8 @@ show_main() {
 
 	separator_section "$tool ($module)"
 
-	if command -v bat &>/dev/null; then
-		bat --style=plain --color=always "$readme_path"
+	if command -v glow &>/dev/null; then
+		glow "$readme_path"
 	elif command -v pygmentize &>/dev/null; then
 		pygmentize -l markdown "$readme_path" 2>/dev/null | less -R
 	else

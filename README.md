@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.17.1-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.17.2-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -81,6 +81,24 @@ core
 
 ---
 
+## Common Modules
+
+These modules are available across most commands (`core list`, `core install`, `core update`, `core uninstall`, `core show`, and `core open`):
+
+| Module | Description |
+|--------|-------------|
+| `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
+| `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
+| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA) |
+| `editor` | Code editor components (Neovim, NvChad) |
+| `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
+| `node` | Node.js global npm packages |
+| `shell` | ZSH plugins |
+| `ui` | Termux UI components |
+| `automation` | Automation tools (n8n) |
+
+---
+
 ## Detailed Commands
 
 ### `core --version`
@@ -93,7 +111,7 @@ core --version
 
 **Output:**
 ```
-Core-Termux v3.17.1
+Core-Termux v3.17.2
 ```
 
 ---
@@ -146,19 +164,7 @@ core list                     # Show help
 core list <module>            # List tools in specific module
 ```
 
-**Available targets:**
-
-| Target | Description |
-|--------|-------------|
-| `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
-| `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
-| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA) |
-| `editor` | Code editor components (Neovim, NvChad) |
-| `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
-| `node` | Node.js global npm packages |
-| `shell` | ZSH plugins |
-| `ui` | Termux UI components |
-| `automation` | Automation tools (n8n) |
+All modules from [Common Modules](#common-modules) are valid targets.
 
 ---
 
@@ -173,19 +179,7 @@ core install <module> --tool1 --tool2  # Install specific tools
 core install full             # Install everything
 ```
 
-**Available modules:**
-
-| Module | Description |
-|--------|-------------|
-| `language` | Node.js, Python, Perl, PHP, Rust, C/C++, Go |
-| `db` | PostgreSQL, MariaDB, SQLite, MongoDB |
-| `ai` | Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA |
-| `editor` | Neovim + NvChad configuration |
-| `tools` | GitHub CLI, wget, curl, fzf, lsd, bat, etc. |
-| `node` | Node.js global npm packages |
-| `shell` | ZSH + Oh My Zsh + 10 plugins |
-| `ui` | Termux UI (font, cursor, extra-keys, banner) |
-| `automation` | Automation Tools (n8n) |
+All modules from [Common Modules](#common-modules) are valid targets.
 
 **Install entire module:**
 
@@ -220,21 +214,12 @@ core update all               # Update everything
 core update core              # Update framework only
 ```
 
-**Update targets:**
+In addition to all [Common Modules](#common-modules), `core update` also supports:
 
 | Target | Description |
 |--------|-------------|
 | `all` | Framework + all installed packages |
 | `core` | Core-Termux framework only |
-| `language` | Language packages (pkg upgrade) |
-| `db` | Databases |
-| `ai` | AI tools (npm/pip/pkg) |
-| `editor` | Code editor configuration |
-| `tools` | Development tools |
-| `node` | Node.js global modules |
-| `shell` | ZSH plugins |
-| `ui` | Termux UI |
-| `automation` | Automation Tools |
 
 **Update entire module:**
 
@@ -264,20 +249,11 @@ core uninstall <target> --tool1 --tool2  # Uninstall specific tools
 core uninstall all            # Remove everything (restore default)
 ```
 
-**Uninstall targets:**
+In addition to all [Common Modules](#common-modules), `core uninstall` also supports:
 
 | Target | Description |
 |--------|-------------|
 | `all` | Remove everything and restore Termux to default |
-| `language` | Language packages |
-| `db` | Databases |
-| `ai` | AI tools |
-| `editor` | Code editor |
-| `tools` | Development tools |
-| `node` | Node.js modules |
-| `shell` | ZSH + Oh My Zsh |
-| `ui` | Restore Termux UI to default |
-| `automation` | Automation tools |
 
 **Uninstall entire module:**
 
@@ -305,21 +281,12 @@ core open                     # Show help
 core open <target>            # Open official documentation in browser
 ```
 
-**Available targets:**
+All [Common Modules](#common-modules) are valid targets, plus:
 
 | Target | Description |
 |--------|-------------|
 | `core` | Core-Termux documentation |
 | `devcorex` | DevCoreX official website |
-| `language` | Language packages documentation |
-| `db` | Database documentation |
-| `ai` | AI tools documentation |
-| `editor` | Code editor documentation |
-| `tools` | Development tools documentation |
-| `node` | Node.js global modules documentation |
-| `shell` | ZSH shell documentation |
-| `ui` | Termux UI customization documentation |
-| `automation` | Automation tools documentation |
 
 ---
 
@@ -573,8 +540,6 @@ core install node
 | **NPM Check Updates** | `ncu` | Find outdated dependencies |
 | **Ngrok** | `ngrok` | Secure tunnel to localhost |
 
-> **Note:** The `node` module automatically applies a [fix for localtunnel on Android](#localtunnel-for-android) to replace `openurl` with `termux-open-url`.
-
 ---
 
 ## Code Editor
@@ -794,7 +759,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.17.2 (current: 3.17.1)
+⚠ New version available: 3.17.3 (current: 3.17.2)
 
 ➜ Run: core update core to update
 ```
@@ -844,21 +809,6 @@ $ pwd
 - Saves path to `~/.cache/core-termux/last_dir`
 - Automatically restored on startup
 - Falls back to `$HOME` if directory doesn't exist
-
----
-
-## Included Fixes
-
-### localtunnel for Android
-
-The fix corrects the `openurl` error on Android by using `termux-open-url`.
-
-**Automatic application:**
-- Applied when installing localtunnel via the `node` module
-- No user intervention required
-- Integrated directly into the localtunnel installer at `core/tools/node/localtunnel/install.sh`
-
----
 
 ## Usage Examples
 

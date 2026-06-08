@@ -80,19 +80,47 @@ banner() {
 }
 
 bootstrap_dependencies() {
-	local needed=0
+	local needed_tput=0
+	local needed_git=0
+	local needed_glow=0
 
-	if ! command -v git &>/dev/null; then
-		pkg install -y git &>/dev/null
-		needed=1
+	command -v tput &>/dev/null || needed_tput=1
+	command -v git &>/dev/null || needed_git=1
+	command -v glow &>/dev/null || needed_glow=1
+
+	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 ]]; then
+		banner
 	fi
 
-	if ! command -v tput &>/dev/null; then
+	if [[ $needed_tput -eq 1 ]]; then
+		echo -e "  ${P_BORDER}→${P_NC}  Installing ncurses-utils..."
 		pkg install -y ncurses-utils &>/dev/null
-		needed=1
+		echo -e "  ${P_OK}✔${P_NC}  ncurses-utils installed"
+		echo
 	fi
 
-	[[ $needed -eq 1 ]] && return 0 || return 0
+	if [[ $needed_git -eq 1 ]]; then
+		log_info "Installing git..."
+		progress_bar 0 10
+		pkg install -y git &>/dev/null
+		progress_bar 10 10
+		echo
+		log_ok "git installed"
+	fi
+
+	if [[ $needed_glow -eq 1 ]]; then
+		log_info "Installing glow..."
+		progress_bar 0 10
+		pkg install -y glow &>/dev/null
+		progress_bar 10 10
+		echo
+		log_ok "glow installed"
+	fi
+
+	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 ]]; then
+		echo
+		clear
+	fi
 }
 
 install_dependencies() {
@@ -100,7 +128,7 @@ install_dependencies() {
 	progress_bar 5 10
 	progress_bar 10 10
 	echo
-	log_ok "Dependencies ready (git, ncurses-utils)"
+	log_ok "Dependencies ready (git, ncurses-utils, glow)"
 }
 
 setup_directories() {
