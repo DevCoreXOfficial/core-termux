@@ -42,13 +42,15 @@ _gentle_ai_install_deps() {
 _clone_or_update_repo() {
     if [ -d "$GENTLE_AI_DATA_DIR/.git" ]; then
         log_info "Updating existing clone..."
-        git -C "$GENTLE_AI_DATA_DIR" stash --include-untracked &>>"$LOG_FILE"
-        if ! git -C "$GENTLE_AI_DATA_DIR" pull --ff-only &>>"$LOG_FILE"; then
-            git -C "$GENTLE_AI_DATA_DIR" stash pop &>>"$LOG_FILE" 2>/dev/null || true
-            log_error "Failed to update gentle-ai repo"
+        # Fetch remote and reset hard — discards any previous patches cleanly.
+        if ! git -C "$GENTLE_AI_DATA_DIR" fetch origin &>>"$LOG_FILE"; then
+            log_error "Failed to fetch from remote"
             return 1
         fi
-        git -C "$GENTLE_AI_DATA_DIR" stash drop &>>"$LOG_FILE" 2>/dev/null || true
+        if ! git -C "$GENTLE_AI_DATA_DIR" reset --hard origin/main &>>"$LOG_FILE"; then
+            log_error "Failed to reset to origin/main"
+            return 1
+        fi
     else
         mkdir -p "$(dirname "$GENTLE_AI_DATA_DIR")"
         log_info "Cloning gentle-ai repo..."
@@ -94,6 +96,12 @@ _compile() {
     fi
 
     pushd "$GENTLE_AI_DATA_DIR" &>/dev/null || return 1
+
+    if ! go mod download &>>"$LOG_FILE"; then
+        popd &>/dev/null || true
+        log_error "Failed to download Go dependencies"
+        return 1
+    fi
 
     if ! go build -trimpath -ldflags="-s -w" -o gentle-ai ./cmd/gentle-ai/ &>>"$LOG_FILE"; then
         popd &>/dev/null || true
