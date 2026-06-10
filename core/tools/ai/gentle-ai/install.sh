@@ -3,9 +3,12 @@
 import "@/utils/log"
 import "@/utils/colors"
 
+: "${CORE_CACHE:=$HOME/.cache/core-termux}"
+: "${CORE_PATH:=$HOME/core-termux/core}"
+: "${PREFIX:=/data/data/com.termux/files/usr}"
+
 LOG_FILE="$CORE_CACHE/install_ai.log"
-GENTLE_AI_DATA_DIR="$HOME/.local/share/core-termux-data/gentle-ai"
-GITHUB_REPO_URL="https://github.com/Gentleman-Programming/gentle-ai.git"
+GENTLE_AI_DATA_DIR="${GENTLE_AI_DATA_DIR:-$HOME/.local/share/core-termux-data/gentle-ai}"
 
 _gentle_ai_install_deps() {
     declare -A DEPS=(
@@ -25,24 +28,50 @@ _gentle_ai_install_deps() {
         fi
     done
 
-    local go_version
-    go_version=$(go version | sed -n 's/.*go\([0-9]*\.[0-9]*\).*/\1/p')
-    local go_major="${go_version%.*}"
-    local go_minor="${go_version#*.}"
-
-    if [ "$go_major" -lt 1 ] || { [ "$go_major" -eq 1 ] && [ "$go_minor" -lt 25 ]; }; then
-        log_error "Go 1.25+ required (detected $go_version). Run: pkg upgrade golang"
-        return 1
-    fi
-
-    log_success "Dependencies installed (go $go_version, git, curl)"
+    log_success "Dependencies installed (git, curl)"
     return 0
 }
 
+_gentle_ai_ensure_go() {
+    if ! command -v go &>/dev/null; then
+        log_error "Go is required but not installed"
+        return 1
+    fi
+
+    local go_installed
+    go_installed=$(go version | sed 's/.*go\([0-9.]*\).*/\1/')
+
+    local go_required
+    if [ -f "$GENTLE_AI_DATA_DIR/go.mod" ]; then
+        go_required=$(sed -n 's/^go \([0-9.]*\)/\1/p' "$GENTLE_AI_DATA_DIR/go.mod" | head -1)
+    fi
+
+    if [ -z "$go_required" ]; then
+        go_required="1.25.0"
+    fi
+
+    if ! _version_ge "$go_installed" "$go_required"; then
+        log_error "Go $go_required+ required (detected $go_installed). Run: pkg upgrade golang"
+        return 1
+    fi
+
+    log_success "Go $go_installed >= $go_required"
+    return 0
+}
+
+_version_ge() {
+    local v1="$1" v2="$2"
+    local highest
+    highest=$(printf '%s\n%s\n' "$v1" "$v2" | sort -V | tail -1)
+    [ "$highest" = "$v1" ]
+}
+
 _clone_or_update_repo() {
+    local repo_url="https://github.com/Gentleman-Programming/gentle-ai.git"
+
     if [ -d "$GENTLE_AI_DATA_DIR/.git" ]; then
         log_info "Updating existing clone..."
-        # Stash any local changes (e.g. stale patches), then reset cleanly.
+        git -C "$GENTLE_AI_DATA_DIR" remote set-url origin "$repo_url" &>>"$LOG_FILE"
         git -C "$GENTLE_AI_DATA_DIR" stash --include-untracked &>>"$LOG_FILE" || true
         if ! git -C "$GENTLE_AI_DATA_DIR" fetch origin &>>"$LOG_FILE"; then
             log_error "Failed to fetch from remote"
@@ -53,12 +82,11 @@ _clone_or_update_repo() {
             return 1
         fi
     else
-        # Safety: remove any stale empty/non-git directory before cloning.
         if [ -d "$GENTLE_AI_DATA_DIR" ]; then
             rm -rf "$GENTLE_AI_DATA_DIR"
         fi
         log_info "Cloning gentle-ai repo..."
-        if ! git clone "$GITHUB_REPO_URL" "$GENTLE_AI_DATA_DIR" &>>"$LOG_FILE"; then
+        if ! git clone "$repo_url" "$GENTLE_AI_DATA_DIR" &>>"$LOG_FILE"; then
             log_error "Failed to clone gentle-ai repo"
             return 1
         fi
@@ -68,23 +96,36 @@ _clone_or_update_repo() {
     return 0
 }
 
-_apply_patches() {
-    local patcher="$CORE_PATH/tools/ai/gentle-ai/termux-patches.go"
-    if [ ! -f "$patcher" ]; then
-        log_warn "Termux patcher not found at $patcher, skipping"
-        return 0
-    fi
+_build_and_apply_patches() {
+    local patcher_src="$CORE_PATH/tools/ai/gentle-ai/termux-patches.go"
+    local patcher_bin="$CORE_CACHE/termux-patcher"
 
-    log_info "Applying Termux compatibility patches..."
+    mkdir -p "$CORE_CACHE"
+
+    if [ ! -f "$patcher_bin" ] || [ "$patcher_src" -nt "$patcher_bin" ]; then
+        if ! go build -o "$patcher_bin" "$patcher_src" &>>"$LOG_FILE"; then
+            log_error "Failed to compile patcher"
+            return 1
+        fi
+    fi
 
     pushd "$GENTLE_AI_DATA_DIR" &>/dev/null || return 1
-    if ! go run "$patcher" "$GENTLE_AI_DATA_DIR" &>>"$LOG_FILE"; then
+
+    local patch_out patch_rc
+    patch_out=$("$patcher_bin" "$GENTLE_AI_DATA_DIR" 2>&1)
+    patch_rc=$?
+
+    echo "$patch_out" >> "$LOG_FILE"
+
+    if [ $patch_rc -ne 0 ]; then
         popd &>/dev/null || true
-        log_error "Failed to apply Termux patches"
+        echo ""
+        log_error "Termux patches failed. Output:"
+        echo "$patch_out"
         return 1
     fi
-    popd &>/dev/null || true
 
+    popd &>/dev/null || true
     log_success "Termux patches applied"
     return 0
 }
@@ -145,6 +186,7 @@ install_gentle_ai() {
     fi
 
     log_info "Installing gentle-ai..."
+    mkdir -p "$(dirname "$LOG_FILE")" "$CORE_CACHE"
 
     if ! loading "Installing dependencies" _gentle_ai_install_deps; then
         return 1
@@ -154,7 +196,11 @@ install_gentle_ai() {
         return 1
     fi
 
-    if ! loading "Applying Termux patches" _apply_patches; then
+    if ! loading "Checking Go version" _gentle_ai_ensure_go; then
+        return 1
+    fi
+
+    if ! loading "Compiling & applying Termux patches" _build_and_apply_patches; then
         return 1
     fi
 
@@ -194,7 +240,11 @@ update_gentle_ai() {
         return 1
     fi
 
-    if ! loading "Applying Termux patches" _apply_patches; then
+    if ! loading "Checking Go version" _gentle_ai_ensure_go; then
+        return 1
+    fi
+
+    if ! loading "Compiling & applying Termux patches" _build_and_apply_patches; then
         return 1
     fi
 

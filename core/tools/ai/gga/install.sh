@@ -5,7 +5,6 @@ import "@/utils/colors"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 GGA_DATA_DIR="$CORE_DATA/gga-termux"
-GITHUB_REPO_URL="https://github.com/DevCoreXOfficial/gga-termux.git"
 
 _gga_install_deps() {
 	declare -A DEPS=(
@@ -29,6 +28,8 @@ _gga_install_deps() {
 }
 
 _gga_clone_or_update_repo() {
+	local repo_url="https://github.com/DevCoreXOfficial/gga-termux.git"
+
 	if [ -d "$GGA_DATA_DIR/.git" ]; then
 		log_info "Updating existing clone..."
 		if ! git -C "$GGA_DATA_DIR" pull --ff-only &>>"$LOG_FILE"; then
@@ -38,7 +39,7 @@ _gga_clone_or_update_repo() {
 	else
 		mkdir -p "$(dirname "$GGA_DATA_DIR")"
 		log_info "Cloning gga-termux repo..."
-		if ! git clone "$GITHUB_REPO_URL" "$GGA_DATA_DIR" &>>"$LOG_FILE"; then
+		if ! git clone "$repo_url" "$GGA_DATA_DIR" &>>"$LOG_FILE"; then
 			log_error "Failed to clone gga-termux repo"
 			return 1
 		fi
