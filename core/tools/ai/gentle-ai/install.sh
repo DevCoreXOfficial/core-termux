@@ -42,7 +42,8 @@ _gentle_ai_install_deps() {
 _clone_or_update_repo() {
     if [ -d "$GENTLE_AI_DATA_DIR/.git" ]; then
         log_info "Updating existing clone..."
-        # Fetch remote and reset hard — discards any previous patches cleanly.
+        # Stash any local changes (e.g. stale patches), then reset cleanly.
+        git -C "$GENTLE_AI_DATA_DIR" stash --include-untracked &>>"$LOG_FILE" || true
         if ! git -C "$GENTLE_AI_DATA_DIR" fetch origin &>>"$LOG_FILE"; then
             log_error "Failed to fetch from remote"
             return 1
@@ -52,7 +53,10 @@ _clone_or_update_repo() {
             return 1
         fi
     else
-        mkdir -p "$(dirname "$GENTLE_AI_DATA_DIR")"
+        # Safety: remove any stale empty/non-git directory before cloning.
+        if [ -d "$GENTLE_AI_DATA_DIR" ]; then
+            rm -rf "$GENTLE_AI_DATA_DIR"
+        fi
         log_info "Cloning gentle-ai repo..."
         if ! git clone "$GITHUB_REPO_URL" "$GENTLE_AI_DATA_DIR" &>>"$LOG_FILE"; then
             log_error "Failed to clone gentle-ai repo"
@@ -73,10 +77,13 @@ _apply_patches() {
 
     log_info "Applying Termux compatibility patches..."
 
+    pushd "$GENTLE_AI_DATA_DIR" &>/dev/null || return 1
     if ! go run "$patcher" "$GENTLE_AI_DATA_DIR" &>>"$LOG_FILE"; then
+        popd &>/dev/null || true
         log_error "Failed to apply Termux patches"
         return 1
     fi
+    popd &>/dev/null || true
 
     log_success "Termux patches applied"
     return 0

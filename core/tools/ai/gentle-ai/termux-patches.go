@@ -33,6 +33,7 @@ func main() {
 
 	patches := []patchDef{
 		{filepath.Join(srcDir, "internal/system/detect.go"), patchDetectGo},
+		{filepath.Join(srcDir, "internal/system/guard.go"), patchGuardGo},
 		{filepath.Join(srcDir, "internal/update/upgrade/download.go"), patchDownloadGo},
 		{filepath.Join(srcDir, "internal/tui/model.go"), patchModelGo},
 		{filepath.Join(srcDir, "internal/components/engram/download.go"), patchEngramDownloadGo},
@@ -120,7 +121,6 @@ func patchDetectGo(src string) (string, error) {
 		tab(1) + `case "android":` + "\n" +
 		tab(2) + `profile.PackageManager = "pkg"` + "\n" +
 		tab(2) + `profile.Supported = true` + "\n" +
-		tab(2) + `linuxOSRelease, _ := osReleaseContent(goos)` + "\n" +
 		tab(2) + `distro := detectLinuxDistro(linuxOSRelease)` + "\n" +
 		tab(2) + `if distro != LinuxDistroUnknown {` + "\n" +
 		tab(3) + `profile.LinuxDistro = distro` + "\n" +
@@ -161,7 +161,18 @@ func patchDetectGo(src string) (string, error) {
 }
 
 // ---------------------------------------------------------------------------
-// 2. internal/update/upgrade/download.go
+// 2. internal/system/guard.go
+// ---------------------------------------------------------------------------
+
+func patchGuardGo(src string) (string, error) {
+	// EnsureSupportedOS error message: mention Android.
+	old1 := `return fmt.Errorf("%w: only macOS, Linux, and Windows are supported (detected %s)", ErrUnsupportedOS, goos)`
+	new1 := `return fmt.Errorf("%w: only macOS, Linux, Windows, and Android are supported (detected %s)", ErrUnsupportedOS, goos)`
+	return assertReplace(src, old1, new1, "EnsureSupportedOS error message Android")
+}
+
+// ---------------------------------------------------------------------------
+// 3. internal/update/upgrade/download.go
 // ---------------------------------------------------------------------------
 
 func patchDownloadGo(src string) (string, error) {
@@ -179,7 +190,7 @@ func patchDownloadGo(src string) (string, error) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. internal/tui/model.go
+// 4. internal/tui/model.go
 // ---------------------------------------------------------------------------
 
 func patchModelGo(src string) (string, error) {
@@ -200,13 +211,13 @@ func patchModelGo(src string) (string, error) {
 }
 
 // ---------------------------------------------------------------------------
-// 4. internal/components/engram/download.go
+// 5. internal/components/engram/download.go
 // ---------------------------------------------------------------------------
 
 func patchEngramDownloadGo(src string) (string, error) {
 	var err error
 
-	// 4a. DownloadLatestBinary: redirect android -> linux for asset URLs.
+	// 5a. DownloadLatestBinary: redirect android -> linux for asset URLs.
 	old1 := "" +
 		tab(1) + `goos := profile.OS` + "\n" +
 		tab(1) + `goarch := normalizeArch(runtime.GOARCH)`
@@ -221,7 +232,7 @@ func patchEngramDownloadGo(src string) (string, error) {
 		return src, err
 	}
 
-	// 4b. engramInstallDir: use $PREFIX/bin on Termux.
+	// 5b. engramInstallDir: use $PREFIX/bin on Termux.
 	old2 := "" +
 		`func engramInstallDir(goos string) string {` + "\n" +
 		tab(1) + `if goos == "windows" {`
