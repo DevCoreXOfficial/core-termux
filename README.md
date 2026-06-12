@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.18.2-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.19.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -89,7 +89,7 @@ These modules are available across most commands (`core list`, `core install`, `
 |--------|-------------|
 | `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
-| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA, Hermes Agent) |
+| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA, Hermes Agent, MimoCode) |
 | `editor` | Code editor components (Neovim, NvChad) |
 | `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
 | `node` | Node.js global npm packages |
@@ -111,7 +111,7 @@ core --version
 
 **Output:**
 ```
-Core-Termux v3.18.2
+Core-Termux v3.19.0
 ```
 
 ---
@@ -759,7 +759,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.18.3 (current: 3.18.2)
+⚠ New version available: 3.19.1 (current: 3.19.0)
 
 ➜ Run: core update core to update
 ```

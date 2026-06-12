@@ -190,6 +190,9 @@ _install_specific_tools() {
         install_opencode
         if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
         ;;
+      mimocode)
+        if loading "Installing MiMo Code" install_mimocode; then ((installed_count++)); else ((failed_count++)); fi
+        ;;
       engram)
         if loading "Installing Engram" install_engram; then ((installed_count++)); else ((failed_count++)); fi
         ;;

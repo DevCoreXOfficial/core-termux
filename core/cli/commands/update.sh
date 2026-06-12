@@ -189,6 +189,9 @@ _update_specific_tools() {
       opencode)
         if loading "Updating OpenCode" update_opencode; then ((updated_count++)); else ((failed_count++)); fi
         ;;
+      mimocode)
+        if loading "Updating MiMo Code" update_mimocode; then ((updated_count++)); else ((failed_count++)); fi
+        ;;
       engram)
         if loading "Updating Engram" update_engram; then ((updated_count++)); else ((failed_count++)); fi
         ;;

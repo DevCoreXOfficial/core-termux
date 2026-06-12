@@ -14,6 +14,7 @@ AI_TOOLS=(
   "ollama"
   "codex"
   "opencode"
+  "mimocode"
   "engram"
   "codegraph"
   "pi"
@@ -33,6 +34,7 @@ source "$(dirname "$BASH_SOURCE")/openclaw/install.sh"
 source "$(dirname "$BASH_SOURCE")/ollama/install.sh"
 source "$(dirname "$BASH_SOURCE")/codex/install.sh"
 source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
+source "$(dirname "$BASH_SOURCE")/mimocode/install.sh"
 source "$(dirname "$BASH_SOURCE")/engram/install.sh"
 source "$(dirname "$BASH_SOURCE")/codegraph/install.sh"
 source "$(dirname "$BASH_SOURCE")/pi/install.sh"
@@ -74,6 +76,9 @@ install_all_ai_tools() {
       ;;
     opencode)
       if install_opencode; then ((installed_count++)); else ((failed_count++)); fi
+      ;;
+    mimocode)
+      if install_mimocode; then ((installed_count++)); else ((failed_count++)); fi
       ;;
     engram)
       if install_engram; then ((installed_count++)); else ((failed_count++)); fi
@@ -138,6 +143,9 @@ uninstall_all_ai_tools() {
     opencode)
       if uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
       ;;
+    mimocode)
+      if uninstall_mimocode; then ((uninstalled_count++)); else ((failed_count++)); fi
+      ;;
     engram)
       if uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
       ;;
@@ -200,6 +208,9 @@ update_all_ai_tools() {
       ;;
     opencode)
       if update_opencode; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    mimocode)
+      if update_mimocode; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     engram)
       if update_engram; then ((updated_count++)); else ((failed_count++)); fi

@@ -211,6 +211,9 @@ _uninstall_specific_tools() {
       opencode)
         if loading "Uninstalling OpenCode" uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
         ;;
+      mimocode)
+        if loading "Uninstalling MiMo Code" uninstall_mimocode; then ((uninstalled_count++)); else ((failed_count++)); fi
+        ;;
       engram)
         if loading "Uninstalling Engram" uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
         ;;

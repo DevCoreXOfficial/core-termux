@@ -32,6 +32,7 @@ install_ai() {
     list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
     list_item "Codex ${GRAY}(${D_GREEN}codex${GRAY})"
     list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
+    list_item "MiMo Code ${GRAY}(${D_GREEN}mimocode${GRAY})"
     list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
     list_item "CodeGraph ${GRAY}(${D_GREEN}codegraph${GRAY})"
     list_item "Pi ${GRAY}(${D_GREEN}pi${GRAY})"
