@@ -4,7 +4,7 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-_codex_install_dependencies() {
+_codex_dependencies() {
 	declare -A DEPS=(
 		["nodejs-lts"]="node"
 		["git"]="git"
@@ -33,7 +33,7 @@ install_codex() {
 	fi
 	log_info "Installing Codex CLI..."
 
-	if ! _codex_install_dependencies; then
+	if ! _codex_dependencies; then
 		log_error "Failed to install dependencies"
 		return 1
 	fi

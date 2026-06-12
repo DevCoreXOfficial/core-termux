@@ -3,7 +3,7 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-_install_codegraph_dependencies() {
+_codegraph_dependencies() {
 	declare -A DEPS=(
 		["nodejs-lts"]="node"
 		["ripgrep"]="rg"
@@ -49,7 +49,7 @@ install_codegraph() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if ! _install_codegraph_dependencies; then
+	if ! _codegraph_dependencies; then
 		log_error "Failed to install CodeGraph dependencies"
 		return 1
 	fi
@@ -112,7 +112,7 @@ update_codegraph() {
 		return 1
 	fi
 
-	if ! _install_codegraph_dependencies; then
+	if ! _codegraph_dependencies; then
 		log_error "Failed to install CodeGraph dependencies"
 		return 1
 	fi

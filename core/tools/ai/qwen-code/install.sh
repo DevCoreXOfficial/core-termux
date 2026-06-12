@@ -4,80 +4,80 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-_qwen_code_install_ai_npm_prereqs() {
-	declare -A DEPS=(
-		["nodejs-lts"]="node"
-		["git"]="git"
-		["ripgrep"]="rg"
-	)
+_qwen_code_dependencies() {
+  declare -A DEPS=(
+    ["nodejs-lts"]="node"
+    ["git"]="git"
+    ["ripgrep"]="rg"
+  )
 
-	local pkg_name bin_name
-	for pkg_name in "${!DEPS[@]}"; do
-		bin_name="${DEPS[$pkg_name]}"
-		if ! command -v "$bin_name" &>/dev/null; then
-			if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
-				log_error "Failed to install $pkg_name"
-				return 1
-			fi
-		fi
-	done
+  local pkg_name bin_name
+  for pkg_name in "${!DEPS[@]}"; do
+    bin_name="${DEPS[$pkg_name]}"
+    if ! command -v "$bin_name" &>/dev/null; then
+      if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+        log_error "Failed to install $pkg_name"
+        return 1
+      fi
+    fi
+  done
 
-	log_success "Node.js and npm prerequisites installed"
-	return 0
+  log_success "Dependencies installed"
+  return 0
 }
 
 install_qwen_code() {
-	if command -v qwen &>/dev/null; then
-		log_info "Qwen Code is already installed"
-		return 0
-	fi
+  if command -v qwen &>/dev/null; then
+    log_info "Qwen Code is already installed"
+    return 0
+  fi
 
-	log_info "Installing Qwen Code..."
+  log_info "Installing Qwen Code..."
 
-	if ! _qwen_code_install_ai_npm_prereqs; then
-		log_error "Prerequisites installation failed"
-		return 1
-	fi
+  if ! _qwen_code_dependencies; then
+    log_error "Prerequisites installation failed"
+    return 1
+  fi
 
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
+  mkdir -p "$(dirname "$LOG_FILE")"
+  export GYP_DEFINES="android_ndk_path=''"
+  export ANDROID_API_LEVEL=24
 
-	log_info "Running npm install for @qwen-code/qwen-code..."
-	if npm install -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-		log_success "Qwen Code installed successfully"
-		return 0
-	else
-		log_error "Failed to install Qwen Code"
-		return 1
-	fi
+  log_info "Running npm install for @qwen-code/qwen-code..."
+  if npm install -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+    log_success "Qwen Code installed successfully"
+    return 0
+  else
+    log_error "Failed to install Qwen Code"
+    return 1
+  fi
 }
 
 uninstall_qwen_code() {
-	log_info "Uninstalling Qwen Code..."
-	mkdir -p "$(dirname "$LOG_FILE")"
+  log_info "Uninstalling Qwen Code..."
+  mkdir -p "$(dirname "$LOG_FILE")"
 
-	if npm uninstall -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-		log_success "Qwen Code uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Qwen Code"
-		return 1
-	fi
+  if npm uninstall -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+    log_success "Qwen Code uninstalled"
+    return 0
+  else
+    log_error "Failed to uninstall Qwen Code"
+    return 1
+  fi
 }
 
 update_qwen_code() {
-	log_info "Updating Qwen Code..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	export GYP_DEFINES="android_ndk_path=''"
-	export ANDROID_API_LEVEL=24
+  log_info "Updating Qwen Code..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+  export GYP_DEFINES="android_ndk_path=''"
+  export ANDROID_API_LEVEL=24
 
-	log_info "Running npm update for @qwen-code/qwen-code..."
-	if npm update -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-		log_success "Qwen Code updated successfully"
-		return 0
-	else
-		log_error "Failed to update Qwen Code"
-		return 1
-	fi
+  log_info "Running npm update for @qwen-code/qwen-code..."
+  if npm update -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+    log_success "Qwen Code updated successfully"
+    return 0
+  else
+    log_error "Failed to update Qwen Code"
+    return 1
+  fi
 }

@@ -6,7 +6,7 @@ import "@/utils/colors"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 GGA_DATA_DIR="$CORE_DATA/gga-termux"
 
-_gga_install_deps() {
+_gga_dependencies() {
 	declare -A DEPS=(
 		["git"]="git"
 		["curl"]="curl"
@@ -76,7 +76,7 @@ install_gga() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if ! loading "Installing dependencies" _gga_install_deps; then
+	if ! loading "Installing dependencies" _gga_dependencies; then
 		return 1
 	fi
 

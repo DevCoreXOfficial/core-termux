@@ -4,7 +4,7 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-_install_ai_pip_prereqs() {
+_mistral_vibe_dependencies() {
   declare -A DEPS=(
     ["python"]="python"
     ["clang"]="clang"
@@ -42,8 +42,9 @@ install_mistral_vibe() {
 
   log_info "Installing Mistral Vibe..."
 
-  _install_ai_pip_prereqs
+  _mistral_vibe_dependencies
   export ANDROID_API_LEVEL=24
+	export GYP_DEFINES="android_ndk_path=''"
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -74,6 +75,7 @@ update_mistral_vibe() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   export ANDROID_API_LEVEL=24
+	export GYP_DEFINES="android_ndk_path=''"
 
   if pip install --upgrade mistral-vibe &>>"$LOG_FILE"; then
     log_success "Mistral Vibe updated"
