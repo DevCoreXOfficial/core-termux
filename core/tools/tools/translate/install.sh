@@ -47,3 +47,8 @@ update_translate() {
 		return 1
 	fi
 }
+
+reinstall_translate() {
+	uninstall_translate
+	install_translate
+}

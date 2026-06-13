@@ -47,3 +47,8 @@ update_fzf() {
 		return 1
 	fi
 }
+
+reinstall_fzf() {
+	uninstall_fzf
+	install_fzf
+}

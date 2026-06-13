@@ -59,3 +59,7 @@ update_zsh_syntax_highlighting() {
   fi
 }
 
+reinstall_zsh_syntax_highlighting() {
+  uninstall_zsh_syntax_highlighting
+  install_zsh_syntax_highlighting
+}

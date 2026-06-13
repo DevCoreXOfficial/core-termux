@@ -76,3 +76,7 @@ update_openclaude() {
   fi
 }
 
+reinstall_openclaude() {
+  uninstall_openclaude
+  install_openclaude
+}

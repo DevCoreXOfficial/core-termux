@@ -60,3 +60,8 @@ update_ngrok() {
   fi
 }
 
+reinstall_ngrok() {
+  uninstall_ngrok
+  install_ngrok
+}
+

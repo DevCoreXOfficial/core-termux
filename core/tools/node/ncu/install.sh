@@ -60,3 +60,8 @@ update_ncu() {
   fi
 }
 
+reinstall_ncu() {
+  uninstall_ncu
+  install_ncu
+}
+

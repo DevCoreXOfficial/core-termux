@@ -1,17 +1,17 @@
 # Antigravity CLI
 
-AI-powered development workflow assistant
+Lightweight, terminal-first surface for Antigravity agents
 
 **Package:** antigravity-cli  
 **Author:** DevCoreX  
 **Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://antigravity-cli.com  
+**Official:** https://antigravity.google  
 **Type:** AI workflow assistant (Binary + glibc bootstrapper)  
 **License:** MIT
 
 ## Description
 
-Antigravity CLI (agy) is an AI-powered development workflow assistant that helps automate common development tasks. It uses VA39 memory patches for Android ARM64 compatibility and runs via a glibc bootstrapper for native performance.
+Antigravity CLI is the lightweight, fast, terminal-first surface to work with Antigravity agents. It uses VA39 memory patches for Android ARM64 compatibility and runs via a glibc bootstrapper for native performance.
 
 ## Dependencies
 

@@ -41,16 +41,31 @@ uninstall_all_automation_tools() {
 }
 
 update_all_automation_tools() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${AUTOMATION_TOOLS[@]}"; do
-		case "$tool" in
-		n8n)
-			if update_n8n; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${AUTOMATION_TOOLS[@]}"; do
+    case "$tool" in
+    n8n)
+      if update_n8n; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_automation_tools() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${AUTOMATION_TOOLS[@]}"; do
+    case "$tool" in
+    n8n)
+      if reinstall_n8n; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

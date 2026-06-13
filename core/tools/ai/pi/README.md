@@ -1,17 +1,17 @@
 # Pi Coding Agent
 
-AI coding agent by Earendil Works
+Minimal terminal coding harness — adapt Pi to your workflows
 
 **Package:** @earendil-works/pi-coding-agent  
 **Author:** DevCoreX  
 **Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://github.com/earendil-works/pi-coding-agent  
+**Official:** https://github.com/earendil-works/pi  
 **Type:** AI coding agent (npm global package)  
 **License:** MIT
 
 ## Description
 
-Pi Coding Agent is an AI-powered coding assistant developed by Earendil Works. It provides intelligent code generation, completion, and programming assistance directly in your terminal.
+Pi is a minimal terminal coding harness. Adapt Pi to your workflows, not the other way around.
 
 ## Dependencies
 

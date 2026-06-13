@@ -47,3 +47,8 @@ update_hermes_agent() {
     return 1
   fi
 }
+
+reinstall_hermes_agent() {
+  uninstall_hermes_agent
+  install_hermes_agent
+}

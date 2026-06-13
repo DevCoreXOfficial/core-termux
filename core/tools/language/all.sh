@@ -89,34 +89,67 @@ uninstall_all_language_packages() {
 }
 
 update_all_language_packages() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${LANGUAGE_PACKAGES[@]}"; do
-		case "$tool" in
-		nodejs)
-			if update_nodejs; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		python)
-			if update_python; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		perl)
-			if update_perl; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		php)
-			if update_php; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		rust)
-			if update_rust; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		clang)
-			if update_clang; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		golang)
-			if update_golang; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${LANGUAGE_PACKAGES[@]}"; do
+    case "$tool" in
+    nodejs)
+      if update_nodejs; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    python)
+      if update_python; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    perl)
+      if update_perl; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    php)
+      if update_php; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    rust)
+      if update_rust; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    clang)
+      if update_clang; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    golang)
+      if update_golang; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_language_packages() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${LANGUAGE_PACKAGES[@]}"; do
+    case "$tool" in
+    nodejs)
+      if reinstall_nodejs; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    python)
+      if reinstall_python; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    perl)
+      if reinstall_perl; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    php)
+      if reinstall_php; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    rust)
+      if reinstall_rust; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    clang)
+      if reinstall_clang; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    golang)
+      if reinstall_golang; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

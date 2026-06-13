@@ -42,6 +42,7 @@ core_help() {
   printf "    ${D_CYAN}%-12s${NC} %s\n" "show" "Show tool documentation"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "update" "Update modules or framework"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "uninstall" "Remove installed modules"
+  printf "    ${D_CYAN}%-12s${NC} %s\n" "reinstall" "Uninstall + install modules"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "open" "Open documentation in browser"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "list" "List available tools in modules"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "pg" "PostgreSQL database manager"
@@ -55,7 +56,7 @@ core_help() {
   echo
   separator_section "Module Targets"
   echo
-  log_info "Install, update, uninstall, list, show or open:"
+  log_info "Install, update, reinstall, uninstall, list, show or open:"
   echo
   printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node, Python, Perl, PHP, Rust, C/C++, Go"
   printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"

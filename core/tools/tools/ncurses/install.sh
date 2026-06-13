@@ -47,3 +47,8 @@ update_ncurses() {
 		return 1
 	fi
 }
+
+reinstall_ncurses() {
+	uninstall_ncurses
+	install_ncurses
+}

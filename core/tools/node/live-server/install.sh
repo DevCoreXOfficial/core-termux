@@ -61,3 +61,8 @@ update_live_server() {
   fi
 }
 
+reinstall_live_server() {
+  uninstall_live_server
+  install_live_server
+}
+

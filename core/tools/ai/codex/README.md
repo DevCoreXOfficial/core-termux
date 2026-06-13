@@ -11,7 +11,7 @@ Codex CLI is a coding agent from OpenAI that runs locally on your computer
 
 ## Description
 
-Codex is an AI coding assistant available through the Termux User Repository (tur-repo). It provides intelligent code suggestions and completions directly in your terminal, optimized for the Termux environment on Android devices.
+Codex CLI is a coding agent from OpenAI that runs locally on your computer. It provides intelligent code suggestions and completions directly in your terminal.
 
 ## Dependencies
 

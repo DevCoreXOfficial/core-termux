@@ -47,3 +47,8 @@ update_curl() {
 		return 1
 	fi
 }
+
+reinstall_curl() {
+	uninstall_curl
+	install_curl
+}

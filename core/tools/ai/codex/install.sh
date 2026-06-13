@@ -74,3 +74,8 @@ update_codex() {
 		return 1
 	fi
 }
+
+reinstall_codex() {
+	uninstall_codex
+	install_codex
+}

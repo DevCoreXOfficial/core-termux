@@ -34,3 +34,8 @@ update_extra_keys() {
 	log_info "Updating Extra Keys..."
 	install_extra_keys
 }
+
+reinstall_extra_keys() {
+	uninstall_extra_keys
+	install_extra_keys
+}

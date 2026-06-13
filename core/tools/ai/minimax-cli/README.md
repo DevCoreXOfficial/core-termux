@@ -1,17 +1,17 @@
 # MiniMax CLI
 
-AI command-line tool by MiniMax for various AI tasks
+Generate text, images, video, speech, and music from the terminal
 
 **Package:** mmx-cli  
 **Author:** DevCoreX  
 **Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://github.com/MiniMax-AI  
+**Official:** https://github.com/MiniMax-AI/cli  
 **Type:** AI CLI tool (npm global package)  
 **License:** MIT
 
 ## Description
 
-MiniMax CLI is a command-line interface for MiniMax AI services. It provides access to MiniMax's AI capabilities including text generation, code assistance, and more, directly from your terminal.
+MiniMax CLI lets you generate text, images, video, speech, and music from any agent or terminal using MiniMax AI services.
 
 ## Dependencies
 

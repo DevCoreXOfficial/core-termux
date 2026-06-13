@@ -1,11 +1,11 @@
 # Claude Code
 
-Anthropic's AI coding assistant that runs in your terminal
+Anthropic's CLI tool with Claude AI
 
 **Package:** claude-code  
 **Author:** DevCoreX  
 **Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://claude.ai  
+**Official:** https://github.com/anthropics/claude-code  
 **Type:** AI coding assistant (Binary + glibc bootstrapper)  
 **License:** MIT
 

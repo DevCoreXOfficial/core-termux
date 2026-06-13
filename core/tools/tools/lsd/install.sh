@@ -47,3 +47,8 @@ update_lsd() {
 		return 1
 	fi
 }
+
+reinstall_lsd() {
+	uninstall_lsd
+	install_lsd
+}

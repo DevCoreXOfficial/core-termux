@@ -1,6 +1,6 @@
 # Mistral Vibe
 
-AI coding assistant powered by Mistral AI
+Command-line coding assistant powered by Mistral's models
 
 **Package:** mistral-vibe  
 **Author:** DevCoreX  
@@ -11,7 +11,7 @@ AI coding assistant powered by Mistral AI
 
 ## Description
 
-Mistral Vibe is an AI-powered coding assistant developed by Mistral AI. It provides intelligent code generation, refactoring, and debugging assistance in your terminal using Mistral's advanced language models.
+Mistral Vibe is a command-line coding assistant powered by Mistral's models. It provides intelligent code generation, refactoring, and debugging assistance in your terminal.
 
 ## Dependencies
 

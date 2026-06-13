@@ -66,25 +66,49 @@ uninstall_all_ui_components() {
 }
 
 update_all_ui_components() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${UI_COMPONENTS[@]}"; do
-		case "$tool" in
-		font)
-			if update_font; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		extra-keys)
-			if update_extra_keys; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		cursor)
-			if update_cursor; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		banner)
-			if update_banner; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${UI_COMPONENTS[@]}"; do
+    case "$tool" in
+    font)
+      if update_font; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    extra-keys)
+      if update_extra_keys; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    cursor)
+      if update_cursor; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    banner)
+      if update_banner; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_ui_components() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${UI_COMPONENTS[@]}"; do
+    case "$tool" in
+    font)
+      if reinstall_font; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    extra-keys)
+      if reinstall_extra_keys; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    cursor)
+      if reinstall_cursor; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    banner)
+      if reinstall_banner; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

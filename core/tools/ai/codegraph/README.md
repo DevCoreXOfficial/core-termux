@@ -1,6 +1,6 @@
 # CodeGraph
 
-Code analysis and visualization tool for understanding codebases
+Analyzes your codebase structure and dependencies to improve navigation
 
 **Package:** codegraph  
 **Author:** DevCoreX  
@@ -11,7 +11,7 @@ Code analysis and visualization tool for understanding codebases
 
 ## Description
 
-CodeGraph is a code analysis and visualization tool that helps developers understand complex codebases. It generates interactive graphs showing relationships between files, functions, classes, and modules, making it easier to navigate and refactor large projects.
+CodeGraph analyzes your codebase structure and dependencies to improve navigation. It generates interactive graphs showing relationships between files, functions, classes, and modules, making it easier to navigate and refactor large projects.
 
 ## Dependencies
 

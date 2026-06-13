@@ -95,6 +95,44 @@ update_node() {
 }
 
 _update_node_wrapper() {
-	import "@/tools/node/all"
-	update_all_node_packages
+  import "@/tools/node/all"
+  update_all_node_packages
+}
+
+reinstall_node() {
+  separator
+  box "Reinstalling Node.js Modules"
+  separator
+  echo
+
+  log_info "Reinstalling Node.js global modules..."
+
+  if loading "Reinstalling npm global packages" _reinstall_node_wrapper; then
+    log_success "Node.js global modules reinstalled"
+    echo
+    list_item "TypeScript"
+    list_item "NestJS CLI"
+    list_item "Prettier"
+    list_item "Live Server"
+    list_item "Localtunnel"
+    list_item "Vercel CLI"
+    list_item "Markserv"
+    list_item "PSQL Format"
+    list_item "NPM Check Updates"
+    list_item "Ngrok"
+    echo
+    separator
+    log_success "Node.js modules reinstallation completed"
+    separator
+    echo
+  else
+    log_error "Failed to reinstall Node.js global modules"
+    log_warn "Check log file: $LOG_FILE"
+    return 1
+  fi
+}
+
+_reinstall_node_wrapper() {
+  import "@/tools/node/all"
+  reinstall_all_node_packages
 }

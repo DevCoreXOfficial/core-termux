@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.19.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-3.20.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -74,6 +74,7 @@ core
 | [`core show`](#core-show) | Show tool documentation |
 | [`core update`](#core-update) | Update modules or framework |
 | [`core uninstall`](#core-uninstall) | Remove installed modules |
+| [`core reinstall`](#core-reinstall) | Uninstall + reinstall modules |
 | [`core open`](#core-open) | Open documentation in browser |
 | [`core list`](#core-list) | List available tools in modules |
 | [`core pg`](#core-pg) | PostgreSQL database manager |
@@ -83,19 +84,51 @@ core
 
 ## Common Modules
 
-These modules are available across most commands (`core list`, `core install`, `core update`, `core uninstall`, `core show`, and `core open`):
+These modules are available across most commands (`core list`, `core install`, `core update`, `core reinstall`, `core uninstall`, `core show`, and `core open`):
 
 | Module | Description |
 |--------|-------------|
 | `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
-| `ai` | AI tools (Qwen Code, Gemini CLI, Mistral Vibe, OpenClaude, Claude Code, OpenClaw, Ollama, Codex, OpenCode, Engram, CodeGraph, Antigravity CLI, MiniMax CLI, Gentle AI, GGA, Hermes Agent, MimoCode) |
+| `ai` | AI agents and coding assistants — see [AI Agents](#ai-agents) |
 | `editor` | Code editor components (Neovim, NvChad) |
 | `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
 | `node` | Node.js global npm packages |
 | `shell` | ZSH plugins |
 | `ui` | Termux UI components |
 | `automation` | Automation tools (n8n) |
+
+---
+
+## AI Agents
+
+The `ai` module installs AI-powered coding agents and assistants. Install all agents or pick specific ones with `--flag`:
+
+```bash
+core install ai                    # Install all agents
+core install ai --opencode --ollama  # Install only OpenCode and Ollama
+```
+
+| Agent | Flag | Description |
+|-------|------|-------------|
+| **Qwen Code** | `--qwen-code` | Alibaba's AI coding assistant |
+| **Gemini CLI** | `--gemini-cli` | Google's AI assistant with Gemini |
+| **Claude Code** | `--claude-code` | Anthropic's CLI tool with Claude AI |
+| **Mistral Vibe** | `--mistral-vibe` | Command-line coding assistant powered by Mistral's models |
+| **OpenClaude** | `--openclaude` | Open source Claude Code alternative |
+| **OpenClaw** | `--openclaw` | Personal AI Assistant |
+| **Ollama** | `--ollama` | Run open-source LLMs locally on Termux |
+| **Codex CLI** | `--codex` | Coding agent from OpenAI that runs locally on your computer |
+| **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
+| **MiMo Code** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
+| **Engram** | `--engram` | Persistent memory system for coding agents |
+| **CodeGraph** | `--codegraph` | Analyzes your codebase structure and dependencies |
+| **Pi** | `--pi` | Minimal terminal coding harness — adapt Pi to your workflows |
+| **Antigravity CLI** | `--antigravity-cli` | Lightweight, terminal-first surface for Antigravity agents |
+| **MiniMax CLI** | `--minimax-cli` | Generate text, images, video, speech, and music from the terminal |
+| **Gentle AI** | `--gentle-ai` | Ecosystem, Frameworks, Workflows for AI coding agents |
+| **GGA** | `--gga` | Provider-agnostic AI code review for every commit |
+| **Hermes Agent** | `--hermes-agent` | The self-improving AI agent built by Nous Research |
 
 ---
 
@@ -111,7 +144,7 @@ core --version
 
 **Output:**
 ```
-Core-Termux v3.19.0
+Core-Termux v3.20.0
 ```
 
 ---
@@ -268,6 +301,40 @@ core uninstall db            # Uninstall all databases
 core uninstall ai --qwen-code --ollama        # Uninstall only Qwen Code and Ollama
 core uninstall db --postgresql --sqlite       # Uninstall only PostgreSQL and SQLite
 core uninstall tools --gh --fzf               # Uninstall only gh and fzf
+```
+
+---
+
+### `core reinstall`
+
+Reinstall modules or specific tools — uninstalls then installs from scratch.
+
+```bash
+core reinstall                # Show help
+core reinstall <target>       # Reinstall specific target
+core reinstall <target> --tool1 --tool2  # Reinstall specific tools
+core reinstall all            # Reinstall everything
+```
+
+In addition to all [Common Modules](#common-modules), `core reinstall` also supports:
+
+| Target | Description |
+|--------|-------------|
+| `all` | Reinstall everything (uninstall + install) |
+
+**Reinstall entire module:**
+
+```bash
+core reinstall ai            # Reinstall all AI tools
+core reinstall db            # Reinstall all databases
+```
+
+**Reinstall specific tools:**
+
+```bash
+core reinstall ai --opencode --ollama       # Reinstall only OpenCode and Ollama
+core reinstall db --postgresql --sqlite     # Reinstall only PostgreSQL and SQLite
+core reinstall tools --gh --fzf             # Reinstall only gh and fzf
 ```
 
 ---
@@ -660,6 +727,7 @@ core-termux/
 │   │   │   ├── install.sh
 │   │   │   ├── list.sh
 │   │   │   ├── pg.sh
+│   │   │   ├── reinstall.sh
 │   │   │   ├── setup.sh
 │   │   │   ├── show.sh
 │   │   │   ├── uninstall.sh
@@ -759,7 +827,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.19.1 (current: 3.19.0)
+⚠ New version available: 3.20.1 (current: 3.20.0)
 
 ➜ Run: core update core to update
 ```
@@ -833,6 +901,15 @@ core list ai                                    # See available AI tools
 core install ai --qwen-code --ollama            # Install only Qwen Code and Ollama
 core install tools --gh --fzf --jq              # Install only gh, fzf, and jq
 core install node --typescript --prettier       # Install only TypeScript and Prettier
+```
+
+### Reinstall
+
+```bash
+core reinstall ai             # Reinstall all AI agents
+core reinstall shell          # Reinstall ZSH + plugins
+core reinstall ai --opencode --ollama  # Reinstall specific tools
+core reinstall all            # Reinstall everything
 ```
 
 ### Configure Next.js project

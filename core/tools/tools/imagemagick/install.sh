@@ -47,3 +47,8 @@ update_imagemagick() {
 		return 1
 	fi
 }
+
+reinstall_imagemagick() {
+	uninstall_imagemagick
+	install_imagemagick
+}

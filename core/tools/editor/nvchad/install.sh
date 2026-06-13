@@ -90,3 +90,8 @@ update_nvchad() {
   fi
 }
 
+reinstall_nvchad() {
+  uninstall_nvchad
+  install_nvchad
+}
+

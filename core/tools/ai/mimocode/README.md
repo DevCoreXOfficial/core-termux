@@ -1,6 +1,6 @@
 # MiMoCode
 
-AI coding agent that runs natively in Termux with glibc support
+Xiaomi's AI coding agent — fast, local, and open-source
 
 **Package:** mimocode  
 **Author:** DevCoreX  
@@ -11,7 +11,7 @@ AI coding agent that runs natively in Termux with glibc support
 
 ## Description
 
-MiMo Code is an AI-powered coding agent developed by XiaomiMiMo that operates directly in your terminal. It provides intelligent code completion, refactoring suggestions, and natural language code generation. Core-Termux installs it natively with glibc support for best performance.
+MiMo Code is Xiaomi's AI coding agent — fast, local, and open-source. It provides intelligent code completion, refactoring suggestions, and natural language code generation directly in your terminal.
 
 ## Dependencies
 

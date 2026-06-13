@@ -47,3 +47,8 @@ update_make() {
 		return 1
 	fi
 }
+
+reinstall_make() {
+	uninstall_make
+	install_make
+}

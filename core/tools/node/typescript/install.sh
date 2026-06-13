@@ -60,3 +60,8 @@ update_typescript() {
   fi
 }
 
+reinstall_typescript() {
+  uninstall_typescript
+  install_typescript
+}
+

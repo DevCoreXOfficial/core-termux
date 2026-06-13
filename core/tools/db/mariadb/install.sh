@@ -43,3 +43,8 @@ update_mariadb() {
 		return 1
 	fi
 }
+
+reinstall_mariadb() {
+	uninstall_mariadb
+	install_mariadb
+}

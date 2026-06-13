@@ -47,3 +47,8 @@ update_html2text() {
 		return 1
 	fi
 }
+
+reinstall_html2text() {
+	uninstall_html2text
+	install_html2text
+}

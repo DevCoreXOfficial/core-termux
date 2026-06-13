@@ -60,3 +60,8 @@ update_markserv() {
   fi
 }
 
+reinstall_markserv() {
+  uninstall_markserv
+  install_markserv
+}
+

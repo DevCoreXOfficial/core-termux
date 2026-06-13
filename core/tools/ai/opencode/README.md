@@ -1,11 +1,11 @@
 # OpenCode
 
-AI coding agent that runs natively in Termux with glibc support
+Open-source agent that helps you write code in your terminal
 
 **Package:** opencode  
 **Author:** DevCoreX  
 **Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://opencode.ai  
+**Official:** https://github.com/anomalyco/opencode  
 **Type:** AI coding agent (Binary + glibc bootstrapper)  
 **License:** MIT
 

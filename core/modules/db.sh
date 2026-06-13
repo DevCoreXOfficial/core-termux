@@ -74,6 +74,35 @@ update_db() {
 }
 
 _update_db_tools_wrapper() {
-	import "@/tools/db/all"
-	update_all_db_tools
+  import "@/tools/db/all"
+  update_all_db_tools
+}
+
+reinstall_db() {
+  separator
+  box "Reinstalling Databases"
+  separator
+  echo
+
+  log_info "Reinstalling databases..."
+
+  if loading "Reinstalling databases" _reinstall_db_tools_wrapper; then
+    log_success "Databases reinstalled successfully"
+    separator
+    echo
+    list_item "PostgreSQL"
+    list_item "MariaDB (MySQL)"
+    list_item "SQLite"
+    list_item "MongoDB"
+    echo
+  else
+    log_error "Failed to reinstall databases"
+    log_warn "Check log file: $LOG_FILE"
+    return 1
+  fi
+}
+
+_reinstall_db_tools_wrapper() {
+  import "@/tools/db/all"
+  reinstall_all_db_tools
 }

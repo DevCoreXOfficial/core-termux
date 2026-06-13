@@ -78,3 +78,7 @@ update_openclaw() {
   fi
 }
 
+reinstall_openclaw() {
+  uninstall_openclaw
+  install_openclaw
+}

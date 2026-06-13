@@ -43,3 +43,8 @@ update_nodejs() {
 		return 1
 	fi
 }
+
+reinstall_nodejs() {
+	uninstall_nodejs
+	install_nodejs
+}

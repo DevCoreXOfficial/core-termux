@@ -1,6 +1,6 @@
 # Gemini CLI
 
-Google's AI-powered command-line assistant
+Google's AI assistant with Gemini
 
 **Package:** @google/gemini-cli  
 **Author:** DevCoreX  

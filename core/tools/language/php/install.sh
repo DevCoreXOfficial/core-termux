@@ -43,3 +43,8 @@ update_php() {
 		return 1
 	fi
 }
+
+reinstall_php() {
+	uninstall_php
+	install_php
+}

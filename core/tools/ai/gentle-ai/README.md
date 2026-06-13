@@ -1,6 +1,6 @@
 # Gentle-AI
 
-Ecosystem, frameworks, workflows for AI coding agents
+Ecosystem, Frameworks, Workflows for AI coding agents
 
 **Package:** gentle-ai  
 **Author:** Gentleman-Programming  

@@ -48,3 +48,7 @@ update_ollama() {
   fi
 }
 
+reinstall_ollama() {
+  uninstall_ollama
+  install_ollama
+}

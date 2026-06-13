@@ -69,3 +69,7 @@ update_fzf_tab() {
   fi
 }
 
+reinstall_fzf_tab() {
+  uninstall_fzf_tab
+  install_fzf_tab
+}

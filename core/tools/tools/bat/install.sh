@@ -47,3 +47,8 @@ update_bat() {
 		return 1
 	fi
 }
+
+reinstall_bat() {
+	uninstall_bat
+	install_bat
+}

@@ -43,3 +43,8 @@ update_postgresql() {
 		return 1
 	fi
 }
+
+reinstall_postgresql() {
+	uninstall_postgresql
+	install_postgresql
+}

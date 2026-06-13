@@ -113,43 +113,85 @@ uninstall_all_node_packages() {
 }
 
 update_all_node_packages() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${NODE_PACKAGES[@]}"; do
-		case "$tool" in
-		typescript)
-			if update_typescript; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		nestjs)
-			if update_nestjs; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		prettier)
-			if update_prettier; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		live-server)
-			if update_live_server; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		localtunnel)
-			if update_localtunnel; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		vercel)
-			if update_vercel; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		markserv)
-			if update_markserv; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		psqlformat)
-			if update_psqlformat; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		ncu)
-			if update_ncu; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		ngrok)
-			if update_ngrok; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${NODE_PACKAGES[@]}"; do
+    case "$tool" in
+    typescript)
+      if update_typescript; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    nestjs)
+      if update_nestjs; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    prettier)
+      if update_prettier; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    live-server)
+      if update_live_server; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    localtunnel)
+      if update_localtunnel; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    vercel)
+      if update_vercel; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    markserv)
+      if update_markserv; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    psqlformat)
+      if update_psqlformat; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    ncu)
+      if update_ncu; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    ngrok)
+      if update_ngrok; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_node_packages() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${NODE_PACKAGES[@]}"; do
+    case "$tool" in
+    typescript)
+      if reinstall_typescript; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    nestjs)
+      if reinstall_nestjs; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    prettier)
+      if reinstall_prettier; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    live-server)
+      if reinstall_live_server; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    localtunnel)
+      if reinstall_localtunnel; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    vercel)
+      if reinstall_vercel; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    markserv)
+      if reinstall_markserv; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    psqlformat)
+      if reinstall_psqlformat; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    ncu)
+      if reinstall_ncu; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    ngrok)
+      if reinstall_ngrok; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

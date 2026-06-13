@@ -60,3 +60,8 @@ update_psqlformat() {
   fi
 }
 
+reinstall_psqlformat() {
+  uninstall_psqlformat
+  install_psqlformat
+}
+

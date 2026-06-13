@@ -47,3 +47,8 @@ update_cloudflared() {
 		return 1
 	fi
 }
+
+reinstall_cloudflared() {
+	uninstall_cloudflared
+	install_cloudflared
+}

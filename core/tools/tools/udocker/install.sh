@@ -47,3 +47,8 @@ update_udocker() {
 		return 1
 	fi
 }
+
+reinstall_udocker() {
+	uninstall_udocker
+	install_udocker
+}

@@ -47,3 +47,8 @@ update_jq() {
 		return 1
 	fi
 }
+
+reinstall_jq() {
+	uninstall_jq
+	install_jq
+}

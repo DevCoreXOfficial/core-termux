@@ -76,3 +76,8 @@ update_pi() {
     return 1
   fi
 }
+
+reinstall_pi() {
+  uninstall_pi
+  install_pi
+}

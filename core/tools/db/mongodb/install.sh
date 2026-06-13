@@ -51,3 +51,8 @@ update_mongodb() {
 		return 1
 	fi
 }
+
+reinstall_mongodb() {
+	uninstall_mongodb
+	install_mongodb
+}

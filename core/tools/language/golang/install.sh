@@ -43,3 +43,8 @@ update_golang() {
 		return 1
 	fi
 }
+
+reinstall_golang() {
+	uninstall_golang
+	install_golang
+}

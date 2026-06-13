@@ -84,6 +84,35 @@ update_editor() {
 }
 
 _update_editor_wrapper() {
-	import "@/tools/editor/all"
-	update_all_editor_components
+  import "@/tools/editor/all"
+  update_all_editor_components
+}
+
+reinstall_editor() {
+  separator
+  box "Reinstalling Code Editor"
+  separator
+  echo
+
+  log_info "Reinstalling Neovim and dependencies..."
+
+  if loading "Reinstalling NvChad configuration" _reinstall_editor_wrapper; then
+    log_success "Code editor reinstalled successfully"
+    separator
+    echo
+    list_item "Neovim (code editor)"
+    list_item "NvChad (framework for Neovim)"
+    list_item "GitHub Copilot (AI code assistant)"
+    list_item "CodeCompanion (AI chat assistant)"
+    echo
+  else
+    log_error "Failed to reinstall code editor"
+    log_warn "Check log file: $LOG_FILE"
+    return 1
+  fi
+}
+
+_reinstall_editor_wrapper() {
+  import "@/tools/editor/all"
+  reinstall_all_editor_components
 }

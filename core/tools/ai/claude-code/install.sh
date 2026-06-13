@@ -267,3 +267,8 @@ update_claude_code() {
   log_success "Claude Code (proot-distro) updated"
   return 0
 }
+
+reinstall_claude_code() {
+  uninstall_claude_code
+  install_claude_code
+}

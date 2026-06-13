@@ -93,6 +93,37 @@ update_ui() {
 }
 
 _update_ui_wrapper() {
-	import "@/tools/ui/all"
-	update_all_ui_components
+  import "@/tools/ui/all"
+  update_all_ui_components
+}
+
+reinstall_ui() {
+  separator
+  box "Reinstalling Termux UI Configuration"
+  separator
+  echo
+
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if loading "Reinstalling UI components" _reinstall_ui_wrapper; then
+    separator
+    log_success "Termux UI configuration reinstalled"
+    separator
+    echo
+    list_item "Cursor: Green (#00FF00)"
+    list_item "Extra-keys: Custom layout with navigation"
+    list_item "Font: Meslo Nerd Font"
+    list_item "Banner: Core-Termux startup banner"
+    echo
+    log_warn "Please restart Termux to apply all changes"
+    echo
+  else
+    log_error "Failed to reinstall UI"
+    return 1
+  fi
+}
+
+_reinstall_ui_wrapper() {
+  import "@/tools/ui/all"
+  reinstall_all_ui_components
 }

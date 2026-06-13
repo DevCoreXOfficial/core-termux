@@ -47,3 +47,8 @@ update_tree() {
 		return 1
 	fi
 }
+
+reinstall_tree() {
+	uninstall_tree
+	install_tree
+}

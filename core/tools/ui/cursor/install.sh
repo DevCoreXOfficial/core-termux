@@ -38,3 +38,8 @@ update_cursor() {
 	log_info "Updating Cursor Color..."
 	install_cursor
 }
+
+reinstall_cursor() {
+	uninstall_cursor
+	install_cursor
+}

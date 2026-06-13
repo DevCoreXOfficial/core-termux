@@ -69,3 +69,7 @@ update_zsh_completions() {
   fi
 }
 
+reinstall_zsh_completions() {
+  uninstall_zsh_completions
+  install_zsh_completions
+}

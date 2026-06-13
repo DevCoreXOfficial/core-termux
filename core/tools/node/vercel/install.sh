@@ -60,3 +60,8 @@ update_vercel() {
   fi
 }
 
+reinstall_vercel() {
+  uninstall_vercel
+  install_vercel
+}
+

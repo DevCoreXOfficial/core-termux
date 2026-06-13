@@ -1,17 +1,17 @@
 # Ollama
 
-Local LLM runtime for running AI models on device
+Run open-source LLMs locally on Termux
 
 **Package:** ollama  
 **Author:** DevCoreX  
 **Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://ollama.ai  
+**Official:** https://ollama.com  
 **Type:** Local LLM runtime (pkg)  
 **License:** MIT
 
 ## Description
 
-Ollama is a local LLM runtime that allows you to run large language models directly on your Android device. It supports a wide range of models including Llama, Mistral, Gemma, and many more. All processing is done locally with no data sent to external servers.
+Ollama allows you to run open-source LLMs locally on Termux. It supports a wide range of models including Llama, Mistral, Gemma, Qwen, DeepSeek, and many more. All processing is done locally with no data sent to external servers.
 
 ## Dependencies
 

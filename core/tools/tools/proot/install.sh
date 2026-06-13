@@ -47,3 +47,8 @@ update_proot() {
 		return 1
 	fi
 }
+
+reinstall_proot() {
+	uninstall_proot
+	install_proot
+}

@@ -77,6 +77,38 @@ update_language() {
 }
 
 _update_language_wrapper() {
-	import "@/tools/language/all"
-	update_all_language_packages
+  import "@/tools/language/all"
+  update_all_language_packages
+}
+
+reinstall_language() {
+  separator
+  box "Reinstalling Language Packages"
+  separator
+  echo
+
+  log_info "Reinstalling language packages..."
+
+  if loading "Reinstalling language packages" _reinstall_language_wrapper; then
+    log_success "Language packages reinstalled successfully"
+    separator
+    echo
+    list_item "Node.js LTS"
+    list_item "Python"
+    list_item "Perl"
+    list_item "PHP"
+    list_item "Rust"
+    list_item "C/C++ (clang)"
+    list_item "Go (golang)"
+    echo
+  else
+    log_error "Failed to reinstall language packages"
+    log_warn "Check log file: $LOG_FILE"
+    return 1
+  fi
+}
+
+_reinstall_language_wrapper() {
+  import "@/tools/language/all"
+  reinstall_all_language_packages
 }

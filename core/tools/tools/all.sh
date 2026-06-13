@@ -185,70 +185,139 @@ uninstall_all_tools() {
 }
 
 update_all_tools() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${TOOLS_PACKAGES[@]}"; do
-		case "$tool" in
-		gh)
-			if update_gh; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		wget)
-			if update_wget; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		curl)
-			if update_curl; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		lsd)
-			if update_lsd; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		bat)
-			if update_bat; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		proot)
-			if update_proot; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		ncurses)
-			if update_ncurses; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		tmate)
-			if update_tmate; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		cloudflared)
-			if update_cloudflared; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		translate)
-			if update_translate; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		html2text)
-			if update_html2text; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		jq)
-			if update_jq; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		bc)
-			if update_bc; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		tree)
-			if update_tree; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		fzf)
-			if update_fzf; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		imagemagick)
-			if update_imagemagick; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		shfmt)
-			if update_shfmt; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		make)
-			if update_make; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		udocker)
-			if update_udocker; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${TOOLS_PACKAGES[@]}"; do
+    case "$tool" in
+    gh)
+      if update_gh; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    wget)
+      if update_wget; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    curl)
+      if update_curl; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    lsd)
+      if update_lsd; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    bat)
+      if update_bat; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    proot)
+      if update_proot; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    ncurses)
+      if update_ncurses; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    tmate)
+      if update_tmate; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    cloudflared)
+      if update_cloudflared; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    translate)
+      if update_translate; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    html2text)
+      if update_html2text; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    jq)
+      if update_jq; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    bc)
+      if update_bc; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    tree)
+      if update_tree; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    fzf)
+      if update_fzf; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    imagemagick)
+      if update_imagemagick; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    shfmt)
+      if update_shfmt; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    make)
+      if update_make; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    udocker)
+      if update_udocker; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_tools() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${TOOLS_PACKAGES[@]}"; do
+    case "$tool" in
+    gh)
+      if reinstall_gh; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    wget)
+      if reinstall_wget; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    curl)
+      if reinstall_curl; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    lsd)
+      if reinstall_lsd; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    bat)
+      if reinstall_bat; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    proot)
+      if reinstall_proot; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    ncurses)
+      if reinstall_ncurses; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    tmate)
+      if reinstall_tmate; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    cloudflared)
+      if reinstall_cloudflared; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    translate)
+      if reinstall_translate; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    html2text)
+      if reinstall_html2text; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    jq)
+      if reinstall_jq; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    bc)
+      if reinstall_bc; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    tree)
+      if reinstall_tree; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    fzf)
+      if reinstall_fzf; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    imagemagick)
+      if reinstall_imagemagick; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    shfmt)
+      if reinstall_shfmt; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    make)
+      if reinstall_make; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    udocker)
+      if reinstall_udocker; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

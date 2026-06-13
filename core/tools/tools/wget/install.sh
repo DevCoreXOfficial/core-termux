@@ -47,3 +47,8 @@ update_wget() {
 		return 1
 	fi
 }
+
+reinstall_wget() {
+	uninstall_wget
+	install_wget
+}

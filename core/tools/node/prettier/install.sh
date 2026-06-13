@@ -60,3 +60,8 @@ update_prettier() {
   fi
 }
 
+reinstall_prettier() {
+  uninstall_prettier
+  install_prettier
+}
+

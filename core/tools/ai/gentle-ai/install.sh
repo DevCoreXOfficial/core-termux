@@ -259,3 +259,8 @@ update_gentle_ai() {
   log_success "gentle-ai updated"
   return 0
 }
+
+reinstall_gentle_ai() {
+  uninstall_gentle_ai
+  install_gentle_ai
+}

@@ -71,6 +71,34 @@ update_automation() {
 }
 
 _update_automation_wrapper() {
-	import "@/tools/automation/all"
-	update_all_automation_tools
+  import "@/tools/automation/all"
+  update_all_automation_tools
+}
+
+reinstall_automation() {
+  separator
+  box "Reinstalling Automation Tools"
+  separator
+  echo
+
+  log_info "Reinstalling Automation Tools..."
+  echo
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if loading "Reinstalling Automation Tools" _reinstall_automation_wrapper; then
+    log_success "Automation Tools reinstalled successfully"
+    separator
+    echo
+    list_item "n8n"
+    echo
+  else
+    log_error "Failed to reinstall Automation Tools"
+    log_warn "Check log file: $LOG_FILE"
+    return 1
+  fi
+}
+
+_reinstall_automation_wrapper() {
+  import "@/tools/automation/all"
+  reinstall_all_automation_tools
 }

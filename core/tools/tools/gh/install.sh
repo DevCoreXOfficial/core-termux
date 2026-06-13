@@ -47,3 +47,8 @@ update_gh() {
 		return 1
 	fi
 }
+
+reinstall_gh() {
+	uninstall_gh
+	install_gh
+}

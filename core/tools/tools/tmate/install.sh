@@ -47,3 +47,8 @@ update_tmate() {
 		return 1
 	fi
 }
+
+reinstall_tmate() {
+	uninstall_tmate
+	install_tmate
+}

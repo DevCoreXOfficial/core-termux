@@ -125,3 +125,8 @@ update_banner() {
 	uninstall_banner
 	install_banner
 }
+
+reinstall_banner() {
+	uninstall_banner
+	install_banner
+}

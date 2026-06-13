@@ -68,3 +68,7 @@ update_zsh_autosuggestions() {
   fi
 }
 
+reinstall_zsh_autosuggestions() {
+  uninstall_zsh_autosuggestions
+  install_zsh_autosuggestions
+}

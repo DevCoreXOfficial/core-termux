@@ -230,3 +230,8 @@ update_antigravity_cli() {
   log_success "Antigravity CLI updated"
   return 0
 }
+
+reinstall_antigravity_cli() {
+  uninstall_antigravity_cli
+  install_antigravity_cli
+}

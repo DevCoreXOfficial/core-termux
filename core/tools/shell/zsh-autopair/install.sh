@@ -69,3 +69,7 @@ update_zsh_autopair() {
   fi
 }
 
+reinstall_zsh_autopair() {
+  uninstall_zsh_autopair
+  install_zsh_autopair
+}

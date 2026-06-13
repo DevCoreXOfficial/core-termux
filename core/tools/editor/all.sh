@@ -49,19 +49,37 @@ uninstall_all_editor_components() {
 }
 
 update_all_editor_components() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${EDITOR_COMPONENTS[@]}"; do
-		case "$tool" in
-		neovim)
-			if update_neovim; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		nvchad)
-			if update_nvchad; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${EDITOR_COMPONENTS[@]}"; do
+    case "$tool" in
+    neovim)
+      if update_neovim; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    nvchad)
+      if update_nvchad; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_editor_components() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${EDITOR_COMPONENTS[@]}"; do
+    case "$tool" in
+    neovim)
+      if reinstall_neovim; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    nvchad)
+      if reinstall_nvchad; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

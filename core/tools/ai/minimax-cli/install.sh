@@ -85,3 +85,8 @@ update_minimax_cli() {
     return 1
   fi
 }
+
+reinstall_minimax_cli() {
+  uninstall_minimax_cli
+  install_minimax_cli
+}

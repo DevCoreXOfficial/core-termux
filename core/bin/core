@@ -69,7 +69,7 @@ show_update_notification() {
 }
 
 # Check updates (solo si no es comando de update)
-if [[ "$1" != "update" ]] && [[ "$1" != "uninstall" ]]; then
+if [[ "$1" != "update" ]] && [[ "$1" != "uninstall" ]] && [[ "$1" != "reinstall" ]]; then
   check_for_updates
   
   # Importar logs para la notificación

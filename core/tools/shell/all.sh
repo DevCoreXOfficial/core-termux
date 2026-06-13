@@ -114,43 +114,85 @@ uninstall_all_shell_plugins() {
 }
 
 update_all_shell_plugins() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${SHELL_PLUGINS[@]}"; do
-		case "$tool" in
-		powerlevel10k)
-			if update_powerlevel10k; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		zsh-defer)
-			if update_zsh_defer; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		zsh-autosuggestions)
-			if update_zsh_autosuggestions; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		zsh-syntax-highlighting)
-			if update_zsh_syntax_highlighting; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		history-substring)
-			if update_history_substring; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		zsh-completions)
-			if update_zsh_completions; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		fzf-tab)
-			if update_fzf_tab; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		you-should-use)
-			if update_you_should_use; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		zsh-autopair)
-			if update_zsh_autopair; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		better-npm)
-			if update_better_npm; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${SHELL_PLUGINS[@]}"; do
+    case "$tool" in
+    powerlevel10k)
+      if update_powerlevel10k; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-defer)
+      if update_zsh_defer; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-autosuggestions)
+      if update_zsh_autosuggestions; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-syntax-highlighting)
+      if update_zsh_syntax_highlighting; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    history-substring)
+      if update_history_substring; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-completions)
+      if update_zsh_completions; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    fzf-tab)
+      if update_fzf_tab; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    you-should-use)
+      if update_you_should_use; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-autopair)
+      if update_zsh_autopair; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    better-npm)
+      if update_better_npm; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_shell_plugins() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${SHELL_PLUGINS[@]}"; do
+    case "$tool" in
+    powerlevel10k)
+      if reinstall_powerlevel10k; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-defer)
+      if reinstall_zsh_defer; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-autosuggestions)
+      if reinstall_zsh_autosuggestions; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-syntax-highlighting)
+      if reinstall_zsh_syntax_highlighting; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    history-substring)
+      if reinstall_history_substring; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-completions)
+      if reinstall_zsh_completions; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    fzf-tab)
+      if reinstall_fzf_tab; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    you-should-use)
+      if reinstall_you_should_use; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    zsh-autopair)
+      if reinstall_zsh_autopair; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    better-npm)
+      if reinstall_better_npm; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

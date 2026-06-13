@@ -43,3 +43,8 @@ update_rust() {
 		return 1
 	fi
 }
+
+reinstall_rust() {
+	uninstall_rust
+	install_rust
+}

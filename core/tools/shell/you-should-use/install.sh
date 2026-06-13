@@ -69,3 +69,7 @@ update_you_should_use() {
   fi
 }
 
+reinstall_you_should_use() {
+  uninstall_you_should_use
+  install_you_should_use
+}

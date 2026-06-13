@@ -77,3 +77,8 @@ update_localtunnel() {
   fi
 }
 
+reinstall_localtunnel() {
+  uninstall_localtunnel
+  install_localtunnel
+}
+

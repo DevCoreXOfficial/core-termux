@@ -69,3 +69,7 @@ update_powerlevel10k() {
   fi
 }
 
+reinstall_powerlevel10k() {
+  uninstall_powerlevel10k
+  install_powerlevel10k
+}

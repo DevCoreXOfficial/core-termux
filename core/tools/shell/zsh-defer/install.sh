@@ -69,3 +69,7 @@ update_zsh_defer() {
   fi
 }
 
+reinstall_zsh_defer() {
+  uninstall_zsh_defer
+  install_zsh_defer
+}

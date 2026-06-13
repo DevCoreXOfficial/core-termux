@@ -43,3 +43,8 @@ update_sqlite() {
 		return 1
 	fi
 }
+
+reinstall_sqlite() {
+	uninstall_sqlite
+	install_sqlite
+}

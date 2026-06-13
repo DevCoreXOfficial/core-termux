@@ -80,3 +80,8 @@ update_n8n() {
   fi
 }
 
+reinstall_n8n() {
+  uninstall_n8n
+  install_n8n
+}
+

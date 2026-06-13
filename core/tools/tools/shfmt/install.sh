@@ -47,3 +47,8 @@ update_shfmt() {
 		return 1
 	fi
 }
+
+reinstall_shfmt() {
+	uninstall_shfmt
+	install_shfmt
+}

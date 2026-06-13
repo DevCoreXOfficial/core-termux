@@ -131,3 +131,8 @@ update_gga() {
 	log_success "GGA updated"
 	return 0
 }
+
+reinstall_gga() {
+	uninstall_gga
+	install_gga
+}

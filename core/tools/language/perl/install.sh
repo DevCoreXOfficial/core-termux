@@ -43,3 +43,8 @@ update_perl() {
 		return 1
 	fi
 }
+
+reinstall_perl() {
+	uninstall_perl
+	install_perl
+}

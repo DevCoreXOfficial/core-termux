@@ -47,3 +47,8 @@ update_bc() {
 		return 1
 	fi
 }
+
+reinstall_bc() {
+	uninstall_bc
+	install_bc
+}

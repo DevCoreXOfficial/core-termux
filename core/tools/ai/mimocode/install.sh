@@ -155,3 +155,8 @@ update_mimocode() {
 
   _install_mimocode_native
 }
+
+reinstall_mimocode() {
+  uninstall_mimocode
+  install_mimocode
+}

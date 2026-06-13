@@ -60,3 +60,8 @@ update_neovim() {
   fi
 }
 
+reinstall_neovim() {
+  uninstall_neovim
+  install_neovim
+}
+

@@ -147,3 +147,8 @@ update_codegraph() {
 	log_success "CodeGraph updated"
 	return 0
 }
+
+reinstall_codegraph() {
+	uninstall_codegraph
+	install_codegraph
+}

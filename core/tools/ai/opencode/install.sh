@@ -279,3 +279,8 @@ update_opencode() {
   log_success "OpenCode (proot-distro) updated"
   return 0
 }
+
+reinstall_opencode() {
+  uninstall_opencode
+  install_opencode
+}

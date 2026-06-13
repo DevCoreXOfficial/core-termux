@@ -65,25 +65,49 @@ uninstall_all_db_tools() {
 }
 
 update_all_db_tools() {
-	local updated_count=0
-	local failed_count=0
+  local updated_count=0
+  local failed_count=0
 
-	for tool in "${DB_TOOLS[@]}"; do
-		case "$tool" in
-		postgresql)
-			if update_postgresql; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		mariadb)
-			if update_mariadb; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		sqlite)
-			if update_sqlite; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		mongodb)
-			if update_mongodb; then ((updated_count++)); else ((failed_count++)); fi
-			;;
-		esac
-	done
+  for tool in "${DB_TOOLS[@]}"; do
+    case "$tool" in
+    postgresql)
+      if update_postgresql; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    mariadb)
+      if update_mariadb; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    sqlite)
+      if update_sqlite; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    mongodb)
+      if update_mongodb; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
 
-	return 0
+  return 0
+}
+
+reinstall_all_db_tools() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${DB_TOOLS[@]}"; do
+    case "$tool" in
+    postgresql)
+      if reinstall_postgresql; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    mariadb)
+      if reinstall_mariadb; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    sqlite)
+      if reinstall_sqlite; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    mongodb)
+      if reinstall_mongodb; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
 }

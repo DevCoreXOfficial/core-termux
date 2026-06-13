@@ -42,3 +42,8 @@ update_font() {
 	log_info "Updating Meslo Nerd Font..."
 	install_font
 }
+
+reinstall_font() {
+	uninstall_font
+	install_font
+}

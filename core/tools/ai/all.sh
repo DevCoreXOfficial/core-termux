@@ -241,3 +241,69 @@ update_all_ai_tools() {
 
   return 0
 }
+
+reinstall_all_ai_tools() {
+  local reinstalled_count=0
+  local failed_count=0
+
+  for tool in "${AI_TOOLS[@]}"; do
+    case "$tool" in
+    qwen-code)
+      if reinstall_qwen_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    gemini-cli)
+      if reinstall_gemini_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    claude-code)
+      if reinstall_claude_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    mistral-vibe)
+      if reinstall_mistral_vibe; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    openclaude)
+      if reinstall_openclaude; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    openclaw)
+      if reinstall_openclaw; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    ollama)
+      if reinstall_ollama; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    codex)
+      if reinstall_codex; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    opencode)
+      if reinstall_opencode; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    mimocode)
+      if reinstall_mimocode; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    engram)
+      if reinstall_engram; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    codegraph)
+      if reinstall_codegraph; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    pi)
+      if reinstall_pi; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    antigravity-cli)
+      if reinstall_antigravity_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    gentle-ai)
+      if reinstall_gentle_ai; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    minimax-cli)
+      if reinstall_minimax_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    gga)
+      if reinstall_gga; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    hermes-agent)
+      if reinstall_hermes_agent; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    esac
+  done
+
+  return 0
+}

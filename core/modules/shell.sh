@@ -278,6 +278,43 @@ update_shell() {
 }
 
 _update_shell_plugins_wrapper() {
-	import "@/tools/shell/all"
-	update_all_shell_plugins
+  import "@/tools/shell/all"
+  update_all_shell_plugins
+}
+
+reinstall_shell() {
+  separator
+  box "Reinstalling ZSH Shell Environment"
+  separator
+  echo
+
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if loading "Reinstalling ZSH plugins" _reinstall_shell_plugins_wrapper; then
+    log_success "ZSH plugins reinstalled"
+  else
+    log_error "Failed to reinstall ZSH plugins"
+  fi
+  echo
+
+  setup_zsh_aliases
+  echo
+
+  setup_shell_env
+  echo
+
+  setupPersistentSession
+  echo
+
+  separator
+  log_success "ZSH shell environment reinstallation completed"
+  separator
+  echo
+  log_warn "Please restart Termux or run: exec zsh"
+  echo
+}
+
+_reinstall_shell_plugins_wrapper() {
+  import "@/tools/shell/all"
+  reinstall_all_shell_plugins
 }

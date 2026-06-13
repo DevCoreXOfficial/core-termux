@@ -1,6 +1,6 @@
 # OpenClaw
 
-Multi-platform AI assistant aggregator
+Personal AI Assistant
 
 **Package:** openclaw  
 **Author:** DevCoreX  
@@ -11,7 +11,7 @@ Multi-platform AI assistant aggregator
 
 ## Description
 
-OpenClaw is a multi-platform AI assistant aggregator that connects to various AI services including Lark, Nostr, Slack, and WhatsApp. It provides a unified interface for interacting with multiple AI platforms from your terminal.
+OpenClaw is a Personal AI Assistant. It provides a unified interface for interacting with AI services from your terminal.
 
 ## Dependencies
 

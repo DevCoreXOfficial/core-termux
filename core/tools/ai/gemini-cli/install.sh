@@ -77,3 +77,7 @@ update_gemini_cli() {
   fi
 }
 
+reinstall_gemini_cli() {
+  uninstall_gemini_cli
+  install_gemini_cli
+}

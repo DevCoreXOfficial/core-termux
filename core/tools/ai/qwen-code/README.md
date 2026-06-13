@@ -1,6 +1,6 @@
 # Qwen Code
 
-AI-powered coding assistant by Alibaba for code generation and completion
+Alibaba's AI coding assistant
 
 **Package:** @qwen-code/qwen-code  
 **Author:** DevCoreX  

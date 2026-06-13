@@ -77,3 +77,8 @@ update_engram() {
   fi
 }
 
+reinstall_engram() {
+  uninstall_engram
+  install_engram
+}
+

@@ -43,3 +43,8 @@ update_python() {
 		return 1
 	fi
 }
+
+reinstall_python() {
+	uninstall_python
+	install_python
+}

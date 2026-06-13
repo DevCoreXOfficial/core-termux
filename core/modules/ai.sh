@@ -95,3 +95,47 @@ _update_ai_tools_wrapper() {
   import "@/tools/ai/all"
   update_all_ai_tools
 }
+
+reinstall_ai() {
+  separator
+  box "Reinstalling AI Tools"
+  separator
+  echo
+
+  log_info "Reinstalling AI tools..."
+  echo
+
+  if loading "Reinstalling AI tools" _reinstall_ai_tools_wrapper; then
+    log_success "AI tools reinstalled successfully"
+    separator
+    echo
+    list_item "Qwen Code"
+    list_item "Gemini CLI"
+    list_item "Mistral Vibe"
+    list_item "OpenClaude"
+    list_item "Claude Code"
+    list_item "OpenClaw"
+    list_item "Ollama"
+    list_item "Codex"
+    list_item "OpenCode"
+    list_item "MiMo Code"
+    list_item "Engram"
+    list_item "CodeGraph"
+    list_item "Pi"
+    list_item "Antigravity CLI"
+    list_item "Minimax CLI"
+    list_item "Gentle AI"
+    list_item "GGA"
+    list_item "Hermes Agent"
+    echo
+  else
+    log_error "Failed to reinstall AI tools"
+    log_warn "Check log file: $LOG_FILE"
+    return 1
+  fi
+}
+
+_reinstall_ai_tools_wrapper() {
+  import "@/tools/ai/all"
+  reinstall_all_ai_tools
+}

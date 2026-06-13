@@ -81,3 +81,8 @@ update_qwen_code() {
     return 1
   fi
 }
+
+reinstall_qwen_code() {
+  uninstall_qwen_code
+  install_qwen_code
+}

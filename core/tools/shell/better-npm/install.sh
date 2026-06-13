@@ -68,3 +68,7 @@ update_better_npm() {
   fi
 }
 
+reinstall_better_npm() {
+  uninstall_better_npm
+  install_better_npm
+}

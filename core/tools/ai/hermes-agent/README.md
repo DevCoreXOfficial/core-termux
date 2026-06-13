@@ -1,5 +1,5 @@
 # Hermes Agent
-The agent that grows with you
+The self-improving AI agent built by Nous Research
 
 **Package:** hermes-agent
 **Author:** DevCoreX  

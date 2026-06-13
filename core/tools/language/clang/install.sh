@@ -43,3 +43,8 @@ update_clang() {
 		return 1
 	fi
 }
+
+reinstall_clang() {
+	uninstall_clang
+	install_clang
+}

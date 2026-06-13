@@ -1,6 +1,6 @@
 # OpenClaude
 
-Open-source Claude AI client for the terminal
+Open source Claude Code alternative
 
 **Package:** @gitlawb/openclaude  
 **Author:** DevCoreX  
@@ -11,7 +11,7 @@ Open-source Claude AI client for the terminal
 
 ## Description
 
-OpenClaude is an open-source terminal client for Anthropic's Claude AI. It provides a CLI interface to interact with Claude models for code generation, analysis, and general AI assistance.
+OpenClaude is an open source Claude Code alternative. It provides a CLI interface for code generation, analysis, and AI assistance.
 
 ## Dependencies
 

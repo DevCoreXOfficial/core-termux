@@ -60,3 +60,8 @@ update_nestjs() {
   fi
 }
 
+reinstall_nestjs() {
+  uninstall_nestjs
+  install_nestjs
+}
+

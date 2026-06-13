@@ -89,6 +89,50 @@ update_tools() {
 }
 
 _update_tools_wrapper() {
-	import "@/tools/tools/all"
-	update_all_tools
+  import "@/tools/tools/all"
+  update_all_tools
+}
+
+reinstall_tools() {
+  separator
+  box "Reinstalling Development Tools"
+  separator
+  echo
+
+  log_info "Reinstalling development tools..."
+
+  if loading "Reinstalling tools" _reinstall_tools_wrapper; then
+    log_success "Tools reinstalled successfully"
+    separator
+    echo
+    list_item "GitHub CLI"
+    list_item "Wget"
+    list_item "Curl"
+    list_item "LSD (ls replacement)"
+    list_item "Bat (cat replacement)"
+    list_item "Proot (chroot alternative)"
+    list_item "Ncurses Utils"
+    list_item "Tmate (terminal sharing)"
+    list_item "Cloudflared (Cloudflare Tunnel)"
+    list_item "Translate Shell"
+    list_item "html2text (HTML to text converter)"
+    list_item "jq (JSON processor)"
+    list_item "bc (calculator)"
+    list_item "Tree (directory listing)"
+    list_item "Fzf (fuzzy finder)"
+    list_item "ImageMagick (image manipulation)"
+    list_item "Shfmt (shell script formatter)"
+    list_item "Make (build automation)"
+    list_item "Udocker (container management)"
+    echo
+  else
+    log_error "Failed to reinstall tools"
+    log_warn "Check log file: $LOG_FILE"
+    return 1
+  fi
+}
+
+_reinstall_tools_wrapper() {
+  import "@/tools/tools/all"
+  reinstall_all_tools
 }

@@ -69,3 +69,7 @@ update_history_substring() {
   fi
 }
 
+reinstall_history_substring() {
+  uninstall_history_substring
+  install_history_substring
+}
