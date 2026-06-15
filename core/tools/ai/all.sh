@@ -23,6 +23,7 @@ AI_TOOLS=(
   "minimax-cli"
   "gga"
   "hermes-agent"
+  "kimi-code"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -43,6 +44,7 @@ source "$(dirname "$BASH_SOURCE")/gentle-ai/install.sh"
 source "$(dirname "$BASH_SOURCE")/minimax-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/gga/install.sh"
 source "$(dirname "$BASH_SOURCE")/hermes-agent/install.sh"
+source "$(dirname "$BASH_SOURCE")/kimi-code/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
@@ -103,6 +105,9 @@ install_all_ai_tools() {
       ;;
     hermes-agent)
       if install_hermes_agent; then ((installed_count++)); else ((failed_count++)); fi
+      ;;
+    kimi-code)
+      if install_kimi_code; then ((installed_count++)); else ((failed_count++)); fi
       ;;
     esac
   done
@@ -170,6 +175,9 @@ uninstall_all_ai_tools() {
     hermes-agent)
       if uninstall_hermes_agent; then ((uninstalled_count++)); else ((failed_count++)); fi
       ;;
+    kimi-code)
+      if uninstall_kimi_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+      ;;
     esac
   done
 
@@ -236,6 +244,9 @@ update_all_ai_tools() {
     hermes-agent)
       if update_hermes_agent; then ((updated_count++)); else ((failed_count++)); fi
       ;;
+    kimi-code)
+      if update_kimi_code; then ((updated_count++)); else ((failed_count++)); fi
+      ;;
     esac
   done
 
@@ -301,6 +312,9 @@ reinstall_all_ai_tools() {
       ;;
     hermes-agent)
       if reinstall_hermes_agent; then ((reinstalled_count++)); else ((failed_count++)); fi
+      ;;
+    kimi-code)
+      if reinstall_kimi_code; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     esac
   done

@@ -126,7 +126,7 @@ _list_ai() {
   table_row "Ollama" "--ollama" "ollama" "$(_check_pkg "ollama")"
   table_row "Codex CLI" "--codex" "codex" "$(_check_cmd "codex")"
   table_row "OpenCode" "--opencode" "opencode" "$(_check_cmd "opencode")"
-  table_row "MiMo Code" "--mimocode" "mimo" "$(_check_cmd "mimo")"
+  table_row "MiMoCode" "--mimocode" "mimo" "$(_check_cmd "mimo")"
   table_row "Engram" "--engram" "engram" "$(_check_cmd "engram")"
   table_row "CodeGraph" "--codegraph" "codegraph" "$(_check_cmd "codegraph")"
   table_row "Pi Coding Agent" "--pi" "pi" "$(_check_cmd "pi")"
@@ -135,6 +135,7 @@ _list_ai() {
   table_row "Gentle AI" "--gentle-ai" "gentle-ai" "$(_check_cmd "gentle-ai")"
   table_row "GGA" "--gga" "gga" "$(_check_cmd "gga")"
   table_row "Hermes Agent" "--hermes-agent" "hermes" "$(_check_cmd "hermes")"
+  table_row "Kimi Code" "--kimi-code" "kimi" "$(_check_cmd "kimi")"
   table_end
 
   echo

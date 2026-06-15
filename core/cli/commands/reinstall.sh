@@ -206,7 +206,10 @@ _reinstall_specific_tools() {
         if loading "Reinstalling GGA" reinstall_gga; then ((reinstalled_count++)); else ((failed_count++)); fi
         ;;
       hermes-agent)
-        if loading "Reinstalling Hermes Agent" reinstall_hermes_agent; then ((reinstalled_count++)); else ((failed_count++)); fi
+        if reinstall_hermes_agent; then ((reinstalled_count++)); else ((failed_count++)); fi
+        ;;
+      kimi-code)
+        if loading "Reinstalling Kimi Code" reinstall_kimi_code; then ((reinstalled_count++)); else ((failed_count++)); fi
         ;;
       *)
         log_warn "Unknown AI tool: --$tool"

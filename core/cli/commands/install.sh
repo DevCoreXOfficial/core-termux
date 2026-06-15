@@ -217,6 +217,9 @@ _install_specific_tools() {
       hermes-agent)
         if install_hermes_agent; then ((installed_count++)); else ((failed_count++)); fi
         ;;
+      kimi-code)
+        if loading "Installing Kimi Code" install_kimi_code; then ((installed_count++)); else ((failed_count++)); fi
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

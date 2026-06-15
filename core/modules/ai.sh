@@ -41,6 +41,7 @@ install_ai() {
     list_item "Gentle AI ${GRAY}(${D_GREEN}gentle-ai${GRAY})"
     list_item "GGA ${GRAY}(${D_GREEN}gga${GRAY})"
     list_item "Hermes Agent ${GRAY}(${D_GREEN}hermes${GRAY})"
+    list_item "Kimi Code ${GRAY}(${D_GREEN}kimi${GRAY})"
     echo
   else
     log_error "Failed to install AI tools"

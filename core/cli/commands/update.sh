@@ -216,6 +216,9 @@ _update_specific_tools() {
       hermes-agent)
         if loading "Updating Hermes Agent" update_hermes_agent; then ((updated_count++)); else ((failed_count++)); fi
         ;;
+      kimi-code)
+        if loading "Updating Kimi Code" update_kimi_code; then ((updated_count++)); else ((failed_count++)); fi
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

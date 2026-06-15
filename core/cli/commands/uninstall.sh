@@ -238,6 +238,9 @@ _uninstall_specific_tools() {
       hermes-agent)
         if loading "Uninstalling Hermes Agent" uninstall_hermes_agent; then ((uninstalled_count++)); else ((failed_count++)); fi
         ;;
+      kimi-code)
+        if loading "Uninstalling Kimi Code" uninstall_kimi_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;
