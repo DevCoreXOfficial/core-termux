@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_lsd() {
 	if command -v lsd &>/dev/null; then
 		log_info "LSD is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing LSD..."
 
@@ -23,6 +23,10 @@ install_lsd() {
 }
 
 uninstall_lsd() {
+	if ! command -v lsd &>/dev/null; then
+		log_info "LSD is not installed"
+		return 2
+	fi
 	log_info "Uninstalling LSD..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

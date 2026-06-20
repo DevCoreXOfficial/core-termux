@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_tmate() {
 	if command -v tmate &>/dev/null; then
 		log_info "Tmate is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Tmate..."
 
@@ -23,6 +23,10 @@ install_tmate() {
 }
 
 uninstall_tmate() {
+	if ! command -v tmate &>/dev/null; then
+		log_info "Tmate is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Tmate..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

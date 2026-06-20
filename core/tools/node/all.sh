@@ -35,34 +35,44 @@ install_all_node_packages() {
 	for tool in "${NODE_PACKAGES[@]}"; do
 		case "$tool" in
 		typescript)
-			if loading "Installing TypeScript" install_typescript; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing TypeScript" install_typescript
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		nestjs)
-			if loading "Installing NestJS CLI" install_nestjs; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing NestJS CLI" install_nestjs
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		prettier)
-			if loading "Installing Prettier" install_prettier; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Prettier" install_prettier
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		live-server)
-			if loading "Installing Live Server" install_live_server; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Live Server" install_live_server
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		localtunnel)
-			if loading "Installing Localtunnel" install_localtunnel; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Localtunnel" install_localtunnel
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		vercel)
-			if loading "Installing Vercel CLI" install_vercel; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Vercel CLI" install_vercel
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		markserv)
-			if loading "Installing Markserv" install_markserv; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Markserv" install_markserv
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		psqlformat)
-			if loading "Installing PSQL Format" install_psqlformat; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing PSQL Format" install_psqlformat
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		ncu)
-			if loading "Installing NPM Check Updates" install_ncu; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing NPM Check Updates" install_ncu
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		ngrok)
-			if loading "Installing Ngrok" install_ngrok; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Ngrok" install_ngrok
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -77,34 +87,44 @@ uninstall_all_node_packages() {
 	for tool in "${NODE_PACKAGES[@]}"; do
 		case "$tool" in
 		typescript)
-			if loading "Uninstalling TypeScript" uninstall_typescript; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling TypeScript" uninstall_typescript
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		nestjs)
-			if loading "Uninstalling NestJS CLI" uninstall_nestjs; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling NestJS CLI" uninstall_nestjs
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		prettier)
-			if loading "Uninstalling Prettier" uninstall_prettier; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Prettier" uninstall_prettier
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		live-server)
-			if loading "Uninstalling Live Server" uninstall_live_server; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Live Server" uninstall_live_server
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		localtunnel)
-			if loading "Uninstalling Localtunnel" uninstall_localtunnel; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Localtunnel" uninstall_localtunnel
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		vercel)
-			if loading "Uninstalling Vercel CLI" uninstall_vercel; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Vercel CLI" uninstall_vercel
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		markserv)
-			if loading "Uninstalling Markserv" uninstall_markserv; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Markserv" uninstall_markserv
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		psqlformat)
-			if loading "Uninstalling PSQL Format" uninstall_psqlformat; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling PSQL Format" uninstall_psqlformat
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		ncu)
-			if loading "Uninstalling NPM Check Updates" uninstall_ncu; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling NPM Check Updates" uninstall_ncu
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		ngrok)
-			if loading "Uninstalling Ngrok" uninstall_ngrok; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Ngrok" uninstall_ngrok
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -119,34 +139,44 @@ update_all_node_packages() {
   for tool in "${NODE_PACKAGES[@]}"; do
     case "$tool" in
     typescript)
-      if loading "Updating TypeScript" update_typescript; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating TypeScript" update_typescript
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     nestjs)
-      if loading "Updating NestJS CLI" update_nestjs; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating NestJS CLI" update_nestjs
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     prettier)
-      if loading "Updating Prettier" update_prettier; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Prettier" update_prettier
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     live-server)
-      if loading "Updating Live Server" update_live_server; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Live Server" update_live_server
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     localtunnel)
-      if loading "Updating Localtunnel" update_localtunnel; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Localtunnel" update_localtunnel
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     vercel)
-      if loading "Updating Vercel CLI" update_vercel; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Vercel CLI" update_vercel
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     markserv)
-      if loading "Updating Markserv" update_markserv; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Markserv" update_markserv
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     psqlformat)
-      if loading "Updating PSQL Format" update_psqlformat; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating PSQL Format" update_psqlformat
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     ncu)
-      if loading "Updating NPM Check Updates" update_ncu; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating NPM Check Updates" update_ncu
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     ngrok)
-      if loading "Updating Ngrok" update_ngrok; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Ngrok" update_ngrok
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -161,34 +191,44 @@ reinstall_all_node_packages() {
   for tool in "${NODE_PACKAGES[@]}"; do
     case "$tool" in
     typescript)
-      if loading "Reinstalling TypeScript" reinstall_typescript; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling TypeScript" reinstall_typescript
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     nestjs)
-      if loading "Reinstalling NestJS CLI" reinstall_nestjs; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling NestJS CLI" reinstall_nestjs
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     prettier)
-      if loading "Reinstalling Prettier" reinstall_prettier; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Prettier" reinstall_prettier
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     live-server)
-      if loading "Reinstalling Live Server" reinstall_live_server; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Live Server" reinstall_live_server
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     localtunnel)
-      if loading "Reinstalling Localtunnel" reinstall_localtunnel; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Localtunnel" reinstall_localtunnel
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     vercel)
-      if loading "Reinstalling Vercel CLI" reinstall_vercel; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Vercel CLI" reinstall_vercel
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     markserv)
-      if loading "Reinstalling Markserv" reinstall_markserv; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Markserv" reinstall_markserv
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     psqlformat)
-      if loading "Reinstalling PSQL Format" reinstall_psqlformat; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling PSQL Format" reinstall_psqlformat
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ncu)
-      if loading "Reinstalling NPM Check Updates" reinstall_ncu; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling NPM Check Updates" reinstall_ncu
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ngrok)
-      if loading "Reinstalling Ngrok" reinstall_ngrok; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Ngrok" reinstall_ngrok
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done

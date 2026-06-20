@@ -29,7 +29,7 @@ minimax_cli_dependencies() {
 install_minimax_cli() {
   if command -v mmx &>/dev/null; then
     log_info "MiniMax CLI is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Installing MiniMax CLI..."
@@ -53,7 +53,7 @@ install_minimax_cli() {
 uninstall_minimax_cli() {
   if ! command -v mmx &>/dev/null; then
     log_success "MiniMax CLI is not installed"
-    return 0
+    return 2
   fi
 
   log_info "Uninstalling MiniMax CLI..."

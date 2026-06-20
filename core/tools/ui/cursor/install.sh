@@ -24,6 +24,10 @@ EOF
 }
 
 uninstall_cursor() {
+	if [[ ! -f "$TERMUX_DIR/colors.properties" ]]; then
+		log_info "Cursor Color is not installed"
+		return 0
+	fi
 	log_info "Uninstalling Cursor Color..."
 
 	if [[ -f "$TERMUX_DIR/colors.properties" ]]; then

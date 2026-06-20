@@ -47,6 +47,11 @@ install_zsh_autosuggestions() {
 }
 
 uninstall_zsh_autosuggestions() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions" ]]; then
+    log_info "zsh-autosuggestions is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling zsh-autosuggestions..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions" ]]; then

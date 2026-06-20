@@ -29,7 +29,7 @@ _kimi_code_dependencies() {
 install_kimi_code() {
   if command -v kimi &>/dev/null; then
     log_info "Kimi Code is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Installing Kimi Code..."
@@ -53,7 +53,7 @@ install_kimi_code() {
 uninstall_kimi_code() {
   if ! command -v kimi &>/dev/null; then
     log_success "Kimi Code is not installed"
-    return 0
+    return 2
   fi
 
   log_info "Uninstalling Kimi Code..."

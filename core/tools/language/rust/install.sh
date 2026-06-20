@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 install_rust() {
 	if command -v rust &>/dev/null; then
 		log_info "Rust is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Rust..."
 
@@ -21,6 +21,10 @@ install_rust() {
 }
 
 uninstall_rust() {
+	if ! command -v rustc &>/dev/null; then
+		log_info "Rust is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Rust..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall rust -y &>>"$LOG_FILE"; then

@@ -29,7 +29,7 @@ _codex_dependencies() {
 install_codex() {
 	if command -v codex &>/dev/null; then
 		log_info "Codex CLI is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Codex CLI..."
 
@@ -50,6 +50,10 @@ install_codex() {
 }
 
 uninstall_codex() {
+	if ! command -v codex &>/dev/null; then
+		log_info "Codex CLI is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Codex CLI..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

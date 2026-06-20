@@ -51,6 +51,10 @@ _install_ai_tools_wrapper() {
 }
 
 uninstall_ai() {
+  if ! command -v opencode &>/dev/null; then
+    log_info "AI Tools are not installed"
+    return 0
+  fi
   separator
   box "Uninstalling AI Tools"
   separator

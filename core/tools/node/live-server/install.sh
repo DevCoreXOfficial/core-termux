@@ -36,6 +36,10 @@ install_live_server() {
 }
 
 uninstall_live_server() {
+  if ! command -v live-server &>/dev/null; then
+    log_info "Live Server is not installed"
+    return 0
+  fi
   log_info "Uninstalling Live Server..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

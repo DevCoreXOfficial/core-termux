@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 install_perl() {
 	if command -v perl &>/dev/null; then
 		log_info "Perl is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Perl..."
 
@@ -21,6 +21,10 @@ install_perl() {
 }
 
 uninstall_perl() {
+	if ! command -v perl &>/dev/null; then
+		log_info "Perl is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Perl..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall perl -y &>>"$LOG_FILE"; then

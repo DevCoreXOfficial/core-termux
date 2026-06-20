@@ -226,6 +226,10 @@ uninstall_oh_my_zsh() {
 }
 
 uninstall_shell() {
+	if [[ ! -d "$OH_MY_ZSH_DIR" ]]; then
+		log_info "ZSH Shell Environment is not installed"
+		return 0
+	fi
 	separator
 	box "Uninstalling ZSH Shell Environment"
 	separator

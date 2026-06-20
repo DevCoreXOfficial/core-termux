@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_udocker() {
 	if command -v udocker &>/dev/null; then
 		log_info "Udocker is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Udocker..."
 
@@ -23,6 +23,10 @@ install_udocker() {
 }
 
 uninstall_udocker() {
+	if ! command -v udocker &>/dev/null; then
+		log_info "Udocker is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Udocker..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

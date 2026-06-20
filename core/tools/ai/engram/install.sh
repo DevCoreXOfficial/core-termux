@@ -27,7 +27,7 @@ _engram_dependencies() {
 install_engram() {
   if command -v engram &>/dev/null; then
     log_info "Engram is already installed"
-    return 0
+    return 2
   fi
   log_info "Installing Engram..."
 
@@ -49,6 +49,10 @@ install_engram() {
 }
 
 uninstall_engram() {
+  if ! command -v engram &>/dev/null; then
+    log_info "Engram is not installed"
+    return 2
+  fi
   log_info "Uninstalling Engram..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

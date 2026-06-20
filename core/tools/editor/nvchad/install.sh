@@ -62,6 +62,10 @@ install_nvchad() {
 }
 
 uninstall_nvchad() {
+  if [[ ! -d "$HOME/.config/nvim" ]]; then
+    log_info "NvChad is not installed"
+    return 2
+  fi
   log_info "Uninstalling NvChad..."
 
   if [[ -d "$HOME/.config/nvim" ]]; then

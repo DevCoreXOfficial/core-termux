@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_ncurses() {
 	if command -v tput &>/dev/null; then
 		log_info "Ncurses Utils is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Ncurses Utils..."
 
@@ -23,6 +23,10 @@ install_ncurses() {
 }
 
 uninstall_ncurses() {
+	if ! command -v tput &>/dev/null; then
+		log_info "Ncurses Utils is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Ncurses Utils..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

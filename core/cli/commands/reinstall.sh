@@ -155,61 +155,80 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       qwen-code)
-        if loading "Reinstalling Qwen Code" reinstall_qwen_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Qwen Code" reinstall_qwen_code
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       gemini-cli)
-        if loading "Reinstalling Gemini CLI" reinstall_gemini_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Gemini CLI" reinstall_gemini_cli
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       claude-code)
-        if loading "Reinstalling Claude Code" reinstall_claude_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Claude Code" reinstall_claude_code
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mistral-vibe)
-        if loading "Reinstalling Mistral Vibe" reinstall_mistral_vibe; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Mistral Vibe" reinstall_mistral_vibe
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       openclaude)
-        if loading "Reinstalling OpenClaude" reinstall_openclaude; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling OpenClaude" reinstall_openclaude
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       openclaw)
-        if loading "Reinstalling OpenClaw" reinstall_openclaw; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling OpenClaw" reinstall_openclaw
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ollama)
-        if loading "Reinstalling Ollama" reinstall_ollama; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Ollama" reinstall_ollama
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       codex)
-        if loading "Reinstalling Codex CLI" reinstall_codex; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Codex CLI" reinstall_codex
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       opencode)
-        if loading "Reinstalling OpenCode" reinstall_opencode; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling OpenCode" reinstall_opencode
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mimocode)
-        if loading "Reinstalling MiMo Code" reinstall_mimocode; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling MiMo Code" reinstall_mimocode
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       engram)
-        if loading "Reinstalling Engram" reinstall_engram; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Engram" reinstall_engram
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       codegraph)
-        if loading "Reinstalling CodeGraph" reinstall_codegraph; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling CodeGraph" reinstall_codegraph
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       pi)
-        if loading "Reinstalling Pi Coding Agent" reinstall_pi; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Pi Coding Agent" reinstall_pi
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       antigravity-cli)
-        if loading "Reinstalling Antigravity CLI" reinstall_antigravity_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Antigravity CLI" reinstall_antigravity_cli
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       minimax-cli)
-        if loading "Reinstalling Minimax CLI" reinstall_minimax_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Minimax CLI" reinstall_minimax_cli
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       gentle-ai)
-        if loading "Reinstalling Gentle AI" reinstall_gentle_ai; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Gentle AI" reinstall_gentle_ai
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       gga)
-        if loading "Reinstalling GGA" reinstall_gga; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling GGA" reinstall_gga
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       hermes-agent)
-        if reinstall_hermes_agent; then ((reinstalled_count++)); else ((failed_count++)); fi
+        reinstall_hermes_agent
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       kimi-code)
-        if loading "Reinstalling Kimi Code" reinstall_kimi_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Kimi Code" reinstall_kimi_code
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown AI tool: --$tool"
@@ -234,16 +253,20 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       postgresql)
-        if loading "Reinstalling PostgreSQL" reinstall_postgresql; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling PostgreSQL" reinstall_postgresql
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mariadb)
-        if loading "Reinstalling MariaDB" reinstall_mariadb; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling MariaDB" reinstall_mariadb
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       sqlite)
-        if loading "Reinstalling SQLite" reinstall_sqlite; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling SQLite" reinstall_sqlite
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mongodb)
-        if loading "Reinstalling MongoDB" reinstall_mongodb; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling MongoDB" reinstall_mongodb
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown database: --$tool"
@@ -268,61 +291,80 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       gh)
-        if loading "Reinstalling GitHub CLI" reinstall_gh; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling GitHub CLI" reinstall_gh
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       wget)
-        if loading "Reinstalling Wget" reinstall_wget; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Wget" reinstall_wget
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       curl)
-        if loading "Reinstalling Curl" reinstall_curl; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Curl" reinstall_curl
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       lsd)
-        if loading "Reinstalling LSD" reinstall_lsd; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling LSD" reinstall_lsd
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       bat)
-        if loading "Reinstalling Bat" reinstall_bat; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Bat" reinstall_bat
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       proot)
-        if loading "Reinstalling Proot" reinstall_proot; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Proot" reinstall_proot
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ncurses)
-        if loading "Reinstalling Ncurses Utils" reinstall_ncurses; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Ncurses Utils" reinstall_ncurses
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       tmate)
-        if loading "Reinstalling Tmate" reinstall_tmate; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Tmate" reinstall_tmate
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)
-        if loading "Reinstalling Cloudflared" reinstall_cloudflared; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Cloudflared" reinstall_cloudflared
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       translate)
-        if loading "Reinstalling Translate Shell" reinstall_translate; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Translate Shell" reinstall_translate
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       html2text)
-        if loading "Reinstalling html2text" reinstall_html2text; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling html2text" reinstall_html2text
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       jq)
-        if loading "Reinstalling jq" reinstall_jq; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling jq" reinstall_jq
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       bc)
-        if loading "Reinstalling bc" reinstall_bc; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling bc" reinstall_bc
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       tree)
-        if loading "Reinstalling Tree" reinstall_tree; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Tree" reinstall_tree
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       fzf)
-        if loading "Reinstalling Fzf" reinstall_fzf; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Fzf" reinstall_fzf
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       imagemagick)
-        if loading "Reinstalling ImageMagick" reinstall_imagemagick; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling ImageMagick" reinstall_imagemagick
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       shfmt)
-        if loading "Reinstalling Shfmt" reinstall_shfmt; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Shfmt" reinstall_shfmt
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       make)
-        if loading "Reinstalling Make" reinstall_make; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Make" reinstall_make
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       udocker)
-        if loading "Reinstalling Udocker" reinstall_udocker; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Udocker" reinstall_udocker
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown tool: --$tool"
@@ -347,34 +389,44 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       typescript)
-        if loading "Reinstalling TypeScript" reinstall_typescript; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling TypeScript" reinstall_typescript
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       nestjs)
-        if loading "Reinstalling NestJS CLI" reinstall_nestjs; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling NestJS CLI" reinstall_nestjs
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       prettier)
-        if loading "Reinstalling Prettier" reinstall_prettier; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Prettier" reinstall_prettier
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       live-server)
-        if loading "Reinstalling Live Server" reinstall_live_server; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Live Server" reinstall_live_server
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       localtunnel)
-        if loading "Reinstalling Localtunnel" reinstall_localtunnel; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Localtunnel" reinstall_localtunnel
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       vercel)
-        if loading "Reinstalling Vercel CLI" reinstall_vercel; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Vercel CLI" reinstall_vercel
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       markserv)
-        if loading "Reinstalling Markserv" reinstall_markserv; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Markserv" reinstall_markserv
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       psqlformat)
-        if loading "Reinstalling PSQL Format" reinstall_psqlformat; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling PSQL Format" reinstall_psqlformat
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ncu)
-        if loading "Reinstalling NPM Check Updates" reinstall_ncu; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling NPM Check Updates" reinstall_ncu
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ngrok)
-        if loading "Reinstalling Ngrok" reinstall_ngrok; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Ngrok" reinstall_ngrok
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown node module: --$tool"
@@ -399,25 +451,32 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        if loading "Reinstalling Node.js LTS" reinstall_nodejs; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Node.js LTS" reinstall_nodejs
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       python)
-        if loading "Reinstalling Python" reinstall_python; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Python" reinstall_python
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       perl)
-        if loading "Reinstalling Perl" reinstall_perl; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Perl" reinstall_perl
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       php)
-        if loading "Reinstalling PHP" reinstall_php; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling PHP" reinstall_php
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       rust)
-        if loading "Reinstalling Rust" reinstall_rust; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Rust" reinstall_rust
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       clang)
-        if loading "Reinstalling C/C++ (clang)" reinstall_clang; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling C/C++ (clang)" reinstall_clang
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       golang)
-        if loading "Reinstalling Go (golang)" reinstall_golang; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Go (golang)" reinstall_golang
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown language: --$tool"
@@ -442,34 +501,44 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       powerlevel10k)
-        if loading "Reinstalling powerlevel10k" reinstall_powerlevel10k; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling powerlevel10k" reinstall_powerlevel10k
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-defer)
-        if loading "Reinstalling zsh-defer" reinstall_zsh_defer; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-defer" reinstall_zsh_defer
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autosuggestions)
-        if loading "Reinstalling zsh-autosuggestions" reinstall_zsh_autosuggestions; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-autosuggestions" reinstall_zsh_autosuggestions
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-syntax-highlighting)
-        if loading "Reinstalling zsh-syntax-highlighting" reinstall_zsh_syntax_highlighting; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-syntax-highlighting" reinstall_zsh_syntax_highlighting
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       history-substring)
-        if loading "Reinstalling zsh-history-substring-search" reinstall_history_substring; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-history-substring-search" reinstall_history_substring
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-completions)
-        if loading "Reinstalling zsh-completions" reinstall_zsh_completions; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-completions" reinstall_zsh_completions
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       fzf-tab)
-        if loading "Reinstalling fzf-tab" reinstall_fzf_tab; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling fzf-tab" reinstall_fzf_tab
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       you-should-use)
-        if loading "Reinstalling zsh-you-should-use" reinstall_you_should_use; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-you-should-use" reinstall_you_should_use
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autopair)
-        if loading "Reinstalling zsh-autopair" reinstall_zsh_autopair; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-autopair" reinstall_zsh_autopair
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       better-npm)
-        if loading "Reinstalling zsh-better-npm-completion" reinstall_better_npm; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling zsh-better-npm-completion" reinstall_better_npm
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown plugin: --$tool"
@@ -494,10 +563,12 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       neovim)
-        if loading "Reinstalling Neovim" reinstall_neovim; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Neovim" reinstall_neovim
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       nvchad)
-        if loading "Reinstalling NvChad" reinstall_nvchad; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling NvChad" reinstall_nvchad
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown editor component: --$tool"
@@ -522,16 +593,20 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       font)
-        if loading "Reinstalling Meslo Nerd Font" reinstall_font; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Meslo Nerd Font" reinstall_font
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       extra-keys)
-        if loading "Reinstalling Extra Keys" reinstall_extra_keys; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Extra Keys" reinstall_extra_keys
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       cursor)
-        if loading "Reinstalling Cursor Color" reinstall_cursor; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Cursor Color" reinstall_cursor
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       banner)
-        if loading "Reinstalling Core-Termux Banner" reinstall_banner; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling Core-Termux Banner" reinstall_banner
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown UI component: --$tool"
@@ -556,7 +631,8 @@ _reinstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       n8n)
-        if loading "Reinstalling n8n" reinstall_n8n; then ((reinstalled_count++)); else ((failed_count++)); fi
+        loading "Reinstalling n8n" reinstall_n8n
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown automation tool: --$tool"

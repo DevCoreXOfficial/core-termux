@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_imagemagick() {
 	if command -v magick &>/dev/null; then
 		log_info "ImageMagick is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing ImageMagick..."
 
@@ -23,6 +23,10 @@ install_imagemagick() {
 }
 
 uninstall_imagemagick() {
+	if ! command -v magick &>/dev/null; then
+		log_info "ImageMagick is not installed"
+		return 2
+	fi
 	log_info "Uninstalling ImageMagick..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

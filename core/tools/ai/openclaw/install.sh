@@ -29,7 +29,7 @@ _openclaw_dependencies() {
 install_openclaw() {
   if command -v openclaw &>/dev/null; then
     log_info "OpenClaw is already installed"
-    return 0
+    return 2
   fi
   log_info "Installing OpenClaw..."
 
@@ -51,6 +51,10 @@ install_openclaw() {
 }
 
 uninstall_openclaw() {
+  if ! command -v openclaw &>/dev/null; then
+    log_info "OpenClaw is not installed"
+    return 2
+  fi
   log_info "Uninstalling OpenClaw..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

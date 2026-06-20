@@ -35,6 +35,10 @@ install_vercel() {
 }
 
 uninstall_vercel() {
+  if ! command -v vercel &>/dev/null; then
+    log_info "Vercel CLI is not installed"
+    return 0
+  fi
   log_info "Uninstalling Vercel CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

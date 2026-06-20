@@ -37,7 +37,7 @@ _mistral_vibe_dependencies() {
 install_mistral_vibe() {
   if command -v vibe &>/dev/null; then
     log_info "Mistral Vibe is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Installing Mistral Vibe..."
@@ -58,6 +58,10 @@ install_mistral_vibe() {
 }
 
 uninstall_mistral_vibe() {
+  if ! command -v vibe &>/dev/null; then
+    log_info "Mistral Vibe is not installed"
+    return 2
+  fi
   log_info "Uninstalling Mistral Vibe..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

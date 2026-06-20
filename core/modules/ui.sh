@@ -40,6 +40,10 @@ _setup_ui_wrapper() {
 }
 
 uninstall_ui() {
+	if [[ ! -d "$TERMUX_DIR" ]]; then
+		log_info "Termux UI Configuration is not installed"
+		return 0
+	fi
 	separator
 	box "Uninstalling Termux UI Configuration"
 	separator

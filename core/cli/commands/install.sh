@@ -162,65 +162,80 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       qwen-code)
-        if loading "Installing Qwen Code" install_qwen_code; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Qwen Code" install_qwen_code
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       gemini-cli)
-        if loading "Installing Gemini CLI" install_gemini_cli; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Gemini CLI" install_gemini_cli
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       claude-code)
         install_claude_code
-        if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       mistral-vibe)
-        if loading "Installing Mistral Vibe" install_mistral_vibe; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Mistral Vibe" install_mistral_vibe
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       openclaude)
-        if loading "Installing OpenClaude" install_openclaude; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing OpenClaude" install_openclaude
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       openclaw)
-        if loading "Installing OpenClaw" install_openclaw; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing OpenClaw" install_openclaw
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ollama)
-        if loading "Installing Ollama" install_ollama; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Ollama" install_ollama
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       codex)
-        if loading "Installing Codex CLI" install_codex; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Codex CLI" install_codex
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       opencode)
         install_opencode
-        if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       mimocode)
         install_mimocode
-        if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       engram)
-        if loading "Installing Engram" install_engram; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Engram" install_engram
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       codegraph)
-        if loading "Installing CodeGraph" install_codegraph; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing CodeGraph" install_codegraph
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       pi)
-        if loading "Installing Pi Coding Agent" install_pi; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Pi Coding Agent" install_pi
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       antigravity-cli)
         install_antigravity_cli
-        if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       minimax-cli)
-        if loading "Installing Minimax CLI" install_minimax_cli; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Minimax CLI" install_minimax_cli
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       gentle-ai)
-        if install_gentle_ai; then ((installed_count++)); else ((failed_count++)); fi
+        install_gentle_ai
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       gga)
-        if install_gga; then ((installed_count++)); else ((failed_count++)); fi
+        install_gga
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       hermes-agent)
-        if loading "Installing Hermes Agent" install_hermes_agent; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Hermes Agent" install_hermes_agent
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       kimi-code)
-        if loading "Installing Kimi Code" install_kimi_code; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Kimi Code" install_kimi_code
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown AI tool: --$tool"
@@ -245,16 +260,20 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       postgresql)
-        if loading "Installing PostgreSQL" install_postgresql; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing PostgreSQL" install_postgresql
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       mariadb)
-        if loading "Installing MariaDB" install_mariadb; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing MariaDB" install_mariadb
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       sqlite)
-        if loading "Installing SQLite" install_sqlite; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing SQLite" install_sqlite
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       mongodb)
-        if loading "Installing MongoDB" install_mongodb; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing MongoDB" install_mongodb
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown database: --$tool"
@@ -279,61 +298,80 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       gh)
-        if loading "Installing GitHub CLI" install_gh; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing GitHub CLI" install_gh
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       wget)
-        if loading "Installing Wget" install_wget; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Wget" install_wget
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       curl)
-        if loading "Installing Curl" install_curl; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Curl" install_curl
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       lsd)
-        if loading "Installing LSD" install_lsd; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing LSD" install_lsd
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       bat)
-        if loading "Installing Bat" install_bat; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Bat" install_bat
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       proot)
-        if loading "Installing Proot" install_proot; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Proot" install_proot
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ncurses)
-        if loading "Installing Ncurses Utils" install_ncurses; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Ncurses Utils" install_ncurses
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       tmate)
-        if loading "Installing Tmate" install_tmate; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Tmate" install_tmate
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)
-        if loading "Installing Cloudflared" install_cloudflared; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Cloudflared" install_cloudflared
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       translate)
-        if loading "Installing Translate Shell" install_translate; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Translate Shell" install_translate
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       html2text)
-        if loading "Installing html2text" install_html2text; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing html2text" install_html2text
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       jq)
-        if loading "Installing jq" install_jq; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing jq" install_jq
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       bc)
-        if loading "Installing bc" install_bc; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing bc" install_bc
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       tree)
-        if loading "Installing Tree" install_tree; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Tree" install_tree
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       fzf)
-        if loading "Installing Fzf" install_fzf; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Fzf" install_fzf
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       imagemagick)
-        if loading "Installing ImageMagick" install_imagemagick; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing ImageMagick" install_imagemagick
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       shfmt)
-        if loading "Installing Shfmt" install_shfmt; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Shfmt" install_shfmt
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       make)
-        if loading "Installing Make" install_make; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Make" install_make
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       udocker)
-        if loading "Installing udocker" install_udocker; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing udocker" install_udocker
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown tool: --$tool"
@@ -358,34 +396,44 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       typescript)
-        if loading "Installing TypeScript" install_typescript; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing TypeScript" install_typescript
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       nestjs)
-        if loading "Installing NestJS CLI" install_nestjs; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing NestJS CLI" install_nestjs
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       prettier)
-        if loading "Installing Prettier" install_prettier; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Prettier" install_prettier
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       live-server)
-        if loading "Installing Live Server" install_live_server; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Live Server" install_live_server
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       localtunnel)
-        if loading "Installing Localtunnel" install_localtunnel; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Localtunnel" install_localtunnel
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       vercel)
-        if loading "Installing Vercel CLI" install_vercel; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Vercel CLI" install_vercel
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       markserv)
-        if loading "Installing Markserv" install_markserv; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Markserv" install_markserv
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       psqlformat)
-        if loading "Installing PSQL Format" install_psqlformat; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing PSQL Format" install_psqlformat
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ncu)
-        if loading "Installing NPM Check Updates" install_ncu; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing NPM Check Updates" install_ncu
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ngrok)
-        if loading "Installing Ngrok" install_ngrok; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Ngrok" install_ngrok
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown node module: --$tool"
@@ -410,25 +458,32 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        if loading "Installing Node.js LTS" install_nodejs; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Node.js LTS" install_nodejs
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       python)
-        if loading "Installing Python" install_python; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Python" install_python
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       perl)
-        if loading "Installing Perl" install_perl; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Perl" install_perl
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       php)
-        if loading "Installing PHP" install_php; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing PHP" install_php
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       rust)
-        if loading "Installing Rust" install_rust; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Rust" install_rust
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       clang)
-        if loading "Installing C/C++ (clang)" install_clang; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing C/C++ (clang)" install_clang
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       golang)
-        if loading "Installing Go (golang)" install_golang; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Go (golang)" install_golang
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown language: --$tool"
@@ -453,34 +508,44 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       powerlevel10k)
-        if loading "Installing powerlevel10k" install_powerlevel10k; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing powerlevel10k" install_powerlevel10k
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-defer)
-        if loading "Installing zsh-defer" install_zsh_defer; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-defer" install_zsh_defer
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autosuggestions)
-        if loading "Installing zsh-autosuggestions" install_zsh_autosuggestions; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-autosuggestions" install_zsh_autosuggestions
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-syntax-highlighting)
-        if loading "Installing zsh-syntax-highlighting" install_zsh_syntax_highlighting; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-syntax-highlighting" install_zsh_syntax_highlighting
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       history-substring)
-        if loading "Installing zsh-history-substring-search" install_history_substring; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-history-substring-search" install_history_substring
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-completions)
-        if loading "Installing zsh-completions" install_zsh_completions; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-completions" install_zsh_completions
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       fzf-tab)
-        if loading "Installing fzf-tab" install_fzf_tab; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing fzf-tab" install_fzf_tab
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       you-should-use)
-        if loading "Installing zsh-you-should-use" install_you_should_use; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-you-should-use" install_you_should_use
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autopair)
-        if loading "Installing zsh-autopair" install_zsh_autopair; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-autopair" install_zsh_autopair
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       better-npm)
-        if loading "Installing zsh-better-npm-completion" install_better_npm; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing zsh-better-npm-completion" install_better_npm
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown plugin: --$tool"
@@ -505,10 +570,12 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       neovim)
-        if loading "Installing Neovim" install_neovim; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Neovim" install_neovim
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       nvchad)
-        if loading "Installing NvChad" install_nvchad; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing NvChad" install_nvchad
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown editor component: --$tool"
@@ -533,16 +600,20 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       font)
-        if loading "Installing Meslo Nerd Font" install_font; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Meslo Nerd Font" install_font
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       extra-keys)
-        if loading "Configuring Extra Keys" install_extra_keys; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Configuring Extra Keys" install_extra_keys
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       cursor)
-        if loading "Configuring Cursor Color" install_cursor; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Configuring Cursor Color" install_cursor
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       banner)
-        if loading "Installing Core-Termux Banner" install_banner; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing Core-Termux Banner" install_banner
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown UI component: --$tool"
@@ -567,7 +638,8 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       n8n)
-        if loading "Installing n8n" install_n8n; then ((installed_count++)); else ((failed_count++)); fi
+        loading "Installing n8n" install_n8n
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown automation tool: --$tool"

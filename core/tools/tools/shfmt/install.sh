@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_shfmt() {
 	if command -v shfmt &>/dev/null; then
 		log_info "Shfmt is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Shfmt..."
 
@@ -23,6 +23,10 @@ install_shfmt() {
 }
 
 uninstall_shfmt() {
+	if ! command -v shfmt &>/dev/null; then
+		log_info "Shfmt is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Shfmt..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -17,7 +17,8 @@ install_all_automation_tools() {
 	for tool in "${AUTOMATION_TOOLS[@]}"; do
 		case "$tool" in
 		n8n)
-			if loading "Installing n8n" install_n8n; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing n8n" install_n8n
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -32,7 +33,8 @@ uninstall_all_automation_tools() {
 	for tool in "${AUTOMATION_TOOLS[@]}"; do
 		case "$tool" in
 		n8n)
-			if loading "Uninstalling n8n" uninstall_n8n; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling n8n" uninstall_n8n
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -47,7 +49,8 @@ update_all_automation_tools() {
   for tool in "${AUTOMATION_TOOLS[@]}"; do
     case "$tool" in
     n8n)
-      if loading "Updating n8n" update_n8n; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating n8n" update_n8n
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -62,7 +65,8 @@ reinstall_all_automation_tools() {
   for tool in "${AUTOMATION_TOOLS[@]}"; do
     case "$tool" in
     n8n)
-      if loading "Reinstalling n8n" reinstall_n8n; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling n8n" reinstall_n8n
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done

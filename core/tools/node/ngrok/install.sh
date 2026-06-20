@@ -35,6 +35,10 @@ install_ngrok() {
 }
 
 uninstall_ngrok() {
+  if ! command -v ngrok &>/dev/null; then
+    log_info "Ngrok is not installed"
+    return 0
+  fi
   log_info "Uninstalling Ngrok..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

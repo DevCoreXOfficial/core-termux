@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 install_postgresql() {
 	if command -v postgres &>/dev/null; then
 		log_info "PostgreSQL is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing PostgreSQL..."
 
@@ -21,6 +21,10 @@ install_postgresql() {
 }
 
 uninstall_postgresql() {
+	if ! command -v postgres &>/dev/null; then
+		log_info "PostgreSQL is not installed"
+		return 2
+	fi
 	log_info "Uninstalling PostgreSQL..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall postgresql -y &>>"$LOG_FILE"; then

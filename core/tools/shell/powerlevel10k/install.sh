@@ -48,6 +48,11 @@ install_powerlevel10k() {
 }
 
 uninstall_powerlevel10k() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then
+    log_info "powerlevel10k is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling powerlevel10k..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then

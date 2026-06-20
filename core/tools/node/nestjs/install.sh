@@ -35,6 +35,10 @@ install_nestjs() {
 }
 
 uninstall_nestjs() {
+  if ! command -v nest &>/dev/null; then
+    log_info "NestJS CLI is not installed"
+    return 0
+  fi
   log_info "Uninstalling NestJS CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

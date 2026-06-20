@@ -310,7 +310,7 @@ PY
 install_antigravity_cli() {
   if command -v agy &>/dev/null; then
     log_info "Antigravity CLI is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Select installation method for Antigravity CLI:"

@@ -35,6 +35,10 @@ install_ncu() {
 }
 
 uninstall_ncu() {
+  if ! command -v ncu &>/dev/null; then
+    log_info "NPM Check Updates is not installed"
+    return 0
+  fi
   log_info "Uninstalling NPM Check Updates..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

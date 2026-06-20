@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_cloudflared() {
 	if command -v cloudflared &>/dev/null; then
 		log_info "Cloudflared is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Cloudflared..."
 
@@ -23,6 +23,10 @@ install_cloudflared() {
 }
 
 uninstall_cloudflared() {
+	if ! command -v cloudflared &>/dev/null; then
+		log_info "Cloudflared is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Cloudflared..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

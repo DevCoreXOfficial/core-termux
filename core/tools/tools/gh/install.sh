@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_gh() {
 	if command -v gh &>/dev/null; then
 		log_info "GitHub CLI is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing GitHub CLI..."
 
@@ -23,6 +23,10 @@ install_gh() {
 }
 
 uninstall_gh() {
+	if ! command -v gh &>/dev/null; then
+		log_info "GitHub CLI is not installed"
+		return 2
+	fi
 	log_info "Uninstalling GitHub CLI..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

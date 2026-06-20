@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 install_ollama() {
   if command -v ollama &>/dev/null; then
     log_info "Ollama is already installed"
-    return 0
+    return 2
   fi
   log_info "Installing Ollama..."
 
@@ -23,6 +23,10 @@ install_ollama() {
 }
 
 uninstall_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    log_info "Ollama is not installed"
+    return 2
+  fi
   log_info "Uninstalling Ollama..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

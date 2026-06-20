@@ -163,61 +163,80 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       qwen-code)
-        if loading "Updating Qwen Code" update_qwen_code; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Qwen Code" update_qwen_code
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       gemini-cli)
-        if loading "Updating Gemini CLI" update_gemini_cli; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Gemini CLI" update_gemini_cli
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       claude-code)
-        if loading "Updating Claude Code" update_claude_code; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Claude Code" update_claude_code
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mistral-vibe)
-        if loading "Updating Mistral Vibe" update_mistral_vibe; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Mistral Vibe" update_mistral_vibe
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       openclaude)
-        if loading "Updating OpenClaude" update_openclaude; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating OpenClaude" update_openclaude
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       openclaw)
-        if loading "Updating OpenClaw" update_openclaw; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating OpenClaw" update_openclaw
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ollama)
-        if loading "Updating Ollama" update_ollama; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Ollama" update_ollama
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       codex)
-        if loading "Updating Codex" update_codex; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Codex" update_codex
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       opencode)
-        if loading "Updating OpenCode" update_opencode; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating OpenCode" update_opencode
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mimocode)
-        if loading "Updating MiMo Code" update_mimocode; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating MiMo Code" update_mimocode
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       engram)
-        if loading "Updating Engram" update_engram; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Engram" update_engram
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       codegraph)
-        if loading "Updating CodeGraph" update_codegraph; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating CodeGraph" update_codegraph
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       pi)
-        if loading "Updating Pi Coding Agent" update_pi; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Pi Coding Agent" update_pi
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       antigravity-cli)
-        if loading "Updating Antigravity CLI" update_antigravity_cli; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Antigravity CLI" update_antigravity_cli
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       minimax-cli)
-        if loading "Updating Minimax CLI" update_minimax_cli; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Minimax CLI" update_minimax_cli
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       gentle-ai)
-        if loading "Updating gentle-ai" update_gentle_ai; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating gentle-ai" update_gentle_ai
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       gga)
-        if loading "Updating GGA" update_gga; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating GGA" update_gga
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       hermes-agent)
-        if loading "Updating Hermes Agent" update_hermes_agent; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Hermes Agent" update_hermes_agent
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       kimi-code)
-        if loading "Updating Kimi Code" update_kimi_code; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Kimi Code" update_kimi_code
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown AI tool: --$tool"
@@ -242,16 +261,20 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       postgresql)
-        if loading "Updating PostgreSQL" update_postgresql; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating PostgreSQL" update_postgresql
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mariadb)
-        if loading "Updating MariaDB" update_mariadb; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating MariaDB" update_mariadb
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       sqlite)
-        if loading "Updating SQLite" update_sqlite; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating SQLite" update_sqlite
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mongodb)
-        if loading "Updating MongoDB" update_mongodb; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating MongoDB" update_mongodb
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown database: --$tool"
@@ -276,61 +299,80 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       gh)
-        if loading "Updating GitHub CLI" update_gh; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating GitHub CLI" update_gh
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       wget)
-        if loading "Updating Wget" update_wget; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Wget" update_wget
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       curl)
-        if loading "Updating Curl" update_curl; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Curl" update_curl
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       lsd)
-        if loading "Updating LSD" update_lsd; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating LSD" update_lsd
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       bat)
-        if loading "Updating Bat" update_bat; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Bat" update_bat
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       proot)
-        if loading "Updating Proot" update_proot; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Proot" update_proot
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ncurses)
-        if loading "Updating Ncurses Utils" update_ncurses; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Ncurses Utils" update_ncurses
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       tmate)
-        if loading "Updating Tmate" update_tmate; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Tmate" update_tmate
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)
-        if loading "Updating Cloudflared" update_cloudflared; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Cloudflared" update_cloudflared
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       translate)
-        if loading "Updating Translate Shell" update_translate; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Translate Shell" update_translate
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       html2text)
-        if loading "Updating html2text" update_html2text; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating html2text" update_html2text
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       jq)
-        if loading "Updating jq" update_jq; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating jq" update_jq
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       bc)
-        if loading "Updating bc" update_bc; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating bc" update_bc
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       tree)
-        if loading "Updating Tree" update_tree; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Tree" update_tree
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       fzf)
-        if loading "Updating Fzf" update_fzf; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Fzf" update_fzf
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       imagemagick)
-        if loading "Updating ImageMagick" update_imagemagick; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating ImageMagick" update_imagemagick
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       shfmt)
-        if loading "Updating Shfmt" update_shfmt; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Shfmt" update_shfmt
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       make)
-        if loading "Updating Make" update_make; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Make" update_make
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       udocker)
-        if loading "Updating Udocker" update_udocker; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Udocker" update_udocker
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown tool: --$tool"
@@ -355,34 +397,44 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       typescript)
-        if loading "Updating TypeScript" update_typescript; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating TypeScript" update_typescript
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       nestjs)
-        if loading "Updating NestJS CLI" update_nestjs; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating NestJS CLI" update_nestjs
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       prettier)
-        if loading "Updating Prettier" update_prettier; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Prettier" update_prettier
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       live-server)
-        if loading "Updating Live Server" update_live_server; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Live Server" update_live_server
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       localtunnel)
-        if loading "Updating Localtunnel" update_localtunnel; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Localtunnel" update_localtunnel
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       vercel)
-        if loading "Updating Vercel CLI" update_vercel; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Vercel CLI" update_vercel
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       markserv)
-        if loading "Updating Markserv" update_markserv; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Markserv" update_markserv
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       psqlformat)
-        if loading "Updating PSQL Format" update_psqlformat; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating PSQL Format" update_psqlformat
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ncu)
-        if loading "Updating NPM Check Updates" update_ncu; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating NPM Check Updates" update_ncu
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ngrok)
-        if loading "Updating Ngrok" update_ngrok; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Ngrok" update_ngrok
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown node module: --$tool"
@@ -407,25 +459,32 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        if loading "Updating Node.js LTS" update_nodejs; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Node.js LTS" update_nodejs
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       python)
-        if loading "Updating Python" update_python; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Python" update_python
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       perl)
-        if loading "Updating Perl" update_perl; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Perl" update_perl
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       php)
-        if loading "Updating PHP" update_php; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating PHP" update_php
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       rust)
-        if loading "Updating Rust" update_rust; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Rust" update_rust
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       clang)
-        if loading "Updating C/C++ (clang)" update_clang; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating C/C++ (clang)" update_clang
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       golang)
-        if loading "Updating Go (golang)" update_golang; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Go (golang)" update_golang
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown language: --$tool"
@@ -450,34 +509,44 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       powerlevel10k)
-        if loading "Updating powerlevel10k" update_powerlevel10k; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating powerlevel10k" update_powerlevel10k
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-defer)
-        if loading "Updating zsh-defer" update_zsh_defer; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-defer" update_zsh_defer
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autosuggestions)
-        if loading "Updating zsh-autosuggestions" update_zsh_autosuggestions; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-autosuggestions" update_zsh_autosuggestions
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-syntax-highlighting)
-        if loading "Updating zsh-syntax-highlighting" update_zsh_syntax_highlighting; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-syntax-highlighting" update_zsh_syntax_highlighting
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       history-substring)
-        if loading "Updating zsh-history-substring-search" update_history_substring; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-history-substring-search" update_history_substring
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-completions)
-        if loading "Updating zsh-completions" update_zsh_completions; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-completions" update_zsh_completions
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       fzf-tab)
-        if loading "Updating fzf-tab" update_fzf_tab; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating fzf-tab" update_fzf_tab
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       you-should-use)
-        if loading "Updating zsh-you-should-use" update_you_should_use; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-you-should-use" update_you_should_use
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autopair)
-        if loading "Updating zsh-autopair" update_zsh_autopair; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-autopair" update_zsh_autopair
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       better-npm)
-        if loading "Updating zsh-better-npm-completion" update_better_npm; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating zsh-better-npm-completion" update_better_npm
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown plugin: --$tool"
@@ -502,10 +571,12 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       neovim)
-        if loading "Updating Neovim" update_neovim; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Neovim" update_neovim
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       nvchad)
-        if loading "Updating NvChad" update_nvchad; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating NvChad" update_nvchad
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown editor component: --$tool"
@@ -530,16 +601,20 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       font)
-        if loading "Updating Meslo Nerd Font" update_font; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Meslo Nerd Font" update_font
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       extra-keys)
-        if loading "Updating Extra Keys" update_extra_keys; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Extra Keys" update_extra_keys
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       cursor)
-        if loading "Updating Cursor Color" update_cursor; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Cursor Color" update_cursor
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       banner)
-        if loading "Updating Core-Termux Banner" update_banner; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating Core-Termux Banner" update_banner
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown UI component: --$tool"
@@ -564,7 +639,8 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       n8n)
-        if loading "Updating n8n" update_n8n; then ((updated_count++)); else ((failed_count++)); fi
+        loading "Updating n8n" update_n8n
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown automation tool: --$tool"
@@ -595,23 +671,21 @@ update_core() {
   separator
   echo
 
-  log_info "Checking for Core-Termux updates..."
-
   if [[ -d "$CORE_PATH/../.git" ]]; then
-    if loading "Updating Core-Termux" _update_core_repo; then
-      log_success "Core-Termux framework updated"
-      echo
-      list_item "New features and bug fixes applied"
-      list_item "Commands and modules updated"
+    loading "Updating Core-Termux" _update_core_repo
+    local rc=$?
 
-      # Limpiar notificación de update
-      rm -f "$CORE_CACHE/new_version"
-      rm -f "$CORE_CACHE/last_version_check"
-
-      echo
-    else
+    echo
+    if [[ $rc -eq 0 ]]; then
+      log_success "Core-Termux updated"
+    elif [[ $rc -eq 2 ]]; then
       log_success "Core-Termux is already up to date"
+    else
+      log_error "Failed to update Core-Termux"
+      log_info "Check your internet connection or run git pull manually"
     fi
+
+    rm -f "$CORE_CACHE/new_version" "$CORE_CACHE/last_version_check"
   else
     log_warn "Not a git repository, cannot update"
     log_info "If you installed via curl, reinstall with:"
@@ -621,7 +695,23 @@ update_core() {
   echo
 }
 
-# Función interna para actualizar repo
 _update_core_repo() {
-  git -C "$CORE_PATH/.." pull &>/dev/null
+  local repo_dir="$CORE_PATH/.."
+  local old_head
+
+  old_head=$(git -C "$repo_dir" rev-parse HEAD 2>/dev/null)
+
+  if ! git -C "$repo_dir" pull --ff-only &>/dev/null; then
+    return 1
+  fi
+
+  if [[ "$(git -C "$repo_dir" rev-parse HEAD 2>/dev/null)" == "$old_head" ]]; then
+    return 2
+  fi
+
+  git -C "$repo_dir" log --oneline --no-decorate "$old_head..HEAD" 2>/dev/null | while IFS= read -r line; do
+    printf "    ${CYAN}▸${NC} %s\n" "$line"
+  done
+
+  return 0
 }

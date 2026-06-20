@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_html2text() {
 	if command -v html2text &>/dev/null; then
 		log_info "HTML2Text is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing html2text..."
 
@@ -23,6 +23,10 @@ install_html2text() {
 }
 
 uninstall_html2text() {
+	if ! command -v html2text &>/dev/null; then
+		log_info "HTML2Text is not installed"
+		return 2
+	fi
 	log_info "Uninstalling html2text..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

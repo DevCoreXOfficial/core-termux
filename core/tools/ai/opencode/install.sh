@@ -200,7 +200,7 @@ _install_opencode_proot_impl() {
 install_opencode() {
   if command -v opencode &>/dev/null; then
     log_info "OpenCode is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Select installation method for OpenCode:"

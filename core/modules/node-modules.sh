@@ -41,6 +41,10 @@ _install_node_wrapper() {
 }
 
 uninstall_node() {
+	if ! command -v tsc &>/dev/null; then
+		log_info "Node.js Modules are not installed"
+		return 0
+	fi
 	separator
 	box "Uninstalling Node.js Modules"
 	separator

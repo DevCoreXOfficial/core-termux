@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_tree() {
 	if command -v tree &>/dev/null; then
 		log_info "Tree is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Tree..."
 
@@ -23,6 +23,10 @@ install_tree() {
 }
 
 uninstall_tree() {
+	if ! command -v tree &>/dev/null; then
+		log_info "Tree is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Tree..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

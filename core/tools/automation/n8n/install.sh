@@ -53,6 +53,10 @@ install_n8n() {
 }
 
 uninstall_n8n() {
+  if ! command -v n8n &>/dev/null; then
+    log_info "n8n is not installed"
+    return 0
+  fi
   log_info "Uninstalling n8n..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 install_python() {
 	if command -v python &>/dev/null; then
 		log_info "Python is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Python..."
 
@@ -21,6 +21,10 @@ install_python() {
 }
 
 uninstall_python() {
+	if ! command -v python &>/dev/null; then
+		log_info "Python is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Python..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall python -y &>>"$LOG_FILE"; then

@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 install_sqlite() {
 	if command -v sqlite &>/dev/null; then
 		log_info "SQLite is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing SQLite..."
 
@@ -21,6 +21,10 @@ install_sqlite() {
 }
 
 uninstall_sqlite() {
+	if ! command -v sqlite3 &>/dev/null; then
+		log_info "SQLite is not installed"
+		return 2
+	fi
 	log_info "Uninstalling SQLite..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall sqlite -y &>>"$LOG_FILE"; then

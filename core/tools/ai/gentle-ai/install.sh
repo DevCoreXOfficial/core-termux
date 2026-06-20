@@ -196,7 +196,7 @@ _install_binary_impl() {
 install_gentle_ai() {
   if command -v gentle-ai &>/dev/null; then
     log_info "gentle-ai is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Installing gentle-ai..."
@@ -214,6 +214,10 @@ install_gentle_ai() {
 }
 
 uninstall_gentle_ai() {
+  if ! command -v gentle-ai &>/dev/null; then
+    log_info "gentle-ai is not installed"
+    return 2
+  fi
   log_info "Uninstalling gentle-ai..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

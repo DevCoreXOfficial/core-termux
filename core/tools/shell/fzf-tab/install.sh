@@ -48,6 +48,11 @@ install_fzf_tab() {
 }
 
 uninstall_fzf_tab() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/fzf-tab" ]]; then
+    log_info "fzf-tab is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling fzf-tab..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/fzf-tab" ]]; then

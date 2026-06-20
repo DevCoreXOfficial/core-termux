@@ -197,7 +197,7 @@ _install_mimocode_proot_impl() {
 install_mimocode() {
   if command -v mimo &>/dev/null; then
     log_info "mimocode is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Select installation method for mimocode:"

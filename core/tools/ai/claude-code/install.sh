@@ -194,7 +194,7 @@ _install_claude_proot_impl() {
 install_claude_code() {
   if command -v claude &>/dev/null; then
     log_info "Claude Code is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Select installation method for Claude Code:"

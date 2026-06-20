@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_proot() {
 	if command -v proot &>/dev/null; then
 		log_info "Proot is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Proot..."
 
@@ -23,6 +23,10 @@ install_proot() {
 }
 
 uninstall_proot() {
+	if ! command -v proot &>/dev/null; then
+		log_info "Proot is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Proot..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -35,6 +35,10 @@ install_psqlformat() {
 }
 
 uninstall_psqlformat() {
+  if ! command -v psqlformat &>/dev/null; then
+    log_info "PSQL Format is not installed"
+    return 0
+  fi
   log_info "Uninstalling PSQL Format..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

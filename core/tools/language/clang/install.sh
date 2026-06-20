@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 install_clang() {
 	if command -v clang &>/dev/null; then
 		log_info "C/C++ (Clang) is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing C/C++ (Clang)..."
 
@@ -21,6 +21,10 @@ install_clang() {
 }
 
 uninstall_clang() {
+	if ! command -v clang &>/dev/null; then
+		log_info "C/C++ (Clang) is not installed"
+		return 2
+	fi
 	log_info "Uninstalling C/C++ (Clang)..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall clang -y &>>"$LOG_FILE"; then

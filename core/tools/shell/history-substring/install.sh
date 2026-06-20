@@ -48,6 +48,11 @@ install_history_substring() {
 }
 
 uninstall_history_substring() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-history-substring-search" ]]; then
+    log_info "zsh-history-substring-search is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling zsh-history-substring-search..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-history-substring-search" ]]; then

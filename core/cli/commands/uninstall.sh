@@ -185,61 +185,80 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       qwen-code)
-        if loading "Uninstalling Qwen Code" uninstall_qwen_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Qwen Code" uninstall_qwen_code
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       gemini-cli)
-        if loading "Uninstalling Gemini CLI" uninstall_gemini_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Gemini CLI" uninstall_gemini_cli
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       claude-code)
-        if loading "Uninstalling Claude Code" uninstall_claude_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Claude Code" uninstall_claude_code
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mistral-vibe)
-        if loading "Uninstalling Mistral Vibe" uninstall_mistral_vibe; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Mistral Vibe" uninstall_mistral_vibe
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       openclaude)
-        if loading "Uninstalling OpenClaude" uninstall_openclaude; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling OpenClaude" uninstall_openclaude
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       openclaw)
-        if loading "Uninstalling OpenClaw" uninstall_openclaw; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling OpenClaw" uninstall_openclaw
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ollama)
-        if loading "Uninstalling Ollama" uninstall_ollama; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Ollama" uninstall_ollama
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       codex)
-        if loading "Uninstalling Codex" uninstall_codex; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Codex" uninstall_codex
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       opencode)
-        if loading "Uninstalling OpenCode" uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling OpenCode" uninstall_opencode
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mimocode)
-        if loading "Uninstalling MiMo Code" uninstall_mimocode; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling MiMo Code" uninstall_mimocode
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       engram)
-        if loading "Uninstalling Engram" uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Engram" uninstall_engram
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       codegraph)
-        if loading "Uninstalling CodeGraph" uninstall_codegraph; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling CodeGraph" uninstall_codegraph
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       pi)
-        if loading "Uninstalling Pi Coding Agent" uninstall_pi; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Pi Coding Agent" uninstall_pi
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       antigravity-cli)
-        if loading "Uninstalling Antigravity CLI" uninstall_antigravity_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Antigravity CLI" uninstall_antigravity_cli
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       minimax-cli)
-        if loading "Uninstalling Minimax CLI" uninstall_minimax_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Minimax CLI" uninstall_minimax_cli
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       gentle-ai)
-        if loading "Uninstalling gentle-ai" uninstall_gentle_ai; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling gentle-ai" uninstall_gentle_ai
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       gga)
-        if loading "Uninstalling GGA" uninstall_gga; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling GGA" uninstall_gga
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       hermes-agent)
-        if loading "Uninstalling Hermes Agent" uninstall_hermes_agent; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Hermes Agent" uninstall_hermes_agent
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       kimi-code)
-        if loading "Uninstalling Kimi Code" uninstall_kimi_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Kimi Code" uninstall_kimi_code
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown AI tool: --$tool"
@@ -264,16 +283,20 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       postgresql)
-        if loading "Uninstalling PostgreSQL" uninstall_postgresql; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling PostgreSQL" uninstall_postgresql
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mariadb)
-        if loading "Uninstalling MariaDB" uninstall_mariadb; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling MariaDB" uninstall_mariadb
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       sqlite)
-        if loading "Uninstalling SQLite" uninstall_sqlite; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling SQLite" uninstall_sqlite
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       mongodb)
-        if loading "Uninstalling MongoDB" uninstall_mongodb; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling MongoDB" uninstall_mongodb
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown database: --$tool"
@@ -298,61 +321,80 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       gh)
-        if loading "Uninstalling GitHub CLI" uninstall_gh; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling GitHub CLI" uninstall_gh
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       wget)
-        if loading "Uninstalling Wget" uninstall_wget; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Wget" uninstall_wget
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       curl)
-        if loading "Uninstalling Curl" uninstall_curl; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Curl" uninstall_curl
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       lsd)
-        if loading "Uninstalling LSD" uninstall_lsd; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling LSD" uninstall_lsd
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       bat)
-        if loading "Uninstalling Bat" uninstall_bat; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Bat" uninstall_bat
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       proot)
-        if loading "Uninstalling Proot" uninstall_proot; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Proot" uninstall_proot
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ncurses)
-        if loading "Uninstalling Ncurses Utils" uninstall_ncurses; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Ncurses Utils" uninstall_ncurses
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       tmate)
-        if loading "Uninstalling Tmate" uninstall_tmate; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Tmate" uninstall_tmate
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)
-        if loading "Uninstalling Cloudflared" uninstall_cloudflared; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Cloudflared" uninstall_cloudflared
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       translate)
-        if loading "Uninstalling Translate Shell" uninstall_translate; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Translate Shell" uninstall_translate
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       html2text)
-        if loading "Uninstalling html2text" uninstall_html2text; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling html2text" uninstall_html2text
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       jq)
-        if loading "Uninstalling jq" uninstall_jq; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling jq" uninstall_jq
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       bc)
-        if loading "Uninstalling bc" uninstall_bc; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling bc" uninstall_bc
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       tree)
-        if loading "Uninstalling Tree" uninstall_tree; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Tree" uninstall_tree
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       fzf)
-        if loading "Uninstalling Fzf" uninstall_fzf; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Fzf" uninstall_fzf
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       imagemagick)
-        if loading "Uninstalling ImageMagick" uninstall_imagemagick; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling ImageMagick" uninstall_imagemagick
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       shfmt)
-        if loading "Uninstalling Shfmt" uninstall_shfmt; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Shfmt" uninstall_shfmt
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       make)
-        if loading "Uninstalling Make" uninstall_make; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Make" uninstall_make
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       udocker)
-        if loading "Uninstalling Udocker" uninstall_udocker; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Udocker" uninstall_udocker
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown tool: --$tool"
@@ -377,34 +419,44 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       typescript)
-        if loading "Uninstalling TypeScript" uninstall_typescript; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling TypeScript" uninstall_typescript
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       nestjs)
-        if loading "Uninstalling NestJS CLI" uninstall_nestjs; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling NestJS CLI" uninstall_nestjs
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       prettier)
-        if loading "Uninstalling Prettier" uninstall_prettier; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Prettier" uninstall_prettier
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       live-server)
-        if loading "Uninstalling Live Server" uninstall_live_server; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Live Server" uninstall_live_server
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       localtunnel)
-        if loading "Uninstalling Localtunnel" uninstall_localtunnel; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Localtunnel" uninstall_localtunnel
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       vercel)
-        if loading "Uninstalling Vercel CLI" uninstall_vercel; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Vercel CLI" uninstall_vercel
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       markserv)
-        if loading "Uninstalling Markserv" uninstall_markserv; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Markserv" uninstall_markserv
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       psqlformat)
-        if loading "Uninstalling PSQL Format" uninstall_psqlformat; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling PSQL Format" uninstall_psqlformat
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ncu)
-        if loading "Uninstalling NPM Check Updates" uninstall_ncu; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling NPM Check Updates" uninstall_ncu
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       ngrok)
-        if loading "Uninstalling Ngrok" uninstall_ngrok; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Ngrok" uninstall_ngrok
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown node module: --$tool"
@@ -429,25 +481,32 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        if loading "Uninstalling Node.js LTS" uninstall_nodejs; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Node.js LTS" uninstall_nodejs
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       python)
-        if loading "Uninstalling Python" uninstall_python; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Python" uninstall_python
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       perl)
-        if loading "Uninstalling Perl" uninstall_perl; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Perl" uninstall_perl
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       php)
-        if loading "Uninstalling PHP" uninstall_php; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling PHP" uninstall_php
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       rust)
-        if loading "Uninstalling Rust" uninstall_rust; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Rust" uninstall_rust
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       clang)
-        if loading "Uninstalling C/C++ (clang)" uninstall_clang; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling C/C++ (clang)" uninstall_clang
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       golang)
-        if loading "Uninstalling Go (golang)" uninstall_golang; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Go (golang)" uninstall_golang
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown language: --$tool"
@@ -472,34 +531,44 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       powerlevel10k)
-        if loading "Uninstalling powerlevel10k" uninstall_powerlevel10k; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling powerlevel10k" uninstall_powerlevel10k
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-defer)
-        if loading "Uninstalling zsh-defer" uninstall_zsh_defer; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-defer" uninstall_zsh_defer
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autosuggestions)
-        if loading "Uninstalling zsh-autosuggestions" uninstall_zsh_autosuggestions; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-autosuggestions" uninstall_zsh_autosuggestions
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-syntax-highlighting)
-        if loading "Uninstalling zsh-syntax-highlighting" uninstall_zsh_syntax_highlighting; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-syntax-highlighting" uninstall_zsh_syntax_highlighting
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       history-substring)
-        if loading "Uninstalling zsh-history-substring-search" uninstall_history_substring; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-history-substring-search" uninstall_history_substring
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-completions)
-        if loading "Uninstalling zsh-completions" uninstall_zsh_completions; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-completions" uninstall_zsh_completions
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       fzf-tab)
-        if loading "Uninstalling fzf-tab" uninstall_fzf_tab; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling fzf-tab" uninstall_fzf_tab
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       you-should-use)
-        if loading "Uninstalling zsh-you-should-use" uninstall_you_should_use; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-you-should-use" uninstall_you_should_use
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autopair)
-        if loading "Uninstalling zsh-autopair" uninstall_zsh_autopair; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-autopair" uninstall_zsh_autopair
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       better-npm)
-        if loading "Uninstalling zsh-better-npm-completion" uninstall_better_npm; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling zsh-better-npm-completion" uninstall_better_npm
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown plugin: --$tool"
@@ -524,10 +593,12 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       neovim)
-        if loading "Uninstalling Neovim" uninstall_neovim; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Neovim" uninstall_neovim
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       nvchad)
-        if loading "Uninstalling NvChad" uninstall_nvchad; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling NvChad" uninstall_nvchad
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown editor component: --$tool"
@@ -552,16 +623,20 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       font)
-        if loading "Uninstalling Meslo Nerd Font" uninstall_font; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Meslo Nerd Font" uninstall_font
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       extra-keys)
-        if loading "Uninstalling Extra Keys" uninstall_extra_keys; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Extra Keys" uninstall_extra_keys
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       cursor)
-        if loading "Uninstalling Cursor Color" uninstall_cursor; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Cursor Color" uninstall_cursor
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       banner)
-        if loading "Uninstalling Core-Termux Banner" uninstall_banner; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling Core-Termux Banner" uninstall_banner
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown UI component: --$tool"
@@ -586,7 +661,8 @@ _uninstall_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       n8n)
-        if loading "Uninstalling n8n" uninstall_n8n; then ((uninstalled_count++)); else ((failed_count++)); fi
+        loading "Uninstalling n8n" uninstall_n8n
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       *)
         log_warn "Unknown automation tool: --$tool"

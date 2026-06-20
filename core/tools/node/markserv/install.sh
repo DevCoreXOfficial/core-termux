@@ -35,6 +35,10 @@ install_markserv() {
 }
 
 uninstall_markserv() {
+  if ! command -v markserv &>/dev/null; then
+    log_info "Markserv is not installed"
+    return 0
+  fi
   log_info "Uninstalling Markserv..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

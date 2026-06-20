@@ -48,6 +48,11 @@ install_zsh_autopair() {
 }
 
 uninstall_zsh_autopair() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autopair" ]]; then
+    log_info "zsh-autopair is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling zsh-autopair..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-autopair" ]]; then

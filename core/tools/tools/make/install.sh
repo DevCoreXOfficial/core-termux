@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_make() {
 	if command -v make &>/dev/null; then
 		log_info "Make is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Make..."
 
@@ -23,6 +23,10 @@ install_make() {
 }
 
 uninstall_make() {
+	if ! command -v make &>/dev/null; then
+		log_info "Make is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Make..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

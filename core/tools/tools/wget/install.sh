@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_wget() {
 	if command -v wget &>/dev/null; then
 		log_info "Wget is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Wget..."
 
@@ -23,6 +23,10 @@ install_wget() {
 }
 
 uninstall_wget() {
+	if ! command -v wget &>/dev/null; then
+		log_info "Wget is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Wget..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

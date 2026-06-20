@@ -43,7 +43,7 @@ _write_codegraph_wrapper() {
 install_codegraph() {
 	if command -v codegraph &>/dev/null; then
 		log_info "CodeGraph is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing CodeGraph..."
 
@@ -86,6 +86,10 @@ install_codegraph() {
 }
 
 uninstall_codegraph() {
+	if ! command -v codegraph &>/dev/null; then
+		log_info "CodeGraph is not installed"
+		return 2
+	fi
 	log_info "Uninstalling CodeGraph..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

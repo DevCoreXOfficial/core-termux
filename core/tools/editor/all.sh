@@ -19,10 +19,12 @@ install_all_editor_components() {
 	for tool in "${EDITOR_COMPONENTS[@]}"; do
 		case "$tool" in
 		neovim)
-			if loading "Installing Neovim" install_neovim; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Neovim" install_neovim
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		nvchad)
-			if loading "Installing NvChad" install_nvchad; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing NvChad" install_nvchad
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -37,10 +39,12 @@ uninstall_all_editor_components() {
 	for tool in "${EDITOR_COMPONENTS[@]}"; do
 		case "$tool" in
 		neovim)
-			if loading "Uninstalling Neovim" uninstall_neovim; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Neovim" uninstall_neovim
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		nvchad)
-			if loading "Uninstalling NvChad" uninstall_nvchad; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling NvChad" uninstall_nvchad
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -55,10 +59,12 @@ update_all_editor_components() {
   for tool in "${EDITOR_COMPONENTS[@]}"; do
     case "$tool" in
     neovim)
-      if loading "Updating Neovim" update_neovim; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Neovim" update_neovim
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     nvchad)
-      if loading "Updating NvChad" update_nvchad; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating NvChad" update_nvchad
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -73,10 +79,12 @@ reinstall_all_editor_components() {
   for tool in "${EDITOR_COMPONENTS[@]}"; do
     case "$tool" in
     neovim)
-      if loading "Reinstalling Neovim" reinstall_neovim; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Neovim" reinstall_neovim
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     nvchad)
-      if loading "Reinstalling NvChad" reinstall_nvchad; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling NvChad" reinstall_nvchad
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done

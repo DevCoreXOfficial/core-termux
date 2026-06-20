@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 install_mongodb() {
 	if command -v mongod &>/dev/null; then
 		log_info "MongoDB is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing MongoDB..."
 
@@ -29,6 +29,10 @@ install_mongodb() {
 }
 
 uninstall_mongodb() {
+	if ! command -v mongod &>/dev/null; then
+		log_info "MongoDB is not installed"
+		return 2
+	fi
 	log_info "Uninstalling MongoDB..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall mongodb -y &>>"$LOG_FILE"; then

@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_bat() {
 	if command -v bat &>/dev/null; then
 		log_info "Bat is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Bat..."
 
@@ -23,6 +23,10 @@ install_bat() {
 }
 
 uninstall_bat() {
+	if ! command -v bat &>/dev/null; then
+		log_info "Bat is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Bat..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -39,6 +39,10 @@ _install_editor_wrapper() {
 }
 
 uninstall_editor() {
+	if ! command -v nvim &>/dev/null; then
+		log_info "Code Editor is not installed"
+		return 0
+	fi
 	separator
 	box "Uninstalling Code Editor"
 	separator

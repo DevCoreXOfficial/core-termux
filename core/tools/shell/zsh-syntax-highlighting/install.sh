@@ -38,6 +38,11 @@ install_zsh_syntax_highlighting() {
 }
 
 uninstall_zsh_syntax_highlighting() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" ]]; then
+    log_info "zsh-syntax-highlighting is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling zsh-syntax-highlighting..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" ]]; then

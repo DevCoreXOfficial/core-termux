@@ -53,61 +53,80 @@ install_all_tools() {
 	for tool in "${TOOLS_PACKAGES[@]}"; do
 		case "$tool" in
 		gh)
-			if loading "Installing GitHub CLI" install_gh; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing GitHub CLI" install_gh
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		wget)
-			if loading "Installing Wget" install_wget; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Wget" install_wget
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		curl)
-			if loading "Installing Curl" install_curl; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Curl" install_curl
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		lsd)
-			if loading "Installing LSD" install_lsd; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing LSD" install_lsd
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		bat)
-			if loading "Installing Bat" install_bat; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Bat" install_bat
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		proot)
-			if loading "Installing Proot" install_proot; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Proot" install_proot
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		ncurses)
-			if loading "Installing Ncurses Utils" install_ncurses; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Ncurses Utils" install_ncurses
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		tmate)
-			if loading "Installing Tmate" install_tmate; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Tmate" install_tmate
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		cloudflared)
-			if loading "Installing Cloudflared" install_cloudflared; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Cloudflared" install_cloudflared
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		translate)
-			if loading "Installing Translate Shell" install_translate; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Translate Shell" install_translate
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		html2text)
-			if loading "Installing html2text" install_html2text; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing html2text" install_html2text
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		jq)
-			if loading "Installing jq" install_jq; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing jq" install_jq
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		bc)
-			if loading "Installing bc" install_bc; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing bc" install_bc
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		tree)
-			if loading "Installing Tree" install_tree; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Tree" install_tree
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		fzf)
-			if loading "Installing Fzf" install_fzf; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Fzf" install_fzf
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		imagemagick)
-			if loading "Installing ImageMagick" install_imagemagick; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing ImageMagick" install_imagemagick
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		shfmt)
-			if loading "Installing Shfmt" install_shfmt; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Shfmt" install_shfmt
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		make)
-			if loading "Installing Make" install_make; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Make" install_make
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		udocker)
-			if loading "Installing Udocker" install_udocker; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing Udocker" install_udocker
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -122,61 +141,80 @@ uninstall_all_tools() {
 	for tool in "${TOOLS_PACKAGES[@]}"; do
 		case "$tool" in
 		gh)
-			if loading "Uninstalling GitHub CLI" uninstall_gh; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling GitHub CLI" uninstall_gh
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		wget)
-			if loading "Uninstalling Wget" uninstall_wget; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Wget" uninstall_wget
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		curl)
-			if loading "Uninstalling Curl" uninstall_curl; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Curl" uninstall_curl
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		lsd)
-			if loading "Uninstalling LSD" uninstall_lsd; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling LSD" uninstall_lsd
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		bat)
-			if loading "Uninstalling Bat" uninstall_bat; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Bat" uninstall_bat
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		proot)
-			if loading "Uninstalling Proot" uninstall_proot; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Proot" uninstall_proot
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		ncurses)
-			if loading "Uninstalling Ncurses Utils" uninstall_ncurses; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Ncurses Utils" uninstall_ncurses
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		tmate)
-			if loading "Uninstalling Tmate" uninstall_tmate; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Tmate" uninstall_tmate
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		cloudflared)
-			if loading "Uninstalling Cloudflared" uninstall_cloudflared; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Cloudflared" uninstall_cloudflared
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		translate)
-			if loading "Uninstalling Translate Shell" uninstall_translate; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Translate Shell" uninstall_translate
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		html2text)
-			if loading "Uninstalling html2text" uninstall_html2text; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling html2text" uninstall_html2text
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		jq)
-			if loading "Uninstalling jq" uninstall_jq; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling jq" uninstall_jq
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		bc)
-			if loading "Uninstalling bc" uninstall_bc; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling bc" uninstall_bc
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		tree)
-			if loading "Uninstalling Tree" uninstall_tree; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Tree" uninstall_tree
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		fzf)
-			if loading "Uninstalling Fzf" uninstall_fzf; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Fzf" uninstall_fzf
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		imagemagick)
-			if loading "Uninstalling ImageMagick" uninstall_imagemagick; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling ImageMagick" uninstall_imagemagick
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		shfmt)
-			if loading "Uninstalling Shfmt" uninstall_shfmt; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Shfmt" uninstall_shfmt
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		make)
-			if loading "Uninstalling Make" uninstall_make; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Make" uninstall_make
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		udocker)
-			if loading "Uninstalling Udocker" uninstall_udocker; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling Udocker" uninstall_udocker
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -191,61 +229,80 @@ update_all_tools() {
   for tool in "${TOOLS_PACKAGES[@]}"; do
     case "$tool" in
     gh)
-      if loading "Updating GitHub CLI" update_gh; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating GitHub CLI" update_gh
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     wget)
-      if loading "Updating Wget" update_wget; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Wget" update_wget
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     curl)
-      if loading "Updating Curl" update_curl; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Curl" update_curl
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     lsd)
-      if loading "Updating LSD" update_lsd; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating LSD" update_lsd
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     bat)
-      if loading "Updating Bat" update_bat; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Bat" update_bat
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     proot)
-      if loading "Updating Proot" update_proot; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Proot" update_proot
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     ncurses)
-      if loading "Updating Ncurses Utils" update_ncurses; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Ncurses Utils" update_ncurses
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     tmate)
-      if loading "Updating Tmate" update_tmate; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Tmate" update_tmate
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     cloudflared)
-      if loading "Updating Cloudflared" update_cloudflared; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Cloudflared" update_cloudflared
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     translate)
-      if loading "Updating Translate Shell" update_translate; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Translate Shell" update_translate
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     html2text)
-      if loading "Updating html2text" update_html2text; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating html2text" update_html2text
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     jq)
-      if loading "Updating jq" update_jq; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating jq" update_jq
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     bc)
-      if loading "Updating bc" update_bc; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating bc" update_bc
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     tree)
-      if loading "Updating Tree" update_tree; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Tree" update_tree
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     fzf)
-      if loading "Updating Fzf" update_fzf; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Fzf" update_fzf
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     imagemagick)
-      if loading "Updating ImageMagick" update_imagemagick; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating ImageMagick" update_imagemagick
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     shfmt)
-      if loading "Updating Shfmt" update_shfmt; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Shfmt" update_shfmt
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     make)
-      if loading "Updating Make" update_make; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Make" update_make
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     udocker)
-      if loading "Updating Udocker" update_udocker; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating Udocker" update_udocker
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -260,61 +317,80 @@ reinstall_all_tools() {
   for tool in "${TOOLS_PACKAGES[@]}"; do
     case "$tool" in
     gh)
-      if loading "Reinstalling GitHub CLI" reinstall_gh; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling GitHub CLI" reinstall_gh
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     wget)
-      if loading "Reinstalling Wget" reinstall_wget; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Wget" reinstall_wget
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     curl)
-      if loading "Reinstalling Curl" reinstall_curl; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Curl" reinstall_curl
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     lsd)
-      if loading "Reinstalling LSD" reinstall_lsd; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling LSD" reinstall_lsd
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     bat)
-      if loading "Reinstalling Bat" reinstall_bat; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Bat" reinstall_bat
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     proot)
-      if loading "Reinstalling Proot" reinstall_proot; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Proot" reinstall_proot
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ncurses)
-      if loading "Reinstalling Ncurses Utils" reinstall_ncurses; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Ncurses Utils" reinstall_ncurses
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     tmate)
-      if loading "Reinstalling Tmate" reinstall_tmate; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Tmate" reinstall_tmate
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     cloudflared)
-      if loading "Reinstalling Cloudflared" reinstall_cloudflared; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Cloudflared" reinstall_cloudflared
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     translate)
-      if loading "Reinstalling Translate Shell" reinstall_translate; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Translate Shell" reinstall_translate
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     html2text)
-      if loading "Reinstalling html2text" reinstall_html2text; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling html2text" reinstall_html2text
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     jq)
-      if loading "Reinstalling jq" reinstall_jq; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling jq" reinstall_jq
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     bc)
-      if loading "Reinstalling bc" reinstall_bc; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling bc" reinstall_bc
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     tree)
-      if loading "Reinstalling Tree" reinstall_tree; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Tree" reinstall_tree
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     fzf)
-      if loading "Reinstalling Fzf" reinstall_fzf; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Fzf" reinstall_fzf
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     imagemagick)
-      if loading "Reinstalling ImageMagick" reinstall_imagemagick; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling ImageMagick" reinstall_imagemagick
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     shfmt)
-      if loading "Reinstalling Shfmt" reinstall_shfmt; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Shfmt" reinstall_shfmt
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     make)
-      if loading "Reinstalling Make" reinstall_make; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Make" reinstall_make
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     udocker)
-      if loading "Reinstalling Udocker" reinstall_udocker; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling Udocker" reinstall_udocker
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done

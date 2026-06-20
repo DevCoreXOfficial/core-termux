@@ -74,7 +74,7 @@ _gga_run_installer_impl() {
 install_gga() {
 	if command -v gga &>/dev/null; then
 		log_info "GGA is already installed"
-		return 0
+		return 2
 	fi
 
 	log_info "Installing GGA..."
@@ -90,6 +90,10 @@ install_gga() {
 }
 
 uninstall_gga() {
+	if ! command -v gga &>/dev/null; then
+		log_info "GGA is not installed"
+		return 2
+	fi
 	log_info "Uninstalling GGA..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

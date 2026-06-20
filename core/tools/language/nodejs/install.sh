@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 install_nodejs() {
 	if command -v node &>/dev/null; then
 		log_info "Node.js LTS is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Node.js LTS..."
 
@@ -21,6 +21,10 @@ install_nodejs() {
 }
 
 uninstall_nodejs() {
+	if ! command -v node &>/dev/null; then
+		log_info "Node.js LTS is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Node.js LTS..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall nodejs-lts -y &>>"$LOG_FILE"; then

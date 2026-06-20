@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_curl() {
 	if command -v curl &>/dev/null; then
 		log_info "Curl is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Curl..."
 
@@ -23,6 +23,10 @@ install_curl() {
 }
 
 uninstall_curl() {
+	if ! command -v curl &>/dev/null; then
+		log_info "Curl is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Curl..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

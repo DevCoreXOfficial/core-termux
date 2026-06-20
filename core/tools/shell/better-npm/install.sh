@@ -47,6 +47,11 @@ install_better_npm() {
 }
 
 uninstall_better_npm() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" ]]; then
+    log_info "zsh-better-npm-completion is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling zsh-better-npm-completion..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" ]]; then

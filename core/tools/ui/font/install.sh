@@ -28,6 +28,10 @@ install_font() {
 }
 
 uninstall_font() {
+	if [[ ! -f "$TERMUX_DIR/font.ttf" ]]; then
+		log_info "Meslo Nerd Font is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Meslo Nerd Font..."
 
 	if [[ -f "$TERMUX_DIR/font.ttf" ]]; then

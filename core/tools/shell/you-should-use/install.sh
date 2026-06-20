@@ -48,6 +48,11 @@ install_you_should_use() {
 }
 
 uninstall_you_should_use() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-you-should-use" ]]; then
+    log_info "zsh-you-should-use is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling zsh-you-should-use..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-you-should-use" ]]; then

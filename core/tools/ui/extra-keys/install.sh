@@ -20,6 +20,10 @@ EOF
 }
 
 uninstall_extra_keys() {
+	if [[ ! -f "$TERMUX_DIR/termux.properties" ]]; then
+		log_info "Extra Keys is not installed"
+		return 0
+	fi
 	log_info "Uninstalling Extra Keys..."
 
 	if [[ -f "$TERMUX_DIR/termux.properties" ]]; then

@@ -53,61 +53,80 @@ install_all_ai_tools() {
   for tool in "${AI_TOOLS[@]}"; do
     case "$tool" in
     qwen-code)
-      if install_qwen_code; then ((installed_count++)); else ((failed_count++)); fi
+      install_qwen_code
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     gemini-cli)
-      if install_gemini_cli; then ((installed_count++)); else ((failed_count++)); fi
+      install_gemini_cli
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     claude-code)
-      if install_claude_code; then ((installed_count++)); else ((failed_count++)); fi
+      install_claude_code
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     mistral-vibe)
-      if install_mistral_vibe; then ((installed_count++)); else ((failed_count++)); fi
+      install_mistral_vibe
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     openclaude)
-      if install_openclaude; then ((installed_count++)); else ((failed_count++)); fi
+      install_openclaude
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     openclaw)
-      if install_openclaw; then ((installed_count++)); else ((failed_count++)); fi
+      install_openclaw
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     ollama)
-      if install_ollama; then ((installed_count++)); else ((failed_count++)); fi
+      install_ollama
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     codex)
-      if install_codex; then ((installed_count++)); else ((failed_count++)); fi
+      install_codex
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     opencode)
-      if install_opencode; then ((installed_count++)); else ((failed_count++)); fi
+      install_opencode
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)
-      if install_mimocode; then ((installed_count++)); else ((failed_count++)); fi
+      install_mimocode
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     engram)
-      if install_engram; then ((installed_count++)); else ((failed_count++)); fi
+      install_engram
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     codegraph)
-      if install_codegraph; then ((installed_count++)); else ((failed_count++)); fi
+      install_codegraph
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     pi)
-      if install_pi; then ((installed_count++)); else ((failed_count++)); fi
+      install_pi
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
-      if install_antigravity_cli; then ((installed_count++)); else ((failed_count++)); fi
+      install_antigravity_cli
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     gentle-ai)
-      if install_gentle_ai; then ((installed_count++)); else ((failed_count++)); fi
+      install_gentle_ai
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     minimax-cli)
-      if install_minimax_cli; then ((installed_count++)); else ((failed_count++)); fi
+      install_minimax_cli
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     gga)
-      if install_gga; then ((installed_count++)); else ((failed_count++)); fi
+      install_gga
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     hermes-agent)
-      if install_hermes_agent; then ((installed_count++)); else ((failed_count++)); fi
+      install_hermes_agent
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     kimi-code)
-      if install_kimi_code; then ((installed_count++)); else ((failed_count++)); fi
+      install_kimi_code
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -122,61 +141,80 @@ uninstall_all_ai_tools() {
   for tool in "${AI_TOOLS[@]}"; do
     case "$tool" in
     qwen-code)
-      if uninstall_qwen_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_qwen_code
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gemini-cli)
-      if uninstall_gemini_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_gemini_cli
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     claude-code)
-      if uninstall_claude_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_claude_code
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mistral-vibe)
-      if uninstall_mistral_vibe; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_mistral_vibe
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaude)
-      if uninstall_openclaude; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_openclaude
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaw)
-      if uninstall_openclaw; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_openclaw
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ollama)
-      if uninstall_ollama; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_ollama
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codex)
-      if uninstall_codex; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_codex
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     opencode)
-      if uninstall_opencode; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_opencode
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)
-      if uninstall_mimocode; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_mimocode
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     engram)
-      if uninstall_engram; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_engram
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codegraph)
-      if uninstall_codegraph; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_codegraph
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     pi)
-      if uninstall_pi; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_pi
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
-      if uninstall_antigravity_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_antigravity_cli
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gentle-ai)
-      if uninstall_gentle_ai; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_gentle_ai
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     minimax-cli)
-      if uninstall_minimax_cli; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_minimax_cli
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gga)
-      if uninstall_gga; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_gga
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     hermes-agent)
-      if uninstall_hermes_agent; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_hermes_agent
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kimi-code)
-      if uninstall_kimi_code; then ((uninstalled_count++)); else ((failed_count++)); fi
+      uninstall_kimi_code
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -191,61 +229,80 @@ update_all_ai_tools() {
   for tool in "${AI_TOOLS[@]}"; do
     case "$tool" in
     qwen-code)
-      if update_qwen_code; then ((updated_count++)); else ((failed_count++)); fi
+      update_qwen_code
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     gemini-cli)
-      if update_gemini_cli; then ((updated_count++)); else ((failed_count++)); fi
+      update_gemini_cli
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     claude-code)
-      if update_claude_code; then ((updated_count++)); else ((failed_count++)); fi
+      update_claude_code
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     mistral-vibe)
-      if update_mistral_vibe; then ((updated_count++)); else ((failed_count++)); fi
+      update_mistral_vibe
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     openclaude)
-      if update_openclaude; then ((updated_count++)); else ((failed_count++)); fi
+      update_openclaude
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     openclaw)
-      if update_openclaw; then ((updated_count++)); else ((failed_count++)); fi
+      update_openclaw
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     ollama)
-      if update_ollama; then ((updated_count++)); else ((failed_count++)); fi
+      update_ollama
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     codex)
-      if update_codex; then ((updated_count++)); else ((failed_count++)); fi
+      update_codex
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     opencode)
-      if update_opencode; then ((updated_count++)); else ((failed_count++)); fi
+      update_opencode
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)
-      if update_mimocode; then ((updated_count++)); else ((failed_count++)); fi
+      update_mimocode
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     engram)
-      if update_engram; then ((updated_count++)); else ((failed_count++)); fi
+      update_engram
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     codegraph)
-      if update_codegraph; then ((updated_count++)); else ((failed_count++)); fi
+      update_codegraph
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     pi)
-      if update_pi; then ((updated_count++)); else ((failed_count++)); fi
+      update_pi
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
-      if update_antigravity_cli; then ((updated_count++)); else ((failed_count++)); fi
+      update_antigravity_cli
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     gentle-ai)
-      if update_gentle_ai; then ((updated_count++)); else ((failed_count++)); fi
+      update_gentle_ai
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     minimax-cli)
-      if update_minimax_cli; then ((updated_count++)); else ((failed_count++)); fi
+      update_minimax_cli
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     gga)
-      if update_gga; then ((updated_count++)); else ((failed_count++)); fi
+      update_gga
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     hermes-agent)
-      if update_hermes_agent; then ((updated_count++)); else ((failed_count++)); fi
+      update_hermes_agent
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     kimi-code)
-      if update_kimi_code; then ((updated_count++)); else ((failed_count++)); fi
+      update_kimi_code
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -260,61 +317,80 @@ reinstall_all_ai_tools() {
   for tool in "${AI_TOOLS[@]}"; do
     case "$tool" in
     qwen-code)
-      if reinstall_qwen_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_qwen_code
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gemini-cli)
-      if reinstall_gemini_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_gemini_cli
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     claude-code)
-      if reinstall_claude_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_claude_code
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mistral-vibe)
-      if reinstall_mistral_vibe; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_mistral_vibe
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaude)
-      if reinstall_openclaude; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_openclaude
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaw)
-      if reinstall_openclaw; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_openclaw
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ollama)
-      if reinstall_ollama; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_ollama
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codex)
-      if reinstall_codex; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_codex
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     opencode)
-      if reinstall_opencode; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_opencode
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)
-      if reinstall_mimocode; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_mimocode
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     engram)
-      if reinstall_engram; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_engram
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codegraph)
-      if reinstall_codegraph; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_codegraph
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     pi)
-      if reinstall_pi; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_pi
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
-      if reinstall_antigravity_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_antigravity_cli
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gentle-ai)
-      if reinstall_gentle_ai; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_gentle_ai
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     minimax-cli)
-      if reinstall_minimax_cli; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_minimax_cli
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gga)
-      if reinstall_gga; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_gga
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     hermes-agent)
-      if reinstall_hermes_agent; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_hermes_agent
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kimi-code)
-      if reinstall_kimi_code; then ((reinstalled_count++)); else ((failed_count++)); fi
+      reinstall_kimi_code
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done

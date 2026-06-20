@@ -29,7 +29,7 @@ _openclaude_dependencies() {
 install_openclaude() {
   if command -v openclaude &>/dev/null; then
     log_info "OpenClaude is already installed"
-    return 0
+    return 2
   fi
   log_info "Installing OpenClaude..."
 
@@ -49,6 +49,10 @@ install_openclaude() {
 }
 
 uninstall_openclaude() {
+  if ! command -v openclaude &>/dev/null; then
+    log_info "OpenClaude is not installed"
+    return 2
+  fi
   log_info "Uninstalling OpenClaude..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

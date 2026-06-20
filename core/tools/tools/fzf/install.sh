@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_fzf() {
 	if command -v fzf &>/dev/null; then
 		log_info "Fzf is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Fzf..."
 
@@ -23,6 +23,10 @@ install_fzf() {
 }
 
 uninstall_fzf() {
+	if ! command -v fzf &>/dev/null; then
+		log_info "Fzf is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Fzf..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

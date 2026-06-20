@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 install_php() {
 	if command -v php &>/dev/null; then
 		log_info "PHP is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing PHP..."
 
@@ -21,6 +21,10 @@ install_php() {
 }
 
 uninstall_php() {
+	if ! command -v php &>/dev/null; then
+		log_info "PHP is not installed"
+		return 2
+	fi
 	log_info "Uninstalling PHP..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall php -y &>>"$LOG_FILE"; then

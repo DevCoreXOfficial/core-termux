@@ -23,16 +23,20 @@ install_all_db_tools() {
 	for tool in "${DB_TOOLS[@]}"; do
 		case "$tool" in
 		postgresql)
-			if loading "Installing PostgreSQL" install_postgresql; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing PostgreSQL" install_postgresql
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		mariadb)
-			if loading "Installing MariaDB" install_mariadb; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing MariaDB" install_mariadb
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		sqlite)
-			if loading "Installing SQLite" install_sqlite; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing SQLite" install_sqlite
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		mongodb)
-			if loading "Installing MongoDB" install_mongodb; then ((installed_count++)); else ((failed_count++)); fi
+			loading "Installing MongoDB" install_mongodb
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -47,16 +51,20 @@ uninstall_all_db_tools() {
 	for tool in "${DB_TOOLS[@]}"; do
 		case "$tool" in
 		postgresql)
-			if loading "Uninstalling PostgreSQL" uninstall_postgresql; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling PostgreSQL" uninstall_postgresql
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		mariadb)
-			if loading "Uninstalling MariaDB" uninstall_mariadb; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling MariaDB" uninstall_mariadb
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		sqlite)
-			if loading "Uninstalling SQLite" uninstall_sqlite; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling SQLite" uninstall_sqlite
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		mongodb)
-			if loading "Uninstalling MongoDB" uninstall_mongodb; then ((uninstalled_count++)); else ((failed_count++)); fi
+			loading "Uninstalling MongoDB" uninstall_mongodb
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
 	done
@@ -71,16 +79,20 @@ update_all_db_tools() {
   for tool in "${DB_TOOLS[@]}"; do
     case "$tool" in
     postgresql)
-      if loading "Updating PostgreSQL" update_postgresql; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating PostgreSQL" update_postgresql
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     mariadb)
-      if loading "Updating MariaDB" update_mariadb; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating MariaDB" update_mariadb
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     sqlite)
-      if loading "Updating SQLite" update_sqlite; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating SQLite" update_sqlite
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     mongodb)
-      if loading "Updating MongoDB" update_mongodb; then ((updated_count++)); else ((failed_count++)); fi
+      loading "Updating MongoDB" update_mongodb
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done
@@ -95,16 +107,20 @@ reinstall_all_db_tools() {
   for tool in "${DB_TOOLS[@]}"; do
     case "$tool" in
     postgresql)
-      if loading "Reinstalling PostgreSQL" reinstall_postgresql; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling PostgreSQL" reinstall_postgresql
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mariadb)
-      if loading "Reinstalling MariaDB" reinstall_mariadb; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling MariaDB" reinstall_mariadb
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     sqlite)
-      if loading "Reinstalling SQLite" reinstall_sqlite; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling SQLite" reinstall_sqlite
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mongodb)
-      if loading "Reinstalling MongoDB" reinstall_mongodb; then ((reinstalled_count++)); else ((failed_count++)); fi
+      loading "Reinstalling MongoDB" reinstall_mongodb
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
   done

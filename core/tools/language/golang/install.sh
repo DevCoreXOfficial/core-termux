@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 install_golang() {
 	if command -v go &>/dev/null; then
 		log_info "Go (Golang) is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing Go (Golang)..."
 
@@ -21,6 +21,10 @@ install_golang() {
 }
 
 uninstall_golang() {
+	if ! command -v go &>/dev/null; then
+		log_info "Go (Golang) is not installed"
+		return 2
+	fi
 	log_info "Uninstalling Go (Golang)..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall golang -y &>>"$LOG_FILE"; then

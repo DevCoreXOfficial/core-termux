@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_jq() {
 	if command -v jq &>/dev/null; then
 		log_info "jq is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing jq..."
 
@@ -23,6 +23,10 @@ install_jq() {
 }
 
 uninstall_jq() {
+	if ! command -v jq &>/dev/null; then
+		log_info "jq is not installed"
+		return 2
+	fi
 	log_info "Uninstalling jq..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -29,7 +29,7 @@ _pi_dependencies() {
 install_pi() {
   if command -v pi &>/dev/null; then
     log_info "Pi Coding Agent is already installed"
-    return 0
+    return 2
   fi
   log_info "Installing Pi Coding Agent..."
 
@@ -50,6 +50,10 @@ install_pi() {
 }
 
 uninstall_pi() {
+  if ! command -v pi &>/dev/null; then
+    log_info "Pi Coding Agent is not installed"
+    return 2
+  fi
   log_info "Uninstalling Pi Coding Agent..."
   log_info "Uninstalling Pi..."
   mkdir -p "$(dirname "$LOG_FILE")"

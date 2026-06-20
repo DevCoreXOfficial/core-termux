@@ -35,6 +35,10 @@ install_typescript() {
 }
 
 uninstall_typescript() {
+  if ! command -v tsc &>/dev/null; then
+    log_info "TypeScript is not installed"
+    return 0
+  fi
   log_info "Uninstalling TypeScript..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

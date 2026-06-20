@@ -29,7 +29,7 @@ _gemini_cli_dependencies() {
 install_gemini_cli() {
   if command -v gemini &>/dev/null; then
     log_info "Gemini CLI is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Installing Gemini CLI..."
@@ -50,6 +50,10 @@ install_gemini_cli() {
 }
 
 uninstall_gemini_cli() {
+  if ! command -v gemini &>/dev/null; then
+    log_info "Gemini CLI is not installed"
+    return 2
+  fi
   log_info "Uninstalling Gemini CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

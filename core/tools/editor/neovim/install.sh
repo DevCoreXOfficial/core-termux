@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_editor.log"
 _neovim_dependencies() {
   if command -v nvim &>/dev/null; then
     log_info "Neovim is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Installing Neovim dependencies..."
@@ -35,6 +35,10 @@ install_neovim() {
 }
 
 uninstall_neovim() {
+  if ! command -v nvim &>/dev/null; then
+    log_info "Neovim is not installed"
+    return 2
+  fi
   log_info "Uninstalling Neovim..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 install_mariadb() {
 	if command -v mariadbd &>/dev/null; then
 		log_info "MariaDB is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing MariaDB..."
 
@@ -21,6 +21,10 @@ install_mariadb() {
 }
 
 uninstall_mariadb() {
+	if ! command -v mariadbd &>/dev/null; then
+		log_info "MariaDB is not installed"
+		return 2
+	fi
 	log_info "Uninstalling MariaDB..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall mariadb -y &>>"$LOG_FILE"; then

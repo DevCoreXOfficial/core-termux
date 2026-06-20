@@ -29,7 +29,7 @@ _qwen_code_dependencies() {
 install_qwen_code() {
   if command -v qwen &>/dev/null; then
     log_info "Qwen Code is already installed"
-    return 0
+    return 2
   fi
 
   log_info "Installing Qwen Code..."
@@ -54,6 +54,10 @@ install_qwen_code() {
 }
 
 uninstall_qwen_code() {
+  if ! command -v qwen &>/dev/null; then
+    log_info "Qwen Code is not installed"
+    return 2
+  fi
   log_info "Uninstalling Qwen Code..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

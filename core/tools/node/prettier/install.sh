@@ -35,6 +35,10 @@ install_prettier() {
 }
 
 uninstall_prettier() {
+  if ! command -v prettier &>/dev/null; then
+    log_info "Prettier is not installed"
+    return 0
+  fi
   log_info "Uninstalling Prettier..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -48,6 +48,11 @@ install_zsh_completions() {
 }
 
 uninstall_zsh_completions() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-completions" ]]; then
+    log_info "zsh-completions is not installed"
+    return 0
+  fi
+
   log_info "Uninstalling zsh-completions..."
 
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-completions" ]]; then

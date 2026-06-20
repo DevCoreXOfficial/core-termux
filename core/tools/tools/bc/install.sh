@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 install_bc() {
 	if command -v bc &>/dev/null; then
 		log_info "bc is already installed"
-		return 0
+		return 2
 	fi
 	log_info "Installing bc..."
 
@@ -23,6 +23,10 @@ install_bc() {
 }
 
 uninstall_bc() {
+	if ! command -v bc &>/dev/null; then
+		log_info "bc is not installed"
+		return 2
+	fi
 	log_info "Uninstalling bc..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

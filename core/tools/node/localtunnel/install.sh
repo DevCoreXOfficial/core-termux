@@ -52,6 +52,10 @@ install_localtunnel() {
 }
 
 uninstall_localtunnel() {
+  if ! command -v lt &>/dev/null; then
+    log_info "Localtunnel is not installed"
+    return 0
+  fi
   log_info "Uninstalling Localtunnel..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
