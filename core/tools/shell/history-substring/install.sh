@@ -29,7 +29,7 @@ _history_substring_dependencies() {
 
 install_history_substring() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-history-substring-search" ]]; then
-    log_info "zsh-history-substring-search ${D_GREEN}already installed${NC}"
+    log_info "zsh-history-substring-search already installed"
     return 0
   fi
 

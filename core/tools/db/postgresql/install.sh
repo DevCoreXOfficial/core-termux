@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_postgresql() {
 	if command -v postgres &>/dev/null; then
-		log_success "PostgreSQL is already installed"
+		log_info "PostgreSQL is already installed"
 		return 0
 	fi
 	log_info "Installing PostgreSQL..."

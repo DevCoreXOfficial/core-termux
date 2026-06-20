@@ -20,7 +20,7 @@ _localtunnel_fix_openurl() {
 
 _localtunnel_dependencies() {
   if command -v node &>/dev/null && command -v npm &>/dev/null; then
-    log_success "Node.js and npm are already installed"
+    log_info "Node.js and npm are already installed"
     return 0
   fi
 

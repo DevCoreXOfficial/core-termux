@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_golang() {
 	if command -v go &>/dev/null; then
-		log_success "Go (Golang) is already installed"
+		log_info "Go (Golang) is already installed"
 		return 0
 	fi
 	log_info "Installing Go (Golang)..."

@@ -29,7 +29,7 @@ _zsh_completions_dependencies() {
 
 install_zsh_completions() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-completions" ]]; then
-    log_info "zsh-completions ${D_GREEN}already installed${NC}"
+    log_info "zsh-completions already installed"
     return 0
   fi
 

@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_udocker() {
 	if command -v udocker &>/dev/null; then
-		log_success "Udocker is already installed"
+		log_info "Udocker is already installed"
 		return 0
 	fi
 	log_info "Installing Udocker..."

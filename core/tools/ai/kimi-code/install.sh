@@ -28,7 +28,7 @@ _kimi_code_dependencies() {
 
 install_kimi_code() {
   if command -v kimi &>/dev/null; then
-    log_success "Kimi Code is already installed"
+    log_info "Kimi Code is already installed"
     return 0
   fi
 

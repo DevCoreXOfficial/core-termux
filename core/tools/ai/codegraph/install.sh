@@ -42,7 +42,7 @@ _write_codegraph_wrapper() {
 
 install_codegraph() {
 	if command -v codegraph &>/dev/null; then
-		log_success "CodeGraph is already installed"
+		log_info "CodeGraph is already installed"
 		return 0
 	fi
 	log_info "Installing CodeGraph..."

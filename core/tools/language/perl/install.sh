@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_perl() {
 	if command -v perl &>/dev/null; then
-		log_success "Perl is already installed"
+		log_info "Perl is already installed"
 		return 0
 	fi
 	log_info "Installing Perl..."

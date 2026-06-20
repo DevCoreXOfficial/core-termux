@@ -8,7 +8,7 @@ ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 _zsh_syntax_highlighting_dependencies() {
   log_info "Installing shell prerequisites..."
   if command -v git &>/dev/null && command -v zsh &>/dev/null; then
-    log_success "Git and ZSH are already installed"
+    log_info "Git and ZSH are already installed"
     return 0
   fi
 
@@ -19,7 +19,7 @@ _zsh_syntax_highlighting_dependencies() {
 
 install_zsh_syntax_highlighting() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" ]]; then
-    log_info "zsh-syntax-highlighting ${D_GREEN}already installed${NC}"
+    log_info "zsh-syntax-highlighting already installed"
     return 0
   fi
 

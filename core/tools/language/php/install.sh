@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_php() {
 	if command -v php &>/dev/null; then
-		log_success "PHP is already installed"
+		log_info "PHP is already installed"
 		return 0
 	fi
 	log_info "Installing PHP..."

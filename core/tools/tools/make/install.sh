@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_make() {
 	if command -v make &>/dev/null; then
-		log_success "Make is already installed"
+		log_info "Make is already installed"
 		return 0
 	fi
 	log_info "Installing Make..."

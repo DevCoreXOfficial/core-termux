@@ -141,21 +141,15 @@ install_shell() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing base packages" install_termux_packages; then
-		log_success "Base packages installed"
-	else
-		log_error "Failed to install base packages"
-	fi
+	install_termux_packages
+	log_success "Base packages installed"
 	echo
 
 	install_oh_my_zsh
 	echo
 
-	if loading "Installing ZSH plugins" _install_shell_plugins_wrapper; then
-		log_success "ZSH plugins installed"
-	else
-		log_error "Failed to install ZSH plugins"
-	fi
+	_install_shell_plugins_wrapper
+	log_success "ZSH plugins installed"
 	echo
 
 	setup_zsh_aliases
@@ -262,11 +256,8 @@ update_shell() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Updating ZSH plugins" _update_shell_plugins_wrapper; then
-		log_success "ZSH shell environment updated"
-	else
-		log_error "Failed to update ZSH plugins"
-	fi
+	_update_shell_plugins_wrapper
+	log_success "ZSH shell environment updated"
 
 	setup_shell_env
 	echo
@@ -290,11 +281,8 @@ reinstall_shell() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if loading "Reinstalling ZSH plugins" _reinstall_shell_plugins_wrapper; then
-    log_success "ZSH plugins reinstalled"
-  else
-    log_error "Failed to reinstall ZSH plugins"
-  fi
+  _reinstall_shell_plugins_wrapper
+  log_success "ZSH plugins reinstalled"
   echo
 
   setup_zsh_aliases

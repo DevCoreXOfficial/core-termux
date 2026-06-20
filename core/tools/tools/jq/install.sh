@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_jq() {
 	if command -v jq &>/dev/null; then
-		log_success "jq is already installed"
+		log_info "jq is already installed"
 		return 0
 	fi
 	log_info "Installing jq..."

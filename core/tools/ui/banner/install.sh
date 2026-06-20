@@ -55,7 +55,7 @@ install_banner() {
 	fi
 
 	if grep -qF "$CORE_BANNER_MARKER" "$shell_config" 2>/dev/null; then
-		log_info "Core-Termux Banner ${D_GREEN}already installed${NC}"
+		log_info "Core-Termux Banner already installed"
 		return 0
 	fi
 

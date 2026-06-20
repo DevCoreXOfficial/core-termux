@@ -15,29 +15,24 @@ install_node() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing npm global packages" _install_node_wrapper; then
-		log_success "Node.js global modules installed"
-		echo
-		list_item "TypeScript"
-		list_item "NestJS CLI"
-		list_item "Prettier"
-		list_item "Live Server"
-		list_item "Localtunnel"
-		list_item "Vercel CLI"
-		list_item "Markserv"
-		list_item "PSQL Format"
-		list_item "NPM Check Updates"
-		list_item "Ngrok"
-		echo
-		separator
-		log_success "Node.js modules installation completed"
-		separator
-		echo
-	else
-		log_error "Failed to install Node.js global modules"
-		log_warn "Check log file: $LOG_FILE"
-		return 1
-	fi
+	_install_node_wrapper
+	log_success "Node.js global modules installed"
+	echo
+	list_item "TypeScript"
+	list_item "NestJS CLI"
+	list_item "Prettier"
+	list_item "Live Server"
+	list_item "Localtunnel"
+	list_item "Vercel CLI"
+	list_item "Markserv"
+	list_item "PSQL Format"
+	list_item "NPM Check Updates"
+	list_item "Ngrok"
+	echo
+	separator
+	log_success "Node.js modules installation completed"
+	separator
+	echo
 }
 
 _install_node_wrapper() {
@@ -53,18 +48,13 @@ uninstall_node() {
 
 	log_info "Uninstalling Node.js global modules..."
 
-	if loading "Uninstalling npm global packages" _uninstall_node_wrapper; then
-		log_success "Node.js global modules uninstalled"
-		echo
-		separator
-		log_success "Node.js modules uninstallation completed"
-		separator
-		echo
-		return 0
-	else
-		log_error "Failed to uninstall Node.js global modules"
-		return 1
-	fi
+	_uninstall_node_wrapper
+	log_success "Node.js global modules uninstalled"
+	echo
+	separator
+	log_success "Node.js modules uninstallation completed"
+	separator
+	echo
 }
 
 _uninstall_node_wrapper() {
@@ -80,18 +70,13 @@ update_node() {
 
 	log_info "Updating Node.js global modules..."
 
-	if loading "Updating npm global packages" _update_node_wrapper; then
-		log_success "Node.js global modules updated"
-		echo
-		separator
-		log_success "Node.js modules update completed"
-		separator
-		echo
-		return 0
-	else
-		log_error "Failed to update Node.js global modules"
-		return 1
-	fi
+	_update_node_wrapper
+	log_success "Node.js global modules updated"
+	echo
+	separator
+	log_success "Node.js modules update completed"
+	separator
+	echo
 }
 
 _update_node_wrapper() {
@@ -107,29 +92,24 @@ reinstall_node() {
 
   log_info "Reinstalling Node.js global modules..."
 
-  if loading "Reinstalling npm global packages" _reinstall_node_wrapper; then
-    log_success "Node.js global modules reinstalled"
-    echo
-    list_item "TypeScript"
-    list_item "NestJS CLI"
-    list_item "Prettier"
-    list_item "Live Server"
-    list_item "Localtunnel"
-    list_item "Vercel CLI"
-    list_item "Markserv"
-    list_item "PSQL Format"
-    list_item "NPM Check Updates"
-    list_item "Ngrok"
-    echo
-    separator
-    log_success "Node.js modules reinstallation completed"
-    separator
-    echo
-  else
-    log_error "Failed to reinstall Node.js global modules"
-    log_warn "Check log file: $LOG_FILE"
-    return 1
-  fi
+  _reinstall_node_wrapper
+  log_success "Node.js global modules reinstalled"
+  echo
+  list_item "TypeScript"
+  list_item "NestJS CLI"
+  list_item "Prettier"
+  list_item "Live Server"
+  list_item "Localtunnel"
+  list_item "Vercel CLI"
+  list_item "Markserv"
+  list_item "PSQL Format"
+  list_item "NPM Check Updates"
+  list_item "Ngrok"
+  echo
+  separator
+  log_success "Node.js modules reinstallation completed"
+  separator
+  echo
 }
 
 _reinstall_node_wrapper() {

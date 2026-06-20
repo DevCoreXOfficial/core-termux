@@ -300,21 +300,30 @@ read_select() {
 	local -a options=("$@")
 	local selected=0
 	local total=${#options[@]}
+	local cols
+	cols=$(tput cols)
+	local margin=6
+	local max_width=$((cols - margin))
 
 	_render_select() {
 		echo -e "    ${GRAY}┌─${D_CYAN} ${prompt}${NC}"
 		for ((i = 0; i < total; i++)); do
+			local text="${options[$i]}"
+			if (( ${#text} > max_width )); then
+				text="${text:0:$((max_width - 3))}..."
+			fi
 			if ((i == selected)); then
-				echo -e "    ${GRAY}│  ${D_CYAN}▶ ${WHITE}${options[$i]}${D_NC}"
+				echo -e "    ${GRAY}│  ${D_CYAN}▶ ${WHITE}${text}${D_NC}"
 			else
-				echo -e "    ${GRAY}│    ${GRAY}${options[$i]}${D_NC}"
+				echo -e "    ${GRAY}│    ${GRAY}${text}${D_NC}"
 			fi
 		done
 		echo -e -n "    ${GRAY}└─${D_NC} ${GRAY}↑↓ move  Enter confirm${D_NC}"
 	}
 
-	tput civis # ocultar cursor
-	tput sc    # guardar posición del cursor
+	local lines=$((total + 1))
+
+	tput civis
 	_render_select
 
 	while true; do
@@ -330,13 +339,12 @@ read_select() {
 		'') break ;;
 		esac
 
-		tput rc # restaurar posición guardada
-		tput ed # borrar desde cursor hasta fin de pantalla
+		echo -en "\r\033[${lines}A\033[J"
 		_render_select
 	done
 
 	echo
-	tput cnorm # mostrar cursor
+	tput cnorm
 
 	read -r "$var" <<<"${options[$selected]}"
 	echo -e "    ${GRAY}└─${D_CYAN}▶ ${D_NC}${options[$selected]}${D_NC}"
@@ -348,36 +356,35 @@ loading() {
 	local message="$1"
 	shift
 
-	local frames=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
+	local frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
 	local delay=0.08
-
-	local tmpdir="${CORE_CACHE:-/tmp}"
-	mkdir -p "$tmpdir"
 	local tmpfile
-	tmpfile="$(mktemp "$tmpdir/loading.XXXXXX")"
+	tmpfile="$(mktemp)"
+
+	printf "    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[0]}" "$message"
 
 	"$@" >"$tmpfile" 2>&1 &
 	local pid=$!
 
 	local i=0
-
 	while kill -0 "$pid" 2>/dev/null; do
-		printf "\r"
-		echo -ne "${D_CYAN}${message}${D_NC} ${frames[i]}"
+		printf "\r    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[i]}" "$message"
 		((i = (i + 1) % ${#frames[@]}))
 		sleep $delay
 	done
 
-	wait $pid
+	wait "$pid"
 	local exit_code=$?
 
-	printf "\r"
-
-	if [[ -f "$tmpfile" ]]; then
+	if [[ $exit_code -eq 0 ]]; then
+		printf "\r    ${GREEN}✔${D_GREEN} %s${NC}\n" "$message"
+		[[ -s "$tmpfile" ]] && cat "$tmpfile"
+	else
+		printf "\r    ${RED}✖${D_RED} %s${NC}\n" "$message"
 		cat "$tmpfile"
-		rm -f "$tmpfile"
 	fi
 
+	rm -f "$tmpfile"
 	return $exit_code
 }
 

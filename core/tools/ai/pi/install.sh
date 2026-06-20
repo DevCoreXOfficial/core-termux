@@ -28,7 +28,7 @@ _pi_dependencies() {
 
 install_pi() {
   if command -v pi &>/dev/null; then
-    log_success "Pi Coding Agent is already installed"
+    log_info "Pi Coding Agent is already installed"
     return 0
   fi
   log_info "Installing Pi Coding Agent..."

@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_sqlite() {
 	if command -v sqlite &>/dev/null; then
-		log_success "SQLite is already installed"
+		log_info "SQLite is already installed"
 		return 0
 	fi
 	log_info "Installing SQLite..."

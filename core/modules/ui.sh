@@ -20,22 +20,18 @@ setup_ui() {
 		log_info "Created Termux directory: $TERMUX_DIR"
 	fi
 
-	if loading "Configuring UI components" _setup_ui_wrapper; then
-		separator
-		log_success "Termux UI configuration completed"
-		separator
-		echo
-		list_item "Cursor: Green (#00FF00)"
-		list_item "Extra-keys: Custom layout with navigation"
-		list_item "Font: Meslo Nerd Font"
-		list_item "Banner: Core-Termux startup banner"
-		echo
-		log_warn "Please restart Termux to apply all changes"
-		echo
-	else
-		log_error "Failed to configure UI"
-		return 1
-	fi
+	_setup_ui_wrapper
+	separator
+	log_success "Termux UI configuration completed"
+	separator
+	echo
+	list_item "Cursor: Green (#00FF00)"
+	list_item "Extra-keys: Custom layout with navigation"
+	list_item "Font: Meslo Nerd Font"
+	list_item "Banner: Core-Termux startup banner"
+	echo
+	log_warn "Please restart Termux to apply all changes"
+	echo
 }
 
 _setup_ui_wrapper() {
@@ -51,19 +47,14 @@ uninstall_ui() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Restoring UI defaults" _uninstall_ui_wrapper; then
-		echo
-		separator
-		log_success "Termux UI configuration uninstalled"
-		separator
-		echo
-		log_warn "Please restart Termux to apply changes"
-		echo
-		return 0
-	else
-		log_error "Failed to uninstall UI"
-		return 1
-	fi
+	_uninstall_ui_wrapper
+	echo
+	separator
+	log_success "Termux UI configuration uninstalled"
+	separator
+	echo
+	log_warn "Please restart Termux to apply changes"
+	echo
 }
 
 _uninstall_ui_wrapper() {
@@ -79,17 +70,12 @@ update_ui() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Updating UI components" _update_ui_wrapper; then
-		echo
-		separator
-		log_success "Termux UI configuration updated"
-		separator
-		echo
-		return 0
-	else
-		log_error "Failed to update UI"
-		return 1
-	fi
+	_update_ui_wrapper
+	echo
+	separator
+	log_success "Termux UI configuration updated"
+	separator
+	echo
 }
 
 _update_ui_wrapper() {
@@ -105,22 +91,18 @@ reinstall_ui() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if loading "Reinstalling UI components" _reinstall_ui_wrapper; then
-    separator
-    log_success "Termux UI configuration reinstalled"
-    separator
-    echo
-    list_item "Cursor: Green (#00FF00)"
-    list_item "Extra-keys: Custom layout with navigation"
-    list_item "Font: Meslo Nerd Font"
-    list_item "Banner: Core-Termux startup banner"
-    echo
-    log_warn "Please restart Termux to apply all changes"
-    echo
-  else
-    log_error "Failed to reinstall UI"
-    return 1
-  fi
+  _reinstall_ui_wrapper
+  separator
+  log_success "Termux UI configuration reinstalled"
+  separator
+  echo
+  list_item "Cursor: Green (#00FF00)"
+  list_item "Extra-keys: Custom layout with navigation"
+  list_item "Font: Meslo Nerd Font"
+  list_item "Banner: Core-Termux startup banner"
+  echo
+  log_warn "Please restart Termux to apply all changes"
+  echo
 }
 
 _reinstall_ui_wrapper() {

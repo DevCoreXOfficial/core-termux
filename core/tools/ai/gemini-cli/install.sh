@@ -28,7 +28,7 @@ _gemini_cli_dependencies() {
 
 install_gemini_cli() {
   if command -v gemini &>/dev/null; then
-    log_success "Gemini CLI is already installed"
+    log_info "Gemini CLI is already installed"
     return 0
   fi
 

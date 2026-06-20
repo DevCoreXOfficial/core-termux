@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_rust() {
 	if command -v rust &>/dev/null; then
-		log_success "Rust is already installed"
+		log_info "Rust is already installed"
 		return 0
 	fi
 	log_info "Installing Rust..."

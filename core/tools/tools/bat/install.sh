@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_bat() {
 	if command -v bat &>/dev/null; then
-		log_success "Bat is already installed"
+		log_info "Bat is already installed"
 		return 0
 	fi
 	log_info "Installing Bat..."

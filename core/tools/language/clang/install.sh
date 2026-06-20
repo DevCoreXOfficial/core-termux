@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_clang() {
 	if command -v clang &>/dev/null; then
-		log_success "C/C++ (Clang) is already installed"
+		log_info "C/C++ (Clang) is already installed"
 		return 0
 	fi
 	log_info "Installing C/C++ (Clang)..."

@@ -28,7 +28,7 @@ _openclaw_dependencies() {
 
 install_openclaw() {
   if command -v openclaw &>/dev/null; then
-    log_success "OpenClaw is already installed"
+    log_info "OpenClaw is already installed"
     return 0
   fi
   log_info "Installing OpenClaw..."

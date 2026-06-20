@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_fzf() {
 	if command -v fzf &>/dev/null; then
-		log_success "Fzf is already installed"
+		log_info "Fzf is already installed"
 		return 0
 	fi
 	log_info "Installing Fzf..."

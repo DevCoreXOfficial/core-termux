@@ -38,7 +38,7 @@ _nvchad_dependencies() {
 
 install_nvchad() {
   if [[ -d "$HOME/.config/nvim" ]]; then
-    log_info "NvChad ${D_GREEN}already installed${NC}"
+    log_info "NvChad already installed"
     return 0
   fi
   log_info "Installing NvChad..."

@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_editor.log"
 
 _neovim_dependencies() {
   if command -v nvim &>/dev/null; then
-    log_success "Neovim is already installed"
+    log_info "Neovim is already installed"
     return 0
   fi
 

@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_tmate() {
 	if command -v tmate &>/dev/null; then
-		log_success "Tmate is already installed"
+		log_info "Tmate is already installed"
 		return 0
 	fi
 	log_info "Installing Tmate..."

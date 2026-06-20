@@ -26,7 +26,7 @@ _engram_dependencies() {
 
 install_engram() {
   if command -v engram &>/dev/null; then
-    log_success "Engram is already installed"
+    log_info "Engram is already installed"
     return 0
   fi
   log_info "Installing Engram..."

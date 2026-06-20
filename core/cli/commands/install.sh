@@ -191,7 +191,8 @@ _install_specific_tools() {
         if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       mimocode)
-        if loading "Installing MiMo Code" install_mimocode; then ((installed_count++)); else ((failed_count++)); fi
+        install_mimocode
+        if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       engram)
         if loading "Installing Engram" install_engram; then ((installed_count++)); else ((failed_count++)); fi
@@ -203,19 +204,20 @@ _install_specific_tools() {
         if loading "Installing Pi Coding Agent" install_pi; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       antigravity-cli)
-        if loading "Installing Antigravity CLI" install_antigravity_cli; then ((installed_count++)); else ((failed_count++)); fi
+        install_antigravity_cli
+        if [ $? -eq 0 ]; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       minimax-cli)
         if loading "Installing Minimax CLI" install_minimax_cli; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       gentle-ai)
-        if loading "Installing Gentle AI" install_gentle_ai; then ((installed_count++)); else ((failed_count++)); fi
+        if install_gentle_ai; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       gga)
-        if loading "Installing GGA" install_gga; then ((installed_count++)); else ((failed_count++)); fi
+        if install_gga; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       hermes-agent)
-        if install_hermes_agent; then ((installed_count++)); else ((failed_count++)); fi
+        if loading "Installing Hermes Agent" install_hermes_agent; then ((installed_count++)); else ((failed_count++)); fi
         ;;
       kimi-code)
         if loading "Installing Kimi Code" install_kimi_code; then ((installed_count++)); else ((failed_count++)); fi

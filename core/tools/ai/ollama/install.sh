@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 
 install_ollama() {
   if command -v ollama &>/dev/null; then
-    log_success "Ollama is already installed"
+    log_info "Ollama is already installed"
     return 0
   fi
   log_info "Installing Ollama..."

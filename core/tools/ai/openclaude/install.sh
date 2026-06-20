@@ -28,7 +28,7 @@ _openclaude_dependencies() {
 
 install_openclaude() {
   if command -v openclaude &>/dev/null; then
-    log_success "OpenClaude is already installed"
+    log_info "OpenClaude is already installed"
     return 0
   fi
   log_info "Installing OpenClaude..."

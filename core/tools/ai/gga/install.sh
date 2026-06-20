@@ -7,6 +7,10 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 GGA_DATA_DIR="$CORE_DATA/gga-termux"
 
 _gga_dependencies() {
+	loading "Installing dependencies" _gga_dependencies_impl
+}
+
+_gga_dependencies_impl() {
 	declare -A DEPS=(
 		["git"]="git"
 		["curl"]="curl"
@@ -23,52 +27,53 @@ _gga_dependencies() {
 		fi
 	done
 
-	log_success "Dependencies installed"
 	return 0
 }
 
 _gga_clone_or_update_repo() {
+	loading "Cloning or updating gga-termux repo" _gga_clone_or_update_repo_impl
+}
+
+_gga_clone_or_update_repo_impl() {
 	local repo_url="https://github.com/DevCoreXOfficial/gga-termux.git"
 
 	if [ -d "$GGA_DATA_DIR/.git" ]; then
-		log_info "Updating existing clone..."
 		if ! git -C "$GGA_DATA_DIR" pull --ff-only &>>"$LOG_FILE"; then
 			log_error "Failed to update gga-termux repo"
 			return 1
 		fi
 	else
 		mkdir -p "$(dirname "$GGA_DATA_DIR")"
-		log_info "Cloning gga-termux repo..."
 		if ! git clone "$repo_url" "$GGA_DATA_DIR" &>>"$LOG_FILE"; then
 			log_error "Failed to clone gga-termux repo"
 			return 1
 		fi
 	fi
 
-	log_success "Source ready at $GGA_DATA_DIR"
 	return 0
 }
 
 _gga_run_installer() {
+	loading "Running gga-termux installer" _gga_run_installer_impl
+}
+
+_gga_run_installer_impl() {
 	if [ ! -d "$GGA_DATA_DIR" ] || [ ! -f "$GGA_DATA_DIR/install.sh" ]; then
 		log_error "gga-termux repo not found at $GGA_DATA_DIR"
 		return 1
 	fi
-
-	log_info "Running gga-termux installer..."
 
 	if ! (cd "$GGA_DATA_DIR" && bash ./install.sh < /dev/null) &>>"$LOG_FILE"; then
 		log_error "gga-termux install.sh failed (see $LOG_FILE)"
 		return 1
 	fi
 
-	log_success "gga-termux installer finished"
 	return 0
 }
 
 install_gga() {
 	if command -v gga &>/dev/null; then
-		log_success "GGA is already installed"
+		log_info "GGA is already installed"
 		return 0
 	fi
 
@@ -76,17 +81,9 @@ install_gga() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if ! loading "Installing dependencies" _gga_dependencies; then
-		return 1
-	fi
-
-	if ! loading "Cloning/updating source" _gga_clone_or_update_repo; then
-		return 1
-	fi
-
-	if ! loading "Running gga-termux installer" _gga_run_installer; then
-		return 1
-	fi
+	_gga_dependencies || return 1
+	_gga_clone_or_update_repo || return 1
+	_gga_run_installer || return 1
 
 	log_success "GGA installed"
 	return 0
@@ -120,13 +117,8 @@ update_gga() {
 	log_info "Updating GGA..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if ! loading "Updating source" _gga_clone_or_update_repo; then
-		return 1
-	fi
-
-	if ! loading "Running gga-termux installer" _gga_run_installer; then
-		return 1
-	fi
+	_gga_clone_or_update_repo || return 1
+	_gga_run_installer || return 1
 
 	log_success "GGA updated"
 	return 0

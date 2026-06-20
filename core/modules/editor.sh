@@ -15,26 +15,18 @@ install_editor() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing Neovim dependencies" _install_editor_deps; then
-		log_success "Neovim dependencies installed"
-	else
-		log_warn "Some dependencies may have failed"
-	fi
+	_install_editor_deps
+	log_success "Neovim dependencies installed"
 
-	if loading "Installing NvChad configuration" _install_editor_wrapper; then
-		log_success "Code editor installed successfully"
-		separator
-		echo
-		list_item "Neovim (code editor)"
-		list_item "NvChad (framework for Neovim)"
-		list_item "GitHub Copilot (AI code assistant)"
-		list_item "CodeCompanion (AI chat assistant)"
-		echo
-	else
-		log_error "Failed to install code editor"
-		log_warn "Check log file: $LOG_FILE"
-		return 1
-	fi
+	_install_editor_wrapper
+	log_success "Code editor installed successfully"
+	separator
+	echo
+	list_item "Neovim (code editor)"
+	list_item "NvChad (framework for Neovim)"
+	list_item "GitHub Copilot (AI code assistant)"
+	list_item "CodeCompanion (AI chat assistant)"
+	echo
 }
 
 _install_editor_deps() {
@@ -54,12 +46,8 @@ uninstall_editor() {
 
 	log_info "Uninstalling Neovim configuration..."
 
-	if loading "Uninstalling NvChad" _uninstall_editor_wrapper; then
-		log_success "Code editor uninstalled"
-	else
-		log_error "Failed to uninstall code editor"
-		return 1
-	fi
+	_uninstall_editor_wrapper
+	log_success "Code editor uninstalled"
 }
 
 _uninstall_editor_wrapper() {
@@ -75,12 +63,8 @@ update_editor() {
 
 	log_info "Updating NvChad configuration..."
 
-	if loading "Updating NvChad" _update_editor_wrapper; then
-		log_success "Code editor updated"
-	else
-		log_error "Failed to update code editor"
-		return 1
-	fi
+	_update_editor_wrapper
+	log_success "Code editor updated"
 }
 
 _update_editor_wrapper() {
@@ -96,20 +80,15 @@ reinstall_editor() {
 
   log_info "Reinstalling Neovim and dependencies..."
 
-  if loading "Reinstalling NvChad configuration" _reinstall_editor_wrapper; then
-    log_success "Code editor reinstalled successfully"
-    separator
-    echo
-    list_item "Neovim (code editor)"
-    list_item "NvChad (framework for Neovim)"
-    list_item "GitHub Copilot (AI code assistant)"
-    list_item "CodeCompanion (AI chat assistant)"
-    echo
-  else
-    log_error "Failed to reinstall code editor"
-    log_warn "Check log file: $LOG_FILE"
-    return 1
-  fi
+  _reinstall_editor_wrapper
+  log_success "Code editor reinstalled successfully"
+  separator
+  echo
+  list_item "Neovim (code editor)"
+  list_item "NvChad (framework for Neovim)"
+  list_item "GitHub Copilot (AI code assistant)"
+  list_item "CodeCompanion (AI chat assistant)"
+  echo
 }
 
 _reinstall_editor_wrapper() {

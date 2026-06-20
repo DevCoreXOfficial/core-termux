@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_tree() {
 	if command -v tree &>/dev/null; then
-		log_success "Tree is already installed"
+		log_info "Tree is already installed"
 		return 0
 	fi
 	log_info "Installing Tree..."

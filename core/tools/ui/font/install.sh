@@ -8,7 +8,7 @@ TERMUX_ASSETS_DIR="$(dirname "$CORE_PATH")/assets"
 
 install_font() {
 	if [[ -f "$TERMUX_DIR/font.ttf" ]]; then
-		log_info "Meslo Nerd Font ${D_GREEN}already installed${NC}"
+		log_info "Meslo Nerd Font already installed"
 		return 0
 	fi
 	log_info "Installing Meslo Nerd Font..."

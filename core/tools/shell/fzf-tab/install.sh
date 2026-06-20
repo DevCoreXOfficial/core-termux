@@ -29,7 +29,7 @@ _fzf_tab_dependencies() {
 
 install_fzf_tab() {
   if [[ -d "$ZSH_PLUGINS_DIR/fzf-tab" ]]; then
-    log_info "fzf-tab ${D_GREEN}already installed${NC}"
+    log_info "fzf-tab already installed"
     return 0
   fi
 

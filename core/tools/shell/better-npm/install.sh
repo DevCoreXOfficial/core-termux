@@ -29,7 +29,7 @@ _better_npm_dependencies() {
 
 install_better_npm() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" ]]; then
-    log_info "zsh-better-npm-completion ${D_GREEN}already installed${NC}"
+    log_info "zsh-better-npm-completion already installed"
     return 0
   fi
 

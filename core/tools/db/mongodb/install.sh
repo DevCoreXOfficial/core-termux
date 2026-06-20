@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_mongodb() {
 	if command -v mongod &>/dev/null; then
-		log_success "MongoDB is already installed"
+		log_info "MongoDB is already installed"
 		return 0
 	fi
 	log_info "Installing MongoDB..."

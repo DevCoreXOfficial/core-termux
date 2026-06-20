@@ -15,35 +15,30 @@ install_tools() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing tools" _install_tools_wrapper; then
-		log_success "Tools installed successfully"
-		separator
-		echo
-		list_item "GitHub CLI"
-		list_item "Wget"
-		list_item "Curl"
-		list_item "LSD (ls replacement)"
-		list_item "Bat (cat replacement)"
-		list_item "Proot (chroot alternative)"
-		list_item "Ncurses Utils"
-		list_item "Tmate (terminal sharing)"
-		list_item "Cloudflared (Cloudflare Tunnel)"
-		list_item "Translate Shell"
-		list_item "html2text (HTML to text converter)"
-		list_item "jq (JSON processor)"
-		list_item "bc (calculator)"
-		list_item "Tree (directory listing)"
-		list_item "Fzf (fuzzy finder)"
-		list_item "ImageMagick (image manipulation)"
-		list_item "Shfmt (shell script formatter)"
-		list_item "Make (build automation)"
-		list_item "Udocker (container management)"
-		echo
-	else
-		log_error "Failed to install tools"
-		log_warn "Check log file: $LOG_FILE"
-		return 1
-	fi
+	_install_tools_wrapper
+	log_success "Tools installed successfully"
+	separator
+	echo
+	list_item "GitHub CLI"
+	list_item "Wget"
+	list_item "Curl"
+	list_item "LSD (ls replacement)"
+	list_item "Bat (cat replacement)"
+	list_item "Proot (chroot alternative)"
+	list_item "Ncurses Utils"
+	list_item "Tmate (terminal sharing)"
+	list_item "Cloudflared (Cloudflare Tunnel)"
+	list_item "Translate Shell"
+	list_item "html2text (HTML to text converter)"
+	list_item "jq (JSON processor)"
+	list_item "bc (calculator)"
+	list_item "Tree (directory listing)"
+	list_item "Fzf (fuzzy finder)"
+	list_item "ImageMagick (image manipulation)"
+	list_item "Shfmt (shell script formatter)"
+	list_item "Make (build automation)"
+	list_item "Udocker (container management)"
+	echo
 }
 
 _install_tools_wrapper() {
@@ -59,12 +54,8 @@ uninstall_tools() {
 
 	log_info "Uninstalling development tools..."
 
-	if loading "Uninstalling tools" _uninstall_tools_wrapper; then
-		log_success "Tools uninstalled"
-	else
-		log_error "Failed to uninstall tools"
-		return 1
-	fi
+	_uninstall_tools_wrapper
+	log_success "Tools uninstalled"
 }
 
 _uninstall_tools_wrapper() {
@@ -80,12 +71,8 @@ update_tools() {
 
 	log_info "Updating development tools..."
 
-	if loading "Updating tools" _update_tools_wrapper; then
-		log_success "Tools updated"
-	else
-		log_error "Failed to update tools"
-		return 1
-	fi
+	_update_tools_wrapper
+	log_success "Tools updated"
 }
 
 _update_tools_wrapper() {
@@ -101,35 +88,30 @@ reinstall_tools() {
 
   log_info "Reinstalling development tools..."
 
-  if loading "Reinstalling tools" _reinstall_tools_wrapper; then
-    log_success "Tools reinstalled successfully"
-    separator
-    echo
-    list_item "GitHub CLI"
-    list_item "Wget"
-    list_item "Curl"
-    list_item "LSD (ls replacement)"
-    list_item "Bat (cat replacement)"
-    list_item "Proot (chroot alternative)"
-    list_item "Ncurses Utils"
-    list_item "Tmate (terminal sharing)"
-    list_item "Cloudflared (Cloudflare Tunnel)"
-    list_item "Translate Shell"
-    list_item "html2text (HTML to text converter)"
-    list_item "jq (JSON processor)"
-    list_item "bc (calculator)"
-    list_item "Tree (directory listing)"
-    list_item "Fzf (fuzzy finder)"
-    list_item "ImageMagick (image manipulation)"
-    list_item "Shfmt (shell script formatter)"
-    list_item "Make (build automation)"
-    list_item "Udocker (container management)"
-    echo
-  else
-    log_error "Failed to reinstall tools"
-    log_warn "Check log file: $LOG_FILE"
-    return 1
-  fi
+  _reinstall_tools_wrapper
+  log_success "Tools reinstalled successfully"
+  separator
+  echo
+  list_item "GitHub CLI"
+  list_item "Wget"
+  list_item "Curl"
+  list_item "LSD (ls replacement)"
+  list_item "Bat (cat replacement)"
+  list_item "Proot (chroot alternative)"
+  list_item "Ncurses Utils"
+  list_item "Tmate (terminal sharing)"
+  list_item "Cloudflared (Cloudflare Tunnel)"
+  list_item "Translate Shell"
+  list_item "html2text (HTML to text converter)"
+  list_item "jq (JSON processor)"
+  list_item "bc (calculator)"
+  list_item "Tree (directory listing)"
+  list_item "Fzf (fuzzy finder)"
+  list_item "ImageMagick (image manipulation)"
+  list_item "Shfmt (shell script formatter)"
+  list_item "Make (build automation)"
+  list_item "Udocker (container management)"
+  echo
 }
 
 _reinstall_tools_wrapper() {

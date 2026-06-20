@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_translate() {
 	if command -v trans &>/dev/null; then
-		log_success "Translate Shell is already installed"
+		log_info "Translate Shell is already installed"
 		return 0
 	fi
 	log_info "Installing Translate Shell..."

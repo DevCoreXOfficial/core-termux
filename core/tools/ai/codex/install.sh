@@ -28,7 +28,7 @@ _codex_dependencies() {
 
 install_codex() {
 	if command -v codex &>/dev/null; then
-		log_success "Codex CLI is already installed"
+		log_info "Codex CLI is already installed"
 		return 0
 	fi
 	log_info "Installing Codex CLI..."

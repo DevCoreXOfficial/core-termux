@@ -29,7 +29,7 @@ _powerlevel10k_dependencies() {
 
 install_powerlevel10k() {
   if [[ -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then
-    log_info "powerlevel10k ${D_GREEN}already installed${NC}"
+    log_info "powerlevel10k already installed"
     return 0
   fi
   log_info "Installing powerlevel10k..."

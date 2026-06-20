@@ -29,25 +29,25 @@ install_all_language_packages() {
 	for tool in "${LANGUAGE_PACKAGES[@]}"; do
 		case "$tool" in
 		nodejs)
-			if install_nodejs; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Node.js LTS" install_nodejs; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		python)
-			if install_python; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Python" install_python; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		perl)
-			if install_perl; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Perl" install_perl; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		php)
-			if install_php; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing PHP" install_php; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		rust)
-			if install_rust; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Rust" install_rust; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		clang)
-			if install_clang; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing C/C++ (clang)" install_clang; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		golang)
-			if install_golang; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Go (golang)" install_golang; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -62,25 +62,25 @@ uninstall_all_language_packages() {
 	for tool in "${LANGUAGE_PACKAGES[@]}"; do
 		case "$tool" in
 		nodejs)
-			if uninstall_nodejs; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Node.js LTS" uninstall_nodejs; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		python)
-			if uninstall_python; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Python" uninstall_python; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		perl)
-			if uninstall_perl; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Perl" uninstall_perl; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		php)
-			if uninstall_php; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling PHP" uninstall_php; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		rust)
-			if uninstall_rust; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Rust" uninstall_rust; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		clang)
-			if uninstall_clang; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling C/C++ (clang)" uninstall_clang; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		golang)
-			if uninstall_golang; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Go (golang)" uninstall_golang; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -95,25 +95,25 @@ update_all_language_packages() {
   for tool in "${LANGUAGE_PACKAGES[@]}"; do
     case "$tool" in
     nodejs)
-      if update_nodejs; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Node.js LTS" update_nodejs; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     python)
-      if update_python; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Python" update_python; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     perl)
-      if update_perl; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Perl" update_perl; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     php)
-      if update_php; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating PHP" update_php; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     rust)
-      if update_rust; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Rust" update_rust; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     clang)
-      if update_clang; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating C/C++ (clang)" update_clang; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     golang)
-      if update_golang; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Go (golang)" update_golang; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     esac
   done
@@ -128,25 +128,25 @@ reinstall_all_language_packages() {
   for tool in "${LANGUAGE_PACKAGES[@]}"; do
     case "$tool" in
     nodejs)
-      if reinstall_nodejs; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Node.js LTS" reinstall_nodejs; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     python)
-      if reinstall_python; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Python" reinstall_python; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     perl)
-      if reinstall_perl; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Perl" reinstall_perl; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     php)
-      if reinstall_php; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling PHP" reinstall_php; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     rust)
-      if reinstall_rust; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Rust" reinstall_rust; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     clang)
-      if reinstall_clang; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling C/C++ (clang)" reinstall_clang; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     golang)
-      if reinstall_golang; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Go (golang)" reinstall_golang; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     esac
   done

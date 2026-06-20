@@ -53,61 +53,61 @@ install_all_tools() {
 	for tool in "${TOOLS_PACKAGES[@]}"; do
 		case "$tool" in
 		gh)
-			if install_gh; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing GitHub CLI" install_gh; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		wget)
-			if install_wget; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Wget" install_wget; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		curl)
-			if install_curl; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Curl" install_curl; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		lsd)
-			if install_lsd; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing LSD" install_lsd; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		bat)
-			if install_bat; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Bat" install_bat; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		proot)
-			if install_proot; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Proot" install_proot; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		ncurses)
-			if install_ncurses; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Ncurses Utils" install_ncurses; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		tmate)
-			if install_tmate; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Tmate" install_tmate; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		cloudflared)
-			if install_cloudflared; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Cloudflared" install_cloudflared; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		translate)
-			if install_translate; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Translate Shell" install_translate; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		html2text)
-			if install_html2text; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing html2text" install_html2text; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		jq)
-			if install_jq; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing jq" install_jq; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		bc)
-			if install_bc; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing bc" install_bc; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		tree)
-			if install_tree; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Tree" install_tree; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		fzf)
-			if install_fzf; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Fzf" install_fzf; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		imagemagick)
-			if install_imagemagick; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing ImageMagick" install_imagemagick; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		shfmt)
-			if install_shfmt; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Shfmt" install_shfmt; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		make)
-			if install_make; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Make" install_make; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		udocker)
-			if install_udocker; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Udocker" install_udocker; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -122,61 +122,61 @@ uninstall_all_tools() {
 	for tool in "${TOOLS_PACKAGES[@]}"; do
 		case "$tool" in
 		gh)
-			if uninstall_gh; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling GitHub CLI" uninstall_gh; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		wget)
-			if uninstall_wget; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Wget" uninstall_wget; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		curl)
-			if uninstall_curl; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Curl" uninstall_curl; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		lsd)
-			if uninstall_lsd; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling LSD" uninstall_lsd; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		bat)
-			if uninstall_bat; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Bat" uninstall_bat; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		proot)
-			if uninstall_proot; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Proot" uninstall_proot; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		ncurses)
-			if uninstall_ncurses; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Ncurses Utils" uninstall_ncurses; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		tmate)
-			if uninstall_tmate; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Tmate" uninstall_tmate; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		cloudflared)
-			if uninstall_cloudflared; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Cloudflared" uninstall_cloudflared; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		translate)
-			if uninstall_translate; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Translate Shell" uninstall_translate; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		html2text)
-			if uninstall_html2text; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling html2text" uninstall_html2text; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		jq)
-			if uninstall_jq; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling jq" uninstall_jq; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		bc)
-			if uninstall_bc; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling bc" uninstall_bc; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		tree)
-			if uninstall_tree; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Tree" uninstall_tree; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		fzf)
-			if uninstall_fzf; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Fzf" uninstall_fzf; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		imagemagick)
-			if uninstall_imagemagick; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling ImageMagick" uninstall_imagemagick; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		shfmt)
-			if uninstall_shfmt; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Shfmt" uninstall_shfmt; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		make)
-			if uninstall_make; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Make" uninstall_make; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		udocker)
-			if uninstall_udocker; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Udocker" uninstall_udocker; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -191,61 +191,61 @@ update_all_tools() {
   for tool in "${TOOLS_PACKAGES[@]}"; do
     case "$tool" in
     gh)
-      if update_gh; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating GitHub CLI" update_gh; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     wget)
-      if update_wget; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Wget" update_wget; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     curl)
-      if update_curl; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Curl" update_curl; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     lsd)
-      if update_lsd; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating LSD" update_lsd; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     bat)
-      if update_bat; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Bat" update_bat; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     proot)
-      if update_proot; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Proot" update_proot; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     ncurses)
-      if update_ncurses; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Ncurses Utils" update_ncurses; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     tmate)
-      if update_tmate; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Tmate" update_tmate; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     cloudflared)
-      if update_cloudflared; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Cloudflared" update_cloudflared; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     translate)
-      if update_translate; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Translate Shell" update_translate; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     html2text)
-      if update_html2text; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating html2text" update_html2text; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     jq)
-      if update_jq; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating jq" update_jq; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     bc)
-      if update_bc; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating bc" update_bc; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     tree)
-      if update_tree; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Tree" update_tree; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     fzf)
-      if update_fzf; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Fzf" update_fzf; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     imagemagick)
-      if update_imagemagick; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating ImageMagick" update_imagemagick; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     shfmt)
-      if update_shfmt; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Shfmt" update_shfmt; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     make)
-      if update_make; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Make" update_make; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     udocker)
-      if update_udocker; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Udocker" update_udocker; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     esac
   done
@@ -260,61 +260,61 @@ reinstall_all_tools() {
   for tool in "${TOOLS_PACKAGES[@]}"; do
     case "$tool" in
     gh)
-      if reinstall_gh; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling GitHub CLI" reinstall_gh; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     wget)
-      if reinstall_wget; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Wget" reinstall_wget; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     curl)
-      if reinstall_curl; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Curl" reinstall_curl; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     lsd)
-      if reinstall_lsd; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling LSD" reinstall_lsd; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     bat)
-      if reinstall_bat; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Bat" reinstall_bat; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     proot)
-      if reinstall_proot; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Proot" reinstall_proot; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     ncurses)
-      if reinstall_ncurses; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Ncurses Utils" reinstall_ncurses; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     tmate)
-      if reinstall_tmate; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Tmate" reinstall_tmate; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     cloudflared)
-      if reinstall_cloudflared; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Cloudflared" reinstall_cloudflared; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     translate)
-      if reinstall_translate; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Translate Shell" reinstall_translate; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     html2text)
-      if reinstall_html2text; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling html2text" reinstall_html2text; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     jq)
-      if reinstall_jq; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling jq" reinstall_jq; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     bc)
-      if reinstall_bc; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling bc" reinstall_bc; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     tree)
-      if reinstall_tree; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Tree" reinstall_tree; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     fzf)
-      if reinstall_fzf; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Fzf" reinstall_fzf; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     imagemagick)
-      if reinstall_imagemagick; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling ImageMagick" reinstall_imagemagick; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     shfmt)
-      if reinstall_shfmt; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Shfmt" reinstall_shfmt; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     make)
-      if reinstall_make; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Make" reinstall_make; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     udocker)
-      if reinstall_udocker; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Udocker" reinstall_udocker; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     esac
   done

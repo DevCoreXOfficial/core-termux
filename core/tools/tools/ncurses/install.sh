@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_ncurses() {
 	if command -v tput &>/dev/null; then
-		log_success "Ncurses Utils is already installed"
+		log_info "Ncurses Utils is already installed"
 		return 0
 	fi
 	log_info "Installing Ncurses Utils..."

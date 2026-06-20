@@ -32,6 +32,10 @@ _get_latest_claude_version() {
 }
 
 _claude_install_deps_native() {
+  loading "Installing glibc and dependencies" _claude_install_deps_native_impl
+}
+
+_claude_install_deps_native_impl() {
   if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
     if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
       log_error "Failed to install glibc-repo"
@@ -64,19 +68,20 @@ _claude_install_deps_native() {
     fi
   done
 
-  log_success "Dependencies installed"
   return 0
 }
 
 _download_claude_binary() {
+  loading "Downloading Claude Code" _download_claude_binary_impl
+}
+
+_download_claude_binary_impl() {
   local latest_version
   latest_version=$(_get_latest_claude_version)
   if [ -z "$latest_version" ]; then
     log_error "Failed to fetch latest Claude Code version"
     return 1
   fi
-
-  log_info "Latest version: ${D_CYAN}$latest_version${NC}"
 
   mkdir -p "$CLAUDE_DATA_DIR"
 
@@ -101,11 +106,14 @@ _download_claude_binary() {
   fi
 
   chmod +x "$CLAUDE_DATA_DIR/claude"
-  log_success "Claude Code binary downloaded"
   return 0
 }
 
 _compile_claude_helper() {
+  loading "Compiling helper" _compile_claude_helper_impl
+}
+
+_compile_claude_helper_impl() {
   local HELPER_SRC="$CORE_PATH/tools/ai/claude-code/helper/claude_helper.c"
   if [ ! -f "$HELPER_SRC" ]; then
     log_error "Helper source not found at $HELPER_SRC"
@@ -118,30 +126,22 @@ _compile_claude_helper() {
   fi
 
   chmod +x "$PREFIX/bin/claude"
-  log_success "Bootstrapper compiled"
   return 0
 }
 
 _install_claude_native() {
-  if ! loading "Installing dependencies" _claude_install_deps_native; then
-    return 1
-  fi
-
-  if ! loading "Downloading Claude Code" _download_claude_binary; then
-    return 1
-  fi
-
-  if ! loading "Compiling bootstrapper" _compile_claude_helper; then
-    return 1
-  fi
-
+  _claude_install_deps_native || return 1
+  _download_claude_binary || return 1
+  _compile_claude_helper || return 1
   log_success "Claude Code installed natively"
   return 0
 }
 
 _install_claude_proot() {
-  log_info "Installing Claude Code (proot-distro)..."
+  loading "Installing Claude Code (proot-distro)" _install_claude_proot_impl
+}
 
+_install_claude_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if ! command -v proot-distro &>/dev/null; then
@@ -188,13 +188,12 @@ _install_claude_proot() {
     printf '\n# claude-code\nexport PATH=/root/.local/bin:$PATH\n' >>"$ubuntu_root/root/.bashrc"
   fi
 
-  log_success "Claude Code installed (proot-distro)"
   return 0
 }
 
 install_claude_code() {
   if command -v claude &>/dev/null; then
-    log_success "Claude Code is already installed"
+    log_info "Claude Code is already installed"
     return 0
   fi
 
@@ -217,6 +216,11 @@ install_claude_code() {
 uninstall_claude_code() {
   log_info "Uninstalling Claude Code..."
   mkdir -p "$(dirname "$LOG_FILE")"
+
+  if [ ! -f "$PREFIX/bin/claude" ]; then
+    log_warn "Claude Code is not installed"
+    return 1
+  fi
 
   if [ -f "$CLAUDE_DATA_DIR/claude" ]; then
     rm -f "$PREFIX/bin/claude"

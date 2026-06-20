@@ -19,10 +19,10 @@ install_all_editor_components() {
 	for tool in "${EDITOR_COMPONENTS[@]}"; do
 		case "$tool" in
 		neovim)
-			if install_neovim; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Neovim" install_neovim; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		nvchad)
-			if install_nvchad; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing NvChad" install_nvchad; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -37,10 +37,10 @@ uninstall_all_editor_components() {
 	for tool in "${EDITOR_COMPONENTS[@]}"; do
 		case "$tool" in
 		neovim)
-			if uninstall_neovim; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Neovim" uninstall_neovim; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		nvchad)
-			if uninstall_nvchad; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling NvChad" uninstall_nvchad; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -55,10 +55,10 @@ update_all_editor_components() {
   for tool in "${EDITOR_COMPONENTS[@]}"; do
     case "$tool" in
     neovim)
-      if update_neovim; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Neovim" update_neovim; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     nvchad)
-      if update_nvchad; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating NvChad" update_nvchad; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     esac
   done
@@ -73,10 +73,10 @@ reinstall_all_editor_components() {
   for tool in "${EDITOR_COMPONENTS[@]}"; do
     case "$tool" in
     neovim)
-      if reinstall_neovim; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Neovim" reinstall_neovim; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     nvchad)
-      if reinstall_nvchad; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling NvChad" reinstall_nvchad; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     esac
   done

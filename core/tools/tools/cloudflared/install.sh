@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_cloudflared() {
 	if command -v cloudflared &>/dev/null; then
-		log_success "Cloudflared is already installed"
+		log_info "Cloudflared is already installed"
 		return 0
 	fi
 	log_info "Installing Cloudflared..."

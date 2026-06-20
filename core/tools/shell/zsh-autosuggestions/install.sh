@@ -29,7 +29,7 @@ _zsh_autosuggestions_dependencies() {
 
 install_zsh_autosuggestions() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions" ]]; then
-    log_info "zsh-autosuggestions ${D_GREEN}already installed${NC}"
+    log_info "zsh-autosuggestions already installed"
     return 0
   fi
 

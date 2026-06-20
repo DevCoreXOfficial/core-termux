@@ -15,17 +15,12 @@ install_automation() {
 	echo
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if loading "Installing Automation Tools" _install_automation_wrapper; then
-		log_success "Automation Tools installed successfully"
-		separator
-		echo
-		list_item "n8n"
-		echo
-	else
-		log_error "Failed to install Automation Tools"
-		log_warn "Check log file: $LOG_FILE"
-		return 1
-	fi
+	_install_automation_wrapper
+	log_success "Automation Tools installed successfully"
+	separator
+	echo
+	list_item "n8n"
+	echo
 }
 
 _install_automation_wrapper() {
@@ -41,12 +36,8 @@ uninstall_automation() {
 
 	log_info "Uninstalling Automation Tools..."
 
-	if loading "Uninstalling Automation Tools" _uninstall_automation_wrapper; then
-		log_success "Automation Tools uninstalled"
-	else
-		log_error "Failed to uninstall Automation Tools"
-		return 1
-	fi
+	_uninstall_automation_wrapper
+	log_success "Automation Tools uninstalled"
 }
 
 _uninstall_automation_wrapper() {
@@ -62,12 +53,8 @@ update_automation() {
 
 	log_info "Updating Automation Tools..."
 
-	if loading "Updating Automation Tools" _update_automation_wrapper; then
-		log_success "Automation Tools updated"
-	else
-		log_error "Failed to update Automation Tools"
-		return 1
-	fi
+	_update_automation_wrapper
+	log_success "Automation Tools updated"
 }
 
 _update_automation_wrapper() {
@@ -85,17 +72,12 @@ reinstall_automation() {
   echo
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if loading "Reinstalling Automation Tools" _reinstall_automation_wrapper; then
-    log_success "Automation Tools reinstalled successfully"
-    separator
-    echo
-    list_item "n8n"
-    echo
-  else
-    log_error "Failed to reinstall Automation Tools"
-    log_warn "Check log file: $LOG_FILE"
-    return 1
-  fi
+  _reinstall_automation_wrapper
+  log_success "Automation Tools reinstalled successfully"
+  separator
+  echo
+  list_item "n8n"
+  echo
 }
 
 _reinstall_automation_wrapper() {

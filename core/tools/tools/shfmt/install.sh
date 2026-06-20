@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_shfmt() {
 	if command -v shfmt &>/dev/null; then
-		log_success "Shfmt is already installed"
+		log_info "Shfmt is already installed"
 		return 0
 	fi
 	log_info "Installing Shfmt..."

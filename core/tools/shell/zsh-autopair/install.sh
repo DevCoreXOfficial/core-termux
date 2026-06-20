@@ -29,7 +29,7 @@ _zsh_autopair_dependencies() {
 
 install_zsh_autopair() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-autopair" ]]; then
-    log_info "zsh-autopair ${D_GREEN}already installed${NC}"
+    log_info "zsh-autopair already installed"
     return 0
   fi
 

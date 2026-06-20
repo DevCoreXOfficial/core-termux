@@ -32,6 +32,10 @@ _get_latest_opencode_version() {
 }
 
 _opencode_install_deps_native() {
+  loading "Installing glibc and dependencies" _opencode_install_deps_native_impl
+}
+
+_opencode_install_deps_native_impl() {
   if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
     if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
       log_error "Failed to install glibc-repo"
@@ -68,19 +72,20 @@ _opencode_install_deps_native() {
     fi
   done
 
-  log_success "Dependencies installed"
   return 0
 }
 
 _download_opencode_binary() {
+  loading "Downloading OpenCode" _download_opencode_binary_impl
+}
+
+_download_opencode_binary_impl() {
   local latest_version
   latest_version=$(_get_latest_opencode_version)
   if [ -z "$latest_version" ]; then
     log_error "Failed to fetch latest OpenCode version"
     return 1
   fi
-
-  log_info "Latest version: ${D_CYAN}$latest_version${NC}"
 
   mkdir -p "$OPENCODE_DATA_DIR"
 
@@ -105,11 +110,14 @@ _download_opencode_binary() {
   fi
 
   chmod +x "$OPENCODE_DATA_DIR/opencode"
-  log_success "OpenCode binary downloaded"
   return 0
 }
 
 _compile_opencode_helper() {
+  loading "Compiling helper" _compile_opencode_helper_impl
+}
+
+_compile_opencode_helper_impl() {
   local HELPER_SRC="$CORE_PATH/tools/ai/opencode/helper/opencode_helper.c"
   if [ ! -f "$HELPER_SRC" ]; then
     log_error "Helper source not found at $HELPER_SRC"
@@ -122,30 +130,22 @@ _compile_opencode_helper() {
   fi
 
   chmod +x "$PREFIX/bin/opencode"
-  log_success "Bootstrapper compiled"
   return 0
 }
 
 _install_opencode_native() {
-  if ! loading "Installing dependencies" _opencode_install_deps_native; then
-    return 1
-  fi
-
-  if ! loading "Downloading OpenCode" _download_opencode_binary; then
-    return 1
-  fi
-
-  if ! loading "Compiling bootstrapper" _compile_opencode_helper; then
-    return 1
-  fi
-
+  _opencode_install_deps_native || return 1
+  _download_opencode_binary || return 1
+  _compile_opencode_helper || return 1
   log_success "OpenCode installed natively"
   return 0
 }
 
 _install_opencode_proot() {
-  log_info "Installing OpenCode (proot-distro)..."
+  loading "Installing OpenCode (proot-distro)" _install_opencode_proot_impl
+}
 
+_install_opencode_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if ! command -v proot-distro &>/dev/null; then
@@ -153,7 +153,7 @@ _install_opencode_proot() {
   fi
 
   if [ ! -d "$(_opencode_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu &>>"$LOG_FILE"
+    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
   fi
 
   _opencode_proot_ubuntu /bin/bash -c \
@@ -194,13 +194,12 @@ _install_opencode_proot() {
     printf '\n# opencode\nexport PATH=/root/.opencode/bin:$PATH\n' >>"$ubuntu_root/root/.bashrc"
   fi
 
-  log_success "OpenCode installed (proot-distro)"
   return 0
 }
 
 install_opencode() {
   if command -v opencode &>/dev/null; then
-    log_success "OpenCode is already installed"
+    log_info "OpenCode is already installed"
     return 0
   fi
 
@@ -223,6 +222,11 @@ install_opencode() {
 uninstall_opencode() {
   log_info "Uninstalling OpenCode..."
   mkdir -p "$(dirname "$LOG_FILE")"
+
+  if [ ! -f "$PREFIX/bin/opencode" ]; then
+    log_warn "OpenCode is not installed"
+    return 1
+  fi
 
   if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
     rm -f "$PREFIX/bin/opencode"

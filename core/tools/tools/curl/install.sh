@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_curl() {
 	if command -v curl &>/dev/null; then
-		log_success "Curl is already installed"
+		log_info "Curl is already installed"
 		return 0
 	fi
 	log_info "Installing Curl..."

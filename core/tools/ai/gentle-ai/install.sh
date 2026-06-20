@@ -11,6 +11,10 @@ LOG_FILE="$CORE_CACHE/install_ai.log"
 GENTLE_AI_DATA_DIR="${GENTLE_AI_DATA_DIR:-$HOME/.local/share/core-termux-data/gentle-ai}"
 
 _gentle_ai_dependencies() {
+  loading "Installing dependencies" _gentle_ai_dependencies_impl
+}
+
+_gentle_ai_dependencies_impl() {
   declare -A DEPS=(
     ["golang"]="go"
     ["git"]="git"
@@ -28,11 +32,14 @@ _gentle_ai_dependencies() {
     fi
   done
 
-  log_success "Dependencies installed (git, curl)"
   return 0
 }
 
 _gentle_ai_ensure_go() {
+  loading "Checking Go version" _gentle_ai_ensure_go_impl
+}
+
+_gentle_ai_ensure_go_impl() {
   if ! command -v go &>/dev/null; then
     log_error "Go is required but not installed"
     return 1
@@ -55,7 +62,6 @@ _gentle_ai_ensure_go() {
     return 1
   fi
 
-  log_success "Go $go_installed >= $go_required"
   return 0
 }
 
@@ -67,10 +73,13 @@ _version_ge() {
 }
 
 _clone_or_update_repo() {
+  loading "Cloning or updating gentle-ai repo" _clone_or_update_repo_impl
+}
+
+_clone_or_update_repo_impl() {
   local repo_url="https://github.com/Gentleman-Programming/gentle-ai.git"
 
   if [ -d "$GENTLE_AI_DATA_DIR/.git" ]; then
-    log_info "Updating existing clone..."
     git -C "$GENTLE_AI_DATA_DIR" remote set-url origin "$repo_url" &>>"$LOG_FILE"
     git -C "$GENTLE_AI_DATA_DIR" stash --include-untracked &>>"$LOG_FILE" || true
     if ! git -C "$GENTLE_AI_DATA_DIR" fetch origin &>>"$LOG_FILE"; then
@@ -85,18 +94,20 @@ _clone_or_update_repo() {
     if [ -d "$GENTLE_AI_DATA_DIR" ]; then
       rm -rf "$GENTLE_AI_DATA_DIR"
     fi
-    log_info "Cloning gentle-ai repo..."
     if ! git clone "$repo_url" "$GENTLE_AI_DATA_DIR" &>>"$LOG_FILE"; then
       log_error "Failed to clone gentle-ai repo"
       return 1
     fi
   fi
 
-  log_success "Source code ready at $GENTLE_AI_DATA_DIR"
   return 0
 }
 
 _build_and_apply_patches() {
+  loading "Applying Termux patches" _build_and_apply_patches_impl
+}
+
+_build_and_apply_patches_impl() {
   local patcher_src="$CORE_PATH/tools/ai/gentle-ai/termux-patches.go"
   local patcher_bin="$CORE_CACHE/termux-patcher"
 
@@ -126,13 +137,14 @@ _build_and_apply_patches() {
   fi
 
   popd &>/dev/null || true
-  log_success "Termux patches applied"
   return 0
 }
 
 _compile() {
-  log_info "Compiling gentle-ai for Termux..."
+  loading "Compiling gentle-ai" _compile_impl
+}
 
+_compile_impl() {
   if ! command -v gcc &>/dev/null && ! command -v clang &>/dev/null; then
     export CGO_ENABLED=0
   fi
@@ -164,53 +176,38 @@ _compile() {
     return 1
   fi
 
-  log_success "gentle-ai compiled successfully"
   return 0
 }
 
 _install_binary() {
+  loading "Installing binary" _install_binary_impl
+}
+
+_install_binary_impl() {
   if ! cp "$GENTLE_AI_DATA_DIR/gentle-ai" "$PREFIX/bin/gentle-ai" &>>"$LOG_FILE"; then
     log_error "Failed to install binary to $PREFIX/bin/gentle-ai"
     return 1
   fi
 
   chmod +x "$PREFIX/bin/gentle-ai"
-  log_success "Binary installed to $PREFIX/bin/gentle-ai"
   return 0
 }
 
 install_gentle_ai() {
   if command -v gentle-ai &>/dev/null; then
-    log_success "gentle-ai is already installed"
+    log_info "gentle-ai is already installed"
     return 0
   fi
 
   log_info "Installing gentle-ai..."
   mkdir -p "$(dirname "$LOG_FILE")" "$CORE_CACHE"
 
-  if ! loading "Installing dependencies" _gentle_ai_dependencies; then
-    return 1
-  fi
-
-  if ! loading "Cloning/updating source" _clone_or_update_repo; then
-    return 1
-  fi
-
-  if ! loading "Checking Go version" _gentle_ai_ensure_go; then
-    return 1
-  fi
-
-  if ! loading "Compiling & applying Termux patches" _build_and_apply_patches; then
-    return 1
-  fi
-
-  if ! loading "Compiling gentle-ai" _compile; then
-    return 1
-  fi
-
-  if ! loading "Installing binary" _install_binary; then
-    return 1
-  fi
+  _gentle_ai_dependencies || return 1
+  _clone_or_update_repo || return 1
+  _gentle_ai_ensure_go || return 1
+  _build_and_apply_patches || return 1
+  _compile || return 1
+  _install_binary || return 1
 
   log_success "gentle-ai installed"
   return 0
@@ -236,25 +233,11 @@ update_gentle_ai() {
   log_info "Updating gentle-ai..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if ! loading "Updating source" _clone_or_update_repo; then
-    return 1
-  fi
-
-  if ! loading "Checking Go version" _gentle_ai_ensure_go; then
-    return 1
-  fi
-
-  if ! loading "Compiling & applying Termux patches" _build_and_apply_patches; then
-    return 1
-  fi
-
-  if ! loading "Recompiling gentle-ai" _compile; then
-    return 1
-  fi
-
-  if ! loading "Reinstalling binary" _install_binary; then
-    return 1
-  fi
+  _clone_or_update_repo || return 1
+  _gentle_ai_ensure_go || return 1
+  _build_and_apply_patches || return 1
+  _compile || return 1
+  _install_binary || return 1
 
   log_success "gentle-ai updated"
   return 0

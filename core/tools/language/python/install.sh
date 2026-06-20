@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_python() {
 	if command -v python &>/dev/null; then
-		log_success "Python is already installed"
+		log_info "Python is already installed"
 		return 0
 	fi
 	log_info "Installing Python..."

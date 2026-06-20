@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_language.log"
 
 install_nodejs() {
 	if command -v node &>/dev/null; then
-		log_success "Node.js LTS is already installed"
+		log_info "Node.js LTS is already installed"
 		return 0
 	fi
 	log_info "Installing Node.js LTS..."

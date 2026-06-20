@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_html2text() {
 	if command -v html2text &>/dev/null; then
-		log_success "HTML2Text is already installed"
+		log_info "HTML2Text is already installed"
 		return 0
 	fi
 	log_info "Installing html2text..."

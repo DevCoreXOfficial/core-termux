@@ -36,7 +36,7 @@ _mistral_vibe_dependencies() {
 
 install_mistral_vibe() {
   if command -v vibe &>/dev/null; then
-    log_success "Mistral Vibe is already installed"
+    log_info "Mistral Vibe is already installed"
     return 0
   fi
 

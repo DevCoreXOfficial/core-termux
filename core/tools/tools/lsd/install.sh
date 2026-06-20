@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_lsd() {
 	if command -v lsd &>/dev/null; then
-		log_success "LSD is already installed"
+		log_info "LSD is already installed"
 		return 0
 	fi
 	log_info "Installing LSD..."

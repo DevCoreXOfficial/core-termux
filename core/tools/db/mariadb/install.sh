@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 install_mariadb() {
 	if command -v mariadbd &>/dev/null; then
-		log_success "MariaDB is already installed"
+		log_info "MariaDB is already installed"
 		return 0
 	fi
 	log_info "Installing MariaDB..."

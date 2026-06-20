@@ -29,7 +29,7 @@ _zsh_defer_dependencies() {
 
 install_zsh_defer() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-defer" ]]; then
-    log_info "zsh-defer ${D_GREEN}already installed${NC}"
+    log_info "zsh-defer already installed"
     return 0
   fi
 

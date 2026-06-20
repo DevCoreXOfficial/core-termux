@@ -29,7 +29,7 @@ _you_should_use_dependencies() {
 
 install_you_should_use() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-you-should-use" ]]; then
-    log_info "zsh-you-should-use ${D_GREEN}already installed${NC}"
+    log_info "zsh-you-should-use already installed"
     return 0
   fi
 

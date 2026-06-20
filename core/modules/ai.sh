@@ -19,35 +19,30 @@ install_ai() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if loading "Installing AI tools" _install_ai_tools_wrapper; then
-    log_success "AI tools installed successfully"
-    separator
-    echo
-    list_item "Qwen Code ${GRAY}(${D_GREEN}qwen${GRAY})"
-    list_item "Gemini CLI ${GRAY}(${D_GREEN}gemini${GRAY})"
-    list_item "Mistral Vibe ${GRAY}(${D_GREEN}vibe${GRAY})"
-    list_item "OpenClaude ${GRAY}(${D_GREEN}openclaude${GRAY})"
-    list_item "Claude Code ${GRAY}(${D_GREEN}claude${GRAY})"
-    list_item "OpenClaw ${GRAY}(${D_GREEN}openclaw${GRAY})"
-    list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
-    list_item "Codex ${GRAY}(${D_GREEN}codex${GRAY})"
-    list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
-    list_item "MiMo Code ${GRAY}(${D_GREEN}mimocode${GRAY})"
-    list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
-    list_item "CodeGraph ${GRAY}(${D_GREEN}codegraph${GRAY})"
-    list_item "Pi ${GRAY}(${D_GREEN}pi${GRAY})"
-    list_item "Antigravity CLI ${GRAY}(${D_GREEN}agy${GRAY})"
-    list_item "Minimax CLI ${GRAY}(${D_GREEN}mmx${GRAY})"
-    list_item "Gentle AI ${GRAY}(${D_GREEN}gentle-ai${GRAY})"
-    list_item "GGA ${GRAY}(${D_GREEN}gga${GRAY})"
-    list_item "Hermes Agent ${GRAY}(${D_GREEN}hermes${GRAY})"
-    list_item "Kimi Code ${GRAY}(${D_GREEN}kimi${GRAY})"
-    echo
-  else
-    log_error "Failed to install AI tools"
-    log_warn "Check log file: $LOG_FILE"
-    return 1
-  fi
+  _install_ai_tools_wrapper
+  log_success "AI tools installed successfully"
+  separator
+  echo
+  list_item "Qwen Code ${GRAY}(${D_GREEN}qwen${GRAY})"
+  list_item "Gemini CLI ${GRAY}(${D_GREEN}gemini${GRAY})"
+  list_item "Mistral Vibe ${GRAY}(${D_GREEN}vibe${GRAY})"
+  list_item "OpenClaude ${GRAY}(${D_GREEN}openclaude${GRAY})"
+  list_item "Claude Code ${GRAY}(${D_GREEN}claude${GRAY})"
+  list_item "OpenClaw ${GRAY}(${D_GREEN}openclaw${GRAY})"
+  list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
+  list_item "Codex ${GRAY}(${D_GREEN}codex${GRAY})"
+  list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
+  list_item "MiMo Code ${GRAY}(${D_GREEN}mimocode${GRAY})"
+  list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
+  list_item "CodeGraph ${GRAY}(${D_GREEN}codegraph${GRAY})"
+  list_item "Pi ${GRAY}(${D_GREEN}pi${GRAY})"
+  list_item "Antigravity CLI ${GRAY}(${D_GREEN}agy${GRAY})"
+  list_item "Minimax CLI ${GRAY}(${D_GREEN}mmx${GRAY})"
+  list_item "Gentle AI ${GRAY}(${D_GREEN}gentle-ai${GRAY})"
+  list_item "GGA ${GRAY}(${D_GREEN}gga${GRAY})"
+  list_item "Hermes Agent ${GRAY}(${D_GREEN}hermes${GRAY})"
+  list_item "Kimi Code ${GRAY}(${D_GREEN}kimi${GRAY})"
+  echo
 }
 
 _install_ai_tools_wrapper() {
@@ -63,12 +58,8 @@ uninstall_ai() {
 
   log_info "Uninstalling AI tools..."
 
-  if loading "Uninstalling AI tools" _uninstall_ai_tools_wrapper; then
-    log_success "AI tools uninstalled"
-  else
-    log_error "Failed to uninstall AI tools"
-    return 1
-  fi
+  _uninstall_ai_tools_wrapper
+  log_success "AI tools uninstalled"
 }
 
 _uninstall_ai_tools_wrapper() {
@@ -84,12 +75,8 @@ update_ai() {
 
   log_info "Updating AI tools..."
 
-  if loading "Updating AI tools" _update_ai_tools_wrapper; then
-    log_success "AI tools updated"
-  else
-    log_error "Failed to update AI tools"
-    return 1
-  fi
+  _update_ai_tools_wrapper
+  log_success "AI tools updated"
 }
 
 _update_ai_tools_wrapper() {
@@ -106,34 +93,29 @@ reinstall_ai() {
   log_info "Reinstalling AI tools..."
   echo
 
-  if loading "Reinstalling AI tools" _reinstall_ai_tools_wrapper; then
-    log_success "AI tools reinstalled successfully"
-    separator
-    echo
-    list_item "Qwen Code"
-    list_item "Gemini CLI"
-    list_item "Mistral Vibe"
-    list_item "OpenClaude"
-    list_item "Claude Code"
-    list_item "OpenClaw"
-    list_item "Ollama"
-    list_item "Codex"
-    list_item "OpenCode"
-    list_item "MiMo Code"
-    list_item "Engram"
-    list_item "CodeGraph"
-    list_item "Pi"
-    list_item "Antigravity CLI"
-    list_item "Minimax CLI"
-    list_item "Gentle AI"
-    list_item "GGA"
-    list_item "Hermes Agent"
-    echo
-  else
-    log_error "Failed to reinstall AI tools"
-    log_warn "Check log file: $LOG_FILE"
-    return 1
-  fi
+  _reinstall_ai_tools_wrapper
+  log_success "AI tools reinstalled successfully"
+  separator
+  echo
+  list_item "Qwen Code"
+  list_item "Gemini CLI"
+  list_item "Mistral Vibe"
+  list_item "OpenClaude"
+  list_item "Claude Code"
+  list_item "OpenClaw"
+  list_item "Ollama"
+  list_item "Codex"
+  list_item "OpenCode"
+  list_item "MiMo Code"
+  list_item "Engram"
+  list_item "CodeGraph"
+  list_item "Pi"
+  list_item "Antigravity CLI"
+  list_item "Minimax CLI"
+  list_item "Gentle AI"
+  list_item "GGA"
+  list_item "Hermes Agent"
+  echo
 }
 
 _reinstall_ai_tools_wrapper() {

@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_bc() {
 	if command -v bc &>/dev/null; then
-		log_success "bc is already installed"
+		log_info "bc is already installed"
 		return 0
 	fi
 	log_info "Installing bc..."

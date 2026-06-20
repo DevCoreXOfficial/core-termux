@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_tools.log"
 
 install_gh() {
 	if command -v gh &>/dev/null; then
-		log_success "GitHub CLI is already installed"
+		log_info "GitHub CLI is already installed"
 		return 0
 	fi
 	log_info "Installing GitHub CLI..."

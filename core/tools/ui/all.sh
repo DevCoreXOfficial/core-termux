@@ -24,16 +24,16 @@ install_all_ui_components() {
 	for tool in "${UI_COMPONENTS[@]}"; do
 		case "$tool" in
 		font)
-			if install_font; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Meslo Nerd Font" install_font; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		extra-keys)
-			if install_extra_keys; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Extra Keys" install_extra_keys; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		cursor)
-			if install_cursor; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Cursor Color" install_cursor; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		banner)
-			if install_banner; then ((installed_count++)); else ((failed_count++)); fi
+			if loading "Installing Core-Termux Banner" install_banner; then ((installed_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -48,16 +48,16 @@ uninstall_all_ui_components() {
 	for tool in "${UI_COMPONENTS[@]}"; do
 		case "$tool" in
 		font)
-			if uninstall_font; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Meslo Nerd Font" uninstall_font; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		extra-keys)
-			if uninstall_extra_keys; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Extra Keys" uninstall_extra_keys; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		cursor)
-			if uninstall_cursor; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Cursor Color" uninstall_cursor; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		banner)
-			if uninstall_banner; then ((uninstalled_count++)); else ((failed_count++)); fi
+			if loading "Uninstalling Core-Termux Banner" uninstall_banner; then ((uninstalled_count++)); else ((failed_count++)); fi
 			;;
 		esac
 	done
@@ -72,16 +72,16 @@ update_all_ui_components() {
   for tool in "${UI_COMPONENTS[@]}"; do
     case "$tool" in
     font)
-      if update_font; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Meslo Nerd Font" update_font; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     extra-keys)
-      if update_extra_keys; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Extra Keys" update_extra_keys; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     cursor)
-      if update_cursor; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Cursor Color" update_cursor; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     banner)
-      if update_banner; then ((updated_count++)); else ((failed_count++)); fi
+      if loading "Updating Core-Termux Banner" update_banner; then ((updated_count++)); else ((failed_count++)); fi
       ;;
     esac
   done
@@ -96,16 +96,16 @@ reinstall_all_ui_components() {
   for tool in "${UI_COMPONENTS[@]}"; do
     case "$tool" in
     font)
-      if reinstall_font; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Meslo Nerd Font" reinstall_font; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     extra-keys)
-      if reinstall_extra_keys; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Extra Keys" reinstall_extra_keys; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     cursor)
-      if reinstall_cursor; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Cursor Color" reinstall_cursor; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     banner)
-      if reinstall_banner; then ((reinstalled_count++)); else ((failed_count++)); fi
+      if loading "Reinstalling Core-Termux Banner" reinstall_banner; then ((reinstalled_count++)); else ((failed_count++)); fi
       ;;
     esac
   done
