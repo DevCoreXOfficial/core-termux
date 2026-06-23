@@ -221,7 +221,7 @@ core brain show <slug>        # View a memory with its relations
 core brain reset              # Destroy the entire brain
 core brain graph              # Visual map of all connections
 core brain skill              # Create an AI skill from memories
-core brain relate <a> <b>     # Link two memories manually
+core brain relate             # Link two memories interactively
 core brain sync               # Push/pull to GitHub private repo
 ```
 
