@@ -14,16 +14,15 @@ uninstall_main() {
     echo
     log_info "Available targets:"
     echo
-    list_item "all        - Uninstall everything (restore to default)"
-    list_item "language   - Remove language packages"
+    list_item "lang       - Remove language packages"
     list_item "db         - Remove databases"
     list_item "ai         - Remove AI tools"
     list_item "editor     - Remove code editor"
-    list_item "tools      - Remove development tools"
-    list_item "node       - Remove Node.js global modules"
+    list_item "dev        - Remove development tools"
+    list_item "npm        - Remove Node.js global modules"
     list_item "shell      - Remove ZSH + Oh My Zsh"
     list_item "ui         - Restore Termux UI to default"
-    list_item "automation - Remove automation tools"
+    list_item "auto       - Remove automation tools"
     echo
     log_info "Uninstall specific tools with flags:"
     echo
@@ -70,66 +69,9 @@ _uninstall_full_module() {
   local target="$1"
 
   case "$target" in
-  all)
-    separator
-    box "Uninstalling Everything"
-    separator
-    echo
-
-    log_warn "This will remove all installed packages and configurations!"
-    echo
-
-    read_confirm "Are you sure you want to continue?" CONFIRM
-    if [[ "$CONFIRM" != "y" ]]; then
-      log_warn "Uninstall cancelled"
-      return 1
-    fi
-
-    echo
-
-    import "@/modules/ai"
-    import "@/modules/db"
-    import "@/modules/editor"
-    import "@/modules/language"
-    import "@/modules/node-modules"
-    import "@/modules/tools"
-    import "@/modules/shell"
-    import "@/modules/ui"
-    import "@/modules/automation"
-
-    uninstall_ai
-    uninstall_db
-    uninstall_editor
-    uninstall_language
-    uninstall_node
-    uninstall_tools
-    uninstall_shell
-    uninstall_ui
-    echo "Localtunnel fix: already integrated"
-    uninstall_automation
-
-    # Eliminar directorios de Core-Termux
-    log_info "Removing Core-Termux directories..."
-    rm -rf "$CORE_DATA" "$CORE_CACHE" "$CORE_CONFIG"
-    log_success "Core-Termux directories removed"
-
-    # Eliminar symlink del comando core
-    log_info "Removing core command..."
-    rm -f "$PREFIX/bin/core"
-    log_success "Core command removed"
-
-    echo
-    separator
-    box "Uninstall Completed"
-    separator
-    echo
-    log_warn "Termux has been restored to its default state"
-    log_warn "Please restart Termux"
-    echo
-    ;;
-  language)
-    import "@/modules/language"
-    uninstall_language
+  lang)
+    import "@/modules/lang"
+    uninstall_lang
     ;;
   db)
     import "@/modules/db"
@@ -143,13 +85,13 @@ _uninstall_full_module() {
     import "@/modules/editor"
     uninstall_editor
     ;;
-  tools)
-    import "@/modules/tools"
-    uninstall_tools
+  dev)
+    import "@/modules/dev"
+    uninstall_dev
     ;;
-  node)
-    import "@/modules/node-modules"
-    uninstall_node
+  npm)
+    import "@/modules/npm"
+    uninstall_npm
     ;;
   shell)
     import "@/modules/shell"
@@ -159,9 +101,9 @@ _uninstall_full_module() {
     import "@/modules/ui"
     uninstall_ui
     ;;
-  automation)
-    import "@/modules/automation"
-    uninstall_automation
+  auto)
+    import "@/modules/auto"
+    uninstall_auto
     ;;
   *)
     log_warn "Unknown uninstall target: $target"
@@ -313,8 +255,8 @@ _uninstall_specific_tools() {
     fi
     echo
     ;;
-  tools)
-    import "@/tools/tools/all"
+  dev)
+    import "@/tools/dev/all"
     local uninstalled_count=0
     local failed_count=0
 
@@ -411,8 +353,8 @@ _uninstall_specific_tools() {
     fi
     echo
     ;;
-  node)
-    import "@/tools/node/all"
+  npm)
+    import "@/tools/npm/all"
     local uninstalled_count=0
     local failed_count=0
 
@@ -473,15 +415,15 @@ _uninstall_specific_tools() {
     fi
     echo
     ;;
-  language)
-    import "@/tools/language/all"
+  lang)
+    import "@/tools/lang/all"
     local uninstalled_count=0
     local failed_count=0
 
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        loading "Uninstalling Node.js LTS" uninstall_nodejs
+        loading "Uninstalling Node.js LTS" uninstall_npmjs
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       python)
@@ -653,8 +595,8 @@ _uninstall_specific_tools() {
     fi
     echo
     ;;
-  automation)
-    import "@/tools/automation/all"
+  auto)
+    import "@/tools/auto/all"
     local uninstalled_count=0
     local failed_count=0
 

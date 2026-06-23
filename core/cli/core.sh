@@ -36,9 +36,10 @@ core_help() {
   echo
   separator_section "Available Commands"
   echo
-  printf "    ${D_CYAN}%-12s${NC} %s\n" "--version" "Show current version"
-  printf "    ${D_CYAN}%-12s${NC} %s\n" "setup" "Interactive installation wizard"
-  printf "    ${D_CYAN}%-12s${NC} %s\n" "install" "Install modules and packages"
+	printf "    ${D_CYAN}%-12s${NC} %s\n" "--version" "Show current version"
+	printf "    ${D_CYAN}%-12s${NC} %s\n" "brain" "Second brain — save and search memories"
+	printf "    ${D_CYAN}%-12s${NC} %s\n" "env" "Manage environment variables"
+	printf "    ${D_CYAN}%-12s${NC} %s\n" "install" "Install modules and packages"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "show" "Show tool documentation"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "update" "Update modules or framework"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "uninstall" "Remove installed modules"
@@ -47,6 +48,7 @@ core_help() {
   printf "    ${D_CYAN}%-12s${NC} %s\n" "list" "List available tools in modules"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "pg" "PostgreSQL database manager"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "init" "Configure existing projects"
+  printf "    ${D_CYAN}%-12s${NC} %s\n" "voice" "Speech-to-agent via microphone"
   echo
   separator_section "Quick Start"
   echo
@@ -58,15 +60,15 @@ core_help() {
   echo
   log_info "Install, update, reinstall, uninstall, list, show or open:"
   echo
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "language" "Node, Python, Perl, PHP, Rust, C/C++, Go"
+  printf "    ${D_GREEN}%-14s${NC} %s\n" "lang" "Node, Python, Perl, PHP, Rust, C/C++, Go"
   printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
   printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "OpenCode, Gentle AI, Claude Code, etc."
   printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad + Plugins"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "tools" "GitHub CLI, wget, curl, fzf, etc."
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "node" "Node.js global npm packages"
+  printf "    ${D_GREEN}%-14s${NC} %s\n" "dev" "GitHub CLI, wget, curl, fzf, etc."
+  printf "    ${D_GREEN}%-14s${NC} %s\n" "npm" "Node.js global npm packages"
   printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
   printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Font, Cursor, Extra-keys, Banner"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "automation" "Automation Tools (n8n)"
+  printf "    ${D_GREEN}%-14s${NC} %s\n" "auto" "Automation Tools (n8n)"
 
   echo
   separator_section "Help"

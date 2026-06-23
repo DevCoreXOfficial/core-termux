@@ -1,0 +1,71 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+import "@/utils/log"
+
+LOG_FILE="$CORE_CACHE/install_npm.log"
+
+_markserv_dependencies() {
+  if command -v node &>/dev/null && command -v npm &>/dev/null; then
+    log_info "Node.js and npm are already installed"
+    return 0
+  fi
+
+  log_info "Installing Nodejs..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+  pkg install nodejs-lts -y &>>"$LOG_FILE"
+}
+
+install_markserv() {
+  if command -v markserv &>/dev/null; then
+    return 0
+  fi
+  log_info "Installing Markserv..."
+
+  _markserv_dependencies
+
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if npm install -g markserv &>>"$LOG_FILE"; then
+    log_success "Markserv installed"
+    return 0
+  else
+    log_error "Failed to install Markserv"
+    return 1
+  fi
+}
+
+uninstall_markserv() {
+  if ! command -v markserv &>/dev/null; then
+    log_info "Markserv is not installed"
+    return 0
+  fi
+  log_info "Uninstalling Markserv..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if npm uninstall -g markserv &>>"$LOG_FILE"; then
+    log_success "Markserv uninstalled"
+    return 0
+  else
+    log_error "Failed to uninstall Markserv"
+    return 1
+  fi
+}
+
+update_markserv() {
+  log_info "Updating Markserv..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if npm update -g markserv &>>"$LOG_FILE"; then
+    log_success "Markserv updated"
+    return 0
+  else
+    log_error "Failed to update Markserv"
+    return 1
+  fi
+}
+
+reinstall_markserv() {
+  uninstall_markserv
+  install_markserv
+}
+

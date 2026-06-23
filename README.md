@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-3.23.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.0.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -43,7 +43,7 @@
 
 <br>
 
-**CORE-TERMUX** is a _modular dev environment_ that turns Termux into a complete development workstation. Through a single core CLI, it provides an interactive installation wizard and a modular system that covers the full developer stack: programming languages, databases, AI agents, code editors, shell configuration, and automation — all manageable with simple, consistent commands like !`core install`, `core update`, and `core uninstall`.
+**CORE-TERMUX** is a _modular dev environment_ that turns Termux into a complete development workstation. Through a single core CLI, it provides a modular system that covers the full developer stack: programming languages, databases, AI agents, code editors, shell configuration, and automation — all manageable with simple, consistent commands like `core install`, `core update`, and `core uninstall`.
 
 > [!IMPORTANT]
 > This project is designed exclusively for **Termux on Android** and is not supported on other platforms.
@@ -69,12 +69,14 @@ core
 | Command | Description |
 |---------|-------------|
 | [`core --version`](#core---version) | Show current version |
-| [`core setup`](#core-setup) | Interactive installation wizard |
+| [`core brain`](#core-brain) | Second brain — save and search memories |
+| [`core env`](#core-env) | Manage environment variables |
 | [`core install`](#core-install) | Install specific modules |
 | [`core show`](#core-show) | Show tool documentation |
 | [`core update`](#core-update) | Update modules or framework |
 | [`core uninstall`](#core-uninstall) | Remove installed modules |
 | [`core reinstall`](#core-reinstall) | Uninstall + reinstall modules |
+| [`core voice`](#core-voice) | Speech-to-agent via microphone |
 | [`core open`](#core-open) | Open documentation in browser |
 | [`core list`](#core-list) | List available tools in modules |
 | [`core pg`](#core-pg) | PostgreSQL database manager |
@@ -88,15 +90,15 @@ These modules are available across most commands (`core list`, `core install`, `
 
 | Module | Description |
 |--------|-------------|
-| `language` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
+| `lang` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
 | `ai` | AI agents and coding assistants — see [AI Agents](#ai-agents) |
 | `editor` | Code editor components (Neovim, NvChad) |
-| `tools` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
-| `node` | Node.js global npm packages |
+| `dev` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
+| `npm` | Node.js global npm packages |
 | `shell` | ZSH plugins |
 | `ui` | Termux UI components |
-| `automation` | Automation tools (n8n) |
+| `auto` | Automation tools (n8n) |
 
 ---
 
@@ -145,7 +147,183 @@ core --version
 
 **Output:**
 ```
-3.23.0
+4.0.0
+```
+
+---
+
+### `core env`
+
+Manage environment variables in your shell rc file (`.zshrc` or `.bashrc`). All operations are interactive.
+
+```bash
+core env                     # Show help
+core env set                 # Add or update a variable (value is hidden while typing)
+core env unset               # Remove a variable (shows list to choose from)
+core env ls                  # List all user-defined variables
+```
+
+**Features:**
+
+- Values are hidden with ● when typing (safe for API keys and tokens)
+- Detects existing variables and warns before replacing
+- Removes all definitions of the same variable name
+- Writes to `.zshrc` if it exists, otherwise `.bashrc`
+
+**Example session:**
+
+```bash
+$ core env set
+
+    ┌─────────────────────────────────────────┐
+    │         Set Environment Variable          │
+    └─────────────────────────────────────────┘
+
+    ┌─ Variable name
+    └─▶ OPENAI_API_KEY
+
+    ┌─ Value for OPENAI_API_KEY
+    │  (input will be hidden)
+    └─▶ ●●●●●●●●●●●●●●
+
+    ✔ Variable OPENAI_API_KEY set in .zshrc
+    • Run: source .zshrc to apply
+
+$ core env ls
+
+    ─────── Environment Variables ───────
+
+    File: .zshrc
+
+    OPENAI_API_KEY              = sk-...
+    DATABASE_URL                = postgresql://...
+
+    ──────────────────────────────────────
+    2 variable(s) in .zshrc
+```
+
+---
+
+### `core brain`
+
+Save and search personal learnings and memories — your second brain in markdown files. All operations are local, synced optionally to a private GitHub repo.
+
+```bash
+core brain                    # Dashboard with stats
+core brain init               # Initialize brain directory and GitHub repo
+core brain save               # Interactive: save a new memory
+core brain search <query>     # Search memories by keywords or tags
+core brain ls [category]      # List memories by category
+core brain edit               # Edit a memory in your $EDITOR
+core brain edit <slug>        # Edit a memory by slug name
+core brain delete             # Delete a memory permanently
+core brain show <slug>        # View a memory with its relations
+core brain reset              # Destroy the entire brain
+core brain graph              # Visual map of all connections
+core brain skill              # Create an AI skill from memories
+core brain relate <a> <b>     # Link two memories manually
+core brain sync               # Push/pull to GitHub private repo
+```
+
+**Memory format (AI-consumable markdown):**
+
+```markdown
+---
+title: React Hook Form + Zod validation
+tags: [react, forms, typescript, zod]
+created: 2026-06-23
+category: frontend
+related: [nextjs-server-actions]
+---
+
+# React Hook Form + Zod validation
+
+After hours of testing, the combination that worked...
+```
+
+**Features:**
+
+- Categorized folders (`frontend/`, `devops/`, `linux/`, etc.) with tags for cross-relations
+- Auto-suggests relations based on shared tags when saving
+- Values hidden with ● when typing for API keys and tokens
+- Syncs to a private GitHub repo via `gh` for backup across devices
+- Markdown frontmatter consumable by AI agents
+
+**Example session:**
+
+```bash
+$ core brain save
+
+    ┌─────────────────────────────────────────┐
+    │            Save a New Memory              │
+    └─────────────────────────────────────────┘
+
+    ┌─ Title
+    └─▶ React Hook Form + Zod patterns
+
+    Existing categories:
+    • frontend
+    • devops
+
+    ┌─ Category
+    └─▶ frontend
+
+    ┌─ Tags (comma separated)
+    └─▶ react, forms, zod, typescript
+
+    Write your content below (Ctrl+D to finish, Ctrl+C to cancel):
+
+    After hours testing, la combinación definitiva...
+    [Ctrl+D]
+
+    ✔ Memory saved to frontend/2026-06-23_react-hook-form-zod-patterns.md
+```
+
+---
+
+### `core voice`
+
+Capture voice from the microphone, review it in nvim, and launch an AI agent.
+
+```bash
+core voice                    # Show help
+core voice <agent>            # Capture → nvim → launch agent
+core voice text               # Capture → nvim → print to stdout
+core voice !                  # Alias for 'text'
+```
+
+**Requirements:**
+- Termux:API package: `pkg install termux-api`
+- Neovim for editing: `core install editor`
+- Termux:API app: https://devcorex-web.vercel.app/termux/api
+
+**Supported agents:**
+
+| Agent | Command |
+|-------|---------|
+| `opencode` | `opencode run "prompt"` |
+| `claude-code` | `claude -p "prompt"` |
+| `codex` | `codex "prompt"` |
+| `gemini-cli` | `gemini -p "prompt"` |
+| `hermes-agent` | `hermes chat -q "prompt"` |
+| `kimi-code` | `kimi -p "prompt"` |
+| `mimocode` | `mimo run "prompt"` |
+| `mistral-vibe` | `vibe --prompt "prompt"` |
+| `openclaude` | `openclaude --bg "prompt"` |
+| `pi` | `pi -p "prompt"` |
+| `qwen-code` | `qwen -p "prompt"` |
+| `text` | Print prompt to stdout |
+
+**Example session:**
+
+```bash
+$ core voice opencode
+
+    ➜ Listening through the microphone...
+    ➜ Review the prompt in nvim, fix mistakes, then save and quit
+    ➜ Launching opencode with prompt…
+
+    # opencode opens with the voice-transcribed prompt
 ```
 
 ---
@@ -165,27 +343,10 @@ core show <module> --<tool>  # Show specific tool documentation
 ```bash
 core show ai --opencode      # Show OpenCode documentation
 core show db --postgresql    # Show PostgreSQL documentation
-core show node --typescript  # Show TypeScript documentation
+core show npm --typescript   # Show TypeScript documentation
 ```
 
 **Colorized output:** If `bat` is installed, documentation is displayed with syntax highlighting. Otherwise, plain text is shown.
-
----
-
-### `core setup`
-
-Interactive wizard with keyboard navigation.
-
-```bash
-core setup                    # Interactive menu
-core setup full               # Automatic full installation
-core setup base               # Base packages only
-```
-
-**Interactive menu options:**
-- **Full installation** → Install all modules
-- **Custom installation** → Select specific modules with ↑↓
-- **Base installation** → Termux base packages only
 
 ---
 
@@ -210,7 +371,6 @@ Install individual modules or specific tools within modules.
 core install                  # Show help
 core install <module>         # Install entire module
 core install <module> --tool1 --tool2  # Install specific tools
-core install full             # Install everything
 ```
 
 All modules from [Common Modules](#common-modules) are valid targets.
@@ -220,7 +380,7 @@ All modules from [Common Modules](#common-modules) are valid targets.
 ```bash
 core install ai               # Install all AI tools
 core install db               # Install all databases
-core install tools            # Install all development tools
+core install dev              # Install all development tools
 ```
 
 **Install specific tools:**
@@ -228,8 +388,8 @@ core install tools            # Install all development tools
 ```bash
 core install ai --qwen-code --ollama          # Install only Qwen Code and Ollama
 core install db --postgresql --sqlite         # Install only PostgreSQL and SQLite
-core install tools --gh --fzf --jq            # Install only gh, fzf, and jq
-core install node --typescript --prettier     # Install only TypeScript and Prettier
+core install dev --gh --fzf --jq              # Install only gh, fzf, and jq
+core install npm --typescript --prettier      # Install only TypeScript and Prettier
 ```
 
 > **Tip:** Run `core list <module>` to see all available tools and their flags.
@@ -244,7 +404,6 @@ Update modules or the complete framework.
 core update                   # Show help
 core update <target>          # Update specific target
 core update <target> --tool1 --tool2  # Update specific tools
-core update all               # Update everything
 core update core              # Update framework only
 ```
 
@@ -252,7 +411,6 @@ In addition to all [Common Modules](#common-modules), `core update` also support
 
 | Target | Description |
 |--------|-------------|
-| `all` | Framework + all installed packages |
 | `core` | Core-Termux framework only |
 
 **Update entire module:**
@@ -267,7 +425,7 @@ core update db               # Update all databases
 ```bash
 core update ai --qwen-code --ollama          # Update only Qwen Code and Ollama
 core update db --postgresql --sqlite         # Update only PostgreSQL and SQLite
-core update tools --gh --fzf --jq            # Update only gh, fzf, and jq
+core update dev --gh --fzf --jq             # Update only gh, fzf, and jq
 ```
 
 ---
@@ -280,28 +438,16 @@ Remove installed modules or specific tools.
 core uninstall                # Show help
 core uninstall <target>       # Uninstall specific target
 core uninstall <target> --tool1 --tool2  # Uninstall specific tools
-core uninstall all            # Remove everything (restore default)
 ```
 
-In addition to all [Common Modules](#common-modules), `core uninstall` also supports:
-
-| Target | Description |
-|--------|-------------|
-| `all` | Remove everything and restore Termux to default |
-
-**Uninstall entire module:**
-
-```bash
-core uninstall ai            # Uninstall all AI tools
-core uninstall db            # Uninstall all databases
-```
+In addition to all [Common Modules](#common-modules), `core uninstall` supports per-module and per-tool removal. No "uninstall all" — desinstalá solo lo que necesitás.
 
 **Uninstall specific tools:**
 
 ```bash
 core uninstall ai --qwen-code --ollama        # Uninstall only Qwen Code and Ollama
 core uninstall db --postgresql --sqlite       # Uninstall only PostgreSQL and SQLite
-core uninstall tools --gh --fzf               # Uninstall only gh and fzf
+core uninstall dev --gh --fzf                 # Uninstall only gh and fzf
 ```
 
 ---
@@ -314,28 +460,16 @@ Reinstall modules or specific tools — uninstalls then installs from scratch.
 core reinstall                # Show help
 core reinstall <target>       # Reinstall specific target
 core reinstall <target> --tool1 --tool2  # Reinstall specific tools
-core reinstall all            # Reinstall everything
 ```
 
-In addition to all [Common Modules](#common-modules), `core reinstall` also supports:
-
-| Target | Description |
-|--------|-------------|
-| `all` | Reinstall everything (uninstall + install) |
-
-**Reinstall entire module:**
-
-```bash
-core reinstall ai            # Reinstall all AI tools
-core reinstall db            # Reinstall all databases
-```
+In addition to all [Common Modules](#common-modules), `core reinstall` supports per-module and per-tool reinstallation. No "reinstall all".
 
 **Reinstall specific tools:**
 
 ```bash
 core reinstall ai --opencode --ollama       # Reinstall only OpenCode and Ollama
 core reinstall db --postgresql --sqlite     # Reinstall only PostgreSQL and SQLite
-core reinstall tools --gh --fzf             # Reinstall only gh and fzf
+core reinstall dev --gh --fzf               # Reinstall only gh and fzf
 ```
 
 ---
@@ -537,10 +671,10 @@ bcryptjs, helmet, cloudinary
 
 ## Language Packages
 
-The `language` module installs the following programming languages and runtimes via `pkg`:
+The `lang` module installs the following programming languages and runtimes via `pkg`:
 
 ```bash
-core install language
+core install lang
 ```
 
 | Language/Runtime | Package | Description |
@@ -557,10 +691,10 @@ core install language
 
 ## Development Tools
 
-The `tools` module installs the following development utilities via `pkg`:
+The `dev` module installs the following development utilities via `pkg`:
 
 ```bash
-core install tools
+core install dev
 ```
 
 | Tool | Package | Description |
@@ -589,10 +723,10 @@ core install tools
 
 ## Node.js Global Modules
 
-The `node` module installs the following global npm packages:
+The `npm` module installs the following global npm packages:
 
 ```bash
-core install node
+core install npm
 ```
 
 | Package | Command | Description |
@@ -695,6 +829,14 @@ read_confirm "Continue?" VAR_NAME
 
 # Selection with arrow keys ↑↓
 read_select "Environment" VAR_NAME "Dev" "Staging" "Production"
+
+# Hidden input (API keys, tokens, passwords) ●●●
+read_secret "Value" VAR_NAME
+
+# Multi-line input (no editor needed)
+file=$(read_multiline "# Title")
+content=$(cat "$file")
+rm -f "$file"
 ```
 
 ### Tables
@@ -724,25 +866,27 @@ core-termux/
 │   ├── cli
 │   │   ├── commands
 │   │   │   ├── --version.sh
+│   │   │   ├── brain.sh
+│   │   │   ├── env.sh
 │   │   │   ├── init.sh
 │   │   │   ├── install.sh
 │   │   │   ├── list.sh
 │   │   │   ├── pg.sh
 │   │   │   ├── reinstall.sh
-│   │   │   ├── setup.sh
 │   │   │   ├── show.sh
 │   │   │   ├── uninstall.sh
-│   │   │   └── update.sh
+│   │   │   ├── update.sh
+│   │   │   └── voice.sh
 │   │   └── core.sh
 │   ├── modules
 │   │   ├── ai.sh
-│   │   ├── automation.sh
+│   │   ├── auto.sh
 │   │   ├── db.sh
+│   │   ├── dev.sh
 │   │   ├── editor.sh
-│   │   ├── language.sh
-│   │   ├── node-modules.sh
+│   │   ├── lang.sh
+│   │   ├── npm.sh
 │   │   ├── shell.sh
-│   │   ├── tools.sh
 │   │   └── ui.sh
 │   ├── tools
 │   │   ├── ai/
@@ -759,14 +903,14 @@ core-termux/
 │   │   │   │   ├── bin/opencode
 │   │   │   │   └── README.md
 │   │   │   └── ... (12 tools, each with own directory)
-│   │   ├── node/
-│   │   ├── language/
+│   │   ├── npm/
+│   │   ├── lang/
 │   │   ├── db/
 │   │   ├── editor/
-│   │   ├── tools/
+│   │   ├── dev/
 │   │   ├── shell/
 │   │   ├── ui/
-│   │   └── automation/
+│   │   └── auto/
 │   └── utils
 │       ├── bootstrap.sh
 │       ├── colors.sh
@@ -799,15 +943,15 @@ All processes save logs to:
 
 ```
 ~/.cache/core-termux/
-├── install_language.log
+├── install_lang.log
 ├── install_db.log
 ├── install_ai.log
 ├── install_editor.log
-├── install_tools.log
-├── install_node_modules.log
+├── install_dev.log
+├── install_npm.log
 ├── install_shell.log
 ├── install_ui.log
-├── install_automation.log
+├── install_auto.log
 ├── postgresql.log
 ├── last_version_check      # Last update check timestamp
 └── new_version             # New version available (if exists)
@@ -828,7 +972,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 3.23.1 (current: 3.23.0)
+⚠ New version available: 4.0.1 (current: 4.0.0)
 
 ➜ Run: core update core to update
 ```
@@ -881,18 +1025,12 @@ $ pwd
 
 ## Usage Examples
 
-### Full installation
-
-```bash
-core setup full
-```
-
 ### Install specific modules
 
 ```bash
 core install db
 core install shell
-core install node
+core install npm
 ```
 
 ### Install specific tools within a module
@@ -900,8 +1038,8 @@ core install node
 ```bash
 core list ai                                    # See available AI tools
 core install ai --qwen-code --ollama            # Install only Qwen Code and Ollama
-core install tools --gh --fzf --jq              # Install only gh, fzf, and jq
-core install node --typescript --prettier       # Install only TypeScript and Prettier
+core install dev --gh --fzf --jq                # Install only gh, fzf, and jq
+core install npm --typescript --prettier        # Install only TypeScript and Prettier
 ```
 
 ### Reinstall
@@ -910,7 +1048,6 @@ core install node --typescript --prettier       # Install only TypeScript and Pr
 core reinstall ai             # Reinstall all AI agents
 core reinstall shell          # Reinstall ZSH + plugins
 core reinstall ai --opencode --ollama  # Reinstall specific tools
-core reinstall all            # Reinstall everything
 ```
 
 ### Configure Next.js project
@@ -934,7 +1071,6 @@ core pg stop              # Stop
 ### Update
 
 ```bash
-core update all           # Update everything
 core update core          # Framework only
 core update shell         # ZSH plugins only
 core update ai --qwen     # Specific AI tool only
@@ -943,16 +1079,15 @@ core update ai --qwen     # Specific AI tool only
 ### Uninstall
 
 ```bash
-core uninstall node       # Remove Node.js modules
+core uninstall npm        # Remove Node.js modules
 core uninstall ai --ollama   # Remove only Ollama
-core uninstall all        # Restore everything to default
 ```
 
 ### List available tools
 
 ```bash
 core list ai              # List all AI tools and their status
-core list tools           # List all development tools
+core list dev             # List all development tools
 core list db              # List all databases
 ```
 

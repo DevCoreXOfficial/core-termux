@@ -38,7 +38,7 @@ core update shell --fzf-tab
 ## Notes
 
 - Installed in `~/.zsh-plugins/`
-- Requires fzf (install via `core install tools --fzf`)
+- Requires fzf (install via `core install dev --fzf`)
 - Fuzzy completion with preview
 - Replaces default ZSH completion menu
 

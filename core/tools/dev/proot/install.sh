@@ -1,0 +1,58 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+import "@/utils/log"
+
+LOG_FILE="$CORE_CACHE/install_dev.log"
+
+install_proot() {
+	if command -v proot &>/dev/null; then
+		log_info "Proot is already installed"
+		return 2
+	fi
+	log_info "Installing Proot..."
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg install proot -y &>>"$LOG_FILE"; then
+		log_success "Proot installed"
+		return 0
+	else
+		log_error "Failed to install Proot"
+		return 1
+	fi
+}
+
+uninstall_proot() {
+	if ! command -v proot &>/dev/null; then
+		log_info "Proot is not installed"
+		return 2
+	fi
+	log_info "Uninstalling Proot..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg uninstall proot -y &>>"$LOG_FILE"; then
+		log_success "Proot uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall Proot"
+		return 1
+	fi
+}
+
+update_proot() {
+	log_info "Updating Proot..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg upgrade proot -y &>>"$LOG_FILE"; then
+		log_success "Proot updated"
+		return 0
+	else
+		log_error "Failed to update Proot"
+		return 1
+	fi
+}
+
+reinstall_proot() {
+	uninstall_proot
+	install_proot
+}

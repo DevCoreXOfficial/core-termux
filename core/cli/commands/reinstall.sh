@@ -14,16 +14,15 @@ reinstall_main() {
     echo
     log_info "Available targets:"
     echo
-    list_item "all        - Reinstall everything (uninstall + install)"
-    list_item "language   - Reinstall language packages"
+    list_item "lang       - Reinstall language packages"
     list_item "db         - Reinstall databases"
     list_item "ai         - Reinstall AI tools"
     list_item "editor     - Reinstall code editor"
-    list_item "tools      - Reinstall development tools"
-    list_item "node       - Reinstall Node.js global modules"
+    list_item "dev        - Reinstall development tools"
+    list_item "npm        - Reinstall Node.js global modules"
     list_item "shell      - Reinstall ZSH + Oh My Zsh"
     list_item "ui         - Reinstall Termux UI"
-    list_item "automation - Reinstall automation tools"
+    list_item "auto       - Reinstall automation tools"
     echo
     log_info "Reinstall specific tools with flags:"
     echo
@@ -65,42 +64,9 @@ _reinstall_full_module() {
   local target="$1"
 
   case "$target" in
-  all)
-    separator
-    box "Reinstalling Complete Environment"
-    separator
-    echo
-
-    import "@/modules/language"
-    import "@/modules/db"
-    import "@/modules/ai"
-    import "@/modules/editor"
-    import "@/modules/tools"
-    import "@/modules/node-modules"
-    import "@/modules/shell"
-    import "@/modules/ui"
-    import "@/modules/automation"
-
-    reinstall_language
-    reinstall_db
-    reinstall_ai
-    reinstall_editor
-    reinstall_tools
-    reinstall_node
-    reinstall_shell
-    reinstall_ui
-    reinstall_automation
-
-    separator
-    log_success "Complete environment reinstalled successfully"
-    separator
-    echo
-    log_warn "Please restart Termux to apply all changes"
-    echo
-    ;;
-  language)
-    import "@/modules/language"
-    reinstall_language
+  lang)
+    import "@/modules/lang"
+    reinstall_lang
     ;;
   db)
     import "@/modules/db"
@@ -114,13 +80,13 @@ _reinstall_full_module() {
     import "@/modules/editor"
     reinstall_editor
     ;;
-  tools)
-    import "@/modules/tools"
-    reinstall_tools
+  dev)
+    import "@/modules/dev"
+    reinstall_dev
     ;;
-  node)
-    import "@/modules/node-modules"
-    reinstall_node
+  npm)
+    import "@/modules/npm"
+    reinstall_npm
     ;;
   shell)
     import "@/modules/shell"
@@ -130,9 +96,9 @@ _reinstall_full_module() {
     import "@/modules/ui"
     reinstall_ui
     ;;
-  automation)
-    import "@/modules/automation"
-    reinstall_automation
+  auto)
+    import "@/modules/auto"
+    reinstall_auto
     ;;
   *)
     log_warn "Unknown reinstall target: $target"
@@ -283,8 +249,8 @@ _reinstall_specific_tools() {
     fi
     echo
     ;;
-  tools)
-    import "@/tools/tools/all"
+  dev)
+    import "@/tools/dev/all"
     local reinstalled_count=0
     local failed_count=0
 
@@ -381,8 +347,8 @@ _reinstall_specific_tools() {
     fi
     echo
     ;;
-  node)
-    import "@/tools/node/all"
+  npm)
+    import "@/tools/npm/all"
     local reinstalled_count=0
     local failed_count=0
 
@@ -443,15 +409,15 @@ _reinstall_specific_tools() {
     fi
     echo
     ;;
-  language)
-    import "@/tools/language/all"
+  lang)
+    import "@/tools/lang/all"
     local reinstalled_count=0
     local failed_count=0
 
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        loading "Reinstalling Node.js LTS" reinstall_nodejs
+        loading "Reinstalling Node.js LTS" reinstall_npmjs
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       python)
@@ -623,8 +589,8 @@ _reinstall_specific_tools() {
     fi
     echo
     ;;
-  automation)
-    import "@/tools/automation/all"
+  auto)
+    import "@/tools/auto/all"
     local reinstalled_count=0
     local failed_count=0
 

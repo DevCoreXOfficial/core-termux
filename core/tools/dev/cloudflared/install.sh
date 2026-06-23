@@ -1,0 +1,58 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+import "@/utils/log"
+
+LOG_FILE="$CORE_CACHE/install_dev.log"
+
+install_cloudflared() {
+	if command -v cloudflared &>/dev/null; then
+		log_info "Cloudflared is already installed"
+		return 2
+	fi
+	log_info "Installing Cloudflared..."
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg install cloudflared -y &>>"$LOG_FILE"; then
+		log_success "Cloudflared installed"
+		return 0
+	else
+		log_error "Failed to install Cloudflared"
+		return 1
+	fi
+}
+
+uninstall_cloudflared() {
+	if ! command -v cloudflared &>/dev/null; then
+		log_info "Cloudflared is not installed"
+		return 2
+	fi
+	log_info "Uninstalling Cloudflared..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg uninstall cloudflared -y &>>"$LOG_FILE"; then
+		log_success "Cloudflared uninstalled"
+		return 0
+	else
+		log_error "Failed to uninstall Cloudflared"
+		return 1
+	fi
+}
+
+update_cloudflared() {
+	log_info "Updating Cloudflared..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	if pkg upgrade cloudflared -y &>>"$LOG_FILE"; then
+		log_success "Cloudflared updated"
+		return 0
+	else
+		log_error "Failed to update Cloudflared"
+		return 1
+	fi
+}
+
+reinstall_cloudflared() {
+	uninstall_cloudflared
+	install_cloudflared
+}

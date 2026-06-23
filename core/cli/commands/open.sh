@@ -21,7 +21,7 @@ open_main() {
 	core | help)
 		url="$OPEN_BASE_URL/core-termux"
 		;;
-	language | db | ai | editor | tools | node | shell | ui | automation)
+	lang | db | ai | editor | dev | npm | shell | ui | auto)
 		url="$OPEN_BASE_URL/core-termux/$target"
 		;;
 	--help | -h)
@@ -57,15 +57,15 @@ open_help() {
 	echo
 	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "core" "Core-Termux documentation"
 	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "devcorex" "DevCoreX website"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "language" "Language modules"
+	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "lang" "Language modules"
 	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "db" "Database modules"
 	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "ai" "AI tools"
 	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "editor" "Code editor"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "tools" "Dev tools"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "node" "Node.js tools"
+	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "dev" "Dev tools"
+	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "npm" "Node.js tools"
 	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "shell" "ZSH shell"
 	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "ui" "Termux UI"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "automation" "Automation tools"
+	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "auto" "Automation tools"
 	echo
 	separator_section "Website"
 	echo

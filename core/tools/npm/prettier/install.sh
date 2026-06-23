@@ -1,0 +1,71 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+import "@/utils/log"
+
+LOG_FILE="$CORE_CACHE/install_npm.log"
+
+_prettier_dependencies() {
+  if command -v node &>/dev/null && command -v npm &>/dev/null; then
+    log_info "Node.js and npm are already installed"
+    return 0
+  fi
+
+  log_info "Installing Nodejs..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+  pkg install nodejs-lts -y &>>"$LOG_FILE"
+}
+
+install_prettier() {
+  if command -v prettier &>/dev/null; then
+    return 0
+  fi
+  log_info "Installing Prettier..."
+
+  _prettier_dependencies
+
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if npm install -g prettier &>>"$LOG_FILE"; then
+    log_success "Prettier installed"
+    return 0
+  else
+    log_error "Failed to install Prettier"
+    return 1
+  fi
+}
+
+uninstall_prettier() {
+  if ! command -v prettier &>/dev/null; then
+    log_info "Prettier is not installed"
+    return 0
+  fi
+  log_info "Uninstalling Prettier..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if npm uninstall -g prettier &>>"$LOG_FILE"; then
+    log_success "Prettier uninstalled"
+    return 0
+  else
+    log_error "Failed to uninstall Prettier"
+    return 1
+  fi
+}
+
+update_prettier() {
+  log_info "Updating Prettier..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  if npm update -g prettier &>>"$LOG_FILE"; then
+    log_success "Prettier updated"
+    return 0
+  else
+    log_error "Failed to update Prettier"
+    return 1
+  fi
+}
+
+reinstall_prettier() {
+  uninstall_prettier
+  install_prettier
+}
+

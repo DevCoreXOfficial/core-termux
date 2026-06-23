@@ -14,23 +14,22 @@ install_main() {
     echo
     log_info "Available targets:"
     echo
-    list_item "full       - Install everything (recommended)"
-    list_item "language   - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++, Go)"
+    list_item "lang       - Language packages (Node.js, Python, Perl, PHP, Rust, C, C++, Go)"
     list_item "db         - Databases (PostgreSQL, MariaDB, SQLite, MongoDB)"
     list_item "ai         - AI tools (OpenCode, Gentle AI, Claude Code, etc.)"
     list_item "editor     - Code editor (Neovim + NvChad)"
-    list_item "tools      - Development tools"
-    list_item "node       - Node.js global modules (npm packages)"
+    list_item "dev        - Development tools"
+    list_item "npm        - Node.js global modules (npm packages)"
     list_item "shell      - ZSH + Oh My Zsh + plugins"
     list_item "ui         - Termux UI (font, cursor, extra-keys, banner)"
-    list_item "automation - Automation Tools (n8n)"
+    list_item "auto       - Automation Tools (n8n)"
 
     echo
     log_info "Install specific tools with flags:"
     echo
     list_item "core install ai --qwen-code --ollama"
     list_item "core install db --postgresql --sqlite"
-    list_item "core install tools --gh --fzf --jq"
+    list_item "core install dev --gh --fzf --jq"
     list_item "Run ${D_CYAN}core list <target>${NC} to see all available tools"
     echo
     return
@@ -71,39 +70,6 @@ _install_full_module() {
   local target="$1"
 
   case "$target" in
-  full)
-    separator
-    box "Installing Complete Environment"
-    separator
-    echo
-
-    import "@/modules/language"
-    import "@/modules/db"
-    import "@/modules/ai"
-    import "@/modules/editor"
-    import "@/modules/tools"
-    import "@/modules/node-modules"
-    import "@/modules/shell"
-    import "@/modules/ui"
-    import "@/modules/automation"
-
-    install_language
-    install_db
-    install_ai
-    install_editor
-    install_tools
-    install_node
-    install_shell
-    setup_ui
-    install_automation
-
-    separator
-    log_success "Complete environment installed successfully"
-    separator
-    echo
-    log_warn "Please restart Termux to apply all changes"
-    echo
-    ;;
   db)
     import "@/modules/db"
     install_db
@@ -116,17 +82,17 @@ _install_full_module() {
     import "@/modules/editor"
     install_editor
     ;;
-  language)
-    import "@/modules/language"
-    install_language
+  lang)
+    import "@/modules/lang"
+    install_lang
     ;;
-  tools)
-    import "@/modules/tools"
-    install_tools
+  dev)
+    import "@/modules/dev"
+    install_dev
     ;;
-  node)
-    import "@/modules/node-modules"
-    install_node
+  npm)
+    import "@/modules/npm"
+    install_npm
     ;;
   shell)
     import "@/modules/shell"
@@ -136,9 +102,9 @@ _install_full_module() {
     import "@/modules/ui"
     setup_ui
     ;;
-  automation)
-    import "@/modules/automation"
-    install_automation
+  auto)
+    import "@/modules/auto"
+    install_auto
     ;;
   *)
     log_warn "Unknown install target: $target"
@@ -290,8 +256,8 @@ _install_specific_tools() {
     fi
     echo
     ;;
-  tools)
-    import "@/tools/tools/all"
+  dev)
+    import "@/tools/dev/all"
     local installed_count=0
     local failed_count=0
 
@@ -388,8 +354,8 @@ _install_specific_tools() {
     fi
     echo
     ;;
-  node)
-    import "@/tools/node/all"
+  npm)
+    import "@/tools/npm/all"
     local installed_count=0
     local failed_count=0
 
@@ -450,15 +416,15 @@ _install_specific_tools() {
     fi
     echo
     ;;
-  language)
-    import "@/tools/language/all"
+  lang)
+    import "@/tools/lang/all"
     local installed_count=0
     local failed_count=0
 
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        loading "Installing Node.js LTS" install_nodejs
+        loading "Installing Node.js LTS" install_npmjs
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       python)
@@ -630,8 +596,8 @@ _install_specific_tools() {
     fi
     echo
     ;;
-  automation)
-    import "@/tools/automation/all"
+  auto)
+    import "@/tools/auto/all"
     local installed_count=0
     local failed_count=0
 

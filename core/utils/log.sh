@@ -257,9 +257,47 @@ read_input() {
 	local var="$2"
 	local _val
 
-	echo -e -n "    ${GRAY}┌─${D_CYAN} ${prompt} ${NC}\n"
-	echo -e -n "    ${GRAY}└─${D_CYAN}▶ ${D_NC}"
+	echo -e -n "    ${GRAY}┌─${D_CYAN} ${prompt} ${NC}\n" >&2
+	echo -e -n "    ${GRAY}└─${D_CYAN}▶ ${D_NC}" >&2
 	read -r _val
+	read -r "$var" <<<"$_val"
+}
+
+# --- Entrada censurada (contraseñas, tokens, API keys) ---
+# Lee carácter por carácter y muestra ● para cada uno.
+# Uso: read_secret "Prompt" VAR_NAME
+read_secret() {
+	local prompt="$1"
+	local var="$2"
+	local _val=""
+	local char
+
+	echo -e -n "    ${GRAY}┌─${D_CYAN} ${prompt} ${NC}\n" >&2
+	echo -e -n "    ${GRAY}│${D_DIM} (input will be hidden)${D_NC}\n" >&2
+	echo -e -n "    ${GRAY}└─${D_CYAN}▶ ${D_NC}" >&2
+
+	local old_stty
+	old_stty=$(stty -g 2>/dev/null)
+	stty -echo -icanon min 1 time 0 2>/dev/null
+
+	while true; do
+		char=$(dd bs=1 count=1 2>/dev/null)
+		if [[ "$char" == $'\n' ]] || [[ "$char" == $'\r' ]] || [[ -z "$char" ]]; then
+			break
+		fi
+		if [[ "$char" == $'\177' ]] || [[ "$char" == $'\b' ]] || [[ "$char" == $'\x7f' ]]; then
+			if [[ -n "$_val" ]]; then
+				_val="${_val%?}"
+				echo -ne "\b \b" >&2
+			fi
+		else
+			_val+="$char"
+			echo -ne "●" >&2
+		fi
+	done
+
+	stty "$old_stty" 2>/dev/null
+	echo >&2
 	read -r "$var" <<<"$_val"
 }
 
@@ -272,10 +310,10 @@ read_confirm() {
 	local _val
 
 	while true; do
-		echo -e -n "    ${GRAY}┌─${D_YELLOW} ${prompt} ${GRAY}[${D_GREEN}y${GRAY}/${D_RED}n${GRAY}]${D_NC}\n"
-		echo -e -n "    ${GRAY}└─${D_YELLOW}▶ ${D_NC}"
+		echo -e -n "    ${GRAY}┌─${D_YELLOW} ${prompt} ${GRAY}[${D_GREEN}y${GRAY}/${D_RED}n${GRAY}]${D_NC}\n" >&2
+		echo -e -n "    ${GRAY}└─${D_YELLOW}▶ ${D_NC}" >&2
 		read -rn1 _val
-		echo
+		echo >&2
 		case "${_val,,}" in
 		y)
 			read -r "$var" <<<"y"
@@ -285,7 +323,7 @@ read_confirm() {
 			read -r "$var" <<<"n"
 			return 1
 			;;
-		*) echo -e "    ${RED}✖${D_NC} Reply ${D_GREEN}y${D_NC} o ${D_RED}n${D_NC}" ;;
+		*) echo -e "    ${RED}✖${D_NC} Reply ${D_GREEN}y${D_NC} o ${D_RED}n${D_NC}" >&2 ;;
 		esac
 	done
 }
@@ -306,19 +344,19 @@ read_select() {
 	local max_width=$((cols - margin))
 
 	_render_select() {
-		echo -e "    ${GRAY}┌─${D_CYAN} ${prompt}${NC}"
+		echo -e "    ${GRAY}┌─${D_CYAN} ${prompt}${NC}" >&2
 		for ((i = 0; i < total; i++)); do
 			local text="${options[$i]}"
 			if (( ${#text} > max_width )); then
 				text="${text:0:$((max_width - 3))}..."
 			fi
 			if ((i == selected)); then
-				echo -e "    ${GRAY}│  ${D_CYAN}▶ ${WHITE}${text}${D_NC}"
+				echo -e "    ${GRAY}│  ${D_CYAN}▶ ${WHITE}${text}${D_NC}" >&2
 			else
-				echo -e "    ${GRAY}│    ${GRAY}${text}${D_NC}"
+				echo -e "    ${GRAY}│    ${GRAY}${text}${D_NC}" >&2
 			fi
 		done
-		echo -e -n "    ${GRAY}└─${D_NC} ${GRAY}↑↓ move  Enter confirm${D_NC}"
+		echo -e -n "    ${GRAY}└─${D_NC} ${GRAY}↑↓ move  Enter confirm${D_NC}" >&2
 	}
 
 	local lines=$((total + 1))
@@ -339,15 +377,49 @@ read_select() {
 		'') break ;;
 		esac
 
-		echo -en "\r\033[${lines}A\033[J"
+		echo -en "\r\033[${lines}A\033[J" >&2
 		_render_select
 	done
 
-	echo
+	echo >&2
 	tput cnorm
 
 	read -r "$var" <<<"${options[$selected]}"
-	echo -e "    ${GRAY}└─${D_CYAN}▶ ${D_NC}${options[$selected]}${D_NC}"
+	echo -e "    ${GRAY}└─${D_CYAN}▶ ${D_NC}${options[$selected]}${D_NC}" >&2
+}
+
+# --- Entrada multi-línea (shell interactiva, sin editor externo) ---
+# Lee contenido línea por línea hasta Ctrl+D.
+# Uso: local tmp; tmp=$(read_multiline "Initial header"); content=$(cat "$tmp"); rm -f "$tmp"
+read_multiline() {
+	local initial="$1"
+	local tmpfile
+	tmpfile=$(mktemp)
+
+	echo "$initial" >"$tmpfile"
+	echo >>"$tmpfile"
+
+	local cols
+	cols=$(tput cols 2>/dev/null || echo 80)
+	local w=$((cols - 6))
+	local bar
+	printf -v bar '%*s' "$w" ''
+
+	echo -e "    ${GRAY}╭${bar// /─}╮${NC}" >&2
+	printf "    ${GRAY}│${NC}  ${D_CYAN}✎  Write your memory${D_NC}%*s ${GRAY}│${NC}\n" $((w - 24)) "" >&2
+	printf "    ${GRAY}│${NC}  ${D_DIM}(Ctrl+D to finish, Ctrl+C to cancel)${D_NC}%*s ${GRAY}│${NC}\n" $((w - 40)) "" >&2
+	echo -e "    ${GRAY}├${bar// /─}┤${NC}" >&2
+
+	local line
+	while IFS= read -r line; do
+		echo "$line" >>"$tmpfile"
+	done
+
+	echo >&2
+	echo -e "    ${GRAY}╰${bar// /─}╯${NC}" >&2
+	echo -e "    ${GRAY}${D_GREEN}✔ Content captured${D_NC}" >&2
+
+	echo "$tmpfile"
 }
 
 # ===== LOADING SPINNER =====

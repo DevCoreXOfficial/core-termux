@@ -13,23 +13,23 @@ list_main() {
     echo
     log_info "Available targets:"
     echo
-    list_item "language   - List language packages"
+    list_item "lang       - List language packages"
     list_item "db         - List database packages"
     list_item "ai         - List AI tools"
     list_item "editor     - List code editor components"
-    list_item "tools      - List development tools"
-    list_item "node       - List Node.js global modules"
+    list_item "dev        - List development tools"
+    list_item "npm        - List Node.js global modules"
     list_item "shell      - List ZSH plugins"
     list_item "ui         - List Termux UI components"
-    list_item "automation - List automation tools"
+    list_item "auto       - List automation tools"
     echo
     return
   fi
 
   for arg in "$@"; do
     case "$arg" in
-    language)
-      _list_language
+    lang)
+      _list_lang
       ;;
     db)
       _list_db
@@ -40,11 +40,11 @@ list_main() {
     editor)
       _list_editor
       ;;
-    tools)
-      _list_tools
+    dev)
+      _list_dev
       ;;
-    node)
-      _list_node
+    npm)
+      _list_npm
       ;;
     shell)
       _list_shell
@@ -52,8 +52,8 @@ list_main() {
     ui)
       _list_ui
       ;;
-    automation)
-      _list_automation
+    auto)
+      _list_auto
       ;;
     *)
       log_warn "Unknown list target: $arg"
@@ -64,7 +64,7 @@ list_main() {
 }
 
 # ===== LIST LANGUAGE =====
-_list_language() {
+_list_lang() {
   echo
   box "Language Packages"
   echo
@@ -82,8 +82,8 @@ _list_language() {
   table_end
 
   echo
-  log_info "Install specific: ${D_CYAN}core install language --nodejs --python${NC}"
-  log_info "Install all: ${D_CYAN}core install language${NC}"
+  log_info "Install specific: ${D_CYAN}core install lang --nodejs --python${NC}"
+  log_info "Install all: ${D_CYAN}core install lang${NC}"
   echo
 }
 
@@ -164,7 +164,7 @@ _list_editor() {
 }
 
 # ===== LIST TOOLS =====
-_list_tools() {
+_list_dev() {
   echo
   box "Development Tools"
   echo
@@ -194,13 +194,13 @@ _list_tools() {
   table_end
 
   echo
-  log_info "Install specific: ${D_CYAN}core install tools --gh --fzf --jq${NC}"
-  log_info "Install all: ${D_CYAN}core install tools${NC}"
+  log_info "Install specific: ${D_CYAN}core install dev --gh --fzf --jq${NC}"
+  log_info "Install all: ${D_CYAN}core install dev${NC}"
   echo
 }
 
 # ===== LIST NODE =====
-_list_node() {
+_list_npm() {
   echo
   box "Node.js Global Modules"
   echo
@@ -221,8 +221,8 @@ _list_node() {
   table_end
 
   echo
-  log_info "Install specific: ${D_CYAN}core install node --typescript --prettier${NC}"
-  log_info "Install all: ${D_CYAN}core install node${NC}"
+  log_info "Install specific: ${D_CYAN}core install npm --typescript --prettier${NC}"
+  log_info "Install all: ${D_CYAN}core install npm${NC}"
   echo
 }
 
@@ -275,7 +275,7 @@ _list_ui() {
 }
 
 # ===== LIST AUTOMATION =====
-_list_automation() {
+_list_auto() {
   echo
   box "Automation Tools"
   echo
@@ -287,8 +287,8 @@ _list_automation() {
   table_end
 
   echo
-  log_info "Install specific: ${D_CYAN}core install automation --n8n${NC}"
-  log_info "Install all: ${D_CYAN}core install automation${NC}"
+  log_info "Install specific: ${D_CYAN}core install auto --n8n${NC}"
+  log_info "Install all: ${D_CYAN}core install auto${NC}"
   echo
 }
 

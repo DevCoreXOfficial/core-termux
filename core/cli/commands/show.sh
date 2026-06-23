@@ -17,8 +17,8 @@ show_main() {
 		list_item "core show ai --opencode"
 		list_item "core show ai --ollama"
 		list_item "core show db --postgresql"
-		list_item "core show tools --gh"
-		list_item "core show node --typescript"
+		list_item "core show dev --gh"
+		list_item "core show npm --typescript"
 		list_item "core show all --<tool>"
 		echo
 		log_info "Run ${D_CYAN}core list <module>${NC} to see available tools"

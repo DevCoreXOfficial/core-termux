@@ -14,17 +14,16 @@ update_main() {
     echo
     log_info "Available targets:"
     echo
-    list_item "all        - Update framework + all installed packages"
     list_item "core       - Update only Core-Termux framework"
-    list_item "language   - Update language packages (pkg upgrade)"
+    list_item "lang       - Update language packages (pkg upgrade)"
     list_item "db         - Update databases"
     list_item "ai         - Update AI tools (npm/pip/pkg)"
     list_item "editor     - Update Neovim configuration"
-    list_item "tools      - Update development tools"
-    list_item "node       - Update Node.js global modules"
+    list_item "dev        - Update development tools"
+    list_item "npm        - Update Node.js global modules"
     list_item "shell      - Update ZSH plugins"
     list_item "ui         - Update Termux UI"
-    list_item "automation - Update Automation Tools"
+    list_item "auto       - Update Automation Tools"
     echo
     log_info "Update specific tools with flags:"
     echo
@@ -69,45 +68,12 @@ _update_full_module() {
   local target="$1"
 
   case "$target" in
-  all)
-    separator
-    box "Updating Everything"
-    separator
-    echo
-
-    update_core
-
-    import "@/modules/language"
-    import "@/modules/db"
-    import "@/modules/ai"
-    import "@/modules/editor"
-    import "@/modules/tools"
-    import "@/modules/node-modules"
-    import "@/modules/shell"
-    import "@/modules/ui"
-    import "@/modules/automation"
-
-    update_language
-    update_db
-    update_ai
-    update_editor
-    update_tools
-    update_node
-    update_shell
-    update_ui
-    update_automation
-
-    separator
-    log_success "All updates completed"
-    separator
-    echo
-    ;;
   core)
     update_core
     ;;
-  language)
-    import "@/modules/language"
-    update_language
+  lang)
+    import "@/modules/lang"
+    update_lang
     ;;
   db)
     import "@/modules/db"
@@ -121,13 +87,13 @@ _update_full_module() {
     import "@/modules/editor"
     update_editor
     ;;
-  tools)
-    import "@/modules/tools"
-    update_tools
+  dev)
+    import "@/modules/dev"
+    update_dev
     ;;
-  node)
-    import "@/modules/node-modules"
-    update_node
+  npm)
+    import "@/modules/npm"
+    update_npm
     ;;
   shell)
     import "@/modules/shell"
@@ -137,9 +103,9 @@ _update_full_module() {
     import "@/modules/ui"
     update_ui
     ;;
-  automation)
-    import "@/modules/automation"
-    update_automation
+  auto)
+    import "@/modules/auto"
+    update_auto
     ;;
   *)
     log_warn "Unknown update target: $target"
@@ -291,8 +257,8 @@ _update_specific_tools() {
     fi
     echo
     ;;
-  tools)
-    import "@/tools/tools/all"
+  dev)
+    import "@/tools/dev/all"
     local updated_count=0
     local failed_count=0
 
@@ -389,8 +355,8 @@ _update_specific_tools() {
     fi
     echo
     ;;
-  node)
-    import "@/tools/node/all"
+  npm)
+    import "@/tools/npm/all"
     local updated_count=0
     local failed_count=0
 
@@ -451,15 +417,15 @@ _update_specific_tools() {
     fi
     echo
     ;;
-  language)
-    import "@/tools/language/all"
+  lang)
+    import "@/tools/lang/all"
     local updated_count=0
     local failed_count=0
 
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        loading "Updating Node.js LTS" update_nodejs
+        loading "Updating Node.js LTS" update_npmjs
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       python)
@@ -631,8 +597,8 @@ _update_specific_tools() {
     fi
     echo
     ;;
-  automation)
-    import "@/tools/automation/all"
+  auto)
+    import "@/tools/auto/all"
     local updated_count=0
     local failed_count=0
 

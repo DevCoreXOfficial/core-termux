@@ -17,7 +17,7 @@ CORE_TOOL_DATA="${XDG_DATA_HOME:-$HOME/.local/share}/core-termux-data"
 CORE_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/core-termux"
 CORE_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/core-termux"
 
-TOTAL_STEPS=5
+TOTAL_STEPS=6
 CURRENT_STEP=0
 
 _cols() {
@@ -83,12 +83,16 @@ bootstrap_dependencies() {
 	local needed_tput=0
 	local needed_git=0
 	local needed_glow=0
+	local needed_gh=0
+	local needed_rg=0
 
 	command -v tput &>/dev/null || needed_tput=1
 	command -v git &>/dev/null || needed_git=1
 	command -v glow &>/dev/null || needed_glow=1
+	command -v gh &>/dev/null || needed_gh=1
+	command -v rg &>/dev/null || needed_rg=1
 
-	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 ]]; then
+	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 || $needed_gh -eq 1 || $needed_rg -eq 1 ]]; then
 		banner
 	fi
 
@@ -117,7 +121,25 @@ bootstrap_dependencies() {
 		log_ok "glow installed"
 	fi
 
-	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 ]]; then
+	if [[ $needed_gh -eq 1 ]]; then
+		log_info "Installing gh (GitHub CLI)..."
+		progress_bar 0 10
+		pkg install -y gh &>/dev/null
+		progress_bar 10 10
+		echo
+		log_ok "gh installed"
+	fi
+
+	if [[ $needed_rg -eq 1 ]]; then
+		log_info "Installing ripgrep..."
+		progress_bar 0 10
+		pkg install -y ripgrep &>/dev/null
+		progress_bar 10 10
+		echo
+		log_ok "ripgrep installed"
+	fi
+
+	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 || $needed_gh -eq 1 || $needed_rg -eq 1 ]]; then
 		echo
 		clear
 	fi
@@ -128,7 +150,7 @@ install_dependencies() {
 	progress_bar 5 10
 	progress_bar 10 10
 	echo
-	log_ok "Dependencies ready (git, ncurses-utils, glow)"
+	log_ok "Dependencies ready (git, ncurses-utils, glow, gh, ripgrep)"
 }
 
 setup_directories() {
@@ -221,15 +243,15 @@ show_final_message() {
 	echo
 	echo -e "  ${P_DIM}Install modules:${P_NC}"
 	echo
-	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install language" "Programming languages"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install lang" "Programming languages"
 	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install db" "Databases"
 	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install ai" "AI tools"
 	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install editor" "Code editor"
-	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install tools" "Dev tools"
-	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install node" "Node.js tools"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install dev" "Dev tools"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install npm" "Node.js tools"
 	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install shell" "ZSH shell"
 	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install ui" "Termux UI"
-	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install automation" "n8n"
+	printf "    ${P_PRIMARY}%-20s${P_NC} ${P_DIM}%s${P_NC}\n" "core install auto" "n8n"
 	echo
 }
 
