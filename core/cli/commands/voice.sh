@@ -7,7 +7,7 @@ voice_help() {
 	echo
 	box "CORE VOICE — Speech-to-Agent"
 	echo
-	log_info "Capture voice from the microphone, review it in nvim, and launch an AI agent."
+	log_info "Capture voice from the microphone, review it in nvim, copy to clipboard, and launch an AI agent."
 	echo
 	log_info "Usage: core voice [agent]"
 	echo
@@ -80,13 +80,17 @@ voice_main() {
 		exit 1
 	fi
 
-	# ── edit prompt in nvim ──
+	# ── edit prompt in nvim (skip if no TTY) ──
 	local tmpfile prompt
 	tmpfile="$(mktemp)"
 	echo "$raw" >"$tmpfile"
 
-	$is_text || log_info "Review the prompt in nvim, fix mistakes, then save and quit"
-	nvim "$tmpfile" </dev/tty >/dev/tty
+	if [[ -t 0 ]] && [[ -t 1 ]]; then
+		$is_text || log_info "Review the prompt in nvim, fix mistakes, then save and quit"
+		nvim "$tmpfile" </dev/tty >/dev/tty || true
+	else
+		$is_text || log_warn "No TTY available, skipping editor — using raw capture"
+	fi
 
 	prompt="$(cat "$tmpfile" | xargs)"
 	rm -f "$tmpfile"
@@ -97,7 +101,15 @@ voice_main() {
 		exit 1
 	fi
 
-		# ── "text" or "!" → just print ──
+	# ── copy to clipboard ──
+	if command -v termux-clipboard-set &>/dev/null; then
+		echo "$prompt" | termux-clipboard-set
+		if [[ "$agent" != "text" && "$agent" != "!" ]]; then
+			log_info "Prompt copied to clipboard"
+		fi
+	fi
+
+	# ── "text" or "!" → just print ──
 	if [[ "$agent" == "text" ]] || [[ "$agent" == "!" ]]; then
 		echo "$prompt"
 		return
