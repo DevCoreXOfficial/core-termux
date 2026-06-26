@@ -545,3 +545,9 @@ badge_beta() {
 badge_deprecated() {
 	echo -e "${D_RED}[ DEPRECATED ]${NC}"
 }
+
+# ===== TIP FUNCTION =====
+
+log_tip() {
+	echo -e "    ${D_CYAN}●${NC} $*"
+}

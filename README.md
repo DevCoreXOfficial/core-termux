@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.1.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.2.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -147,7 +147,7 @@ core --version
 
 **Output:**
 ```
-4.1.0
+4.2.0
 ```
 
 ---
@@ -296,6 +296,8 @@ core voice !                  # Alias for 'text'
 - Termux:API package: `pkg install termux-api`
 - Neovim for editing: `core install editor`
 - Termux:API app: https://devcorex-web.vercel.app/termux/api
+
+> **Note:** `core voice` automatically runs `termux-api-start` before capturing audio to ensure the Termux:API service is running.
 
 **Supported agents:**
 
@@ -776,7 +778,7 @@ core install editor
 
 ## UI and Logs
 
-The framework includes a professional logging system with colors, icons, and animations.
+The framework includes a professional logging system with colors, icons, and animations, plus a startup banner with random tips.
 
 ### Log Functions
 
@@ -849,6 +851,19 @@ table_end
 
 ---
 
+## Banner Tips
+
+Every time you open a new Termux session (or run the banner), Core-Termux shows a random tip to help you discover features you might not know about. Tips cover all modules: installing tools, using `core brain`, managing databases, voice commands, project initialization, and more.
+
+The tip system:
+- Picks a random tip from a pool of 65+ tips on each session
+- Never shows the same tip twice in a row
+- Covers every module and command in the framework
+
+To refresh the tips pool or customize them, edit `core/utils/banner.sh`.
+
+---
+
 ## Project Structure
 
 ```
@@ -913,6 +928,7 @@ core-termux/
 │   │   └── auto/
 │   └── utils
 │       ├── bootstrap.sh
+│       ├── banner.sh
 │       ├── colors.sh
 │       ├── env.sh
 │       └── log.sh
@@ -972,7 +988,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.1.1 (current: 4.1.0)
+⚠ New version available: 4.2.1 (current: 4.2.0)
 
 ➜ Run: core update core to update
 ```

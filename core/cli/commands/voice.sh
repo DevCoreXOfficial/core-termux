@@ -66,6 +66,9 @@ voice_main() {
 		exit 1
 	fi
 
+	# ── start Termux API activity ──
+	termux-api-start &>/dev/null
+
 	local is_text=false
 	[[ "$agent" == "text" || "$agent" == "!" ]] && is_text=true
 
