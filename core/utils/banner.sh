@@ -207,3 +207,5 @@ if [[ ${#CORE_TIPS[@]} -gt 0 ]]; then
 		log_tip "$_tip"
 	fi
 fi
+
+echo
