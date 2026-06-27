@@ -4,6 +4,42 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
+_install_bat_pkg() {
+	loading "Installing Bat" _install_bat_pkg_impl
+}
+
+_install_bat_pkg_impl() {
+	if ! pkg install bat -y &>>"$LOG_FILE"; then
+		log_error "Failed to install Bat"
+		return 1
+	fi
+	return 0
+}
+
+_uninstall_bat_pkg() {
+	loading "Uninstalling Bat" _uninstall_bat_pkg_impl
+}
+
+_uninstall_bat_pkg_impl() {
+	if ! pkg uninstall bat -y &>>"$LOG_FILE"; then
+		log_error "Failed to uninstall Bat"
+		return 1
+	fi
+	return 0
+}
+
+_update_bat_pkg() {
+	loading "Updating Bat" _update_bat_pkg_impl
+}
+
+_update_bat_pkg_impl() {
+	if ! pkg upgrade bat -y &>>"$LOG_FILE"; then
+		log_error "Failed to update Bat"
+		return 1
+	fi
+	return 0
+}
+
 install_bat() {
 	if command -v bat &>/dev/null; then
 		log_info "Bat is already installed"
@@ -13,13 +49,9 @@ install_bat() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if pkg install bat -y &>>"$LOG_FILE"; then
-		log_success "Bat installed"
-		return 0
-	else
-		log_error "Failed to install Bat"
-		return 1
-	fi
+	_install_bat_pkg || return 1
+	log_success "Bat installed"
+	return 0
 }
 
 uninstall_bat() {
@@ -30,26 +62,18 @@ uninstall_bat() {
 	log_info "Uninstalling Bat..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if pkg uninstall bat -y &>>"$LOG_FILE"; then
-		log_success "Bat uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Bat"
-		return 1
-	fi
+	_uninstall_bat_pkg || return 1
+	log_success "Bat uninstalled"
+	return 0
 }
 
 update_bat() {
 	log_info "Updating Bat..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if pkg upgrade bat -y &>>"$LOG_FILE"; then
-		log_success "Bat updated"
-		return 0
-	else
-		log_error "Failed to update Bat"
-		return 1
-	fi
+	_update_bat_pkg || return 1
+	log_success "Bat updated"
+	return 0
 }
 
 reinstall_bat() {

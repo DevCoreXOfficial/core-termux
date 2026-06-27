@@ -128,11 +128,11 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       qwen-code)
-        loading "Installing Qwen Code" install_qwen_code
+        install_qwen_code
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       gemini-cli)
-        loading "Installing Gemini CLI" install_gemini_cli
+        install_gemini_cli
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       claude-code)
@@ -140,23 +140,23 @@ _install_specific_tools() {
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       mistral-vibe)
-        loading "Installing Mistral Vibe" install_mistral_vibe
+        install_mistral_vibe
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       openclaude)
-        loading "Installing OpenClaude" install_openclaude
+        install_openclaude
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       openclaw)
-        loading "Installing OpenClaw" install_openclaw
+        install_openclaw
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ollama)
-        loading "Installing Ollama" install_ollama
+        install_ollama
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       codex)
-        loading "Installing Codex CLI" install_codex
+        install_codex
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       opencode)
@@ -168,15 +168,15 @@ _install_specific_tools() {
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       engram)
-        loading "Installing Engram" install_engram
+        install_engram
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       codegraph)
-        loading "Installing CodeGraph" install_codegraph
+        install_codegraph
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       pi)
-        loading "Installing Pi Coding Agent" install_pi
+        install_pi
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       antigravity-cli)
@@ -184,7 +184,7 @@ _install_specific_tools() {
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       minimax-cli)
-        loading "Installing Minimax CLI" install_minimax_cli
+        install_minimax_cli
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       gentle-ai)
@@ -196,11 +196,15 @@ _install_specific_tools() {
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       hermes-agent)
-        loading "Installing Hermes Agent" install_hermes_agent
+        install_hermes_agent
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       kimi-code)
-        loading "Installing Kimi Code" install_kimi_code
+        install_kimi_code
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
+      command-code)
+        install_command_code
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -226,19 +230,19 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       postgresql)
-        loading "Installing PostgreSQL" install_postgresql
+        install_postgresql
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       mariadb)
-        loading "Installing MariaDB" install_mariadb
+        install_mariadb
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       sqlite)
-        loading "Installing SQLite" install_sqlite
+        install_sqlite
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       mongodb)
-        loading "Installing MongoDB" install_mongodb
+        install_mongodb
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -264,79 +268,79 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       gh)
-        loading "Installing GitHub CLI" install_gh
+        install_gh
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       wget)
-        loading "Installing Wget" install_wget
+        install_wget
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       curl)
-        loading "Installing Curl" install_curl
+        install_curl
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       lsd)
-        loading "Installing LSD" install_lsd
+        install_lsd
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       bat)
-        loading "Installing Bat" install_bat
+        install_bat
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       proot)
-        loading "Installing Proot" install_proot
+        install_proot
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ncurses)
-        loading "Installing Ncurses Utils" install_ncurses
+        install_ncurses
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       tmate)
-        loading "Installing Tmate" install_tmate
+        install_tmate
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)
-        loading "Installing Cloudflared" install_cloudflared
+        install_cloudflared
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       translate)
-        loading "Installing Translate Shell" install_translate
+        install_translate
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       html2text)
-        loading "Installing html2text" install_html2text
+        install_html2text
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       jq)
-        loading "Installing jq" install_jq
+        install_jq
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       bc)
-        loading "Installing bc" install_bc
+        install_bc
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       tree)
-        loading "Installing Tree" install_tree
+        install_tree
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       fzf)
-        loading "Installing Fzf" install_fzf
+        install_fzf
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       imagemagick)
-        loading "Installing ImageMagick" install_imagemagick
+        install_imagemagick
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       shfmt)
-        loading "Installing Shfmt" install_shfmt
+        install_shfmt
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       make)
-        loading "Installing Make" install_make
+        install_make
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       udocker)
-        loading "Installing udocker" install_udocker
+        install_udocker
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -362,43 +366,43 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       typescript)
-        loading "Installing TypeScript" install_typescript
+        install_typescript
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       nestjs)
-        loading "Installing NestJS CLI" install_nestjs
+        install_nestjs
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       prettier)
-        loading "Installing Prettier" install_prettier
+        install_prettier
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       live-server)
-        loading "Installing Live Server" install_live_server
+        install_live_server
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       localtunnel)
-        loading "Installing Localtunnel" install_localtunnel
+        install_localtunnel
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       vercel)
-        loading "Installing Vercel CLI" install_vercel
+        install_vercel
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       markserv)
-        loading "Installing Markserv" install_markserv
+        install_markserv
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       psqlformat)
-        loading "Installing PSQL Format" install_psqlformat
+        install_psqlformat
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ncu)
-        loading "Installing NPM Check Updates" install_ncu
+        install_ncu
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       ngrok)
-        loading "Installing Ngrok" install_ngrok
+        install_ngrok
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -424,31 +428,31 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        loading "Installing Node.js LTS" install_npmjs
+        install_npmjs
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       python)
-        loading "Installing Python" install_python
+        install_python
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       perl)
-        loading "Installing Perl" install_perl
+        install_perl
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       php)
-        loading "Installing PHP" install_php
+        install_php
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       rust)
-        loading "Installing Rust" install_rust
+        install_rust
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       clang)
-        loading "Installing C/C++ (clang)" install_clang
+        install_clang
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       golang)
-        loading "Installing Go (golang)" install_golang
+        install_golang
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -474,43 +478,43 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       powerlevel10k)
-        loading "Installing powerlevel10k" install_powerlevel10k
+        install_powerlevel10k
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-defer)
-        loading "Installing zsh-defer" install_zsh_defer
+        install_zsh_defer
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autosuggestions)
-        loading "Installing zsh-autosuggestions" install_zsh_autosuggestions
+        install_zsh_autosuggestions
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-syntax-highlighting)
-        loading "Installing zsh-syntax-highlighting" install_zsh_syntax_highlighting
+        install_zsh_syntax_highlighting
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       history-substring)
-        loading "Installing zsh-history-substring-search" install_history_substring
+        install_history_substring
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-completions)
-        loading "Installing zsh-completions" install_zsh_completions
+        install_zsh_completions
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       fzf-tab)
-        loading "Installing fzf-tab" install_fzf_tab
+        install_fzf_tab
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       you-should-use)
-        loading "Installing zsh-you-should-use" install_you_should_use
+        install_you_should_use
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autopair)
-        loading "Installing zsh-autopair" install_zsh_autopair
+        install_zsh_autopair
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       better-npm)
-        loading "Installing zsh-better-npm-completion" install_better_npm
+        install_better_npm
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -536,11 +540,11 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       neovim)
-        loading "Installing Neovim" install_neovim
+        install_neovim
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       nvchad)
-        loading "Installing NvChad" install_nvchad
+        install_nvchad
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -566,19 +570,19 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       font)
-        loading "Installing Meslo Nerd Font" install_font
+        install_font
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       extra-keys)
-        loading "Configuring Extra Keys" install_extra_keys
+        install_extra_keys
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       cursor)
-        loading "Configuring Cursor Color" install_cursor
+        install_cursor
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       banner)
-        loading "Installing Core-Termux Banner" install_banner
+        install_banner
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -604,7 +608,7 @@ _install_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       n8n)
-        loading "Installing n8n" install_n8n
+        install_n8n
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       *)

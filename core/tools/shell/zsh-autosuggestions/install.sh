@@ -27,6 +27,19 @@ _zsh_autosuggestions_dependencies() {
   return 0
 }
 
+_install_zsh_autosuggestions_git() {
+  loading "Installing zsh-autosuggestions" _install_zsh_autosuggestions_git_impl
+}
+
+_install_zsh_autosuggestions_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_PLUGINS_DIR/zsh-autosuggestions" &>>"$LOG_FILE"; then
+    log_error "Failed to install zsh-autosuggestions"
+    return 1
+  fi
+  return 0
+}
+
 install_zsh_autosuggestions() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions" ]]; then
     log_info "zsh-autosuggestions already installed"
@@ -35,42 +48,35 @@ install_zsh_autosuggestions() {
 
   _zsh_autosuggestions_dependencies
 
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/zsh-users/zsh-autosuggestions.git" "$ZSH_PLUGINS_DIR/zsh-autosuggestions" &>>"$LOG_FILE"; then
-    log_success "zsh-autosuggestions installed"
-    return 0
-  else
-    log_error "Failed to install zsh-autosuggestions"
-    return 1
-  fi
+  _install_zsh_autosuggestions_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_zsh_autosuggestions() {
+_uninstall_zsh_autosuggestions_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions" ]]; then
     log_info "zsh-autosuggestions is not installed"
     return 0
   fi
 
-  log_info "Uninstalling zsh-autosuggestions..."
+  rm -rf "$ZSH_PLUGINS_DIR/zsh-autosuggestions"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/zsh-autosuggestions"
-    log_success "zsh-autosuggestions uninstalled"
-  else
+uninstall_zsh_autosuggestions() {
+  loading "Uninstalling zsh-autosuggestions" _uninstall_zsh_autosuggestions_impl
+}
+
+_update_zsh_autosuggestions_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions/.git" ]]; then
     log_warn "zsh-autosuggestions not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/zsh-autosuggestions" pull &>>"$LOG_FILE"
 }
 
 update_zsh_autosuggestions() {
-  log_info "Updating zsh-autosuggestions..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/zsh-autosuggestions" pull &>>"$LOG_FILE"
-    log_success "zsh-autosuggestions updated"
-  else
-    log_warn "zsh-autosuggestions not installed"
-  fi
+  loading "Updating zsh-autosuggestions" _update_zsh_autosuggestions_impl
 }
 
 reinstall_zsh_autosuggestions() {

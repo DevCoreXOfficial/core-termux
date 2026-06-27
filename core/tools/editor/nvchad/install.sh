@@ -36,13 +36,7 @@ _nvchad_dependencies() {
   return 0
 }
 
-install_nvchad() {
-  if [[ -d "$HOME/.config/nvim" ]]; then
-    log_info "NvChad already installed"
-    return 0
-  fi
-  log_info "Installing NvChad..."
-
+_install_nvchad_impl() {
   _nvchad_dependencies
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -61,13 +55,16 @@ install_nvchad() {
   fi
 }
 
-uninstall_nvchad() {
-  if [[ ! -d "$HOME/.config/nvim" ]]; then
-    log_info "NvChad is not installed"
-    return 2
+install_nvchad() {
+  if [[ -d "$HOME/.config/nvim" ]]; then
+    log_info "NvChad already installed"
+    return 0
   fi
-  log_info "Uninstalling NvChad..."
+  log_info "Installing NvChad..."
+  loading "Installing NvChad" _install_nvchad_impl
+}
 
+_uninstall_nvchad_impl() {
   if [[ -d "$HOME/.config/nvim" ]]; then
     rm -rf ~/.config/nvim &>>"$LOG_FILE"
     rm -rf ~/.local/state/nvim &>>"$LOG_FILE"
@@ -79,8 +76,16 @@ uninstall_nvchad() {
   fi
 }
 
-update_nvchad() {
-  log_info "Updating NvChad..."
+uninstall_nvchad() {
+  if [[ ! -d "$HOME/.config/nvim" ]]; then
+    log_info "NvChad is not installed"
+    return 2
+  fi
+  log_info "Uninstalling NvChad..."
+  loading "Uninstalling NvChad" _uninstall_nvchad_impl
+}
+
+_update_nvchad_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   rm -rf "$NVCHAD_DIR" &>>"$LOG_FILE"
@@ -94,8 +99,12 @@ update_nvchad() {
   fi
 }
 
+update_nvchad() {
+  log_info "Updating NvChad..."
+  loading "Updating NvChad" _update_nvchad_impl
+}
+
 reinstall_nvchad() {
   uninstall_nvchad
   install_nvchad
 }
-

@@ -4,6 +4,42 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
+_install_shfmt_pkg() {
+	loading "Installing Shfmt" _install_shfmt_pkg_impl
+}
+
+_install_shfmt_pkg_impl() {
+	if ! pkg install shfmt -y &>>"$LOG_FILE"; then
+		log_error "Failed to install Shfmt"
+		return 1
+	fi
+	return 0
+}
+
+_uninstall_shfmt_pkg() {
+	loading "Uninstalling Shfmt" _uninstall_shfmt_pkg_impl
+}
+
+_uninstall_shfmt_pkg_impl() {
+	if ! pkg uninstall shfmt -y &>>"$LOG_FILE"; then
+		log_error "Failed to uninstall Shfmt"
+		return 1
+	fi
+	return 0
+}
+
+_update_shfmt_pkg() {
+	loading "Updating Shfmt" _update_shfmt_pkg_impl
+}
+
+_update_shfmt_pkg_impl() {
+	if ! pkg upgrade shfmt -y &>>"$LOG_FILE"; then
+		log_error "Failed to update Shfmt"
+		return 1
+	fi
+	return 0
+}
+
 install_shfmt() {
 	if command -v shfmt &>/dev/null; then
 		log_info "Shfmt is already installed"
@@ -13,13 +49,9 @@ install_shfmt() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if pkg install shfmt -y &>>"$LOG_FILE"; then
-		log_success "Shfmt installed"
-		return 0
-	else
-		log_error "Failed to install Shfmt"
-		return 1
-	fi
+	_install_shfmt_pkg || return 1
+	log_success "Shfmt installed"
+	return 0
 }
 
 uninstall_shfmt() {
@@ -30,26 +62,18 @@ uninstall_shfmt() {
 	log_info "Uninstalling Shfmt..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if pkg uninstall shfmt -y &>>"$LOG_FILE"; then
-		log_success "Shfmt uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Shfmt"
-		return 1
-	fi
+	_uninstall_shfmt_pkg || return 1
+	log_success "Shfmt uninstalled"
+	return 0
 }
 
 update_shfmt() {
 	log_info "Updating Shfmt..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if pkg upgrade shfmt -y &>>"$LOG_FILE"; then
-		log_success "Shfmt updated"
-		return 0
-	else
-		log_error "Failed to update Shfmt"
-		return 1
-	fi
+	_update_shfmt_pkg || return 1
+	log_success "Shfmt updated"
+	return 0
 }
 
 reinstall_shfmt() {

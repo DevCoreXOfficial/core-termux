@@ -27,6 +27,19 @@ _zsh_autopair_dependencies() {
   return 0
 }
 
+_install_zsh_autopair_git() {
+  loading "Installing zsh-autopair" _install_zsh_autopair_git_impl
+}
+
+_install_zsh_autopair_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/hlissner/zsh-autopair.git" "$ZSH_PLUGINS_DIR/zsh-autopair" &>>"$LOG_FILE"; then
+    log_error "Failed to install zsh-autopair"
+    return 1
+  fi
+  return 0
+}
+
 install_zsh_autopair() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-autopair" ]]; then
     log_info "zsh-autopair already installed"
@@ -35,43 +48,35 @@ install_zsh_autopair() {
 
   _zsh_autopair_dependencies
 
-  log_info "Installing shell prerequisites..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/hlissner/zsh-autopair.git" "$ZSH_PLUGINS_DIR/zsh-autopair" &>>"$LOG_FILE"; then
-    log_success "zsh-autopair installed"
-    return 0
-  else
-    log_error "Failed to install zsh-autopair"
-    return 1
-  fi
+  _install_zsh_autopair_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_zsh_autopair() {
+_uninstall_zsh_autopair_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autopair" ]]; then
     log_info "zsh-autopair is not installed"
     return 0
   fi
 
-  log_info "Uninstalling zsh-autopair..."
+  rm -rf "$ZSH_PLUGINS_DIR/zsh-autopair"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-autopair" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/zsh-autopair"
-    log_success "zsh-autopair uninstalled"
-  else
+uninstall_zsh_autopair() {
+  loading "Uninstalling zsh-autopair" _uninstall_zsh_autopair_impl
+}
+
+_update_zsh_autopair_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autopair/.git" ]]; then
     log_warn "zsh-autopair not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/zsh-autopair" pull &>>"$LOG_FILE"
 }
 
 update_zsh_autopair() {
-  log_info "Updating zsh-autopair..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-autopair/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/zsh-autopair" pull &>>"$LOG_FILE"
-    log_success "zsh-autopair updated"
-  else
-    log_warn "zsh-autopair not installed"
-  fi
+  loading "Updating zsh-autopair" _update_zsh_autopair_impl
 }
 
 reinstall_zsh_autopair() {

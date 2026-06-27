@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.2.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.3.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -132,6 +132,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **GGA** | `--gga` | Provider-agnostic AI code review for every commit |
 | **Hermes Agent** | `--hermes-agent` | The self-improving AI agent built by Nous Research |
 | **Kimi Code** | `--kimi-code` | Kimi Code CLI — The Starting Point for Next-Gen Agents |
+| **Command Code** | `--command-code` | Terminal-first AI coding agent that runs locally |
 
 ---
 
@@ -147,7 +148,7 @@ core --version
 
 **Output:**
 ```
-4.2.0
+4.3.0
 ```
 
 ---
@@ -988,7 +989,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.2.1 (current: 4.2.0)
+⚠ New version available: 4.3.1 (current: 4.3.0)
 
 ➜ Run: core update core to update
 ```

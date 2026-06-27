@@ -4,13 +4,7 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
-install_mariadb() {
-	if command -v mariadbd &>/dev/null; then
-		log_info "MariaDB is already installed"
-		return 2
-	fi
-	log_info "Installing MariaDB..."
-
+_install_mariadb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg install mariadb -y &>>"$LOG_FILE"; then
 		log_success "MariaDB installed"
@@ -20,12 +14,16 @@ install_mariadb() {
 	fi
 }
 
-uninstall_mariadb() {
-	if ! command -v mariadbd &>/dev/null; then
-		log_info "MariaDB is not installed"
+install_mariadb() {
+	if command -v mariadbd &>/dev/null; then
+		log_info "MariaDB is already installed"
 		return 2
 	fi
-	log_info "Uninstalling MariaDB..."
+	log_info "Installing MariaDB..."
+	loading "Installing MariaDB" _install_mariadb_impl
+}
+
+_uninstall_mariadb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall mariadb -y &>>"$LOG_FILE"; then
 		log_success "MariaDB uninstalled"
@@ -36,8 +34,16 @@ uninstall_mariadb() {
 	fi
 }
 
-update_mariadb() {
-	log_info "Updating MariaDB..."
+uninstall_mariadb() {
+	if ! command -v mariadbd &>/dev/null; then
+		log_info "MariaDB is not installed"
+		return 2
+	fi
+	log_info "Uninstalling MariaDB..."
+	loading "Uninstalling MariaDB" _uninstall_mariadb_impl
+}
+
+_update_mariadb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg upgrade mariadb -y &>>"$LOG_FILE"; then
 		log_success "MariaDB updated"
@@ -46,6 +52,11 @@ update_mariadb() {
 		log_error "Failed to update MariaDB"
 		return 1
 	fi
+}
+
+update_mariadb() {
+	log_info "Updating MariaDB..."
+	loading "Updating MariaDB" _update_mariadb_impl
 }
 
 reinstall_mariadb() {

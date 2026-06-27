@@ -15,6 +15,18 @@ _psqlformat_dependencies() {
   pkg install nodejs-lts perl -y &>>"$LOG_FILE"
 }
 
+_install_psqlformat_npm() {
+  loading "Installing PSQL Format" _install_psqlformat_npm_impl
+}
+
+_install_psqlformat_npm_impl() {
+  if ! npm install -g psqlformat &>>"$LOG_FILE"; then
+    log_error "Failed to install PSQL Format"
+    return 1
+  fi
+  return 0
+}
+
 install_psqlformat() {
   if command -v psqlformat &>/dev/null; then
     return 0
@@ -25,13 +37,21 @@ install_psqlformat() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm install -g psqlformat &>>"$LOG_FILE"; then
-    log_success "PSQL Format installed"
-    return 0
-  else
-    log_error "Failed to install PSQL Format"
+  _install_psqlformat_npm || return 1
+  log_success "PSQL Format installed"
+  return 0
+}
+
+_uninstall_psqlformat_npm() {
+  loading "Uninstalling PSQL Format" _uninstall_psqlformat_npm_impl
+}
+
+_uninstall_psqlformat_npm_impl() {
+  if ! npm uninstall -g psqlformat &>>"$LOG_FILE"; then
+    log_error "Failed to uninstall PSQL Format"
     return 1
   fi
+  return 0
 }
 
 uninstall_psqlformat() {
@@ -42,30 +62,33 @@ uninstall_psqlformat() {
   log_info "Uninstalling PSQL Format..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g psqlformat &>>"$LOG_FILE"; then
-    log_success "PSQL Format uninstalled"
-    return 0
-  else
-    log_error "Failed to uninstall PSQL Format"
+  _uninstall_psqlformat_npm || return 1
+  log_success "PSQL Format uninstalled"
+  return 0
+}
+
+_update_psqlformat_npm() {
+  loading "Updating PSQL Format" _update_psqlformat_npm_impl
+}
+
+_update_psqlformat_npm_impl() {
+  if ! npm update -g psqlformat &>>"$LOG_FILE"; then
+    log_error "Failed to update PSQL Format"
     return 1
   fi
+  return 0
 }
 
 update_psqlformat() {
   log_info "Updating PSQL Format..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm update -g psqlformat &>>"$LOG_FILE"; then
-    log_success "PSQL Format updated"
-    return 0
-  else
-    log_error "Failed to update PSQL Format"
-    return 1
-  fi
+  _update_psqlformat_npm || return 1
+  log_success "PSQL Format updated"
+  return 0
 }
 
 reinstall_psqlformat() {
   uninstall_psqlformat
   install_psqlformat
 }
-

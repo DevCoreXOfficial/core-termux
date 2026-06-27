@@ -4,13 +4,7 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
-install_mongodb() {
-	if command -v mongod &>/dev/null; then
-		log_info "MongoDB is already installed"
-		return 2
-	fi
-	log_info "Installing MongoDB..."
-
+_install_mongodb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if [[ ! -f $PREFIX/etc/apt/sources.list.d/tur.list ]]; then
@@ -28,12 +22,16 @@ install_mongodb() {
 	fi
 }
 
-uninstall_mongodb() {
-	if ! command -v mongod &>/dev/null; then
-		log_info "MongoDB is not installed"
+install_mongodb() {
+	if command -v mongod &>/dev/null; then
+		log_info "MongoDB is already installed"
 		return 2
 	fi
-	log_info "Uninstalling MongoDB..."
+	log_info "Installing MongoDB..."
+	loading "Installing MongoDB" _install_mongodb_impl
+}
+
+_uninstall_mongodb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg uninstall mongodb -y &>>"$LOG_FILE"; then
 		log_success "MongoDB uninstalled"
@@ -44,8 +42,16 @@ uninstall_mongodb() {
 	fi
 }
 
-update_mongodb() {
-	log_info "Updating MongoDB..."
+uninstall_mongodb() {
+	if ! command -v mongod &>/dev/null; then
+		log_info "MongoDB is not installed"
+		return 2
+	fi
+	log_info "Uninstalling MongoDB..."
+	loading "Uninstalling MongoDB" _uninstall_mongodb_impl
+}
+
+_update_mongodb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 	if pkg upgrade mongodb -y &>>"$LOG_FILE"; then
 		log_success "MongoDB updated"
@@ -54,6 +60,11 @@ update_mongodb() {
 		log_error "Failed to update MongoDB"
 		return 1
 	fi
+}
+
+update_mongodb() {
+	log_info "Updating MongoDB..."
+	loading "Updating MongoDB" _update_mongodb_impl
 }
 
 reinstall_mongodb() {

@@ -45,7 +45,7 @@ _detect_shell_config() {
 	fi
 }
 
-install_banner() {
+_install_banner_impl() {
 	local shell_config
 	shell_config="$(_detect_shell_config)"
 
@@ -65,8 +65,6 @@ install_banner() {
 		return 1
 	fi
 
-	log_info "Installing Core-Termux Banner..."
-
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	cat >>"$shell_config" <<EOF
@@ -83,7 +81,17 @@ EOF
 	return 0
 }
 
-uninstall_banner() {
+install_banner() {
+	if grep -qF "$CORE_BANNER_MARKER" "$(_detect_shell_config)" 2>/dev/null; then
+		log_info "Core-Termux Banner already installed"
+		return 0
+	fi
+	log_info "Installing Core-Termux Banner..."
+	mkdir -p "$(dirname "$LOG_FILE")"
+	loading "Installing Banner" _install_banner_impl
+}
+
+_uninstall_banner_impl() {
 	local shell_config
 	shell_config="$(_detect_shell_config)"
 
@@ -96,8 +104,6 @@ uninstall_banner() {
 		log_warn "Core-Termux Banner not installed"
 		return 0
 	fi
-
-	log_info "Uninstalling Core-Termux Banner..."
 
 	local marker_line
 	marker_line="$(grep -nF "$CORE_BANNER_MARKER" "$shell_config" | head -1 | cut -d: -f1)"
@@ -120,10 +126,23 @@ uninstall_banner() {
 	return 0
 }
 
-update_banner() {
-	log_info "Updating Core-Termux Banner..."
+uninstall_banner() {
+	if ! grep -qF "$CORE_BANNER_MARKER" "$(_detect_shell_config)" 2>/dev/null; then
+		log_warn "Core-Termux Banner not installed"
+		return 0
+	fi
+	log_info "Uninstalling Core-Termux Banner..."
+	loading "Uninstalling Banner" _uninstall_banner_impl
+}
+
+_update_banner_impl() {
 	uninstall_banner
 	install_banner
+}
+
+update_banner() {
+	log_info "Updating Core-Termux Banner..."
+	loading "Updating Banner" _update_banner_impl
 }
 
 reinstall_banner() {

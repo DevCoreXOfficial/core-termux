@@ -141,7 +141,7 @@ install_shell() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	install_termux_packages
+	loading "Installing base packages" install_termux_packages
 	log_success "Base packages installed"
 	echo
 
@@ -238,7 +238,7 @@ uninstall_shell() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	_uninstall_shell_plugins_wrapper
-	uninstall_oh_my_zsh
+	loading "Removing Oh My Zsh" uninstall_oh_my_zsh
 
 	echo
 	separator

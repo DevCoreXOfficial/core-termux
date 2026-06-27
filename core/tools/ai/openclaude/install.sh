@@ -5,6 +5,10 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _openclaude_dependencies() {
+  loading "Installing dependencies" _openclaude_dependencies_impl
+}
+
+_openclaude_dependencies_impl() {
   declare -A DEPS=(
     ["nodejs-lts"]="node"
     ["git"]="git"
@@ -22,7 +26,22 @@ _openclaude_dependencies() {
     fi
   done
 
-  log_success "Dependencies installed"
+  return 0
+}
+
+_install_openclaude_npm() {
+  loading "Installing OpenClaude" _install_openclaude_npm_impl
+}
+
+_install_openclaude_npm_impl() {
+  export GYP_DEFINES="android_ndk_path=''"
+  export ANDROID_API_LEVEL=24
+
+  if ! npm install -g @gitlawb/openclaude &>>"$LOG_FILE"; then
+    log_error "Failed to install OpenClaude"
+    return 1
+  fi
+
   return 0
 }
 
@@ -33,19 +52,13 @@ install_openclaude() {
   fi
   log_info "Installing OpenClaude..."
 
-  _openclaude_dependencies
-
   mkdir -p "$(dirname "$LOG_FILE")"
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
 
-  if npm install -g @gitlawb/openclaude &>>"$LOG_FILE"; then
-    log_success "OpenClaude installed"
-    return 0
-  else
-    log_error "Failed to install OpenClaude"
-    return 1
-  fi
+  _openclaude_dependencies || return 1
+  _install_openclaude_npm || return 1
+
+  log_success "OpenClaude installed"
+  return 0
 }
 
 uninstall_openclaude() {
@@ -56,28 +69,39 @@ uninstall_openclaude() {
   log_info "Uninstalling OpenClaude..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g @gitlawb/openclaude &>>"$LOG_FILE"; then
-    log_success "OpenClaude uninstalled"
-    return 0
-  else
+  loading "Removing OpenClaude" _uninstall_openclaude_impl
+
+  log_success "OpenClaude uninstalled"
+  return 0
+}
+
+_uninstall_openclaude_impl() {
+  if ! npm uninstall -g @gitlawb/openclaude &>>"$LOG_FILE"; then
     log_error "Failed to uninstall OpenClaude"
     return 1
   fi
+  return 0
 }
 
 update_openclaude() {
   log_info "Updating OpenClaude..."
   mkdir -p "$(dirname "$LOG_FILE")"
+
+  loading "Updating OpenClaude" _update_openclaude_impl
+
+  log_success "OpenClaude updated"
+  return 0
+}
+
+_update_openclaude_impl() {
   export GYP_DEFINES="android_ndk_path=''"
   export ANDROID_API_LEVEL=24
 
-  if npm update -g @gitlawb/openclaude &>>"$LOG_FILE"; then
-    log_success "OpenClaude updated"
-    return 0
-  else
+  if ! npm update -g @gitlawb/openclaude &>>"$LOG_FILE"; then
     log_error "Failed to update OpenClaude"
     return 1
   fi
+  return 0
 }
 
 reinstall_openclaude() {

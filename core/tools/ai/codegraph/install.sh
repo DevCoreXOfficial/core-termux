@@ -4,6 +4,10 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _codegraph_dependencies() {
+	loading "Installing dependencies" _codegraph_dependencies_impl
+}
+
+_codegraph_dependencies_impl() {
 	declare -A DEPS=(
 		["nodejs-lts"]="node"
 		["ripgrep"]="rg"
@@ -26,34 +30,14 @@ _codegraph_dependencies() {
 		fi
 	done
 
-	log_success "Dependencies installed"
 	return 0
 }
 
-_write_codegraph_wrapper() {
-	local wrapper_src="$CORE_PATH/tools/ai/codegraph/bin/codegraph"
-	if [ ! -f "$wrapper_src" ]; then
-		log_error "Wrapper template not found at $wrapper_src"
-		return 1
-	fi
-	cp "$wrapper_src" "$PREFIX/bin/codegraph"
-	chmod +x "$PREFIX/bin/codegraph"
+_download_codegraph() {
+	loading "Downloading CodeGraph" _download_codegraph_impl
 }
 
-install_codegraph() {
-	if command -v codegraph &>/dev/null; then
-		log_info "CodeGraph is already installed"
-		return 2
-	fi
-	log_info "Installing CodeGraph..."
-
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	if ! _codegraph_dependencies; then
-		log_error "Failed to install CodeGraph dependencies"
-		return 1
-	fi
-
+_download_codegraph_impl() {
 	LATEST_VERSION=$(curl -sI https://github.com/colbymchenry/codegraph/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
 
 	if [ -z "$LATEST_VERSION" ]; then
@@ -71,15 +55,39 @@ install_codegraph() {
 		return 1
 	fi
 
-	if ! rm -f $PREFIX/tmp/codegraph-linux-arm64.tar.gz &>>"$LOG_FILE"; then
-		log_error "Failed to clean up temporary files"
-		return 1
-	fi
+	rm -f $PREFIX/tmp/codegraph-linux-arm64.tar.gz
 
-	if ! _write_codegraph_wrapper; then
-		log_error "Failed to write CodeGraph wrapper"
+	return 0
+}
+
+_write_codegraph_wrapper() {
+	loading "Creating CodeGraph wrapper" _write_codegraph_wrapper_impl
+}
+
+_write_codegraph_wrapper_impl() {
+	local wrapper_src="$CORE_PATH/tools/ai/codegraph/bin/codegraph"
+	if [ ! -f "$wrapper_src" ]; then
+		log_error "Wrapper template not found at $wrapper_src"
 		return 1
 	fi
+	cp "$wrapper_src" "$PREFIX/bin/codegraph"
+	chmod +x "$PREFIX/bin/codegraph"
+
+	return 0
+}
+
+install_codegraph() {
+	if command -v codegraph &>/dev/null; then
+		log_info "CodeGraph is already installed"
+		return 2
+	fi
+	log_info "Installing CodeGraph..."
+
+	mkdir -p "$(dirname "$LOG_FILE")"
+
+	_codegraph_dependencies || return 1
+	_download_codegraph || return 1
+	_write_codegraph_wrapper || return 1
 
 	log_success "CodeGraph installed"
 	return 0
@@ -93,8 +101,14 @@ uninstall_codegraph() {
 	log_info "Uninstalling CodeGraph..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
+	loading "Removing CodeGraph" _uninstall_codegraph_impl
+
+	log_success "CodeGraph uninstalled"
+	return 0
+}
+
+_uninstall_codegraph_impl() {
 	if rm -rf "$CORE_DATA/codegraph-linux-arm64" && rm -f "$PREFIX/bin/codegraph" &>>"$LOG_FILE"; then
-		log_success "CodeGraph uninstalled"
 		return 0
 	else
 		log_error "Failed to uninstall CodeGraph"
@@ -106,6 +120,16 @@ update_codegraph() {
 	log_info "Updating CodeGraph..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
+	loading "Removing old CodeGraph" _update_codegraph_remove_impl
+	_codegraph_dependencies || return 1
+	_download_codegraph || return 1
+	_write_codegraph_wrapper || return 1
+
+	log_success "CodeGraph updated"
+	return 0
+}
+
+_update_codegraph_remove_impl() {
 	if ! rm -rf "$CORE_DATA/codegraph-linux-arm64" &>>"$LOG_FILE"; then
 		log_error "Failed to remove old CodeGraph installation"
 		return 1
@@ -116,39 +140,6 @@ update_codegraph() {
 		return 1
 	fi
 
-	if ! _codegraph_dependencies; then
-		log_error "Failed to install CodeGraph dependencies"
-		return 1
-	fi
-
-	LATEST_VERSION=$(curl -sI https://github.com/colbymchenry/codegraph/releases/latest | grep -i location | sed -E 's#.*/tag/([^[:space:]]+).*#\1#')
-
-	if [ -z "$LATEST_VERSION" ]; then
-		log_error "Failed to fetch latest CodeGraph version"
-		return 1
-	fi
-
-	if ! curl -L https://github.com/colbymchenry/codegraph/releases/download/${LATEST_VERSION}/codegraph-linux-arm64.tar.gz -o $PREFIX/tmp/codegraph-linux-arm64.tar.gz &>>"$LOG_FILE"; then
-		log_error "Failed to download CodeGraph"
-		return 1
-	fi
-
-	if ! tar -xzf $PREFIX/tmp/codegraph-linux-arm64.tar.gz -C "$CORE_DATA" &>>"$LOG_FILE"; then
-		log_error "Failed to extract CodeGraph"
-		return 1
-	fi
-
-	if ! rm -f $PREFIX/tmp/codegraph-linux-arm64.tar.gz &>>"$LOG_FILE"; then
-		log_error "Failed to clean up temporary files"
-		return 1
-	fi
-
-	if ! _write_codegraph_wrapper; then
-		log_error "Failed to write CodeGraph wrapper"
-		return 1
-	fi
-
-	log_success "CodeGraph updated"
 	return 0
 }
 

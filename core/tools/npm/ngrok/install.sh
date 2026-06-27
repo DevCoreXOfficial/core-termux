@@ -15,6 +15,18 @@ _ngrok_dependencies() {
   pkg install nodejs-lts -y &>>"$LOG_FILE"
 }
 
+_install_ngrok_npm() {
+  loading "Installing Ngrok" _install_ngrok_npm_impl
+}
+
+_install_ngrok_npm_impl() {
+  if ! npm install -g ngrok &>>"$LOG_FILE"; then
+    log_error "Failed to install Ngrok"
+    return 1
+  fi
+  return 0
+}
+
 install_ngrok() {
   if command -v ngrok &>/dev/null; then
     return 0
@@ -25,13 +37,21 @@ install_ngrok() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm install -g ngrok &>>"$LOG_FILE"; then
-    log_success "Ngrok installed"
-    return 0
-  else
-    log_error "Failed to install Ngrok"
+  _install_ngrok_npm || return 1
+  log_success "Ngrok installed"
+  return 0
+}
+
+_uninstall_ngrok_npm() {
+  loading "Uninstalling Ngrok" _uninstall_ngrok_npm_impl
+}
+
+_uninstall_ngrok_npm_impl() {
+  if ! npm uninstall -g ngrok &>>"$LOG_FILE"; then
+    log_error "Failed to uninstall Ngrok"
     return 1
   fi
+  return 0
 }
 
 uninstall_ngrok() {
@@ -42,30 +62,33 @@ uninstall_ngrok() {
   log_info "Uninstalling Ngrok..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g ngrok &>>"$LOG_FILE"; then
-    log_success "Ngrok uninstalled"
-    return 0
-  else
-    log_error "Failed to uninstall Ngrok"
+  _uninstall_ngrok_npm || return 1
+  log_success "Ngrok uninstalled"
+  return 0
+}
+
+_update_ngrok_npm() {
+  loading "Updating Ngrok" _update_ngrok_npm_impl
+}
+
+_update_ngrok_npm_impl() {
+  if ! npm update -g ngrok &>>"$LOG_FILE"; then
+    log_error "Failed to update Ngrok"
     return 1
   fi
+  return 0
 }
 
 update_ngrok() {
   log_info "Updating Ngrok..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm update -g ngrok &>>"$LOG_FILE"; then
-    log_success "Ngrok updated"
-    return 0
-  else
-    log_error "Failed to update Ngrok"
-    return 1
-  fi
+  _update_ngrok_npm || return 1
+  log_success "Ngrok updated"
+  return 0
 }
 
 reinstall_ngrok() {
   uninstall_ngrok
   install_ngrok
 }
-

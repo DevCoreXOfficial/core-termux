@@ -4,6 +4,18 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
+_install_php_pkg() {
+	loading "Installing PHP" _install_php_pkg_impl
+}
+
+_install_php_pkg_impl() {
+	if ! pkg install php -y &>>"$LOG_FILE"; then
+		log_error "Failed to install PHP"
+		return 1
+	fi
+	return 0
+}
+
 install_php() {
 	if command -v php &>/dev/null; then
 		log_info "PHP is already installed"
@@ -12,12 +24,21 @@ install_php() {
 	log_info "Installing PHP..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install php -y &>>"$LOG_FILE"; then
-		log_success "PHP installed"
-		return 0
-	else
+	_install_php_pkg || return 1
+	log_success "PHP installed"
+	return 0
+}
+
+_uninstall_php_pkg() {
+	loading "Uninstalling PHP" _uninstall_php_pkg_impl
+}
+
+_uninstall_php_pkg_impl() {
+	if ! pkg uninstall php -y &>>"$LOG_FILE"; then
+		log_error "Failed to uninstall PHP"
 		return 1
 	fi
+	return 0
 }
 
 uninstall_php() {
@@ -27,25 +48,29 @@ uninstall_php() {
 	fi
 	log_info "Uninstalling PHP..."
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall php -y &>>"$LOG_FILE"; then
-		log_success "PHP uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall PHP"
+	_uninstall_php_pkg || return 1
+	log_success "PHP uninstalled"
+	return 0
+}
+
+_update_php_pkg() {
+	loading "Updating PHP" _update_php_pkg_impl
+}
+
+_update_php_pkg_impl() {
+	if ! pkg upgrade php -y &>>"$LOG_FILE"; then
+		log_error "Failed to update PHP"
 		return 1
 	fi
+	return 0
 }
 
 update_php() {
 	log_info "Updating PHP..."
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade php -y &>>"$LOG_FILE"; then
-		log_success "PHP updated"
-		return 0
-	else
-		log_error "Failed to update PHP"
-		return 1
-	fi
+	_update_php_pkg || return 1
+	log_success "PHP updated"
+	return 0
 }
 
 reinstall_php() {

@@ -5,8 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ui.log"
 TERMUX_DIR="$HOME/.termux"
 
-install_extra_keys() {
-	log_info "Configuring Termux extra-keys..."
+_install_extra_keys_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")" "$TERMUX_DIR"
 
 	cat >"$TERMUX_DIR/termux.properties" <<'EOF'
@@ -19,13 +18,18 @@ EOF
 	return 0
 }
 
-uninstall_extra_keys() {
-	if [[ ! -f "$TERMUX_DIR/termux.properties" ]]; then
-		log_info "Extra Keys is not installed"
+EXTRA_KEYS_MARKER="terminal-cursor-blink-rate=500"
+
+install_extra_keys() {
+	if grep -qF "$EXTRA_KEYS_MARKER" "$TERMUX_DIR/termux.properties" 2>/dev/null; then
+		log_info "Extra Keys already installed"
 		return 0
 	fi
-	log_info "Uninstalling Extra Keys..."
+	log_info "Installing Extra Keys..."
+	loading "Installing Extra Keys" _install_extra_keys_impl
+}
 
+_uninstall_extra_keys_impl() {
 	if [[ -f "$TERMUX_DIR/termux.properties" ]]; then
 		rm "$TERMUX_DIR/termux.properties"
 		log_success "Extra Keys uninstalled"
@@ -34,9 +38,22 @@ uninstall_extra_keys() {
 	fi
 }
 
+uninstall_extra_keys() {
+	if ! grep -qF "$EXTRA_KEYS_MARKER" "$TERMUX_DIR/termux.properties" 2>/dev/null; then
+		log_info "Extra Keys is not installed"
+		return 0
+	fi
+	log_info "Uninstalling Extra Keys..."
+	loading "Uninstalling Extra Keys" _uninstall_extra_keys_impl
+}
+
+_update_extra_keys_impl() {
+	install_extra_keys
+}
+
 update_extra_keys() {
 	log_info "Updating Extra Keys..."
-	install_extra_keys
+	loading "Updating Extra Keys" _update_extra_keys_impl
 }
 
 reinstall_extra_keys() {

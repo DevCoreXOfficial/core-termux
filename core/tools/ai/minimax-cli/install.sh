@@ -4,7 +4,11 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
-minimax_cli_dependencies() {
+_minimax_cli_dependencies() {
+  loading "Installing dependencies" _minimax_cli_dependencies_impl
+}
+
+_minimax_cli_dependencies_impl() {
   declare -A DEPS=(
     ["nodejs-lts"]="node"
     ["git"]="git"
@@ -22,7 +26,19 @@ minimax_cli_dependencies() {
     fi
   done
 
-  log_success "Dependencies installed"
+  return 0
+}
+
+_install_minimax_cli_npm() {
+  loading "Installing MiniMax CLI" _install_minimax_cli_npm_impl
+}
+
+_install_minimax_cli_npm_impl() {
+  if ! npm install -g mmx-cli &>>"$LOG_FILE"; then
+    log_error "Failed to install MiniMax CLI"
+    return 1
+  fi
+
   return 0
 }
 
@@ -34,20 +50,13 @@ install_minimax_cli() {
 
   log_info "Installing MiniMax CLI..."
 
-  if minimax_cli_dependencies; then
-    mkdir -p "$(dirname "$LOG_FILE")"
+  mkdir -p "$(dirname "$LOG_FILE")"
 
-    if npm install -g mmx-cli &>>"$LOG_FILE"; then
-      log_success "MiniMax CLI installed successfully"
-      return 0
-    else
-      log_error "Failed to install MiniMax CLI"
-      return 1
-    fi
-  else
-    log_error "Failed to install prerequisites for MiniMax CLI"
-    return 1
-  fi
+  _minimax_cli_dependencies || return 1
+  _install_minimax_cli_npm || return 1
+
+  log_success "MiniMax CLI installed successfully"
+  return 0
 }
 
 uninstall_minimax_cli() {
@@ -59,13 +68,18 @@ uninstall_minimax_cli() {
   log_info "Uninstalling MiniMax CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g mmx-cli &>>"$LOG_FILE"; then
-    log_success "MiniMax CLI uninstalled successfully"
-    return 0
-  else
+  loading "Removing MiniMax CLI" _uninstall_minimax_cli_impl
+
+  log_success "MiniMax CLI uninstalled successfully"
+  return 0
+}
+
+_uninstall_minimax_cli_impl() {
+  if ! npm uninstall -g mmx-cli &>>"$LOG_FILE"; then
     log_error "Failed to uninstall MiniMax CLI"
     return 1
   fi
+  return 0
 }
 
 update_minimax_cli() {
@@ -77,13 +91,18 @@ update_minimax_cli() {
   log_info "Updating MiniMax CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm update -g mmx-cli &>>"$LOG_FILE"; then
-    log_success "MiniMax CLI updated successfully"
-    return 0
-  else
+  loading "Updating MiniMax CLI" _update_minimax_cli_impl
+
+  log_success "MiniMax CLI updated successfully"
+  return 0
+}
+
+_update_minimax_cli_impl() {
+  if ! npm update -g mmx-cli &>>"$LOG_FILE"; then
     log_error "Failed to update MiniMax CLI"
     return 1
   fi
+  return 0
 }
 
 reinstall_minimax_cli() {

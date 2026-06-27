@@ -4,6 +4,10 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _pi_dependencies() {
+  loading "Installing dependencies" _pi_dependencies_impl
+}
+
+_pi_dependencies_impl() {
   declare -A DEPS=(
     ["nodejs-lts"]="node"
     ["ripgrep"]="rg"
@@ -22,7 +26,19 @@ _pi_dependencies() {
     fi
   done
 
-  log_success "Dependencies installed"
+  return 0
+}
+
+_install_pi_npm() {
+  loading "Installing Pi Coding Agent" _install_pi_npm_impl
+}
+
+_install_pi_npm_impl() {
+  if ! npm install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
+    log_error "Failed to install Pi"
+    return 1
+  fi
+
   return 0
 }
 
@@ -35,18 +51,11 @@ install_pi() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if ! _pi_dependencies; then
-    log_error "Failed to install Pi dependencies"
-    return 1
-  fi
+  _pi_dependencies || return 1
+  _install_pi_npm || return 1
 
-  if npm install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
-    log_success "Pi Coding Agent installed"
-    return 0
-  else
-    log_error "Failed to install Pi"
-    return 1
-  fi
+  log_success "Pi Coding Agent installed"
+  return 0
 }
 
 uninstall_pi() {
@@ -55,30 +64,38 @@ uninstall_pi() {
     return 2
   fi
   log_info "Uninstalling Pi Coding Agent..."
-  log_info "Uninstalling Pi..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
-    log_success "Pi uninstalled"
-    return 0
-  else
+  loading "Removing Pi Coding Agent" _uninstall_pi_impl
+
+  log_success "Pi uninstalled"
+  return 0
+}
+
+_uninstall_pi_impl() {
+  if ! npm uninstall -g @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Pi"
     return 1
   fi
+  return 0
 }
 
 update_pi() {
   log_info "Updating Pi Coding Agent..."
-  log_info "Updating Pi..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
-    log_success "Pi updated"
-    return 0
-  else
+  loading "Updating Pi Coding Agent" _update_pi_impl
+
+  log_success "Pi updated"
+  return 0
+}
+
+_update_pi_impl() {
+  if ! npm install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
     log_error "Failed to update Pi"
     return 1
   fi
+  return 0
 }
 
 reinstall_pi() {

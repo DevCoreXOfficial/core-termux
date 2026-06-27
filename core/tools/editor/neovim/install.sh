@@ -4,32 +4,33 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_editor.log"
 
-_neovim_dependencies() {
-  if command -v nvim &>/dev/null; then
-    log_info "Neovim is already installed"
-    return 2
-  fi
-
-  log_info "Installing Neovim dependencies..."
+_install_neovim_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
-  pkg install neovim -y &>>"$LOG_FILE"
-}
-
-install_neovim() {
-  if command -v nvim &>/dev/null; then
-    return 0
-  fi
-  log_info "Installing Neovim..."
-
-  _neovim_dependencies
-
-  mkdir -p "$(dirname "$LOG_FILE")"
-
   if pkg install neovim -y &>>"$LOG_FILE"; then
     log_success "Neovim installed"
     return 0
   else
     log_error "Failed to install Neovim"
+    return 1
+  fi
+}
+
+install_neovim() {
+  if command -v nvim &>/dev/null; then
+    log_info "Neovim is already installed"
+    return 0
+  fi
+  log_info "Installing Neovim..."
+  loading "Installing Neovim" _install_neovim_impl
+}
+
+_uninstall_neovim_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if pkg uninstall neovim -y &>>"$LOG_FILE"; then
+    log_success "Neovim uninstalled"
+    return 0
+  else
+    log_error "Failed to uninstall Neovim"
     return 1
   fi
 }
@@ -40,21 +41,11 @@ uninstall_neovim() {
     return 2
   fi
   log_info "Uninstalling Neovim..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if pkg uninstall neovim -y &>>"$LOG_FILE"; then
-    log_success "Neovim uninstalled"
-    return 0
-  else
-    log_error "Failed to uninstall Neovim"
-    return 1
-  fi
+  loading "Uninstalling Neovim" _uninstall_neovim_impl
 }
 
-update_neovim() {
-  log_info "Updating Neovim..."
+_update_neovim_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
-
   if pkg upgrade neovim -y &>>"$LOG_FILE"; then
     log_success "Neovim updated"
     return 0
@@ -64,8 +55,12 @@ update_neovim() {
   fi
 }
 
+update_neovim() {
+  log_info "Updating Neovim..."
+  loading "Updating Neovim" _update_neovim_impl
+}
+
 reinstall_neovim() {
   uninstall_neovim
   install_neovim
 }
-

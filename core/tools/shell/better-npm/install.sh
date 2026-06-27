@@ -27,6 +27,19 @@ _better_npm_dependencies() {
   return 0
 }
 
+_install_better_npm_git() {
+  loading "Installing zsh-better-npm-completion" _install_better_npm_git_impl
+}
+
+_install_better_npm_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/lukechilds/zsh-better-npm-completion.git" "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" &>>"$LOG_FILE"; then
+    log_error "Failed to install zsh-better-npm-completion"
+    return 1
+  fi
+  return 0
+}
+
 install_better_npm() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" ]]; then
     log_info "zsh-better-npm-completion already installed"
@@ -35,42 +48,35 @@ install_better_npm() {
 
   _better_npm_dependencies
 
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/lukechilds/zsh-better-npm-completion.git" "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" &>>"$LOG_FILE"; then
-    log_success "zsh-better-npm-completion installed"
-    return 0
-  else
-    log_error "Failed to install zsh-better-npm-completion"
-    return 1
-  fi
+  _install_better_npm_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_better_npm() {
+_uninstall_better_npm_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" ]]; then
     log_info "zsh-better-npm-completion is not installed"
     return 0
   fi
 
-  log_info "Uninstalling zsh-better-npm-completion..."
+  rm -rf "$ZSH_PLUGINS_DIR/zsh-better-npm-completion"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/zsh-better-npm-completion"
-    log_success "zsh-better-npm-completion uninstalled"
-  else
+uninstall_better_npm() {
+  loading "Uninstalling zsh-better-npm-completion" _uninstall_better_npm_impl
+}
+
+_update_better_npm_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion/.git" ]]; then
     log_warn "zsh-better-npm-completion not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" pull &>>"$LOG_FILE"
 }
 
 update_better_npm() {
-  log_info "Updating zsh-better-npm-completion..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" pull &>>"$LOG_FILE"
-    log_success "zsh-better-npm-completion updated"
-  else
-    log_warn "zsh-better-npm-completion not installed"
-  fi
+  loading "Updating zsh-better-npm-completion" _update_better_npm_impl
 }
 
 reinstall_better_npm() {

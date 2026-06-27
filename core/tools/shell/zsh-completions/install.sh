@@ -27,6 +27,19 @@ _zsh_completions_dependencies() {
   return 0
 }
 
+_install_zsh_completions_git() {
+  loading "Installing zsh-completions" _install_zsh_completions_git_impl
+}
+
+_install_zsh_completions_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/zsh-users/zsh-completions.git" "$ZSH_PLUGINS_DIR/zsh-completions" &>>"$LOG_FILE"; then
+    log_error "Failed to install zsh-completions"
+    return 1
+  fi
+  return 0
+}
+
 install_zsh_completions() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-completions" ]]; then
     log_info "zsh-completions already installed"
@@ -35,43 +48,35 @@ install_zsh_completions() {
 
   _zsh_completions_dependencies
 
-  log_info "Installing shell prerequisites..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/zsh-users/zsh-completions.git" "$ZSH_PLUGINS_DIR/zsh-completions" &>>"$LOG_FILE"; then
-    log_success "zsh-completions installed"
-    return 0
-  else
-    log_error "Failed to install zsh-completions"
-    return 1
-  fi
+  _install_zsh_completions_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_zsh_completions() {
+_uninstall_zsh_completions_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-completions" ]]; then
     log_info "zsh-completions is not installed"
     return 0
   fi
 
-  log_info "Uninstalling zsh-completions..."
+  rm -rf "$ZSH_PLUGINS_DIR/zsh-completions"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-completions" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/zsh-completions"
-    log_success "zsh-completions uninstalled"
-  else
+uninstall_zsh_completions() {
+  loading "Uninstalling zsh-completions" _uninstall_zsh_completions_impl
+}
+
+_update_zsh_completions_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-completions/.git" ]]; then
     log_warn "zsh-completions not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/zsh-completions" pull &>>"$LOG_FILE"
 }
 
 update_zsh_completions() {
-  log_info "Updating zsh-completions..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-completions/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/zsh-completions" pull &>>"$LOG_FILE"
-    log_success "zsh-completions updated"
-  else
-    log_warn "zsh-completions not installed"
-  fi
+  loading "Updating zsh-completions" _update_zsh_completions_impl
 }
 
 reinstall_zsh_completions() {

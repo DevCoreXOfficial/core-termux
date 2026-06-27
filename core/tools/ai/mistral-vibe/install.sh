@@ -5,6 +5,10 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _mistral_vibe_dependencies() {
+  loading "Installing dependencies" _mistral_vibe_dependencies_impl
+}
+
+_mistral_vibe_dependencies_impl() {
   declare -A DEPS=(
     ["python"]="python"
     ["clang"]="clang"
@@ -30,7 +34,22 @@ _mistral_vibe_dependencies() {
   done
 
   pip install --upgrade pip setuptools wheel &>>"$LOG_FILE"
-  log_success "Python and pip prerequisites installed"
+  return 0
+}
+
+_install_mistral_vibe_pip() {
+  loading "Installing Mistral Vibe" _install_mistral_vibe_pip_impl
+}
+
+_install_mistral_vibe_pip_impl() {
+  export ANDROID_API_LEVEL=24
+  export GYP_DEFINES="android_ndk_path=''"
+
+  if ! pip install mistral-vibe &>>"$LOG_FILE"; then
+    log_error "Failed to install Mistral Vibe"
+    return 1
+  fi
+
   return 0
 }
 
@@ -42,19 +61,13 @@ install_mistral_vibe() {
 
   log_info "Installing Mistral Vibe..."
 
-  _mistral_vibe_dependencies
-  export ANDROID_API_LEVEL=24
-	export GYP_DEFINES="android_ndk_path=''"
-
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if pip install mistral-vibe &>>"$LOG_FILE"; then
-    log_success "Mistral Vibe installed"
-    return 0
-  else
-    log_error "Failed to install Mistral Vibe"
-    return 1
-  fi
+  _mistral_vibe_dependencies || return 1
+  _install_mistral_vibe_pip || return 1
+
+  log_success "Mistral Vibe installed"
+  return 0
 }
 
 uninstall_mistral_vibe() {
@@ -65,29 +78,39 @@ uninstall_mistral_vibe() {
   log_info "Uninstalling Mistral Vibe..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if pip uninstall mistral-vibe -y &>>"$LOG_FILE"; then
-    log_success "Mistral Vibe uninstalled"
-    return 0
-  else
+  loading "Removing Mistral Vibe" _uninstall_mistral_vibe_impl
+
+  log_success "Mistral Vibe uninstalled"
+  return 0
+}
+
+_uninstall_mistral_vibe_impl() {
+  if ! pip uninstall mistral-vibe -y &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Mistral Vibe"
     return 1
   fi
+  return 0
 }
 
 update_mistral_vibe() {
   log_info "Updating Mistral Vibe..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  export ANDROID_API_LEVEL=24
-	export GYP_DEFINES="android_ndk_path=''"
+  loading "Updating Mistral Vibe" _update_mistral_vibe_impl
 
-  if pip install --upgrade mistral-vibe &>>"$LOG_FILE"; then
-    log_success "Mistral Vibe updated"
-    return 0
-  else
+  log_success "Mistral Vibe updated"
+  return 0
+}
+
+_update_mistral_vibe_impl() {
+  export ANDROID_API_LEVEL=24
+  export GYP_DEFINES="android_ndk_path=''"
+
+  if ! pip install --upgrade mistral-vibe &>>"$LOG_FILE"; then
     log_error "Failed to update Mistral Vibe"
     return 1
   fi
+  return 0
 }
 
 reinstall_mistral_vibe() {

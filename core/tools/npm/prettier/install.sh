@@ -15,6 +15,18 @@ _prettier_dependencies() {
   pkg install nodejs-lts -y &>>"$LOG_FILE"
 }
 
+_install_prettier_npm() {
+  loading "Installing Prettier" _install_prettier_npm_impl
+}
+
+_install_prettier_npm_impl() {
+  if ! npm install -g prettier &>>"$LOG_FILE"; then
+    log_error "Failed to install Prettier"
+    return 1
+  fi
+  return 0
+}
+
 install_prettier() {
   if command -v prettier &>/dev/null; then
     return 0
@@ -25,13 +37,21 @@ install_prettier() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm install -g prettier &>>"$LOG_FILE"; then
-    log_success "Prettier installed"
-    return 0
-  else
-    log_error "Failed to install Prettier"
+  _install_prettier_npm || return 1
+  log_success "Prettier installed"
+  return 0
+}
+
+_uninstall_prettier_npm() {
+  loading "Uninstalling Prettier" _uninstall_prettier_npm_impl
+}
+
+_uninstall_prettier_npm_impl() {
+  if ! npm uninstall -g prettier &>>"$LOG_FILE"; then
+    log_error "Failed to uninstall Prettier"
     return 1
   fi
+  return 0
 }
 
 uninstall_prettier() {
@@ -42,30 +62,33 @@ uninstall_prettier() {
   log_info "Uninstalling Prettier..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g prettier &>>"$LOG_FILE"; then
-    log_success "Prettier uninstalled"
-    return 0
-  else
-    log_error "Failed to uninstall Prettier"
+  _uninstall_prettier_npm || return 1
+  log_success "Prettier uninstalled"
+  return 0
+}
+
+_update_prettier_npm() {
+  loading "Updating Prettier" _update_prettier_npm_impl
+}
+
+_update_prettier_npm_impl() {
+  if ! npm update -g prettier &>>"$LOG_FILE"; then
+    log_error "Failed to update Prettier"
     return 1
   fi
+  return 0
 }
 
 update_prettier() {
   log_info "Updating Prettier..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm update -g prettier &>>"$LOG_FILE"; then
-    log_success "Prettier updated"
-    return 0
-  else
-    log_error "Failed to update Prettier"
-    return 1
-  fi
+  _update_prettier_npm || return 1
+  log_success "Prettier updated"
+  return 0
 }
 
 reinstall_prettier() {
   uninstall_prettier
   install_prettier
 }
-

@@ -27,6 +27,19 @@ _zsh_defer_dependencies() {
   return 0
 }
 
+_install_zsh_defer_git() {
+  loading "Installing zsh-defer" _install_zsh_defer_git_impl
+}
+
+_install_zsh_defer_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/romkatv/zsh-defer.git" "$ZSH_PLUGINS_DIR/zsh-defer" &>>"$LOG_FILE"; then
+    log_error "Failed to install zsh-defer"
+    return 1
+  fi
+  return 0
+}
+
 install_zsh_defer() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-defer" ]]; then
     log_info "zsh-defer already installed"
@@ -35,43 +48,35 @@ install_zsh_defer() {
 
   _zsh_defer_dependencies
 
-  log_info "Installing shell prerequisites..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/romkatv/zsh-defer.git" "$ZSH_PLUGINS_DIR/zsh-defer" &>>"$LOG_FILE"; then
-    log_success "zsh-defer installed"
-    return 0
-  else
-    log_error "Failed to install zsh-defer"
-    return 1
-  fi
+  _install_zsh_defer_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_zsh_defer() {
+_uninstall_zsh_defer_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-defer" ]]; then
     log_info "zsh-defer is not installed"
     return 2
   fi
 
-  log_info "Uninstalling zsh-defer..."
+  rm -rf "$ZSH_PLUGINS_DIR/zsh-defer"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-defer" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/zsh-defer"
-    log_success "zsh-defer uninstalled"
-  else
+uninstall_zsh_defer() {
+  loading "Uninstalling zsh-defer" _uninstall_zsh_defer_impl
+}
+
+_update_zsh_defer_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-defer/.git" ]]; then
     log_warn "zsh-defer not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/zsh-defer" pull &>>"$LOG_FILE"
 }
 
 update_zsh_defer() {
-  log_info "Updating zsh-defer..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-defer/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/zsh-defer" pull &>>"$LOG_FILE"
-    log_success "zsh-defer updated"
-  else
-    log_warn "zsh-defer not installed"
-  fi
+  loading "Updating zsh-defer" _update_zsh_defer_impl
 }
 
 reinstall_zsh_defer() {

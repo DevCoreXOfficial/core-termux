@@ -136,6 +136,7 @@ _list_ai() {
   table_row "GGA" "--gga" "gga" "$(_check_cmd "gga")"
   table_row "Hermes Agent" "--hermes-agent" "hermes" "$(_check_cmd "hermes")"
   table_row "Kimi Code" "--kimi-code" "kimi" "$(_check_cmd "kimi")"
+  table_row "Command Code" "--command-code" "cmdc" "$(_check_cmd "command-code")"
   table_end
 
   echo
@@ -263,7 +264,7 @@ _list_ui() {
 
   table_start "Component" "Install Flag" "Status"
   table_row "Meslo Nerd Font" "--font" "$(_check_file "$HOME/.termux/font.ttf")"
-  table_row "Extra Keys" "--extra-keys" "$(_check_file "$HOME/.termux/termux.properties")"
+  table_row "Extra Keys" "--extra-keys" "$(_check_extra_keys)"
   table_row "Cursor Color" "--cursor" "$(_check_file "$HOME/.termux/colors.properties")"
   table_row "Startup Banner" "--banner" "$(_grep_config "$HOME/.zshrc" "# ===== Core-Termux Banner =====" "$HOME/.bashrc")"
   table_end
@@ -328,6 +329,15 @@ _check_dir() {
 _check_file() {
   local file="$1"
   if [[ -f "$file" ]]; then
+    echo -e "${D_GREEN}installed${NC}"
+  else
+    echo -e "${D_RED}not installed${NC}"
+  fi
+}
+
+# Check if extra-keys are configured by core-termux
+_check_extra_keys() {
+  if grep -qF "terminal-cursor-blink-rate=500" "$HOME/.termux/termux.properties" 2>/dev/null; then
     echo -e "${D_GREEN}installed${NC}"
   else
     echo -e "${D_RED}not installed${NC}"

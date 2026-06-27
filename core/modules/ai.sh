@@ -42,6 +42,7 @@ install_ai() {
   list_item "GGA ${GRAY}(${D_GREEN}gga${GRAY})"
   list_item "Hermes Agent ${GRAY}(${D_GREEN}hermes${GRAY})"
   list_item "Kimi Code ${GRAY}(${D_GREEN}kimi${GRAY})"
+  list_item "Command Code ${GRAY}(${D_GREEN}command-code${GRAY})"
   echo
 }
 
@@ -119,6 +120,8 @@ reinstall_ai() {
   list_item "Gentle AI"
   list_item "GGA"
   list_item "Hermes Agent"
+  list_item "Kimi Code"
+  list_item "Command Code"
   echo
 }
 

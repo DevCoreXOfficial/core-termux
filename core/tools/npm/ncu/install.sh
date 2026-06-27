@@ -15,6 +15,18 @@ _ncu_dependencies() {
   pkg install nodejs-lts -y &>>"$LOG_FILE"
 }
 
+_install_ncu_npm() {
+  loading "Installing NPM Check Updates" _install_ncu_npm_impl
+}
+
+_install_ncu_npm_impl() {
+  if ! npm install -g npm-check-updates &>>"$LOG_FILE"; then
+    log_error "Failed to install NPM Check Updates"
+    return 1
+  fi
+  return 0
+}
+
 install_ncu() {
   if command -v ncu &>/dev/null; then
     return 0
@@ -25,13 +37,21 @@ install_ncu() {
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm install -g npm-check-updates &>>"$LOG_FILE"; then
-    log_success "NPM Check Updates installed"
-    return 0
-  else
-    log_error "Failed to install NPM Check Updates"
+  _install_ncu_npm || return 1
+  log_success "NPM Check Updates installed"
+  return 0
+}
+
+_uninstall_ncu_npm() {
+  loading "Uninstalling NPM Check Updates" _uninstall_ncu_npm_impl
+}
+
+_uninstall_ncu_npm_impl() {
+  if ! npm uninstall -g npm-check-updates &>>"$LOG_FILE"; then
+    log_error "Failed to uninstall NPM Check Updates"
     return 1
   fi
+  return 0
 }
 
 uninstall_ncu() {
@@ -42,30 +62,33 @@ uninstall_ncu() {
   log_info "Uninstalling NPM Check Updates..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g npm-check-updates &>>"$LOG_FILE"; then
-    log_success "NPM Check Updates uninstalled"
-    return 0
-  else
-    log_error "Failed to uninstall NPM Check Updates"
+  _uninstall_ncu_npm || return 1
+  log_success "NPM Check Updates uninstalled"
+  return 0
+}
+
+_update_ncu_npm() {
+  loading "Updating NPM Check Updates" _update_ncu_npm_impl
+}
+
+_update_ncu_npm_impl() {
+  if ! npm update -g npm-check-updates &>>"$LOG_FILE"; then
+    log_error "Failed to update NPM Check Updates"
     return 1
   fi
+  return 0
 }
 
 update_ncu() {
   log_info "Updating NPM Check Updates..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm update -g npm-check-updates &>>"$LOG_FILE"; then
-    log_success "NPM Check Updates updated"
-    return 0
-  else
-    log_error "Failed to update NPM Check Updates"
-    return 1
-  fi
+  _update_ncu_npm || return 1
+  log_success "NPM Check Updates updated"
+  return 0
 }
 
 reinstall_ncu() {
   uninstall_ncu
   install_ncu
 }
-

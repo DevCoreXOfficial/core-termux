@@ -15,7 +15,7 @@ install_editor() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	_install_editor_deps
+	loading "Installing Neovim dependencies" _install_editor_deps
 	log_success "Neovim dependencies installed"
 
 	_install_editor_wrapper

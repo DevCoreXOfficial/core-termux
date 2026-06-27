@@ -5,6 +5,10 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _kimi_code_dependencies() {
+  loading "Installing dependencies" _kimi_code_dependencies_impl
+}
+
+_kimi_code_dependencies_impl() {
   declare -A DEPS=(
     ["nodejs-lts"]="node"
     ["git"]="git"
@@ -22,7 +26,19 @@ _kimi_code_dependencies() {
     fi
   done
 
-  log_success "Dependencies installed"
+  return 0
+}
+
+_install_kimi_code_npm() {
+  loading "Installing Kimi Code" _install_kimi_code_npm_impl
+}
+
+_install_kimi_code_npm_impl() {
+  if ! npm install -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
+    log_error "Failed to install Kimi Code"
+    return 1
+  fi
+
   return 0
 }
 
@@ -34,20 +50,13 @@ install_kimi_code() {
 
   log_info "Installing Kimi Code..."
 
-  if _kimi_code_dependencies; then
-    mkdir -p "$(dirname "$LOG_FILE")"
+  mkdir -p "$(dirname "$LOG_FILE")"
 
-    if npm install -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
-      log_success "Kimi Code installed successfully"
-      return 0
-    else
-      log_error "Failed to install Kimi Code"
-      return 1
-    fi
-  else
-    log_error "Failed to install prerequisites for Kimi Code"
-    return 1
-  fi
+  _kimi_code_dependencies || return 1
+  _install_kimi_code_npm || return 1
+
+  log_success "Kimi Code installed successfully"
+  return 0
 }
 
 uninstall_kimi_code() {
@@ -59,13 +68,18 @@ uninstall_kimi_code() {
   log_info "Uninstalling Kimi Code..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
-    log_success "Kimi Code uninstalled successfully"
-    return 0
-  else
+  loading "Removing Kimi Code" _uninstall_kimi_code_impl
+
+  log_success "Kimi Code uninstalled successfully"
+  return 0
+}
+
+_uninstall_kimi_code_impl() {
+  if ! npm uninstall -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Kimi Code"
     return 1
   fi
+  return 0
 }
 
 update_kimi_code() {
@@ -77,13 +91,18 @@ update_kimi_code() {
   log_info "Updating Kimi Code..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm update -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
-    log_success "Kimi Code updated successfully"
-    return 0
-  else
+  loading "Updating Kimi Code" _update_kimi_code_impl
+
+  log_success "Kimi Code updated successfully"
+  return 0
+}
+
+_update_kimi_code_impl() {
+  if ! npm update -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
     log_error "Failed to update Kimi Code"
     return 1
   fi
+  return 0
 }
 
 reinstall_kimi_code() {

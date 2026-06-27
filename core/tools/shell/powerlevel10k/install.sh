@@ -27,51 +27,56 @@ _powerlevel10k_dependencies() {
   return 0
 }
 
+_install_powerlevel10k_git() {
+  loading "Installing powerlevel10k" _install_powerlevel10k_git_impl
+}
+
+_install_powerlevel10k_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/romkatv/powerlevel10k.git" "$ZSH_PLUGINS_DIR/powerlevel10k" &>>"$LOG_FILE"; then
+    log_error "Failed to install powerlevel10k"
+    return 1
+  fi
+  return 0
+}
+
 install_powerlevel10k() {
   if [[ -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then
     log_info "powerlevel10k already installed"
     return 0
   fi
-  log_info "Installing powerlevel10k..."
 
   _powerlevel10k_dependencies
 
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/romkatv/powerlevel10k.git" "$ZSH_PLUGINS_DIR/powerlevel10k" &>>"$LOG_FILE"; then
-    log_success "powerlevel10k installed"
-    return 0
-  else
-    log_error "Failed to install powerlevel10k"
-    return 1
-  fi
+  _install_powerlevel10k_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_powerlevel10k() {
+_uninstall_powerlevel10k_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then
     log_info "powerlevel10k is not installed"
     return 0
   fi
 
-  log_info "Uninstalling powerlevel10k..."
+  rm -rf "$ZSH_PLUGINS_DIR/powerlevel10k"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/powerlevel10k"
-    log_success "powerlevel10k uninstalled"
-  else
+uninstall_powerlevel10k() {
+  loading "Uninstalling powerlevel10k" _uninstall_powerlevel10k_impl
+}
+
+_update_powerlevel10k_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/powerlevel10k/.git" ]]; then
     log_warn "powerlevel10k not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/powerlevel10k" pull &>>"$LOG_FILE"
 }
 
 update_powerlevel10k() {
-  log_info "Updating powerlevel10k..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/powerlevel10k/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/powerlevel10k" pull &>>"$LOG_FILE"
-    log_success "powerlevel10k updated"
-  else
-    log_warn "powerlevel10k not installed"
-  fi
+  loading "Updating powerlevel10k" _update_powerlevel10k_impl
 }
 
 reinstall_powerlevel10k() {

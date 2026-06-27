@@ -27,6 +27,19 @@ _you_should_use_dependencies() {
   return 0
 }
 
+_install_you_should_use_git() {
+  loading "Installing zsh-you-should-use" _install_you_should_use_git_impl
+}
+
+_install_you_should_use_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/MichaelAquilina/zsh-you-should-use.git" "$ZSH_PLUGINS_DIR/zsh-you-should-use" &>>"$LOG_FILE"; then
+    log_error "Failed to install zsh-you-should-use"
+    return 1
+  fi
+  return 0
+}
+
 install_you_should_use() {
   if [[ -d "$ZSH_PLUGINS_DIR/zsh-you-should-use" ]]; then
     log_info "zsh-you-should-use already installed"
@@ -35,43 +48,35 @@ install_you_should_use() {
 
   _you_should_use_dependencies
 
-  log_info "Installing shell prerequisites..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/MichaelAquilina/zsh-you-should-use.git" "$ZSH_PLUGINS_DIR/zsh-you-should-use" &>>"$LOG_FILE"; then
-    log_success "zsh-you-should-use installed"
-    return 0
-  else
-    log_error "Failed to install zsh-you-should-use"
-    return 1
-  fi
+  _install_you_should_use_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_you_should_use() {
+_uninstall_you_should_use_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-you-should-use" ]]; then
     log_info "zsh-you-should-use is not installed"
     return 0
   fi
 
-  log_info "Uninstalling zsh-you-should-use..."
+  rm -rf "$ZSH_PLUGINS_DIR/zsh-you-should-use"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-you-should-use" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/zsh-you-should-use"
-    log_success "zsh-you-should-use uninstalled"
-  else
+uninstall_you_should_use() {
+  loading "Uninstalling zsh-you-should-use" _uninstall_you_should_use_impl
+}
+
+_update_you_should_use_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-you-should-use/.git" ]]; then
     log_warn "zsh-you-should-use not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/zsh-you-should-use" pull &>>"$LOG_FILE"
 }
 
 update_you_should_use() {
-  log_info "Updating zsh-you-should-use..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-you-should-use/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/zsh-you-should-use" pull &>>"$LOG_FILE"
-    log_success "zsh-you-should-use updated"
-  else
-    log_warn "zsh-you-should-use not installed"
-  fi
+  loading "Updating zsh-you-should-use" _update_you_should_use_impl
 }
 
 reinstall_you_should_use() {

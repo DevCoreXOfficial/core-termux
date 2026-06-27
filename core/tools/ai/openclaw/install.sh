@@ -5,6 +5,10 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
 _openclaw_dependencies() {
+  loading "Installing dependencies" _openclaw_dependencies_impl
+}
+
+_openclaw_dependencies_impl() {
   declare -A DEPS=(
     ["nodejs-lts"]="node"
     ["git"]="git"
@@ -22,7 +26,24 @@ _openclaw_dependencies() {
     fi
   done
 
-  log_success "Dependencies installed"
+  return 0
+}
+
+_install_openclaw_npm() {
+  loading "Installing OpenClaw and dependencies" _install_openclaw_npm_impl
+}
+
+_install_openclaw_npm_impl() {
+  export GYP_DEFINES="android_ndk_path=''"
+  export ANDROID_API_LEVEL=24
+
+  npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
+  if ! npm install -g openclaw@latest &>>"$LOG_FILE"; then
+    log_error "Failed to install OpenClaw"
+    return 1
+  fi
+
   return 0
 }
 
@@ -33,21 +54,13 @@ install_openclaw() {
   fi
   log_info "Installing OpenClaw..."
 
-  _openclaw_dependencies
-
-  npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
-
   mkdir -p "$(dirname "$LOG_FILE")"
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
 
-  if npm install -g openclaw@latest &>>"$LOG_FILE"; then
-    log_success "OpenClaw installed"
-    return 0
-  else
-    log_error "Failed to install OpenClaw"
-    return 1
-  fi
+  _openclaw_dependencies || return 1
+  _install_openclaw_npm || return 1
+
+  log_success "OpenClaw installed"
+  return 0
 }
 
 uninstall_openclaw() {
@@ -58,28 +71,39 @@ uninstall_openclaw() {
   log_info "Uninstalling OpenClaw..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if npm uninstall -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
-    log_success "OpenClaw uninstalled"
-    return 0
-  else
+  loading "Removing OpenClaw" _uninstall_openclaw_impl
+
+  log_success "OpenClaw uninstalled"
+  return 0
+}
+
+_uninstall_openclaw_impl() {
+  if ! npm uninstall -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
     log_error "Failed to uninstall OpenClaw"
     return 1
   fi
+  return 0
 }
 
 update_openclaw() {
   log_info "Updating OpenClaw..."
   mkdir -p "$(dirname "$LOG_FILE")"
+
+  loading "Updating OpenClaw" _update_openclaw_impl
+
+  log_success "OpenClaw updated"
+  return 0
+}
+
+_update_openclaw_impl() {
   export GYP_DEFINES="android_ndk_path=''"
   export ANDROID_API_LEVEL=24
 
-  if npm update -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
-    log_success "OpenClaw updated"
-    return 0
-  else
+  if ! npm update -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
     log_error "Failed to update OpenClaw"
     return 1
   fi
+  return 0
 }
 
 reinstall_openclaw() {

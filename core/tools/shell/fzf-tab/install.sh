@@ -27,6 +27,19 @@ _fzf_tab_dependencies() {
   return 0
 }
 
+_install_fzf_tab_git() {
+  loading "Installing fzf-tab" _install_fzf_tab_git_impl
+}
+
+_install_fzf_tab_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/Aloxaf/fzf-tab.git" "$ZSH_PLUGINS_DIR/fzf-tab" &>>"$LOG_FILE"; then
+    log_error "Failed to install fzf-tab"
+    return 1
+  fi
+  return 0
+}
+
 install_fzf_tab() {
   if [[ -d "$ZSH_PLUGINS_DIR/fzf-tab" ]]; then
     log_info "fzf-tab already installed"
@@ -35,43 +48,35 @@ install_fzf_tab() {
 
   _fzf_tab_dependencies
 
-  log_info "Installing shell prerequisites..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/Aloxaf/fzf-tab.git" "$ZSH_PLUGINS_DIR/fzf-tab" &>>"$LOG_FILE"; then
-    log_success "fzf-tab installed"
-    return 0
-  else
-    log_error "Failed to install fzf-tab"
-    return 1
-  fi
+  _install_fzf_tab_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_fzf_tab() {
+_uninstall_fzf_tab_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/fzf-tab" ]]; then
     log_info "fzf-tab is not installed"
     return 0
   fi
 
-  log_info "Uninstalling fzf-tab..."
+  rm -rf "$ZSH_PLUGINS_DIR/fzf-tab"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/fzf-tab" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/fzf-tab"
-    log_success "fzf-tab uninstalled"
-  else
+uninstall_fzf_tab() {
+  loading "Uninstalling fzf-tab" _uninstall_fzf_tab_impl
+}
+
+_update_fzf_tab_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/fzf-tab/.git" ]]; then
     log_warn "fzf-tab not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/fzf-tab" pull &>>"$LOG_FILE"
 }
 
 update_fzf_tab() {
-  log_info "Updating fzf-tab..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/fzf-tab/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/fzf-tab" pull &>>"$LOG_FILE"
-    log_success "fzf-tab updated"
-  else
-    log_warn "fzf-tab not installed"
-  fi
+  loading "Updating fzf-tab" _update_fzf_tab_impl
 }
 
 reinstall_fzf_tab() {

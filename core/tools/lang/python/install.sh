@@ -4,6 +4,18 @@ import "@/utils/log"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
+_install_python_pkg() {
+	loading "Installing Python" _install_python_pkg_impl
+}
+
+_install_python_pkg_impl() {
+	if ! pkg install python -y &>>"$LOG_FILE"; then
+		log_error "Failed to install Python"
+		return 1
+	fi
+	return 0
+}
+
 install_python() {
 	if command -v python &>/dev/null; then
 		log_info "Python is already installed"
@@ -12,12 +24,21 @@ install_python() {
 	log_info "Installing Python..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install python -y &>>"$LOG_FILE"; then
-		log_success "Python installed"
-		return 0
-	else
+	_install_python_pkg || return 1
+	log_success "Python installed"
+	return 0
+}
+
+_uninstall_python_pkg() {
+	loading "Uninstalling Python" _uninstall_python_pkg_impl
+}
+
+_uninstall_python_pkg_impl() {
+	if ! pkg uninstall python -y &>>"$LOG_FILE"; then
+		log_error "Failed to uninstall Python"
 		return 1
 	fi
+	return 0
 }
 
 uninstall_python() {
@@ -27,25 +48,29 @@ uninstall_python() {
 	fi
 	log_info "Uninstalling Python..."
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg uninstall python -y &>>"$LOG_FILE"; then
-		log_success "Python uninstalled"
-		return 0
-	else
-		log_error "Failed to uninstall Python"
+	_uninstall_python_pkg || return 1
+	log_success "Python uninstalled"
+	return 0
+}
+
+_update_python_pkg() {
+	loading "Updating Python" _update_python_pkg_impl
+}
+
+_update_python_pkg_impl() {
+	if ! pkg upgrade python -y &>>"$LOG_FILE"; then
+		log_error "Failed to update Python"
 		return 1
 	fi
+	return 0
 }
 
 update_python() {
 	log_info "Updating Python..."
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade python -y &>>"$LOG_FILE"; then
-		log_success "Python updated"
-		return 0
-	else
-		log_error "Failed to update Python"
-		return 1
-	fi
+	_update_python_pkg || return 1
+	log_success "Python updated"
+	return 0
 }
 
 reinstall_python() {

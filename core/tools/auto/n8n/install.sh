@@ -31,12 +31,7 @@ _n8n_dependencies() {
   return 0
 }
 
-install_n8n() {
-  if command -v n8n &>/dev/null; then
-    return 0
-  fi
-  log_info "Installing n8n..."
-
+_install_n8n_impl() {
   _n8n_dependencies
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -52,12 +47,16 @@ install_n8n() {
   fi
 }
 
-uninstall_n8n() {
-  if ! command -v n8n &>/dev/null; then
-    log_info "n8n is not installed"
+install_n8n() {
+  if command -v n8n &>/dev/null; then
+    log_info "n8n is already installed"
     return 0
   fi
-  log_info "Uninstalling n8n..."
+  log_info "Installing n8n..."
+  loading "Installing n8n" _install_n8n_impl
+}
+
+_uninstall_n8n_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if npm uninstall -g n8n &>>"$LOG_FILE"; then
@@ -69,8 +68,16 @@ uninstall_n8n() {
   fi
 }
 
-update_n8n() {
-  log_info "Updating n8n..."
+uninstall_n8n() {
+  if ! command -v n8n &>/dev/null; then
+    log_info "n8n is not installed"
+    return 0
+  fi
+  log_info "Uninstalling n8n..."
+  loading "Uninstalling n8n" _uninstall_n8n_impl
+}
+
+_update_n8n_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
   export GYP_DEFINES="android_ndk_path=''"
   export ANDROID_API_LEVEL=24
@@ -84,8 +91,12 @@ update_n8n() {
   fi
 }
 
+update_n8n() {
+  log_info "Updating n8n..."
+  loading "Updating n8n" _update_n8n_impl
+}
+
 reinstall_n8n() {
   uninstall_n8n
   install_n8n
 }
-

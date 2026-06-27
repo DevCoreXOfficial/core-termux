@@ -5,14 +5,7 @@ import "@/utils/log"
 LOG_FILE="$CORE_CACHE/install_ui.log"
 TERMUX_DIR="$HOME/.termux"
 
-install_cursor() {
-	if [[ -f "$TERMUX_DIR/colors.properties" ]]; then
-		log_info "Cursor Color ${D_GREEN}already configured${NC}"
-		return 0
-	fi
-	log_info "Installing Cursor Color..."
-
-	log_info "Configuring cursor color..."
+_install_cursor_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")" "$TERMUX_DIR"
 
 	cat >"$TERMUX_DIR/colors.properties" <<'EOF'
@@ -23,13 +16,16 @@ EOF
 	return 0
 }
 
-uninstall_cursor() {
-	if [[ ! -f "$TERMUX_DIR/colors.properties" ]]; then
-		log_info "Cursor Color is not installed"
+install_cursor() {
+	if [[ -f "$TERMUX_DIR/colors.properties" ]]; then
+		log_info "Cursor Color already configured"
 		return 0
 	fi
-	log_info "Uninstalling Cursor Color..."
+	log_info "Installing Cursor Color..."
+	loading "Installing Cursor Color" _install_cursor_impl
+}
 
+_uninstall_cursor_impl() {
 	if [[ -f "$TERMUX_DIR/colors.properties" ]]; then
 		rm "$TERMUX_DIR/colors.properties"
 		log_success "Cursor Color uninstalled"
@@ -38,9 +34,22 @@ uninstall_cursor() {
 	fi
 }
 
+uninstall_cursor() {
+	if [[ ! -f "$TERMUX_DIR/colors.properties" ]]; then
+		log_info "Cursor Color is not installed"
+		return 0
+	fi
+	log_info "Uninstalling Cursor Color..."
+	loading "Uninstalling Cursor Color" _uninstall_cursor_impl
+}
+
+_update_cursor_impl() {
+	install_cursor
+}
+
 update_cursor() {
 	log_info "Updating Cursor Color..."
-	install_cursor
+	loading "Updating Cursor Color" _update_cursor_impl
 }
 
 reinstall_cursor() {

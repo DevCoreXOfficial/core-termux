@@ -6,15 +6,25 @@ LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
 
 _zsh_syntax_highlighting_dependencies() {
-  log_info "Installing shell prerequisites..."
   if command -v git &>/dev/null && command -v zsh &>/dev/null; then
-    log_info "Git and ZSH are already installed"
     return 0
   fi
 
-  log_info "Installing shell dependencies..."
   mkdir -p "$(dirname "$LOG_FILE")"
   pkg install zsh zoxide git -y &>>"$LOG_FILE"
+}
+
+_install_zsh_syntax_highlighting_git() {
+  loading "Installing zsh-syntax-highlighting" _install_zsh_syntax_highlighting_git_impl
+}
+
+_install_zsh_syntax_highlighting_git_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  if ! git clone --depth=1 "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" &>>"$LOG_FILE"; then
+    log_error "Failed to install zsh-syntax-highlighting"
+    return 1
+  fi
+  return 0
 }
 
 install_zsh_syntax_highlighting() {
@@ -25,43 +35,35 @@ install_zsh_syntax_highlighting() {
 
   _zsh_syntax_highlighting_dependencies
 
-  log_info "Installing shell prerequisites..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  if git clone --depth=1 "https://github.com/zsh-users/zsh-syntax-highlighting.git" "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" &>>"$LOG_FILE"; then
-    log_success "zsh-syntax-highlighting installed"
-    return 0
-  else
-    log_error "Failed to install zsh-syntax-highlighting"
-    return 1
-  fi
+  _install_zsh_syntax_highlighting_git || return 1
+  log_success "Installed"
+  return 0
 }
 
-uninstall_zsh_syntax_highlighting() {
+_uninstall_zsh_syntax_highlighting_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" ]]; then
     log_info "zsh-syntax-highlighting is not installed"
     return 0
   fi
 
-  log_info "Uninstalling zsh-syntax-highlighting..."
+  rm -rf "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting"
+}
 
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" ]]; then
-    rm -rf "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting"
-    log_success "zsh-syntax-highlighting uninstalled"
-  else
+uninstall_zsh_syntax_highlighting() {
+  loading "Uninstalling zsh-syntax-highlighting" _uninstall_zsh_syntax_highlighting_impl
+}
+
+_update_zsh_syntax_highlighting_impl() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/.git" ]]; then
     log_warn "zsh-syntax-highlighting not installed"
+    return 0
   fi
+
+  git -C "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" pull &>>"$LOG_FILE"
 }
 
 update_zsh_syntax_highlighting() {
-  log_info "Updating zsh-syntax-highlighting..."
-
-  if [[ -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/.git" ]]; then
-    git -C "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" pull &>>"$LOG_FILE"
-    log_success "zsh-syntax-highlighting updated"
-  else
-    log_warn "zsh-syntax-highlighting not installed"
-  fi
+  loading "Updating zsh-syntax-highlighting" _update_zsh_syntax_highlighting_impl
 }
 
 reinstall_zsh_syntax_highlighting() {

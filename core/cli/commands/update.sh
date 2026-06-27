@@ -129,79 +129,83 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       qwen-code)
-        loading "Updating Qwen Code" update_qwen_code
+        update_qwen_code
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       gemini-cli)
-        loading "Updating Gemini CLI" update_gemini_cli
+        update_gemini_cli
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       claude-code)
-        loading "Updating Claude Code" update_claude_code
+        update_claude_code
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mistral-vibe)
-        loading "Updating Mistral Vibe" update_mistral_vibe
+        update_mistral_vibe
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       openclaude)
-        loading "Updating OpenClaude" update_openclaude
+        update_openclaude
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       openclaw)
-        loading "Updating OpenClaw" update_openclaw
+        update_openclaw
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ollama)
-        loading "Updating Ollama" update_ollama
+        update_ollama
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       codex)
-        loading "Updating Codex" update_codex
+        update_codex
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       opencode)
-        loading "Updating OpenCode" update_opencode
+        update_opencode
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mimocode)
-        loading "Updating MiMo Code" update_mimocode
+        update_mimocode
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       engram)
-        loading "Updating Engram" update_engram
+        update_engram
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       codegraph)
-        loading "Updating CodeGraph" update_codegraph
+        update_codegraph
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       pi)
-        loading "Updating Pi Coding Agent" update_pi
+        update_pi
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       antigravity-cli)
-        loading "Updating Antigravity CLI" update_antigravity_cli
+        update_antigravity_cli
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       minimax-cli)
-        loading "Updating Minimax CLI" update_minimax_cli
+        update_minimax_cli
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       gentle-ai)
-        loading "Updating gentle-ai" update_gentle_ai
+        update_gentle_ai
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       gga)
-        loading "Updating GGA" update_gga
+        update_gga
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       hermes-agent)
-        loading "Updating Hermes Agent" update_hermes_agent
+        update_hermes_agent
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       kimi-code)
-        loading "Updating Kimi Code" update_kimi_code
+        update_kimi_code
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
+      command-code)
+        update_command_code
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -227,19 +231,19 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       postgresql)
-        loading "Updating PostgreSQL" update_postgresql
+        update_postgresql
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mariadb)
-        loading "Updating MariaDB" update_mariadb
+        update_mariadb
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       sqlite)
-        loading "Updating SQLite" update_sqlite
+        update_sqlite
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       mongodb)
-        loading "Updating MongoDB" update_mongodb
+        update_mongodb
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -265,79 +269,79 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       gh)
-        loading "Updating GitHub CLI" update_gh
+        update_gh
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       wget)
-        loading "Updating Wget" update_wget
+        update_wget
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       curl)
-        loading "Updating Curl" update_curl
+        update_curl
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       lsd)
-        loading "Updating LSD" update_lsd
+        update_lsd
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       bat)
-        loading "Updating Bat" update_bat
+        update_bat
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       proot)
-        loading "Updating Proot" update_proot
+        update_proot
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ncurses)
-        loading "Updating Ncurses Utils" update_ncurses
+        update_ncurses
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       tmate)
-        loading "Updating Tmate" update_tmate
+        update_tmate
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)
-        loading "Updating Cloudflared" update_cloudflared
+        update_cloudflared
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       translate)
-        loading "Updating Translate Shell" update_translate
+        update_translate
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       html2text)
-        loading "Updating html2text" update_html2text
+        update_html2text
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       jq)
-        loading "Updating jq" update_jq
+        update_jq
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       bc)
-        loading "Updating bc" update_bc
+        update_bc
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       tree)
-        loading "Updating Tree" update_tree
+        update_tree
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       fzf)
-        loading "Updating Fzf" update_fzf
+        update_fzf
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       imagemagick)
-        loading "Updating ImageMagick" update_imagemagick
+        update_imagemagick
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       shfmt)
-        loading "Updating Shfmt" update_shfmt
+        update_shfmt
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       make)
-        loading "Updating Make" update_make
+        update_make
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       udocker)
-        loading "Updating Udocker" update_udocker
+        update_udocker
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -363,43 +367,43 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       typescript)
-        loading "Updating TypeScript" update_typescript
+        update_typescript
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       nestjs)
-        loading "Updating NestJS CLI" update_nestjs
+        update_nestjs
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       prettier)
-        loading "Updating Prettier" update_prettier
+        update_prettier
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       live-server)
-        loading "Updating Live Server" update_live_server
+        update_live_server
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       localtunnel)
-        loading "Updating Localtunnel" update_localtunnel
+        update_localtunnel
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       vercel)
-        loading "Updating Vercel CLI" update_vercel
+        update_vercel
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       markserv)
-        loading "Updating Markserv" update_markserv
+        update_markserv
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       psqlformat)
-        loading "Updating PSQL Format" update_psqlformat
+        update_psqlformat
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ncu)
-        loading "Updating NPM Check Updates" update_ncu
+        update_ncu
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       ngrok)
-        loading "Updating Ngrok" update_ngrok
+        update_ngrok
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -425,31 +429,31 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       nodejs)
-        loading "Updating Node.js LTS" update_npmjs
+        update_npmjs
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       python)
-        loading "Updating Python" update_python
+        update_python
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       perl)
-        loading "Updating Perl" update_perl
+        update_perl
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       php)
-        loading "Updating PHP" update_php
+        update_php
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       rust)
-        loading "Updating Rust" update_rust
+        update_rust
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       clang)
-        loading "Updating C/C++ (clang)" update_clang
+        update_clang
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       golang)
-        loading "Updating Go (golang)" update_golang
+        update_golang
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -475,43 +479,43 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       powerlevel10k)
-        loading "Updating powerlevel10k" update_powerlevel10k
+        update_powerlevel10k
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-defer)
-        loading "Updating zsh-defer" update_zsh_defer
+        update_zsh_defer
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autosuggestions)
-        loading "Updating zsh-autosuggestions" update_zsh_autosuggestions
+        update_zsh_autosuggestions
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-syntax-highlighting)
-        loading "Updating zsh-syntax-highlighting" update_zsh_syntax_highlighting
+        update_zsh_syntax_highlighting
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       history-substring)
-        loading "Updating zsh-history-substring-search" update_history_substring
+        update_history_substring
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-completions)
-        loading "Updating zsh-completions" update_zsh_completions
+        update_zsh_completions
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       fzf-tab)
-        loading "Updating fzf-tab" update_fzf_tab
+        update_fzf_tab
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       you-should-use)
-        loading "Updating zsh-you-should-use" update_you_should_use
+        update_you_should_use
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       zsh-autopair)
-        loading "Updating zsh-autopair" update_zsh_autopair
+        update_zsh_autopair
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       better-npm)
-        loading "Updating zsh-better-npm-completion" update_better_npm
+        update_better_npm
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -537,11 +541,11 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       neovim)
-        loading "Updating Neovim" update_neovim
+        update_neovim
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       nvchad)
-        loading "Updating NvChad" update_nvchad
+        update_nvchad
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -567,19 +571,19 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       font)
-        loading "Updating Meslo Nerd Font" update_font
+        update_font
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       extra-keys)
-        loading "Updating Extra Keys" update_extra_keys
+        update_extra_keys
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       cursor)
-        loading "Updating Cursor Color" update_cursor
+        update_cursor
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       banner)
-        loading "Updating Core-Termux Banner" update_banner
+        update_banner
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
@@ -605,7 +609,7 @@ _update_specific_tools() {
     for tool in "${tools[@]}"; do
       case "$tool" in
       n8n)
-        loading "Updating n8n" update_n8n
+        update_n8n
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       *)
