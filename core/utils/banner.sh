@@ -96,6 +96,7 @@ CORE_TIPS=(
 	"Install GGA code review: ${D_CYAN}core install ai --gga${NC}"
 	"Install MiniMax CLI: ${D_CYAN}core install ai --minimax-cli${NC}"
 	"Install Command Code: ${D_CYAN}core install ai --command-code${NC}"
+	"Install Freebuff: ${D_CYAN}core install ai --freebuff${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"

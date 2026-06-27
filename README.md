@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.3.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.4.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -133,6 +133,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Hermes Agent** | `--hermes-agent` | The self-improving AI agent built by Nous Research |
 | **Kimi Code** | `--kimi-code` | Kimi Code CLI — The Starting Point for Next-Gen Agents |
 | **Command Code** | `--command-code` | The coding agent that learns your coding taste |
+| **Freebuff** | `--freebuff` | A 100% free coding agent, right from your terminal |
 
 ---
 
@@ -148,7 +149,7 @@ core --version
 
 **Output:**
 ```
-4.3.0
+4.4.0
 ```
 
 ---
@@ -918,7 +919,12 @@ core-termux/
 │   │   │   │   ├── install.sh
 │   │   │   │   ├── bin/opencode
 │   │   │   │   └── README.md
-│   │   │   └── ... (12 tools, each with own directory)
+│   │   │   ├── freebuff/
+│   │   │   │   ├── install.sh
+│   │   │   │   ├── bin/freebuff
+│   │   │   │   ├── helper/freebuff_helper.c
+│   │   │   │   └── README.md
+│   │   │   └── ... (13 tools, each with own directory)
 │   │   ├── npm/
 │   │   ├── lang/
 │   │   ├── db/
@@ -989,7 +995,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.3.1 (current: 4.3.0)
+⚠ New version available: 4.4.1 (current: 4.4.0)
 
 ➜ Run: core update core to update
 ```

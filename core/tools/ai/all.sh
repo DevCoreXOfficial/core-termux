@@ -25,6 +25,7 @@ AI_TOOLS=(
   "hermes-agent"
   "kimi-code"
   "command-code"
+  "freebuff"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -47,6 +48,7 @@ source "$(dirname "$BASH_SOURCE")/gga/install.sh"
 source "$(dirname "$BASH_SOURCE")/hermes-agent/install.sh"
 source "$(dirname "$BASH_SOURCE")/kimi-code/install.sh"
 source "$(dirname "$BASH_SOURCE")/command-code/install.sh"
+source "$(dirname "$BASH_SOURCE")/freebuff/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
@@ -132,6 +134,10 @@ install_all_ai_tools() {
       ;;
     command-code)
       loading "Installing Command Code" install_command_code
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    freebuff)
+      loading "Installing Freebuff" install_freebuff
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     esac
@@ -226,6 +232,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling Command Code" uninstall_command_code
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    freebuff)
+      loading "Uninstalling Freebuff" uninstall_freebuff
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -318,6 +328,10 @@ update_all_ai_tools() {
       loading "Updating Command Code" update_command_code
       case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
+    freebuff)
+      loading "Updating Freebuff" update_freebuff
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -408,6 +422,10 @@ reinstall_all_ai_tools() {
       ;;
     command-code)
       loading "Reinstalling Command Code" reinstall_command_code
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    freebuff)
+      loading "Reinstalling Freebuff" reinstall_freebuff
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

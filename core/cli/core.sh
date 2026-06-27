@@ -36,10 +36,10 @@ core_help() {
   echo
   separator_section "Available Commands"
   echo
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "--version" "Show current version"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "brain" "Second brain — save and search memories"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "env" "Manage environment variables"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "install" "Install modules and packages"
+  printf "    ${D_CYAN}%-12s${NC} %s\n" "--version" "Show current version"
+  printf "    ${D_CYAN}%-12s${NC} %s\n" "brain" "Second brain — save and search memories"
+  printf "    ${D_CYAN}%-12s${NC} %s\n" "env" "Manage environment variables"
+  printf "    ${D_CYAN}%-12s${NC} %s\n" "install" "Install modules and packages"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "show" "Show tool documentation"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "update" "Update modules or framework"
   printf "    ${D_CYAN}%-12s${NC} %s\n" "uninstall" "Remove installed modules"
@@ -60,15 +60,15 @@ core_help() {
   echo
   log_info "Install, update, reinstall, uninstall, list, show or open:"
   echo
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "lang" "Node, Python, Perl, PHP, Rust, C/C++, Go"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "ai" "OpenCode, Gentle AI, Claude Code, etc."
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "editor" "Neovim + NvChad + Plugins"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "dev" "GitHub CLI, wget, curl, fzf, etc."
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "npm" "Node.js global npm packages"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "ui" "Font, Cursor, Extra-keys, Banner"
-  printf "    ${D_GREEN}%-14s${NC} %s\n" "auto" "Automation Tools (n8n)"
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "lang" "Node, Python, Perl, PHP, Rust, C/C++, Go"
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "db" "PostgreSQL, MariaDB, SQLite, MongoDB"
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "ai" "OpenCode, Gentle AI, Claude Code, etc."
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "editor" "Neovim + NvChad + Plugins"
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "dev" "GitHub CLI, wget, curl, fzf, etc."
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "npm" "Node.js global npm packages"
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "ui" "Font, Cursor, Extra-keys, Banner"
+  printf "    ${D_GREEN}%-10s${NC} %s\n" "auto" "Automation Tools (n8n)"
 
   echo
   separator_section "Help"

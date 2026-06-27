@@ -160,8 +160,8 @@ voice_main() {
 		log_error "Unknown agent: $agent"
 		echo
 		log_info "Supported agents:"
-		echo "  opencode, claude-code, codex, gemini-cli, hermes-agent, kimi-code,"
-		echo "  mimocode, mistral-vibe, openclaude, pi, qwen-code"
+		echo "  opencode, claude-code, codex, gemini-cli, hermes-agent,"
+		echo "  kimi-code, mimocode, mistral-vibe, openclaude, pi, qwen-code"
 		separator
 		exit 1
 		;;

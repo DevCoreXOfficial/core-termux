@@ -43,6 +43,7 @@ install_ai() {
   list_item "Hermes Agent ${GRAY}(${D_GREEN}hermes${GRAY})"
   list_item "Kimi Code ${GRAY}(${D_GREEN}kimi${GRAY})"
   list_item "Command Code ${GRAY}(${D_GREEN}command-code${GRAY})"
+  list_item "Freebuff ${GRAY}(${D_GREEN}freebuff${GRAY})"
   echo
 }
 
@@ -52,7 +53,7 @@ _install_ai_tools_wrapper() {
 }
 
 uninstall_ai() {
-  if ! command -v opencode &>/dev/null; then
+  if ! command -v opencode &>/dev/null && ! command -v freebuff &>/dev/null; then
     log_info "AI Tools are not installed"
     return 0
   fi
@@ -122,6 +123,7 @@ reinstall_ai() {
   list_item "Hermes Agent"
   list_item "Kimi Code"
   list_item "Command Code"
+  list_item "Freebuff"
   echo
 }
 

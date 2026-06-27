@@ -207,6 +207,10 @@ _install_specific_tools() {
         install_command_code
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      freebuff)
+        install_freebuff
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;
