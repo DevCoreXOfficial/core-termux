@@ -122,7 +122,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Ollama** | `--ollama` | Run open-source LLMs locally on Termux |
 | **Codex CLI** | `--codex` | Coding agent from OpenAI that runs locally on your computer |
 | **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
-| **MiMo Code** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
+| **MiMoCode** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
 | **Engram** | `--engram` | Persistent memory system for coding agents |
 | **CodeGraph** | `--codegraph` | Analyzes your codebase structure and dependencies |
 | **Pi** | `--pi` | Minimal terminal coding harness — adapt Pi to your workflows |
@@ -132,7 +132,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **GGA** | `--gga` | Provider-agnostic AI code review for every commit |
 | **Hermes Agent** | `--hermes-agent` | The self-improving AI agent built by Nous Research |
 | **Kimi Code** | `--kimi-code` | Kimi Code CLI — The Starting Point for Next-Gen Agents |
-| **Command Code** | `--command-code` | Terminal-first AI coding agent that runs locally |
+| **Command Code** | `--command-code` | The coding agent that learns your coding taste |
 
 ---
 
@@ -177,7 +177,7 @@ core env ls                  # List all user-defined variables
 $ core env set
 
     ┌─────────────────────────────────────────┐
-    │         Set Environment Variable          │
+    │         Set Environment Variable        │
     └─────────────────────────────────────────┘
 
     ┌─ Variable name
@@ -256,7 +256,7 @@ After hours of testing, the combination that worked...
 $ core brain save
 
     ┌─────────────────────────────────────────┐
-    │            Save a New Memory              │
+    │            Save a New Memory            │
     └─────────────────────────────────────────┘
 
     ┌─ Title
