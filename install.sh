@@ -198,6 +198,9 @@ clone_repo() {
 		echo
 		log_ok "Repository updated"
 	else
+		if [[ -d "$CORE_DATA" ]]; then
+			rm -rf "$CORE_DATA"
+		fi
 		progress_bar 0 10
 		git clone --depth=1 -b "$BRANCH" "$REPO" "$CORE_DATA" &>/dev/null &
 		local pid=$!
