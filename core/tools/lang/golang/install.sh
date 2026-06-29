@@ -9,7 +9,7 @@ _install_golang_pkg() {
 }
 
 _install_golang_pkg_impl() {
-	if ! pkg install golang -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install golang &>>"$LOG_FILE"; then
 		log_error "Failed to install Go (Golang)"
 		return 1
 	fi

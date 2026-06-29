@@ -9,7 +9,7 @@ _install_gh_pkg() {
 }
 
 _install_gh_pkg_impl() {
-	if ! pkg install gh -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install gh &>>"$LOG_FILE"; then
 		log_error "Failed to install GitHub CLI"
 		return 1
 	fi

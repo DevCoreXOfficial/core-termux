@@ -9,7 +9,7 @@ _install_lsd_pkg() {
 }
 
 _install_lsd_pkg_impl() {
-	if ! pkg install lsd -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install lsd &>>"$LOG_FILE"; then
 		log_error "Failed to install LSD"
 		return 1
 	fi

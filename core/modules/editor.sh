@@ -30,7 +30,7 @@ install_editor() {
 }
 
 _install_editor_deps() {
-	pkg install git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter -y &>"$LOG_FILE"
+	yes | pkg install git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter &>"$LOG_FILE"
 }
 
 _install_editor_wrapper() {

@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_editor.log"
 
 _install_neovim_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
-  if pkg install neovim -y &>>"$LOG_FILE"; then
+  if yes | pkg install neovim &>>"$LOG_FILE"; then
     log_success "Neovim installed"
     return 0
   else

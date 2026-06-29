@@ -9,7 +9,7 @@ _install_imagemagick_pkg() {
 }
 
 _install_imagemagick_pkg_impl() {
-	if ! pkg install imagemagick -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install imagemagick &>>"$LOG_FILE"; then
 		log_error "Failed to install ImageMagick"
 		return 1
 	fi

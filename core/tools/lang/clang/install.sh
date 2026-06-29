@@ -9,7 +9,7 @@ _install_clang_pkg() {
 }
 
 _install_clang_pkg_impl() {
-	if ! pkg install clang -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install clang &>>"$LOG_FILE"; then
 		log_error "Failed to install C/C++ (Clang)"
 		return 1
 	fi

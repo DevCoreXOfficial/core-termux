@@ -9,7 +9,7 @@ _install_ollama_pkg() {
 }
 
 _install_ollama_pkg_impl() {
-  if ! pkg install ollama -y &>>"$LOG_FILE"; then
+  if ! yes | pkg install ollama &>>"$LOG_FILE"; then
     log_error "Failed to install Ollama"
     return 1
   fi

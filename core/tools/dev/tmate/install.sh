@@ -9,7 +9,7 @@ _install_tmate_pkg() {
 }
 
 _install_tmate_pkg_impl() {
-	if ! pkg install tmate -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install tmate &>>"$LOG_FILE"; then
 		log_error "Failed to install Tmate"
 		return 1
 	fi

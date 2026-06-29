@@ -8,13 +8,13 @@ _install_mongodb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	if [[ ! -f $PREFIX/etc/apt/sources.list.d/tur.list ]]; then
-		if ! pkg install tur-repo -y &>>"$LOG_FILE"; then
+		if ! yes | pkg install tur-repo &>>"$LOG_FILE"; then
 			log_error "Failed to install tur-repo"
 			return 1
 		fi
 	fi
 
-	if pkg install mongodb -y &>>"$LOG_FILE"; then
+	if yes | pkg install mongodb &>>"$LOG_FILE"; then
 		log_success "MongoDB installed"
 		return 0
 	else

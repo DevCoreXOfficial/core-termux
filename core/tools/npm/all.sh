@@ -15,6 +15,7 @@ NODE_PACKAGES=(
 	"psqlformat"
 	"ncu"
 	"ngrok"
+	"turbopack"
 )
 
 source "$(dirname "$BASH_SOURCE")/typescript/install.sh"
@@ -27,6 +28,7 @@ source "$(dirname "$BASH_SOURCE")/markserv/install.sh"
 source "$(dirname "$BASH_SOURCE")/psqlformat/install.sh"
 source "$(dirname "$BASH_SOURCE")/ncu/install.sh"
 source "$(dirname "$BASH_SOURCE")/ngrok/install.sh"
+source "$(dirname "$BASH_SOURCE")/turbopack/install.sh"
 
 install_all_npm_packages() {
 	local installed_count=0
@@ -72,6 +74,10 @@ install_all_npm_packages() {
 			;;
 		ngrok)
 			loading "Installing Ngrok" install_ngrok
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+			;;
+		turbopack)
+			loading "Installing Turbopack toolchain" install_turbopack
 			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
@@ -126,6 +132,10 @@ uninstall_all_npm_packages() {
 			loading "Uninstalling Ngrok" uninstall_ngrok
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
+		turbopack)
+			loading "Uninstalling Turbopack toolchain" uninstall_turbopack
+			((uninstalled_count++))
+			;;
 		esac
 	done
 
@@ -178,6 +188,10 @@ update_all_npm_packages() {
       loading "Updating Ngrok" update_ngrok
       case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
+    turbopack)
+      loading "Updating Turbopack toolchain" update_turbopack
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -228,6 +242,10 @@ reinstall_all_npm_packages() {
       ;;
     ngrok)
       loading "Reinstalling Ngrok" reinstall_ngrok
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    turbopack)
+      loading "Reinstalling Turbopack toolchain" reinstall_turbopack
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

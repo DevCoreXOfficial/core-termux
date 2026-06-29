@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 _install_sqlite_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install sqlite -y &>>"$LOG_FILE"; then
+	if yes | pkg install sqlite &>>"$LOG_FILE"; then
 		log_success "SQLite installed"
 		return 0
 	else

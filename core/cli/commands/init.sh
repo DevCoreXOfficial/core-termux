@@ -29,6 +29,8 @@ init_help() {
 	echo
 }
 
+# ===== SHARED UTILITIES =====
+
 check_project_exists() {
 	if [[ ! -f "package.json" ]]; then
 		log_error "No project found in current directory"
@@ -38,132 +40,339 @@ check_project_exists() {
 	return 0
 }
 
+detect_package_manager() {
+	if [[ -f "pnpm-lock.yaml" ]]; then
+		echo "pnpm"
+	elif [[ -f "yarn.lock" ]]; then
+		echo "yarn"
+	elif [[ -f "bun.lockb" ]]; then
+		echo "bun"
+	elif [[ -f "package-lock.json" ]]; then
+		echo "npm"
+	elif command -v pnpm &>/dev/null; then
+		echo "pnpm"
+	elif command -v yarn &>/dev/null; then
+		echo "yarn"
+	elif command -v bun &>/dev/null; then
+		echo "bun"
+	else
+		echo "npm"
+	fi
+}
+
+_install_pkg() {
+	local pm="$1"
+	shift
+	case "$pm" in
+	pnpm) pnpm add "$@" ;;
+	yarn) yarn add "$@" ;;
+	bun) bun add "$@" ;;
+	*)
+		if [[ -d "/data/data/com.termux" ]]; then
+			npm install --force "$@"
+		else
+			npm install "$@"
+		fi
+		;;
+	esac
+}
+
+_install_dev_pkg() {
+	local pm="$1"
+	shift
+	case "$pm" in
+	pnpm) pnpm add -D "$@" ;;
+	yarn) yarn add -D "$@" ;;
+	bun) bun add -D "$@" ;;
+	*)
+		if [[ -d "/data/data/com.termux" ]]; then
+			npm install --force -D "$@"
+		else
+			npm install -D "$@"
+		fi
+		;;
+	esac
+}
+
+_pm_exec() {
+	local pm="$1"
+	shift
+	case "$pm" in
+	pnpm) pnpm exec "$@" ;;
+	yarn) yarn "$@" ;;
+	bun) bun "$@" ;;
+	*) npx "$@" ;;
+	esac
+}
+
+_fix_pnpm_dev_engines() {
+	if [[ -f "package.json" ]] && command -v jq &>/dev/null; then
+		local temp
+		temp=$(mktemp)
+		if jq 'if .devEngines.packageManager.version then .devEngines.packageManager.version |= gsub("\\^";"") else . end' package.json >"$temp" && mv "$temp" package.json; then
+			log_info "Fixed pnpm devEngines version (removed semver range)"
+		fi
+	fi
+}
+
+_check_turbopack_toolchain() {
+	[[ -x "$HOME/.local/share/core-termux-data/node-glibc/bin/node" ]] && return 0
+	return 1
+}
+
+_detect_next_version() {
+	local v
+	v=$(grep -oP '"next":\s*"[^"]*"' package.json 2>/dev/null | grep -oP '\d+\.\d+\.\d+')
+	echo "${v:-latest}"
+}
+
 # ===== NEXT.JS =====
 configure_next() {
 	separator
 	box "Configuring Next.js Project"
 	separator
 	echo
+
 	check_project_exists || return 1
 
-	if ! grep -q "next" package.json 2>/dev/null; then
-		log_warn "This doesn't appear to be a Next.js project"
-		read_confirm "Continue anyway?" CONFIRM
-		[[ "$CONFIRM" != "y" ]] && { log_warn "Cancelled"; return 0; }
-	fi
+	local PM
+	PM=$(detect_package_manager)
+	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	echo
 
-	log_info "Installing dependencies..."
-	if loading "Installing dependencies" _install_next_deps; then
-		log_success "Dependencies installed"
-		echo
-		list_item "axios, lucide-react, framer-motion, sonner, zod"
-		list_item "react-hook-form, @hookform/resolvers"
-		list_item "@tanstack/react-query, zustand, tailwindcss"
-		list_item "prettier, prettier-plugin-tailwindcss"
-		echo
+	# ── Dependencies array ──
+	local -a DEPS=()
+	local -a DEV_DEPS=()
+	local USE_TURBOPACK=false
+	local SETUP_STRUCTURE=false
+	local SETUP_PRETTIER=false
+	local SETUP_ENV=false
+
+	# ── Turbopack ──
+	if _check_turbopack_toolchain; then
+		read_confirm_default "Configure Turbopack (faster dev/build)?" "y" TURBO_ANS
+		if [[ "$TURBO_ANS" == "y" ]]; then
+			USE_TURBOPACK=true
+			DEV_DEPS+=("@next/swc-linux-arm64-gnu" "lightningcss-linux-arm64-gnu" "@tailwindcss/oxide-linux-arm64-gnu" "@unrs/resolver-binding-linux-arm64-gnu")
+		fi
 	else
-		log_warn "Some dependencies failed to install"
+		log_info "Turbopack requires the glibc toolchain (core install npm --turbopack)"
+		read_confirm_default "Install Turbopack toolchain now?" "n" INSTALL_TURBO
+		if [[ "$INSTALL_TURBO" == "y" ]]; then
+			import "@/tools/npm/turbopack/install"
+			if loading "Installing Turbopack toolchain" install_turbopack; then
+				USE_TURBOPACK=true
+				DEV_DEPS+=("@next/swc-linux-arm64-gnu" "lightningcss-linux-arm64-gnu" "@tailwindcss/oxide-linux-arm64-gnu" "@unrs/resolver-binding-linux-arm64-gnu")
+			else
+				log_warn "Turbopack toolchain installation failed — falling back to Webpack"
+			fi
+		fi
 	fi
 
-	log_info "Setting up structure..."
-	mkdir -p src/components/ui src/lib src/hooks src/types src/config src/store 2>/dev/null
+	# ── Optional deps ──
+	section_title "Optional dependencies"
 
-	# Crear .prettierrc
-	cat >.prettierrc <<'EOF'
+	read_confirm_default "Install TypeScript support?" "y" ANS
+	# TypeScript comes with Next.js by default, no extra package
+
+	read_confirm_default "Install Tailwind CSS?" "y" ANS
+	# Next.js 16 includes Tailwind by default — only add prettier plugin
+
+	read_confirm_default "Install Zustand (state management)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("zustand")
+
+	read_confirm_default "Install React Query (@tanstack/react-query)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("@tanstack/react-query")
+
+	read_confirm_default "Install Zod (schema validation)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("zod")
+
+	read_confirm_default "Install React Hook Form + @hookform/resolvers?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("react-hook-form" "@hookform/resolvers")
+
+	read_confirm_default "Install Axios (HTTP client)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("axios")
+
+	read_confirm_default "Install Framer Motion (animations)?" "n" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("framer-motion")
+
+	read_confirm_default "Install Sonner (toast notifications)?" "n" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("sonner")
+
+	read_confirm_default "Install Lucide React (icons)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("lucide-react")
+
+	# ── Setup options ──
+	echo
+	section_title "Project setup"
+
+	read_confirm_default "Create modular folder structure?" "y" ANS
+	[[ "$ANS" == "y" ]] && SETUP_STRUCTURE=true
+
+	read_confirm_default "Configure Prettier?" "y" ANS
+	[[ "$ANS" == "y" ]] && SETUP_PRETTIER=true
+
+	read_confirm_default "Create .env.example?" "y" ANS
+	[[ "$ANS" == "y" ]] && SETUP_ENV=true
+
+	# ── Configure pnpm for multi-platform native bindings ──
+	if $USE_TURBOPACK && [[ "$PM" == "pnpm" ]]; then
+		if [[ ! -f ".npmrc" ]] || ! grep -q "supportedArchitectures" .npmrc 2>/dev/null; then
+			cat >>.npmrc <<'NPMRCEOF'
+supportedArchitectures[0]=android
+supportedArchitectures[1]=linux
+NPMRCEOF
+			log_info "Configured pnpm for multi-platform native bindings"
+		fi
+	fi
+
+	[[ "$PM" == "pnpm" ]] && _fix_pnpm_dev_engines
+
+	# ── Install dependencies ──
+	if [[ ${#DEPS[@]} -gt 0 ]]; then
+		echo
+		section_title "Installing dependencies"
+		log_info "Packages: ${D_CYAN}${DEPS[*]}${NC}"
+		if ! loading "Installing dependencies" _install_pkgs "$PM" "${DEPS[@]}"; then
+			log_warn "Some dependencies failed to install"
+		fi
+	fi
+
+	if [[ ${#DEV_DEPS[@]} -gt 0 ]]; then
+		if ! loading "Installing dev dependencies" _install_dev_pkgs "$PM" "${DEV_DEPS[@]}"; then
+			log_warn "Some dev dependencies failed to install"
+		fi
+	fi
+
+	# ── Setup Prettier ──
+	if $SETUP_PRETTIER; then
+		echo
+		section_title "Configuring Prettier"
+		_install_dev_pkg "$PM" prettier prettier-plugin-tailwindcss &>>"$LOG_FILE"
+		cat >.prettierrc <<'EOF'
 {
   "plugins": ["prettier-plugin-tailwindcss"]
 }
 EOF
-	log_success "Created .prettierrc"
-
-	log_info "Creating DevCoreX landing page..."
-	[[ -f "src/app/page.tsx" ]] && cat >src/app/page.tsx <<'EOF'
-"use client"
-import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
-import { Terminal, Code2, Rocket } from "lucide-react"
-import { Toaster } from "sonner"
-
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-slate-900">
-      <Toaster position="top-center" richColors />
-      <div className="container mx-auto px-4 py-20">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }} className="mb-8 flex justify-center">
-            <div className="p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-2xl">
-              <Terminal className="w-16 h-16 text-white" />
-            </div>
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            DevCoreX
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-xl md:text-2xl text-slate-400 mb-4">
-            Comunidad de Desarrollo y Tecnología
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-lg text-slate-500 mb-12 max-w-2xl mx-auto">
-            Este proyecto fue creado con herramientas de la comunidad DevCoreX.
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-            <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800"><Code2 className="w-12 h-12 text-blue-400 mb-4 mx-auto" /><h3 className="text-lg font-semibold text-white mb-2">Código de Calidad</h3></div>
-            <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800"><Rocket className="w-12 h-12 text-purple-400 mb-4 mx-auto" /><h3 className="text-lg font-semibold text-white mb-2">Proyectos Reales</h3></div>
-            <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800"><Terminal className="w-12 h-12 text-pink-400 mb-4 mx-auto" /><h3 className="text-lg font-semibold text-white mb-2">Comunidad Activa</h3></div>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.7 }} className="w-full max-w-sm mx-auto">
-            <Button size="lg" onClick={() => window.open("https://youtube.com/@devcorex", "_blank")} className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-6 text-lg font-semibold">
-              <Rocket className="w-5 h-5 mr-2" /> Únete a DevCoreX en YouTube
-            </Button>
-          </motion.div>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-16 text-sm text-slate-600">Built with ❤️ using DevCoreX tools</motion.p>
-        </motion.div>
-      </div>
-    </main>
-  )
-}
-EOF
-
-	# Actualizar package.json para usar --webpack
-	if [[ -f "package.json" ]]; then
-		log_info "Updating package.json scripts..."
-		local temp=$(mktemp)
-		jq '.scripts.dev = "next dev --webpack" | .scripts.build = "next build --webpack" | .scripts.start = "next start"' package.json > "$temp" && mv "$temp" package.json
-		log_success "Added --webpack flag to dev and build scripts"
+		log_success "Created .prettierrc"
 	fi
 
-	[[ -f "src/app/layout.tsx" ]] && cat >src/app/layout.tsx <<'EOF'
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-const inter = Inter({ subsets: ["latin"] })
-export const metadata: Metadata = {
-  title: "DevCoreX - Comunidad de Desarrollo",
-  description: "Únete a la comunidad DevCoreX",
-}
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (<html lang="es"><body className={inter.className}>{children}</body></html>)
-}
-EOF
+	# ── Setup env ──
+	if $SETUP_ENV; then
+		echo
+		section_title "Creating .env.example"
+		if [[ ! -f ".env.example" ]]; then
+			cat >.env.example <<'EOF'
+# App
+NEXT_PUBLIC_API_URL=http://localhost:4000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 
+# Auth (optional)
+# AUTH_SECRET=
+EOF
+			log_success "Created .env.example"
+		else
+			log_info ".env.example already exists, skipping"
+		fi
+	fi
+
+	# ── Folder structure ──
+	if $SETUP_STRUCTURE; then
+		echo
+		section_title "Creating folder structure"
+
+		local -a DIRS=(
+			"src/components/ui"
+			"src/components/layout"
+			"src/components/shared"
+			"src/services"
+			"src/lib"
+			"src/hooks"
+			"src/store"
+			"src/types"
+			"src/config"
+			"src/providers"
+		)
+
+		for dir in "${DIRS[@]}"; do
+			mkdir -p "$dir" 2>/dev/null
+			list_item "Created $dir"
+		done
+
+		# Create barrel files for key modules
+		_ensure_barrel "src/services" '// API services — add your HTTP calls here'
+		_ensure_barrel "src/lib" '// Utilities — add your helpers here'
+		_ensure_barrel "src/store" '// Zustand stores — add your stores here'
+		_ensure_barrel "src/types" '// Shared TypeScript types'
+		_ensure_barrel "src/hooks" '// Custom React hooks'
+		_ensure_barrel "src/config" 'export const config = { apiUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000" }'
+
+		log_success "Folder structure created"
+	fi
+
+	# ── Update package.json scripts ──
+	echo
+	section_title "Updating package.json scripts"
+	if command -v jq &>/dev/null; then
+		local temp
+		temp=$(mktemp)
+		if $USE_TURBOPACK; then
+			jq '.scripts.dev = "next-turbopack dev --hostname 127.0.0.1" | .scripts.build = "next-turbopack build" | .scripts.start = "next start"' package.json >"$temp" && mv "$temp" package.json
+			log_success "Updated scripts for Turbopack"
+		else
+			jq '.scripts.dev = "next dev --webpack" | .scripts.build = "next build --webpack" | .scripts.start = "next start"' package.json >"$temp" && mv "$temp" package.json
+			log_success "Added --webpack flag for Termux compatibility"
+		fi
+	else
+		log_warn "jq not found — update package.json scripts manually"
+	fi
+
+	# ── Done ──
 	echo
 	separator
 	log_success "Next.js configured!"
 	separator
 	echo
-	list_item "Dependencies installed"
-	list_item "DevCoreX landing page created"
-	list_item "Prettier configured"
+	list_item "Package manager: ${D_CYAN}$PM${NC}"
+	$USE_TURBOPACK && list_item "Bundler: ${D_CYAN}Turbopack${NC}" || list_item "Bundler: Webpack"
+	list_item "Dependencies: ${D_CYAN}${DEPS[*]:-(none selected)}${NC}"
 	echo
 	log_info "Next steps:"
 	echo
-	list_item "Initialize shadcn: ${D_CYAN}npx shadcn@latest init${NC}"
-	list_item "Add button: ${D_CYAN}npx shadcn@latest add button${NC}"
-	list_item "Start: ${D_CYAN}npm run dev${NC} (with --webpack)"
+	if $USE_TURBOPACK; then
+		list_item "Start: ${D_CYAN}next-turbopack dev${NC}"
+	else
+		list_item "Start: ${D_CYAN}npm run dev${NC} (or ${D_CYAN}$PM run dev${NC})"
+	fi
+	list_item "Init shadcn: ${D_CYAN}npx shadcn@latest init${NC}"
 	echo
 }
 
-_install_next_deps() {
-	npm install axios lucide-react framer-motion sonner zod react-hook-form @hookform/resolvers @tanstack/react-query zustand tailwindcss &>"$LOG_FILE"
-	npm install -D prettier prettier-plugin-tailwindcss &>>"$LOG_FILE"
+_install_pkgs() {
+	local pm="$1"
+	shift
+	_install_pkg "$pm" "$@" &>>"$LOG_FILE"
+}
+
+_install_dev_pkgs() {
+	local pm="$1"
+	shift
+	_install_dev_pkg "$pm" "$@" &>>"$LOG_FILE"
+}
+
+_ensure_barrel() {
+	local dir="$1"
+	local content="$2"
+	local barrel="$dir/index.ts"
+	if [[ ! -f "$barrel" ]]; then
+		echo "$content" >"$barrel"
+		list_item "Created $barrel"
+	fi
+}
+
+section_title() {
+	echo
+	separator_section "$1"
 }
 
 # ===== REACT + VITE =====
@@ -172,7 +381,13 @@ configure_react() {
 	box "Configuring React + Vite Project"
 	separator
 	echo
+
 	check_project_exists || return 1
+
+	local PM
+	PM=$(detect_package_manager)
+	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	echo
 
 	if ! grep -q "vite" package.json 2>/dev/null; then
 		log_warn "This doesn't appear to be a Vite project"
@@ -180,99 +395,116 @@ configure_react() {
 		[[ "$CONFIRM" != "y" ]] && { log_warn "Cancelled"; return 0; }
 	fi
 
-	log_info "Installing dependencies..."
-	if loading "Installing dependencies" _install_react_deps; then
-		log_success "Dependencies installed"
+	local -a DEPS=()
+	local SETUP_STRUCTURE=false
+	local SETUP_PRETTIER=false
+	local SETUP_ENV=false
+
+	# ── Optional deps ──
+	section_title "Optional dependencies"
+
+	read_confirm_default "Install Zustand (state management)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("zustand")
+
+	read_confirm_default "Install React Query (@tanstack/react-query)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("@tanstack/react-query")
+
+	read_confirm_default "Install Zod (schema validation)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("zod")
+
+	read_confirm_default "Install React Hook Form + @hookform/resolvers?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("react-hook-form" "@hookform/resolvers")
+
+	read_confirm_default "Install Axios (HTTP client)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("axios")
+
+	read_confirm_default "Install Framer Motion (animations)?" "n" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("framer-motion")
+
+	read_confirm_default "Install Sonner (toast notifications)?" "n" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("sonner")
+
+	read_confirm_default "Install Lucide React (icons)?" "y" ANS
+	[[ "$ANS" == "y" ]] && DEPS+=("lucide-react")
+
+	# ── Setup options ──
+	echo
+	section_title "Project setup"
+
+	read_confirm_default "Create modular folder structure?" "y" ANS
+	[[ "$ANS" == "y" ]] && SETUP_STRUCTURE=true
+
+	read_confirm_default "Configure Prettier?" "y" ANS
+	[[ "$ANS" == "y" ]] && SETUP_PRETTIER=true
+
+	read_confirm_default "Create .env.example?" "y" ANS
+	[[ "$ANS" == "y" ]] && SETUP_ENV=true
+
+	[[ "$PM" == "pnpm" ]] && _fix_pnpm_dev_engines
+
+	# ── Install ──
+	if [[ ${#DEPS[@]} -gt 0 ]]; then
 		echo
-		list_item "axios, lucide-react, framer-motion, sonner, zod"
-		list_item "react-hook-form, @hookform/resolvers"
-		list_item "@tanstack/react-query, zustand, tailwindcss"
-		list_item "prettier, prettier-plugin-tailwindcss"
-		echo
-	else
-		log_warn "Some dependencies failed to install"
+		section_title "Installing dependencies"
+		if ! loading "Installing dependencies" _install_pkgs "$PM" "${DEPS[@]}"; then
+			log_warn "Some dependencies failed to install"
+		fi
 	fi
 
-	log_info "Setting up structure..."
-	mkdir -p src/components/ui src/lib src/hooks src/types src/config src/store src/pages 2>/dev/null
-
-	# Crear .prettierrc
-	cat >.prettierrc <<'EOF'
+	# ── Prettier ──
+	if $SETUP_PRETTIER; then
+		echo
+		section_title "Configuring Prettier"
+		_install_dev_pkg "$PM" prettier prettier-plugin-tailwindcss &>>"$LOG_FILE"
+		cat >.prettierrc <<'EOF'
 {
   "plugins": ["prettier-plugin-tailwindcss"]
 }
 EOF
-	log_success "Created .prettierrc"
-
-	log_info "Creating DevCoreX landing page..."
-	if [[ -f "src/App.tsx" ]]; then
-		cat >src/App.tsx <<'EOF'
-import { Button } from "./components/ui/Button"
-import { motion } from "framer-motion"
-import { Terminal, Code2, Rocket } from "lucide-react"
-import { Toaster } from "sonner"
-
-function App() {
-  return (
-    <main className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-slate-900">
-      <Toaster position="top-center" richColors />
-      <div className="container mx-auto px-4 py-20">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }} className="mb-8 flex justify-center">
-            <div className="p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-2xl">
-              <Terminal className="w-16 h-16 text-white" />
-            </div>
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">DevCoreX</motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-xl md:text-2xl text-slate-400 mb-4">Comunidad de Desarrollo y Tecnología</motion.p>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-lg text-slate-500 mb-12 max-w-2xl mx-auto">Este proyecto fue creado con herramientas de la comunidad DevCoreX.</motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-            <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800"><Code2 className="w-12 h-12 text-blue-400 mb-4 mx-auto" /><h3 className="text-lg font-semibold text-white mb-2">Código de Calidad</h3></div>
-            <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800"><Rocket className="w-12 h-12 text-purple-400 mb-4 mx-auto" /><h3 className="text-lg font-semibold text-white mb-2">Proyectos Reales</h3></div>
-            <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800"><Terminal className="w-12 h-12 text-pink-400 mb-4 mx-auto" /><h3 className="text-lg font-semibold text-white mb-2">Comunidad Activa</h3></div>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.7 }} className="w-full max-w-sm mx-auto">
-            <Button size="lg" onClick={() => window.open("https://youtube.com/@devcorex", "_blank")} className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-6 text-lg">
-              <Rocket className="w-5 h-5 mr-2" /> Únete a DevCoreX en YouTube
-            </Button>
-          </motion.div>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-16 text-sm text-slate-600">Built with ❤️ using DevCoreX tools</motion.p>
-        </motion.div>
-      </div>
-    </main>
-  )
-}
-export default App
-EOF
-		log_success "Created landing page"
+		log_success "Created .prettierrc"
 	fi
 
-	if [[ ! -f "src/components/ui/Button.tsx" ]]; then
-		mkdir -p src/components/ui
-		cat >src/components/ui/Button.tsx <<'EOF'
-import { ButtonHTMLAttributes, forwardRef } from 'react'
-import { clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-function cn(...inputs: any[]) { return twMerge(clsx(inputs)) }
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'outline' | 'ghost'
-  size?: 'sm' | 'md' | 'lg'
-}
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'md', children, ...props }, ref) => {
-    return (
-      <button className={cn('inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-        { 'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'default',
-          'border border-input hover:bg-accent hover:text-accent-foreground': variant === 'outline',
-          'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
-          'h-9 px-3 text-sm': size === 'sm', 'h-10 px-4': size === 'md', 'h-11 px-8': size === 'lg' },
-        className)} ref={ref} {...props}>{children}</button>
-    )
-  }
-)
-Button.displayName = 'Button'
+	# ── Env ──
+	if $SETUP_ENV && [[ ! -f ".env.example" ]]; then
+		echo
+		section_title "Creating .env.example"
+		cat >.env.example <<'EOF'
+VITE_API_URL=http://localhost:4000
 EOF
-		log_success "Created Button component"
+		log_success "Created .env.example"
+	fi
+
+	# ── Structure ──
+	if $SETUP_STRUCTURE; then
+		echo
+		section_title "Creating folder structure"
+
+		local -a DIRS=(
+			"src/components/ui"
+			"src/components/layout"
+			"src/components/shared"
+			"src/services"
+			"src/lib"
+			"src/hooks"
+			"src/store"
+			"src/types"
+			"src/config"
+			"src/providers"
+		)
+
+		for dir in "${DIRS[@]}"; do
+			mkdir -p "$dir" 2>/dev/null
+			list_item "Created $dir"
+		done
+
+		_ensure_barrel "src/services" '// API services — add your HTTP calls here'
+		_ensure_barrel "src/lib" '// Utilities — add your helpers here'
+		_ensure_barrel "src/store" '// Zustand stores'
+		_ensure_barrel "src/types" '// Shared types'
+		_ensure_barrel "src/hooks" '// Custom hooks'
+		_ensure_barrel "src/config" 'export const config = { apiUrl: import.meta.env.VITE_API_URL || "http://localhost:4000" }'
+
+		log_success "Folder structure created"
 	fi
 
 	echo
@@ -280,16 +512,10 @@ EOF
 	log_success "React + Vite configured!"
 	separator
 	echo
-	list_item "Dependencies installed"
-	list_item "Prettier configured"
+	list_item "Dependencies: ${D_CYAN}${DEPS[*]:-(none selected)}${NC}"
 	echo
-	list_item "Start: ${D_CYAN}npm run dev${NC}"
+	list_item "Start: ${D_CYAN}$PM run dev${NC}"
 	echo
-}
-
-_install_react_deps() {
-	npm install axios lucide-react framer-motion sonner zod react-hook-form @hookform/resolvers @tanstack/react-query zustand tailwindcss &>"$LOG_FILE"
-	npm install -D prettier prettier-plugin-tailwindcss &>>"$LOG_FILE"
 }
 
 # ===== EXPRESS.JS =====
@@ -298,81 +524,90 @@ configure_express() {
 	box "Configuring Express.js Project"
 	separator
 	echo
+
 	check_project_exists || return 1
 
-	if ! grep -q "express" package.json 2>/dev/null; then
-		log_warn "This doesn't appear to be an Express project"
-		read_confirm "Continue anyway?" CONFIRM
-		[[ "$CONFIRM" != "y" ]] && { log_warn "Cancelled"; return 0; }
-	fi
+	local PM
+	PM=$(detect_package_manager)
+	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	echo
 
-	log_info "Installing dependencies..."
-	if loading "Installing dependencies" _install_express_deps; then
-		log_success "Dependencies installed"
-		echo
-		list_item "express, pg, typeorm, reflect-metadata"
-		list_item "jsonwebtoken, cookie-parser, morgan, cors"
-		list_item "bcryptjs, helmet, cloudinary, multer"
-		list_item "express-rate-limit, zod"
-		echo
-	else
+	# ── Interactive ──
+
+	read_confirm_default "Install PostgreSQL + TypeORM?" "y" USE_DB
+	read_confirm_default "Install authentication (JWT + bcrypt)?" "y" USE_AUTH
+	read_confirm_default "Install file upload support (Multer + Cloudinary)?" "n" USE_UPLOAD
+	read_confirm_default "Install Zod (request validation)?" "y" USE_ZOD
+	read_confirm_default "Configure rate limiting?" "y" USE_RATE
+	read_confirm_default "Configure CORS?" "y" USE_CORS
+
+	echo
+	section_title "Project setup"
+	read_confirm_default "Create folder structure?" "y" SETUP_STRUCTURE
+	read_confirm_default "Create .env.example?" "y" SETUP_ENV
+
+	echo
+	section_title "Installing dependencies"
+
+	[[ "$PM" == "pnpm" ]] && _fix_pnpm_dev_engines
+
+	# Build dep list
+	local -a DEPS=("express")
+	local -a DEV_DEPS=()
+
+	[[ "$USE_DB" == "y" ]] && DEPS+=("pg" "typeorm" "reflect-metadata")
+	[[ "$USE_AUTH" == "y" ]] && DEPS+=("jsonwebtoken" "bcryptjs")
+	[[ "$USE_UPLOAD" == "y" ]] && DEPS+=("multer" "cloudinary")
+	[[ "$USE_ZOD" == "y" ]] && DEPS+=("zod")
+	[[ "$USE_RATE" == "y" ]] && DEPS+=("express-rate-limit")
+	[[ "$USE_CORS" == "y" ]] && DEPS+=("cors")
+	DEPS+=("cookie-parser" "morgan" "helmet")
+
+	DEV_DEPS+=("typescript" "ts-node-dev" "tsconfig-paths" "tsc-alias")
+	DEV_DEPS+=("@types/node" "@types/express" "@types/cors" "@types/morgan" "@types/cookie-parser")
+	[[ "$USE_AUTH" == "y" ]] && DEV_DEPS+=("@types/jsonwebtoken")
+	[[ "$USE_UPLOAD" == "y" ]] && DEV_DEPS+=("@types/multer")
+
+	if ! loading "Installing dependencies" _install_pkgs "$PM" "${DEPS[@]}"; then
 		log_warn "Some dependencies failed to install"
 	fi
 
-	log_info "Installing devDependencies..."
-	if loading "Installing devDependencies" _install_express_dev; then
-		log_success "devDependencies installed"
-		echo
-		list_item "typescript, ts-node-dev, tsconfig-paths, tsc-alias"
-		list_item "@types/* (all type definitions)"
-		echo
-	else
-		log_warn "Some devDependencies failed to install"
+	if ! loading "Installing dev dependencies" _install_dev_pkgs "$PM" "${DEV_DEPS[@]}"; then
+		log_warn "Some dev dependencies failed to install"
 	fi
 
-	log_info "Creating folder structure..."
-	_setup_express_structure
+	# ── Structure ──
+	if [[ "$SETUP_STRUCTURE" == "y" ]]; then
+		echo
+		section_title "Creating folder structure"
 
-	log_info "Creating configuration files..."
-	_create_express_config
+		local -a DIRS=(
+			"src/controllers"
+			"src/middlewares"
+			"src/routes"
+			"src/services"
+			"src/repositories"
+			"src/entities"
+			"src/schemas"
+			"src/types"
+			"src/utils"
+			"src/config"
+			"src/database/migrations"
+			"src/database/seeds"
+		)
 
+		for dir in "${DIRS[@]}"; do
+			mkdir -p "$dir" 2>/dev/null
+			list_item "Created $dir"
+		done
+	fi
+
+	# ── Config files ──
 	echo
-	separator
-	log_success "Express.js configured!"
-	separator
-	echo
-	list_item "Start: ${D_CYAN}npm run dev${NC}"
-	list_item "Build: ${D_CYAN}npm run build${NC}"
-	list_item "Migrations: ${D_CYAN}npm run mg:run${NC}"
-	echo
-}
+	section_title "Creating configuration files"
 
-_install_express_deps() {
-	npm install express pg typeorm reflect-metadata jsonwebtoken cookie-parser morgan cors bcryptjs helmet cloudinary multer express-rate-limit tsconfig-paths zod &>"$LOG_FILE"
-}
-
-_install_express_dev() {
-	npm install -D typescript ts-node-dev tsconfig-paths tsc-alias @types/node @types/multer @types/morgan @types/jsonwebtoken @types/helmet @types/express @types/cors @types/cookie-parser @types/bcryptjs &>>"$LOG_FILE"
-}
-
-_setup_express_structure() {
-	mkdir -p src/controllers 2>/dev/null
-	mkdir -p src/middlewares 2>/dev/null
-	mkdir -p src/repositories 2>/dev/null
-	mkdir -p src/routes 2>/dev/null
-	mkdir -p src/schemas 2>/dev/null
-	mkdir -p src/services 2>/dev/null
-	mkdir -p src/types 2>/dev/null
-	mkdir -p src/utils 2>/dev/null
-	mkdir -p src/config 2>/dev/null
-	mkdir -p src/database/migrations 2>/dev/null
-	mkdir -p src/database/seeds 2>/dev/null
-	mkdir -p src/entities 2>/dev/null
-	log_success "Created folder structure"
-}
-
-_create_express_config() {
-	cat >tsconfig.json <<'EOF'
+	# tsconfig.json
+	cat >tsconfig.json <<'JSONCFG'
 {
   "compilerOptions": {
     "target": "ES2020",
@@ -395,59 +630,38 @@ _create_express_config() {
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
-EOF
+JSONCFG
 	log_success "Created tsconfig.json"
 
-	cat >.env.example <<'EOF'
+	# .env.example
+	if [[ "$SETUP_ENV" == "y" ]]; then
+		cat >.env.example <<'ENVEOF'
 NODE_ENV=development
 PORT=4000
-DB_NAME=postgres
 DATABASE_URL=postgresql://user:password@localhost:5432/dbname
-JWT_SECRET=your-super-secret-jwt-key
+DB_NAME=dbname
+JWT_SECRET=change-me-to-a-random-string
 FRONTEND_URL=http://localhost:3000
-CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
-EOF
-	log_success "Created .env.example"
+ENVEOF
+		log_success "Created .env.example"
+	fi
 
-	cat >src/config/env.ts <<'EOF'
+	# src/config/env.ts
+	mkdir -p src/config
+	cat >src/config/env.ts <<'CFGEOF'
 export const NODE_ENV = process.env.NODE_ENV || "development";
 export const PORT = Number(process.env.PORT) || 4000;
-export const DB_NAME = process.env.DB_NAME || "postgres";
-export const DATABASE_URL = process.env.DATABASE_URL;
-export const JWT_SECRET = process.env.JWT_SECRET as string;
-export const FRONTEND_URL = (process.env.FRONTEND_URL as string) || "http://localhost:3000";
-EOF
+export const DATABASE_URL = process.env.DATABASE_URL || "";
+export const DB_NAME = process.env.DATABASE_URL?.split("/").pop() || "dbname";
+export const JWT_SECRET = process.env.JWT_SECRET || "change-me";
+export const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+CFGEOF
 	log_success "Created src/config/env.ts"
 
-	cat >src/database/data-source.ts <<'EOF'
-import "reflect-metadata";
-import { DataSource } from "typeorm";
-import { DATABASE_URL, NODE_ENV } from "@/config/env";
-import { ExampleEntity1 } from "@/entities/ExampleEntity1";
-import { ExampleEntity2 } from "@/entities/ExampleEntity2";
-
-const isDevelopment = NODE_ENV === "development";
-const isProduction = NODE_ENV === "production";
-
-export const AppDataSource = new DataSource({
-  type: "postgres",
-  url: DATABASE_URL,
-  ssl: isDevelopment ? false : { rejectUnauthorized: false },
-  synchronize: isDevelopment,
-  logging: isDevelopment ? ["query", "error"] : false,
-  entities: [ExampleEntity1, ExampleEntity2],
-  migrations: isDevelopment
-    ? [__dirname + "/migrations/*.ts"]
-    : [__dirname + "/migrations/*.js"],
-  migrationsRun: isDevelopment,
-  extra: {
-    max: isProduction ? 10 : 20,
-  },
-});
-EOF
-	log_success "Created src/database/data-source.ts"
-
-	cat >src/app.ts <<'EOF'
+	# src/app.ts
+	mkdir -p src
+	if [[ ! -f "src/app.ts" ]]; then
+		cat >src/app.ts <<'APPEOF'
 import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
@@ -455,8 +669,8 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { FRONTEND_URL } from "@/config/env";
-import exampleRoutes1 from "@/routes/example1.routes";
-import exampleRoutes2 from "@/routes/example2.routes";
+import userRoutes from "@/routes/user.routes";
+import productRoutes from "@/routes/product.routes";
 
 const app = express();
 
@@ -477,7 +691,7 @@ app.use(
 // limitar número de peticiones
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -490,14 +704,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 // endpoints
-app.use("/api/example1", exampleRoutes1);
-app.use("/api/example2", exampleRoutes2);
+app.use("/api/user", userRoutes);
+app.use("/api/product", productRoutes);
 
 export default app;
-EOF
-	log_success "Created src/app.ts"
+APPEOF
+		log_success "Created src/app.ts"
+	fi
 
-	cat >src/index.ts <<'EOF'
+	# src/index.ts
+	if [[ ! -f "src/index.ts" ]]; then
+		cat >src/index.ts <<'INDEXEOF'
 import app from "@/app";
 import { DB_NAME, PORT } from "@/config/env";
 import { AppDataSource } from "@/database/data-source";
@@ -505,9 +722,9 @@ import { AppDataSource } from "@/database/data-source";
 async function main() {
   try {
     await AppDataSource.initialize();
-    console.log(" Connected to:", DB_NAME);
+    console.log("Connected to:", DB_NAME);
     app.listen(PORT, () => {
-      console.log(" http://localhost:" + PORT);
+      console.log("http://localhost:" + PORT);
     });
   } catch (error) {
     console.error("Internal server error:", error);
@@ -515,26 +732,223 @@ async function main() {
 }
 
 main();
-EOF
-	log_success "Created src/index.ts"
+INDEXEOF
+		log_success "Created src/index.ts"
+	fi
 
-	# Agregar scripts al package.json
-	if [[ -f "package.json" ]]; then
-		log_info "Adding scripts to package.json..."
-		local temp=$(mktemp)
-		jq '.scripts += {
-      "dev": "ts-node-dev --require tsconfig-paths/register --env-file=.env --respawn src/index.ts",
-      "build": "tsc && tsc-alias -p tsconfig.json",
-      "start": "node dist/index.js",
-      "typeorm": "ts-node-dev --require tsconfig-paths/register --env-file=.env ./node_modules/typeorm/cli.js",
-      "mg:gen": "npm run typeorm -- migration:generate -d src/database/data-source.ts",
-      "mg:create": "npm run typeorm -- migration:create",
-      "mg:run": "npm run typeorm -- migration:run -d src/database/data-source.ts",
-      "mg:revert": "npm run typeorm -- migration:revert -d src/database/data-source.ts",
-      "mg:show": "npm run typeorm -- migration:show -d src/database/data-source.ts"
-    }' package.json > "$temp" && mv "$temp" package.json
+	# src/database/data-source.ts
+	mkdir -p src/database
+	if [[ ! -f "src/database/data-source.ts" ]]; then
+		cat >src/database/data-source.ts <<'DSEOF'
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { DATABASE_URL, NODE_ENV } from "@/config/env";
+import { User } from "@/entities/User";
+import { Product } from "@/entities/Product";
+
+const isDevelopment = NODE_ENV === "development";
+const isProduction = NODE_ENV === "production";
+
+export const AppDataSource = new DataSource({
+  type: "postgres",
+  url: DATABASE_URL,
+  ssl: isDevelopment ? false : { rejectUnauthorized: false },
+  synchronize: false,
+  logging: isDevelopment ? ["query", "error"] : false,
+  entities: [User, Product],
+  migrations: isDevelopment
+    ? [__dirname + "/migrations/*.ts"]
+    : [__dirname + "/migrations/*.js"],
+  migrationsRun: isDevelopment,
+  extra: {
+    max: isProduction ? 10 : 20,
+  },
+});
+DSEOF
+		log_success "Created src/database/data-source.ts"
+	fi
+
+	# src/entities/User.ts
+	mkdir -p src/entities
+	if [[ ! -f "src/entities/User.ts" ]]; then
+		cat >src/entities/User.ts <<'USEREOF'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
+
+@Entity("users")
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: "varchar", length: 100 })
+  name: string;
+
+  @Column({ type: "varchar", length: 100, unique: true })
+  email: string;
+
+  @Column({ type: "varchar", select: false })
+  password: string;
+
+  @Column({ type: "varchar", length: 20, default: "user" })
+  role: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+USEREOF
+		log_success "Created src/entities/User.ts"
+	fi
+
+	# src/entities/Product.ts
+	if [[ ! -f "src/entities/Product.ts" ]]; then
+		cat >src/entities/Product.ts <<'PRODEOF'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
+import { User } from "./User";
+
+@Entity("products")
+export class Product {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: "varchar", length: 200 })
+  name: string;
+
+  @Column({ type: "text", nullable: true })
+  description: string;
+
+  @Column({ type: "decimal", precision: 10, scale: 2 })
+  price: number;
+
+  @Column({ type: "int", default: 0 })
+  stock: number;
+
+  @Column({ type: "boolean", default: true })
+  isActive: boolean;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "userId" })
+  user: User;
+
+  @Column()
+  userId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+PRODEOF
+		log_success "Created src/entities/Product.ts"
+	fi
+
+	# src/routes/user.routes.ts
+	mkdir -p src/routes
+	if [[ ! -f "src/routes/user.routes.ts" ]]; then
+		cat >src/routes/user.routes.ts <<'USERRTEOF'
+import { Router } from "express";
+
+const router = Router();
+
+router.get("/", (_req, res) => {
+  res.json({ message: "Get all users" });
+});
+
+router.get("/:id", (req, res) => {
+  res.json({ message: `Get user ${req.params.id}` });
+});
+
+router.post("/", (req, res) => {
+  res.status(201).json({ message: "Create user", data: req.body });
+});
+
+export default router;
+USERRTEOF
+		log_success "Created src/routes/user.routes.ts"
+	fi
+
+	# src/routes/product.routes.ts
+	if [[ ! -f "src/routes/product.routes.ts" ]]; then
+		cat >src/routes/product.routes.ts <<'PRODRTEOF'
+import { Router } from "express";
+
+const router = Router();
+
+router.get("/", (_req, res) => {
+  res.json({ message: "Get all products" });
+});
+
+router.get("/:id", (req, res) => {
+  res.json({ message: `Get product ${req.params.id}` });
+});
+
+router.post("/", (req, res) => {
+  res.status(201).json({ message: "Create product", data: req.body });
+});
+
+export default router;
+PRODRTEOF
+		log_success "Created src/routes/product.routes.ts"
+	fi
+
+	# ── Scripts ──
+	if command -v jq &>/dev/null; then
+		local temp
+		temp=$(mktemp)
+		if [[ "$PM" == "pnpm" ]]; then
+			jq '.scripts += {
+				"dev": "ts-node-dev --require tsconfig-paths/register --env-file=.env --respawn src/index.ts",
+				"build": "tsc && tsc-alias -p tsconfig.json",
+				"start": "node dist/index.js",
+				"typeorm": "ts-node-dev --require tsconfig-paths/register --env-file=.env ./node_modules/typeorm/cli.js",
+				"mg:gen": "pnpm typeorm -- migration:generate -d src/database/data-source.ts",
+				"mg:create": "pnpm run typeorm -- migration:create",
+				"mg:run": "pnpm typeorm -- migration:run -d src/database/data-source.ts",
+				"mg:run:prod": "typeorm migration:run -d dist/database/data-source.js",
+				"mg:revert": "pnpm typeorm -- migration:revert -d src/database/data-source.ts",
+				"mg:show": "pnpm typeorm -- migration:show -d src/database/data-source.ts"
+			}' package.json >"$temp" && mv "$temp" package.json
+		else
+			jq '.scripts += {
+				"dev": "ts-node-dev --require tsconfig-paths/register --env-file=.env --respawn src/index.ts",
+				"build": "tsc && tsc-alias -p tsconfig.json",
+				"start": "node dist/index.js",
+				"typeorm": "ts-node-dev --require tsconfig-paths/register --env-file=.env ./node_modules/typeorm/cli.js",
+				"mg:gen": "npx typeorm -- migration:generate -d src/database/data-source.ts",
+				"mg:create": "npm run typeorm -- migration:create",
+				"mg:run": "npx typeorm -- migration:run -d src/database/data-source.ts",
+				"mg:run:prod": "typeorm migration:run -d dist/database/data-source.js",
+				"mg:revert": "npx typeorm -- migration:revert -d src/database/data-source.ts",
+				"mg:show": "npx typeorm -- migration:show -d src/database/data-source.ts"
+			}' package.json >"$temp" && mv "$temp" package.json
+		fi
 		log_success "Added scripts to package.json"
 	fi
+
+	echo
+	separator
+	log_success "Express.js configured!"
+	separator
+	echo
+	list_item "Start: ${D_CYAN}$PM run dev${NC}"
+	list_item "Build: ${D_CYAN}$PM run build${NC}"
+	echo
 }
 
 # ===== NESTJS =====
@@ -543,7 +957,13 @@ configure_nest() {
 	box "Configuring NestJS Project"
 	separator
 	echo
+
 	check_project_exists || return 1
+
+	local PM
+	PM=$(detect_package_manager)
+	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	echo
 
 	if ! grep -q "@nestjs" package.json 2>/dev/null; then
 		log_warn "This doesn't appear to be a NestJS project"
@@ -551,17 +971,33 @@ configure_nest() {
 		[[ "$CONFIRM" != "y" ]] && { log_warn "Cancelled"; return 0; }
 	fi
 
-	log_info "Installing NestJS dependencies..."
-	if loading "Installing dependencies" _install_nest_deps; then
-		log_success "Dependencies installed"
+	echo
+	section_title "Optional dependencies"
+
+	read_confirm_default "Install PostgreSQL + TypeORM?" "y" USE_DB
+	read_confirm_default "Install authentication (JWT + Passport)?" "y" USE_AUTH
+
+	local -a DEPS=()
+	local -a DEV_DEPS=()
+
+	[[ "$USE_DB" == "y" ]] && DEPS+=("@nestjs/typeorm" "typeorm" "pg")
+	[[ "$USE_AUTH" == "y" ]] && DEPS+=("@nestjs/jwt" "@nestjs/passport" "passport" "passport-jwt" "bcryptjs")
+	[[ "$USE_AUTH" == "y" ]] && DEV_DEPS+=("@types/passport-jwt" "@types/bcryptjs")
+
+	[[ "$PM" == "pnpm" ]] && _fix_pnpm_dev_engines
+
+	if [[ ${#DEPS[@]} -gt 0 ]]; then
 		echo
-		list_item "@nestjs/typeorm, typeorm, pg"
-		list_item "@nestjs/jwt, @nestjs/passport"
-		list_item "class-validator, class-transformer"
-		list_item "bcryptjs, helmet, cloudinary"
-		echo
-	else
-		log_warn "Some dependencies failed to install"
+		section_title "Installing dependencies"
+		if ! loading "Installing dependencies" _install_pkgs "$PM" "${DEPS[@]}"; then
+			log_warn "Some dependencies failed to install"
+		fi
+	fi
+
+	if [[ ${#DEV_DEPS[@]} -gt 0 ]]; then
+		if ! loading "Installing dev dependencies" _install_dev_pkgs "$PM" "${DEV_DEPS[@]}"; then
+			log_warn "Some dev dependencies failed to install"
+		fi
 	fi
 
 	echo
@@ -569,13 +1005,8 @@ configure_nest() {
 	log_success "NestJS configured!"
 	separator
 	echo
-	list_item "Start: ${D_CYAN}npm run start:dev${NC}"
+	list_item "Start: ${D_CYAN}$PM run start:dev${NC}"
 	echo
-}
-
-_install_nest_deps() {
-	npm install @nestjs/typeorm typeorm pg @nestjs/jwt @nestjs/passport passport passport-jwt passport-local class-validator class-transformer bcryptjs helmet cloudinary &>>"$LOG_FILE"
-	npm install -D @types/passport-jwt @types/passport-local @types/bcryptjs &>>"$LOG_FILE"
 }
 
 # ===== MAIN =====
@@ -588,7 +1019,8 @@ init_main() {
 	nest | nestjs) configure_nest ;;
 	express | exp) configure_express ;;
 	"")
-		local detected=$(detect_project_type)
+		local detected
+		detected=$(detect_project_type)
 		if [[ "$detected" != "unknown" ]]; then
 			log_info "Detected project type: $detected"
 			echo
@@ -612,9 +1044,9 @@ init_main() {
 
 detect_project_type() {
 	[[ ! -f "package.json" ]] && { echo "unknown"; return; }
-	grep -q "next" package.json 2>/dev/null && { echo "next"; return; }
-	grep -q "vite" package.json 2>/dev/null && { echo "react"; return; }
-	grep -q "@nestjs" package.json 2>/dev/null && { echo "nest"; return; }
-	grep -q "express" package.json 2>/dev/null && { echo "express"; return; }
+	grep -q '"next"' package.json 2>/dev/null && { echo "next"; return; }
+	grep -q '"vite"' package.json 2>/dev/null && { echo "react"; return; }
+	grep -q '"@nestjs"' package.json 2>/dev/null && { echo "nest"; return; }
+	grep -q '"express"' package.json 2>/dev/null && { echo "express"; return; }
 	echo "unknown"
 }

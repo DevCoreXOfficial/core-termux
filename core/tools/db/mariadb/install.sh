@@ -6,7 +6,7 @@ LOG_FILE="$CORE_CACHE/install_db.log"
 
 _install_mariadb_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg install mariadb -y &>>"$LOG_FILE"; then
+	if yes | pkg install mariadb &>>"$LOG_FILE"; then
 		log_success "MariaDB installed"
 		return 0
 	else

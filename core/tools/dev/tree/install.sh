@@ -9,7 +9,7 @@ _install_tree_pkg() {
 }
 
 _install_tree_pkg_impl() {
-	if ! pkg install tree -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install tree &>>"$LOG_FILE"; then
 		log_error "Failed to install Tree"
 		return 1
 	fi

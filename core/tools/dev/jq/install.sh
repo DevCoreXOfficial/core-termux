@@ -9,7 +9,7 @@ _install_jq_pkg() {
 }
 
 _install_jq_pkg_impl() {
-	if ! pkg install jq -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install jq &>>"$LOG_FILE"; then
 		log_error "Failed to install jq"
 		return 1
 	fi

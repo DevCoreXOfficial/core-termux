@@ -9,7 +9,7 @@ _install_cloudflared_pkg() {
 }
 
 _install_cloudflared_pkg_impl() {
-	if ! pkg install cloudflared -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install cloudflared &>>"$LOG_FILE"; then
 		log_error "Failed to install Cloudflared"
 		return 1
 	fi

@@ -21,7 +21,7 @@ _n8n_dependencies() {
     if [[ -n "$bin_name" ]] && command -v "$bin_name" &>/dev/null; then
       continue
     fi
-    if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+    if ! yes | pkg install "$pkg_name" &>>"$LOG_FILE"; then
       log_error "Failed to install $pkg_name"
       return 1
     fi

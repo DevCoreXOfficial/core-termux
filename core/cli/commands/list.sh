@@ -220,6 +220,7 @@ _list_npm() {
   table_row "PSQL Format" "--psqlformat" "psqlformat" "$(_check_cmd "psqlformat")"
   table_row "NPM Check Updates" "--ncu" "ncu" "$(_check_cmd "ncu")"
   table_row "Ngrok" "--ngrok" "ngrok" "$(_check_cmd "ngrok")"
+  table_row "Turbopack" "--turbopack" "next-turbopack" "$(_check_cmd "next-turbopack")"
   table_end
 
   echo

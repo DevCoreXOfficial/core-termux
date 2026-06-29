@@ -18,14 +18,14 @@ _mimocode_install_deps() {
 
 _mimocode_install_deps_impl() {
   if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
-    if ! pkg install glibc-repo -y &>>"$LOG_FILE"; then
+    if ! yes | pkg install glibc-repo &>>"$LOG_FILE"; then
       log_error "Failed to install glibc-repo"
       return 1
     fi
   fi
 
   if [[ ! -f $PREFIX/glibc/lib/libc.so.6 ]]; then
-    if ! pkg install glibc -y &>>"$LOG_FILE"; then
+    if ! yes | pkg install glibc &>>"$LOG_FILE"; then
       log_error "Failed to install glibc"
       return 1
     fi
@@ -41,7 +41,7 @@ _mimocode_install_deps_impl() {
   for pkg_name in "${!DEPS[@]}"; do
     bin_name="${DEPS[$pkg_name]}"
     if ! command -v "$bin_name" &>/dev/null; then
-      if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+      if ! yes | pkg install "$pkg_name" &>>"$LOG_FILE"; then
         log_error "Failed to install $pkg_name"
         return 1
       fi
@@ -146,7 +146,7 @@ _install_mimocode_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if ! command -v proot-distro &>/dev/null; then
-    pkg install proot-distro -y &>>"$LOG_FILE"
+    yes | pkg install proot-distro &>>"$LOG_FILE"
   fi
 
   if [ ! -d "$(_mimocode_detect_ubuntu_root)" ]; then

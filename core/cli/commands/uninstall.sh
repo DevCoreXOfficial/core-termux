@@ -408,6 +408,10 @@ _uninstall_specific_tools() {
         uninstall_ngrok
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      turbopack)
+        uninstall_turbopack
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown node module: --$tool"
         ;;

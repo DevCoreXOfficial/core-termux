@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.4.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.5.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -149,7 +149,7 @@ core --version
 
 **Output:**
 ```
-4.4.0
+4.5.0
 ```
 
 ---
@@ -522,21 +522,29 @@ core pg shell                 # Open psql console
 
 ### `core init`
 
-Configure existing projects with predefined dependencies and structure.
+Configure existing projects with predefined dependencies, folder structure, and tooling. Detects your package manager (npm, pnpm, yarn, or bun) and installs dependencies accordingly.
 
 ```bash
-core init                     # Show help
+core init                     # Auto-detect project type and configure
 core init <template>          # Configure with specific template
 ```
+
+**What it does:**
+
+1. **Detects package manager** — Automatically identifies npm, pnpm, yarn, or bun from lock files or installed binaries
+2. **Installs dependencies** — Adds optional packages based on your selections (Zustand, React Query, Zod, etc.)
+3. **Creates folder structure** — Sets up a modular architecture with `src/components/`, `src/services/`, `src/hooks/`, etc.
+4. **Generates config files** — Creates `.prettierrc`, `.env.example`, `tsconfig.json`, and other project-specific files
+5. **Configures scripts** — Updates `package.json` with optimized scripts for your package manager
 
 **Available templates:**
 
 | Template | Description |
 |----------|-------------|
-| `next` | Next.js with preconfigured dependencies |
+| `next` | Next.js with optional Turbopack, TypeScript, Tailwind CSS |
 | `react` | React + Vite with modern structure |
-| `nest` | NestJS with additional configuration |
-| `express` | Express API with TypeScript + TypeORM |
+| `nest` | NestJS with TypeORM and authentication |
+| `express` | Express API with TypeScript + TypeORM + migrations |
 
 **Usage:**
 
@@ -547,11 +555,52 @@ cd api && core init express
 cd backend && core init nest
 ```
 
+**Example:**
+
+```bash
+$ cd my-next-app && core init next
+
+──────────────────────────────────────────────────────────────
+╭────────────────────────────────╮
+│ Configuring Next.js Project    │
+╰────────────────────────────────╯
+──────────────────────────────────────────────────────────────
+
+    ➜ Package manager detected: pnpm
+
+    ┌─ Configure Turbopack (faster dev/build)? [Y/n]
+    └─▶ y
+
+    ┌─ Install Zustand (state management)? [Y/n]
+    └─▶ y
+
+    ┌─ Create modular folder structure? [Y/n]
+    └─▶ y
+
+─────────────────── Creating folder structure ────────────────
+    ✔ Created src/components/ui
+    ✔ Created src/components/layout
+    ✔ Created src/services
+    ✔ Created src/hooks
+    ✔ Created src/store
+    ✔ Created src/types
+    ✔ Created src/config
+    ✔ Created src/providers
+
+──────────────────────────────────────────────────────────────
+    ✔ Next.js configured!
+──────────────────────────────────────────────────────────────
+```
+
 ---
 
 ## Template Details
 
 ### Next.js (`core init next`)
+
+**Turbopack & LightningCSS Support:**
+
+When running in Termux, `core init next` offers optional Turbopack support (the native Rust-based bundler for Next.js). If the glibc toolchain is installed (`core install npm --turbopack`), you can enable Turbopack for faster dev/build times. The installer also adds platform-specific native bindings for LightningCSS and Tailwind CSS.
 
 **Installed dependencies:**
 ```json
@@ -570,7 +619,10 @@ cd backend && core init nest
   },
   "devDependencies": {
     "prettier": "latest",
-    "prettier-plugin-tailwindcss": "latest"
+    "prettier-plugin-tailwindcss": "latest",
+    "@next/swc-linux-arm64-gnu": "latest",
+    "lightningcss-linux-arm64-gnu": "latest",
+    "@tailwindcss/oxide-linux-arm64-gnu": "latest"
   }
 }
 ```
@@ -745,6 +797,14 @@ core install npm
 | **PSQL Format** | `psqlformat` | PostgreSQL query formatter |
 | **NPM Check Updates** | `ncu` | Find outdated dependencies |
 | **Ngrok** | `ngrok` | Secure tunnel to localhost |
+| **Turbopack** | `next-turbopack` | Next.js native bundler (requires glibc toolchain) |
+
+**Turbopack Installation:**
+```bash
+core install npm --turbopack
+```
+
+> **Note:** Turbopack requires the glibc toolchain to run on Termux. When enabled, `core init next` will configure your project with Turbopack for faster development and build times.
 
 ---
 
@@ -995,7 +1055,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.4.1 (current: 4.4.0)
+⚠ New version available: 4.5.1 (current: 4.5.0)
 
 ➜ Run: core update core to update
 ```

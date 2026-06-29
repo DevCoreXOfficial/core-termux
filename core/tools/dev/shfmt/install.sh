@@ -9,7 +9,7 @@ _install_shfmt_pkg() {
 }
 
 _install_shfmt_pkg_impl() {
-	if ! pkg install shfmt -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install shfmt &>>"$LOG_FILE"; then
 		log_error "Failed to install Shfmt"
 		return 1
 	fi

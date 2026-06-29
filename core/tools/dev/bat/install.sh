@@ -9,7 +9,7 @@ _install_bat_pkg() {
 }
 
 _install_bat_pkg_impl() {
-	if ! pkg install bat -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install bat &>>"$LOG_FILE"; then
 		log_error "Failed to install Bat"
 		return 1
 	fi

@@ -9,7 +9,7 @@ _install_wget_pkg() {
 }
 
 _install_wget_pkg_impl() {
-	if ! pkg install wget -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install wget &>>"$LOG_FILE"; then
 		log_error "Failed to install Wget"
 		return 1
 	fi

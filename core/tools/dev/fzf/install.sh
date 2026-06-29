@@ -9,7 +9,7 @@ _install_fzf_pkg() {
 }
 
 _install_fzf_pkg_impl() {
-	if ! pkg install fzf -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install fzf &>>"$LOG_FILE"; then
 		log_error "Failed to install Fzf"
 		return 1
 	fi

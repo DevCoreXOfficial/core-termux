@@ -19,7 +19,7 @@ _pi_dependencies_impl() {
   for pkg_name in "${!DEPS[@]}"; do
     bin_name="${DEPS[$pkg_name]}"
     if ! command -v "$bin_name" &>/dev/null; then
-      if ! pkg install "$pkg_name" -y &>>"$LOG_FILE"; then
+      if ! yes | pkg install "$pkg_name" &>>"$LOG_FILE"; then
         log_error "Failed to install $pkg_name"
         return 1
       fi

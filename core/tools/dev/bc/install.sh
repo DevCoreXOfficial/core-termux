@@ -9,7 +9,7 @@ _install_bc_pkg() {
 }
 
 _install_bc_pkg_impl() {
-	if ! pkg install bc -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install bc &>>"$LOG_FILE"; then
 		log_error "Failed to install bc"
 		return 1
 	fi

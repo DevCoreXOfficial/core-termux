@@ -85,20 +85,22 @@ bootstrap_dependencies() {
 	local needed_glow=0
 	local needed_gh=0
 	local needed_rg=0
+  local needed_jq=0
 
 	command -v tput &>/dev/null || needed_tput=1
 	command -v git &>/dev/null || needed_git=1
 	command -v glow &>/dev/null || needed_glow=1
 	command -v gh &>/dev/null || needed_gh=1
 	command -v rg &>/dev/null || needed_rg=1
+  command -v jq &>/dev/null || needed_jq=1
 
-	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 || $needed_gh -eq 1 || $needed_rg -eq 1 ]]; then
+	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 || $needed_gh -eq 1 || $needed_rg -eq 1 || $needed_jq -eq 1 ]]; then
 		banner
 	fi
 
 	if [[ $needed_tput -eq 1 ]]; then
 		echo -e "  ${P_BORDER}→${P_NC}  Installing ncurses-utils..."
-		pkg install -y ncurses-utils &>/dev/null
+		yes | pkg install ncurses-utils &>/dev/null
 		echo -e "  ${P_OK}✔${P_NC}  ncurses-utils installed"
 		echo
 	fi
@@ -106,7 +108,7 @@ bootstrap_dependencies() {
 	if [[ $needed_git -eq 1 ]]; then
 		log_info "Installing git..."
 		progress_bar 0 10
-		pkg install -y git &>/dev/null
+		yes | pkg install git &>/dev/null
 		progress_bar 10 10
 		echo
 		log_ok "git installed"
@@ -115,7 +117,7 @@ bootstrap_dependencies() {
 	if [[ $needed_glow -eq 1 ]]; then
 		log_info "Installing glow..."
 		progress_bar 0 10
-		pkg install -y glow &>/dev/null
+		yes | pkg install glow &>/dev/null
 		progress_bar 10 10
 		echo
 		log_ok "glow installed"
@@ -124,7 +126,7 @@ bootstrap_dependencies() {
 	if [[ $needed_gh -eq 1 ]]; then
 		log_info "Installing gh (GitHub CLI)..."
 		progress_bar 0 10
-		pkg install -y gh &>/dev/null
+		yes | pkg install gh &>/dev/null
 		progress_bar 10 10
 		echo
 		log_ok "gh installed"
@@ -133,13 +135,22 @@ bootstrap_dependencies() {
 	if [[ $needed_rg -eq 1 ]]; then
 		log_info "Installing ripgrep..."
 		progress_bar 0 10
-		pkg install -y ripgrep &>/dev/null
+		yes | pkg install ripgrep &>/dev/null
 		progress_bar 10 10
 		echo
 		log_ok "ripgrep installed"
 	fi
 
-	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 || $needed_gh -eq 1 || $needed_rg -eq 1 ]]; then
+	if [[ $needed_jq -eq 1 ]]; then
+		log_info "Installing jq..."
+		progress_bar 0 10
+		yes | pkg install jq &>/dev/null
+		progress_bar 10 10
+		echo
+		log_ok "jq installed"
+	fi
+
+	if [[ $needed_tput -eq 1 || $needed_git -eq 1 || $needed_glow -eq 1 || $needed_gh -eq 1 || $needed_rg -eq 1 || $needed_jq -eq 1 ]]; then
 		echo
 		clear
 	fi
@@ -150,7 +161,7 @@ install_dependencies() {
 	progress_bar 5 10
 	progress_bar 10 10
 	echo
-	log_ok "Dependencies ready (git, ncurses-utils, glow, gh, ripgrep)"
+	log_ok "Dependencies ready (git, ncurses-utils, glow, gh, ripgrep, jq)"
 }
 
 setup_directories() {

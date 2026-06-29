@@ -9,7 +9,7 @@ _install_python_pkg() {
 }
 
 _install_python_pkg_impl() {
-	if ! pkg install python -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install python &>>"$LOG_FILE"; then
 		log_error "Failed to install Python"
 		return 1
 	fi

@@ -9,7 +9,7 @@ _install_proot_pkg() {
 }
 
 _install_proot_pkg_impl() {
-	if ! pkg install proot -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install proot &>>"$LOG_FILE"; then
 		log_error "Failed to install Proot"
 		return 1
 	fi

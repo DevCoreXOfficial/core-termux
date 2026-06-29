@@ -9,7 +9,7 @@ _install_rust_pkg() {
 }
 
 _install_rust_pkg_impl() {
-	if ! pkg install rust -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install rust &>>"$LOG_FILE"; then
 		log_error "Failed to install Rust"
 		return 1
 	fi

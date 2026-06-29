@@ -9,7 +9,7 @@ _install_udocker_pkg() {
 }
 
 _install_udocker_pkg_impl() {
-	if ! pkg install udocker -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install udocker &>>"$LOG_FILE"; then
 		log_error "Failed to install Udocker"
 		return 1
 	fi

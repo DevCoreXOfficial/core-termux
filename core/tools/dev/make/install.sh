@@ -9,7 +9,7 @@ _install_make_pkg() {
 }
 
 _install_make_pkg_impl() {
-	if ! pkg install make -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install make &>>"$LOG_FILE"; then
 		log_error "Failed to install Make"
 		return 1
 	fi

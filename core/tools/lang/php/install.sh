@@ -9,7 +9,7 @@ _install_php_pkg() {
 }
 
 _install_php_pkg_impl() {
-	if ! pkg install php -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install php &>>"$LOG_FILE"; then
 		log_error "Failed to install PHP"
 		return 1
 	fi

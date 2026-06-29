@@ -9,7 +9,7 @@ _install_perl_pkg() {
 }
 
 _install_perl_pkg_impl() {
-	if ! pkg install perl -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install perl &>>"$LOG_FILE"; then
 		log_error "Failed to install Perl"
 		return 1
 	fi

@@ -9,7 +9,7 @@ _install_npmjs_pkg() {
 }
 
 _install_npmjs_pkg_impl() {
-	if ! pkg install nodejs-lts -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install nodejs-lts &>>"$LOG_FILE"; then
 		log_error "Failed to install Node.js LTS"
 		return 1
 	fi

@@ -9,7 +9,7 @@ _install_html2text_pkg() {
 }
 
 _install_html2text_pkg_impl() {
-	if ! pkg install html2text -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install html2text &>>"$LOG_FILE"; then
 		log_error "Failed to install html2text"
 		return 1
 	fi

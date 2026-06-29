@@ -9,7 +9,7 @@ _install_curl_pkg() {
 }
 
 _install_curl_pkg_impl() {
-	if ! pkg install curl -y &>>"$LOG_FILE"; then
+	if ! yes | pkg install curl &>>"$LOG_FILE"; then
 		log_error "Failed to install Curl"
 		return 1
 	fi

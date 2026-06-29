@@ -1,0 +1,63 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# Wrapper for Next.js + Turbopack on Termux
+# Uses glibc Node.js to load linux-arm64 native bindings
+# Unset bionic linker vars so glibc ld.so finds libs from interpreter path
+unset LD_LIBRARY_PATH
+unset LD_PRELOAD
+NODE_GLIBC="$HOME/.local/share/core-termux-data/node-glibc/bin/node"
+NODE_GLIBC_DIR="$(dirname "$NODE_GLIBC")"
+
+if [[ ! -x "$NODE_GLIBC" ]]; then
+	echo "Turbopack toolchain not installed. Run: core install npm --turbopack" >&2
+	exit 1
+fi
+
+# Detect project root (where package.json lives)
+PROJECT_DIR="$PWD"
+while [[ "$PROJECT_DIR" != "/" && ! -f "$PROJECT_DIR/package.json" ]]; do
+	PROJECT_DIR="$(dirname "$PROJECT_DIR")"
+done
+if [[ ! -f "$PROJECT_DIR/package.json" ]]; then
+	echo "No package.json found in current or parent directories" >&2
+	exit 1
+fi
+
+# Find next.js CLI entry
+NEXT_BIN=""
+SEARCH_PATHS=(
+	"$PROJECT_DIR/node_modules/.pnpm/next@*/node_modules/next/dist/bin/next"
+	"$PROJECT_DIR/node_modules/next/dist/bin/next"
+)
+for pattern in "${SEARCH_PATHS[@]}"; do
+	for match in $pattern; do
+		if [[ -f "$match" ]]; then
+			NEXT_BIN="$match"
+			break 2
+		fi
+	done
+done
+
+if [[ -z "$NEXT_BIN" ]]; then
+	echo "Next.js not found in project dependencies" >&2
+	exit 1
+fi
+
+# Install missing linux-arm64-gnu native bindings
+# pnpm under bionic installs android-arm64 variants; glibc node needs linux ones
+PRECHECK="${CORE_PATH:-$HOME/.local/share/core-termux/core}/tools/npm/turbopack/bin/precheck-native.js"
+if [[ -f "$PRECHECK" && -d "$PROJECT_DIR/node_modules" ]]; then
+	"$NODE_GLIBC" "$PRECHECK" 2>/dev/null || true
+fi
+
+# Fix --hostname if not provided (Android blocks os.networkInterfaces)
+HAS_HOSTNAME=false
+for arg in "$@"; do
+	[[ "$arg" == "--hostname" ]] && HAS_HOSTNAME=true && break
+done
+
+if ! $HAS_HOSTNAME && [[ "$1" == "dev" ]]; then
+	set -- "$@" --hostname 127.0.0.1
+fi
+
+export PATH="$NODE_GLIBC_DIR:$PATH"
+exec "$NODE_GLIBC" "$NEXT_BIN" "$@"
