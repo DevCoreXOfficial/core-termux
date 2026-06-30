@@ -12,7 +12,7 @@ _engram_dependencies_impl() {
   declare -A DEPS=(
     ["golang"]="go"
     ["git"]="git"
-    ["sqlite"]="sqlite"
+    ["sqlite"]="sqlite3"
   )
 
   local pkg_name bin_name

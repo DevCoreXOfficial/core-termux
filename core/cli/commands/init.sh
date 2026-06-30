@@ -352,6 +352,53 @@ _ensure_barrel() {
 	fi
 }
 
+_configure_tailwind_vite() {
+	local config_file="vite.config.ts"
+	if [[ ! -f "$config_file" ]]; then
+		log_warn "vite.config.ts not found, skipping Tailwind plugin config"
+		return 1
+	fi
+
+	# Add import if not present
+	if ! grep -q "@tailwindcss/vite" "$config_file"; then
+		local last_import_line
+		last_import_line=$(grep -n "^import " "$config_file" | tail -1 | cut -d: -f1)
+		if [[ -n "$last_import_line" ]]; then
+			sed -i "${last_import_line}a import tailwindcss from '@tailwindcss/vite';" "$config_file"
+			log_info "Added tailwindcss import to vite.config.ts"
+		fi
+	fi
+
+	# Add tailwindcss() to plugins if not present
+	if ! grep -q "tailwindcss()" "$config_file"; then
+		local plugins_line
+		plugins_line=$(grep -n "plugins:" "$config_file" | head -1 | cut -d: -f1)
+		if [[ -n "$plugins_line" ]]; then
+			local bracket_line
+			bracket_line=$(awk -v start="$plugins_line" 'NR >= start && /\[/ { print NR; exit }' "$config_file")
+			if [[ -n "$bracket_line" ]]; then
+				sed -i "${bracket_line}a\\  tailwindcss()," "$config_file"
+				log_info "Added tailwindcss() plugin to vite.config.ts"
+			fi
+		fi
+	fi
+}
+
+_configure_tailwind_css() {
+	local css_file="src/index.css"
+	if [[ ! -f "$css_file" ]]; then
+		mkdir -p src
+		echo '@import "tailwindcss";' >"$css_file"
+		log_info "Created src/index.css with Tailwind import"
+		return 0
+	fi
+
+	if ! grep -q '@import "tailwindcss"' "$css_file"; then
+		sed -i '1i @import "tailwindcss";' "$css_file"
+		log_info "Added Tailwind import to src/index.css"
+	fi
+}
+
 section_title() {
 	echo
 	separator_section "$1"
@@ -378,12 +425,17 @@ configure_react() {
 	fi
 
 	local -a DEPS=()
+	local -a DEV_DEPS=()
 	local SETUP_STRUCTURE=false
 	local SETUP_PRETTIER=false
 	local SETUP_ENV=false
+	local SETUP_TAILWIND=false
 
 	# ── Optional deps ──
 	section_title "Optional dependencies"
+
+	read_confirm_default "Install Tailwind CSS?" "y" ANS
+	[[ "$ANS" == "y" ]] && SETUP_TAILWIND=true
 
 	read_confirm_default "Install Zustand (state management)?" "y" ANS
 	[[ "$ANS" == "y" ]] && DEPS+=("zustand")
@@ -430,6 +482,20 @@ configure_react() {
 		section_title "Installing dependencies"
 		if ! loading "Installing dependencies" _install_pkgs "$PM" "${DEPS[@]}"; then
 			log_warn "Some dependencies failed to install"
+		fi
+	fi
+
+	# ── Tailwind CSS ──
+	if $SETUP_TAILWIND; then
+		DEV_DEPS+=("tailwindcss" "@tailwindcss/vite")
+		echo
+		section_title "Installing Tailwind CSS"
+		if loading "Installing Tailwind CSS" _install_dev_pkgs "$PM" "${DEV_DEPS[@]}"; then
+			_configure_tailwind_vite
+			_configure_tailwind_css
+			log_success "Tailwind CSS configured"
+		else
+			log_warn "Tailwind CSS installation failed"
 		fi
 	fi
 
