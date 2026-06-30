@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.5.1-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.5.2-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -149,7 +149,7 @@ core --version
 
 **Output:**
 ```
-4.5.1
+4.5.2
 ```
 
 ---
@@ -535,7 +535,7 @@ core init <template>          # Configure with specific template
 2. **Installs dependencies** — Adds optional packages based on your selections (Zustand, React Query, Zod, etc.)
 3. **Creates folder structure** — Sets up a modular architecture with `src/components/`, `src/services/`, `src/hooks/`, etc.
 4. **Generates config files** — Creates `.prettierrc`, `.env.example`, `tsconfig.json`, and other project-specific files
-5. **Configures scripts** — Updates `package.json` with optimized scripts for your package manager
+5. **Preserves existing scripts** — Does not modify `package.json` scripts, so your `dev`, `build`, and `start` commands stay as your template set them
 
 **Available templates:**
 
@@ -629,8 +629,6 @@ When running in Termux, `core init next` offers optional Turbopack support (the 
 
 **Configuration:**
 - `.prettierrc` with Tailwind CSS plugin
-- Scripts with `--webpack` flag
-- DevCoreX landing page included
 - Structure: `components/`, `lib/`, `hooks/`, `types/`, `config/`, `store/`
 
 ---
@@ -641,8 +639,6 @@ When running in Termux, `core init next` offers optional Turbopack support (the 
 
 **Configuration:**
 - `.prettierrc` with Tailwind CSS plugin
-- Custom Button component
-- DevCoreX landing page in `src/App.tsx`
 - Structure: `components/`, `lib/`, `hooks/`, `types/`, `config/`, `store/`, `pages/`
 
 ---
@@ -1055,7 +1051,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.5.2 (current: 4.5.1)
+⚠ New version available: 4.5.3 (current: 4.5.2)
 
 ➜ Run: core update core to update
 ```

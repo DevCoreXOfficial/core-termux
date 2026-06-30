@@ -310,23 +310,6 @@ EOF
 		log_success "Folder structure created"
 	fi
 
-	# ── Update package.json scripts ──
-	echo
-	section_title "Updating package.json scripts"
-	if command -v jq &>/dev/null; then
-		local temp
-		temp=$(mktemp)
-		if $USE_TURBOPACK; then
-			jq '.scripts.dev = "next-turbopack dev --hostname 127.0.0.1" | .scripts.build = "next-turbopack build" | .scripts.start = "next start"' package.json >"$temp" && mv "$temp" package.json
-			log_success "Updated scripts for Turbopack"
-		else
-			jq '.scripts.dev = "next dev --webpack" | .scripts.build = "next build --webpack" | .scripts.start = "next start"' package.json >"$temp" && mv "$temp" package.json
-			log_success "Added --webpack flag for Termux compatibility"
-		fi
-	else
-		log_warn "jq not found — update package.json scripts manually"
-	fi
-
 	# ── Done ──
 	echo
 	separator
@@ -344,7 +327,6 @@ EOF
 	else
 		list_item "Start: ${D_CYAN}npm run dev${NC} (or ${D_CYAN}$PM run dev${NC})"
 	fi
-	list_item "Init shadcn: ${D_CYAN}npx shadcn@latest init${NC}"
 	echo
 }
 
