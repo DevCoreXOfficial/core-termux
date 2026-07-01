@@ -11,7 +11,7 @@ _codegraph_dependencies_impl() {
 	declare -A DEPS=(
 		["nodejs-lts"]="node"
 		["ripgrep"]="rg"
-		["sqlite"]="sqlite"
+		["sqlite"]="sqlite3"
 		["git"]="git"
 		["python"]="python"
 		["clang"]="clang"
