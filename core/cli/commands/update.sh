@@ -164,6 +164,10 @@ _update_specific_tools() {
         update_opencode
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      kimchi)
+        update_kimchi
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       mimocode)
         update_mimocode
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac

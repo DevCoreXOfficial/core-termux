@@ -14,6 +14,7 @@ AI_TOOLS=(
   "ollama"
   "codex"
   "opencode"
+  "kimchi"
   "mimocode"
   "engram"
   "codegraph"
@@ -37,6 +38,7 @@ source "$(dirname "$BASH_SOURCE")/openclaw/install.sh"
 source "$(dirname "$BASH_SOURCE")/ollama/install.sh"
 source "$(dirname "$BASH_SOURCE")/codex/install.sh"
 source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
+source "$(dirname "$BASH_SOURCE")/kimchi/install.sh"
 source "$(dirname "$BASH_SOURCE")/mimocode/install.sh"
 source "$(dirname "$BASH_SOURCE")/engram/install.sh"
 source "$(dirname "$BASH_SOURCE")/codegraph/install.sh"
@@ -90,6 +92,10 @@ install_all_ai_tools() {
       ;;
     opencode)
       loading "Installing OpenCode" install_opencode
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    kimchi)
+      loading "Installing Kimchi" install_kimchi
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)
@@ -188,6 +194,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling OpenCode" uninstall_opencode
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    kimchi)
+      loading "Uninstalling Kimchi" uninstall_kimchi
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     mimocode)
       loading "Uninstalling MiMo Code" uninstall_mimocode
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -284,6 +294,10 @@ update_all_ai_tools() {
       loading "Updating OpenCode" update_opencode
       case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
+    kimchi)
+      loading "Updating Kimchi" update_kimchi
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      ;;
     mimocode)
       loading "Updating MiMo Code" update_mimocode
       case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
@@ -378,6 +392,10 @@ reinstall_all_ai_tools() {
       ;;
     opencode)
       loading "Reinstalling OpenCode" reinstall_opencode
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    kimchi)
+      loading "Reinstalling Kimchi" reinstall_kimchi
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)

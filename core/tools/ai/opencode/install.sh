@@ -220,7 +220,6 @@ install_opencode() {
 }
 
 uninstall_opencode() {
-  log_info "Uninstalling OpenCode..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/opencode" ]; then
@@ -228,6 +227,10 @@ uninstall_opencode() {
     return 1
   fi
 
+  loading "Uninstalling OpenCode" _uninstall_opencode_impl
+}
+
+_uninstall_opencode_impl() {
   if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
     rm -f "$PREFIX/bin/opencode"
     rm -rf "$OPENCODE_DATA_DIR"
@@ -254,7 +257,6 @@ uninstall_opencode() {
 }
 
 update_opencode() {
-  log_info "Updating OpenCode..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
@@ -262,6 +264,10 @@ update_opencode() {
     return $?
   fi
 
+  loading "Updating OpenCode (proot-distro)" _update_opencode_proot_impl
+}
+
+_update_opencode_proot_impl() {
   _opencode_proot_ubuntu /bin/bash -c 'rm -rf /root/.opencode' &>>"$LOG_FILE"
 
   _opencode_proot_ubuntu /bin/bash -c '

@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.5.4-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.6.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -122,6 +122,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Ollama** | `--ollama` | Run open-source LLMs locally on Termux |
 | **Codex CLI** | `--codex` | Coding agent from OpenAI that runs locally on your computer |
 | **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
+| **Kimchi** | `--kimchi` | Terminal coding agent powered by Kimchi's multi-model orchestration |
 | **MiMoCode** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
 | **Engram** | `--engram` | Persistent memory system for coding agents |
 | **CodeGraph** | `--codegraph` | Analyzes your codebase structure and dependencies |
@@ -149,7 +150,7 @@ core --version
 
 **Output:**
 ```
-4.5.4
+4.6.0
 ```
 
 ---
@@ -1051,7 +1052,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.5.5 (current: 4.5.4)
+⚠ New version available: 4.6.1 (current: 4.6.0)
 
 ➜ Run: core update core to update
 ```
