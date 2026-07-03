@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.6.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.7.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -122,6 +122,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Ollama** | `--ollama` | Run open-source LLMs locally on Termux |
 | **Codex CLI** | `--codex` | Coding agent from OpenAI that runs locally on your computer |
 | **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
+| **Kilo Code CLI** | `--kilocode-cli` | The open source coding agent for building with AI in VS Code, JetBrains, or the CLI |
 | **Kimchi** | `--kimchi` | Terminal coding agent powered by Kimchi's multi-model orchestration |
 | **MiMoCode** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
 | **Engram** | `--engram` | Persistent memory system for coding agents |
@@ -150,7 +151,7 @@ core --version
 
 **Output:**
 ```
-4.6.0
+4.7.0
 ```
 
 ---
@@ -311,6 +312,7 @@ core voice !                  # Alias for 'text'
 | `codex` | `codex "prompt"` |
 | `gemini-cli` | `gemini -p "prompt"` |
 | `hermes-agent` | `hermes chat -q "prompt"` |
+| `kilocode-cli` | `kilo run "prompt"` |
 | `kimi-code` | `kimi -p "prompt"` |
 | `mimocode` | `mimo run "prompt"` |
 | `mistral-vibe` | `vibe --prompt "prompt"` |
@@ -1052,7 +1054,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.6.1 (current: 4.6.0)
+⚠ New version available: 4.7.1 (current: 4.7.0)
 
 ➜ Run: core update core to update
 ```

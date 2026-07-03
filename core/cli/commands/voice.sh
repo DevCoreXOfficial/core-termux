@@ -18,6 +18,7 @@ voice_help() {
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "codex" "codex \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "gemini-cli" "gemini -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "hermes-agent" "hermes chat -q \"prompt\""
+	printf "    ${D_CYAN}%-16s${NC} %s\n" "kilocode-cli" "kilo run \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "kimi-code" "kimi -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "mimocode" "mimo run \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "mistral-vibe" "vibe --prompt \"prompt\""
@@ -138,6 +139,9 @@ voice_main() {
 	hermes-agent)
 		hermes chat -q "$prompt"
 		;;
+	kilocode-cli)
+		kilo run "$prompt"
+		;;
 	kimi-code)
 		kimi -p "$prompt"
 		;;
@@ -161,7 +165,7 @@ voice_main() {
 		echo
 		log_info "Supported agents:"
 		echo "  opencode, claude-code, codex, gemini-cli, hermes-agent,"
-		echo "  kimi-code, mimocode, mistral-vibe, openclaude, pi, qwen-code"
+		echo "  kilocode-cli, kimi-code, mimocode, mistral-vibe, openclaude, pi, qwen-code"
 		separator
 		exit 1
 		;;

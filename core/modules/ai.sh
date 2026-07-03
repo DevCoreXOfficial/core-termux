@@ -32,6 +32,7 @@ install_ai() {
   list_item "Ollama ${GRAY}(${D_GREEN}ollama${GRAY})"
   list_item "Codex ${GRAY}(${D_GREEN}codex${GRAY})"
   list_item "OpenCode ${GRAY}(${D_GREEN}opencode${GRAY})"
+  list_item "Kilo Code CLI ${GRAY}(${D_GREEN}kilo${GRAY})"
   list_item "Kimchi ${GRAY}(${D_GREEN}kimchi${GRAY})"
   list_item "MiMo Code ${GRAY}(${D_GREEN}mimocode${GRAY})"
   list_item "Engram ${GRAY}(${D_GREEN}engram${GRAY})"
@@ -43,7 +44,7 @@ install_ai() {
   list_item "GGA ${GRAY}(${D_GREEN}gga${GRAY})"
   list_item "Hermes Agent ${GRAY}(${D_GREEN}hermes${GRAY})"
   list_item "Kimi Code ${GRAY}(${D_GREEN}kimi${GRAY})"
-  list_item "Command Code ${GRAY}(${D_GREEN}command-code${GRAY})"
+  list_item "Command Code ${GRAY}(${D_GREEN}cmdc${GRAY})"
   list_item "Freebuff ${GRAY}(${D_GREEN}freebuff${GRAY})"
   echo
 }
@@ -113,6 +114,7 @@ reinstall_ai() {
   list_item "Ollama"
   list_item "Codex"
   list_item "OpenCode"
+  list_item "Kilo Code CLI"
   list_item "Kimchi"
   list_item "MiMo Code"
   list_item "Engram"

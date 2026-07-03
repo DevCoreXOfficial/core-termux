@@ -98,6 +98,7 @@ CORE_TIPS=(
 	"Install Command Code: ${D_CYAN}core install ai --command-code${NC}"
 	"Install Freebuff: ${D_CYAN}core install ai --freebuff${NC}"
 	"Install Kimchi: ${D_CYAN}core install ai --kimchi${NC}"
+	"Install Kilo Code CLI: ${D_CYAN}core install ai --kilocode-cli${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"
