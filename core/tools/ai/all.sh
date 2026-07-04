@@ -28,6 +28,8 @@ AI_TOOLS=(
   "kimi-code"
   "command-code"
   "freebuff"
+  "ctx7"
+  "openspec"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -53,6 +55,8 @@ source "$(dirname "$BASH_SOURCE")/hermes-agent/install.sh"
 source "$(dirname "$BASH_SOURCE")/kimi-code/install.sh"
 source "$(dirname "$BASH_SOURCE")/command-code/install.sh"
 source "$(dirname "$BASH_SOURCE")/freebuff/install.sh"
+source "$(dirname "$BASH_SOURCE")/ctx7/install.sh"
+source "$(dirname "$BASH_SOURCE")/openspec/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
@@ -150,6 +154,14 @@ install_all_ai_tools() {
       ;;
     freebuff)
       loading "Installing Freebuff" install_freebuff
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    ctx7)
+      loading "Installing Context7" install_ctx7
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    openspec)
+      loading "Installing OpenSpec" install_openspec
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     esac
@@ -256,6 +268,14 @@ uninstall_all_ai_tools() {
       loading "Uninstalling Freebuff" uninstall_freebuff
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    ctx7)
+      loading "Uninstalling Context7" uninstall_ctx7
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    openspec)
+      loading "Uninstalling OpenSpec" uninstall_openspec
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -360,6 +380,14 @@ update_all_ai_tools() {
       loading "Updating Freebuff" update_freebuff
       case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
       ;;
+    ctx7)
+      loading "Updating Context7" update_ctx7
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      ;;
+    openspec)
+      loading "Updating OpenSpec" update_openspec
+      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -462,6 +490,14 @@ reinstall_all_ai_tools() {
       ;;
     freebuff)
       loading "Reinstalling Freebuff" reinstall_freebuff
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    ctx7)
+      loading "Reinstalling Context7" reinstall_ctx7
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    openspec)
+      loading "Reinstalling OpenSpec" reinstall_openspec
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

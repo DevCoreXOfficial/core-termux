@@ -212,6 +212,14 @@ _reinstall_specific_tools() {
         reinstall_freebuff
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      ctx7)
+        reinstall_ctx7
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
+      openspec)
+        reinstall_openspec
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

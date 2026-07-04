@@ -220,6 +220,14 @@ _update_specific_tools() {
         update_freebuff
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      ctx7)
+        update_ctx7
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
+      openspec)
+        update_openspec
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

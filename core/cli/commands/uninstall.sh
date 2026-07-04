@@ -218,6 +218,14 @@ _uninstall_specific_tools() {
         uninstall_freebuff
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      ctx7)
+        uninstall_ctx7
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
+      openspec)
+        uninstall_openspec
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

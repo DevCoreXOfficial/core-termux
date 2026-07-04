@@ -16,6 +16,18 @@ _install_npmjs_pkg_impl() {
 	return 0
 }
 
+_enable_corepack() {
+	loading "Enabling Corepack (pnpm, yarn)" _enable_corepack_impl
+}
+
+_enable_corepack_impl() {
+	if ! corepack enable &>>"$LOG_FILE"; then
+		log_error "Failed to enable Corepack"
+		return 1
+	fi
+	return 0
+}
+
 install_npmjs() {
 	if command -v node &>/dev/null; then
 		log_info "Node.js LTS is already installed"
@@ -25,7 +37,8 @@ install_npmjs() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 	_install_npmjs_pkg || return 1
-	log_success "Node.js LTS installed"
+	_enable_corepack || return 1
+	log_success "Node.js LTS installed (pnpm, yarn available via corepack)"
 	return 0
 }
 

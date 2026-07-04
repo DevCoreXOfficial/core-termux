@@ -219,6 +219,14 @@ _install_specific_tools() {
         install_freebuff
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      ctx7)
+        install_ctx7
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
+      openspec)
+        install_openspec
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

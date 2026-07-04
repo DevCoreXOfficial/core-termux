@@ -99,6 +99,8 @@ CORE_TIPS=(
 	"Install Freebuff: ${D_CYAN}core install ai --freebuff${NC}"
 	"Install Kimchi: ${D_CYAN}core install ai --kimchi${NC}"
 	"Install Kilo Code CLI: ${D_CYAN}core install ai --kilocode-cli${NC}"
+	"Install Context7: ${D_CYAN}core install ai --ctx7${NC}"
+	"Install OpenSpec: ${D_CYAN}core install ai --openspec${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"

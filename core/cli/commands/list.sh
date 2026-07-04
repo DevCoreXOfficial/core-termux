@@ -140,6 +140,8 @@ _list_ai() {
   table_row "Kimi Code" "--kimi-code" "kimi" "$(_check_cmd "kimi")"
   table_row "Command Code" "--command-code" "cmdc" "$(_check_cmd "command-code")"
   table_row "Freebuff" "--freebuff" "freebuff" "$(_check_cmd "freebuff")"
+  table_row "Context7" "--ctx7" "ctx7" "$(_check_cmd "ctx7")"
+  table_row "OpenSpec" "--openspec" "openspec" "$(_check_cmd "openspec")"
   table_end
 
   echo
