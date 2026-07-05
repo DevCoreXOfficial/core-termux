@@ -114,8 +114,18 @@ _update_engram_impl() {
   export GOCACHE="$HOME/.cache/go"
   export GOMODCACHE="$GOPATH/pkg/mod"
 
-  if ! git -C "$CORE_DATA/engram" pull &>>"$LOG_FILE" && go build -C "$CORE_DATA/engram/cmd/engram" -o $PREFIX/bin/engram &>>"$LOG_FILE"; then
-    log_error "Failed to update Engram"
+  if ! git -C "$CORE_DATA/engram" pull &>>"$LOG_FILE"; then
+    log_error "Failed to update Engram repository"
+    return 1
+  fi
+
+  rm -f "$PREFIX/bin/engram"
+  go clean -C "$CORE_DATA/engram" -cache &>>"$LOG_FILE"
+  go mod tidy -C "$CORE_DATA/engram" &>>"$LOG_FILE"
+  go mod download -C "$CORE_DATA/engram" &>>"$LOG_FILE"
+
+  if ! go build -C "$CORE_DATA/engram/cmd/engram" -o "$PREFIX/bin/engram" &>>"$LOG_FILE"; then
+    log_error "Failed to build Engram"
     return 1
   fi
   return 0
