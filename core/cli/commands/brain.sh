@@ -414,10 +414,10 @@ brain_save() {
 	echo
 	log_success "Memory saved to ${D_CYAN}$category/${date_prefix}_${slug}.md${D_NC}"
 
-	if command -v glow &>/dev/null; then
-		read_confirm "Preview with glow?" preview
+	if command -v bat &>/dev/null; then
+		read_confirm "Preview with bat?" preview
 		if [[ "$preview" == "y" ]]; then
-			glow "$filepath"
+			bat "$filepath"
 		fi
 	fi
 
@@ -510,8 +510,8 @@ brain_search() {
 	fi
 
 	echo
-	if command -v glow &>/dev/null; then
-		glow "$selected_file"
+	if command -v bat &>/dev/null; then
+		bat "$selected_file"
 	else
 		cat "$selected_file"
 	fi
@@ -679,8 +679,8 @@ brain_show() {
 	fi
 
 	echo
-	if command -v glow &>/dev/null; then
-		glow "$file"
+	if command -v bat &>/dev/null; then
+		bat "$file"
 	else
 		cat "$file"
 	fi
