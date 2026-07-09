@@ -270,7 +270,7 @@ _uninstall_kimchi_impl() {
 }
 
 _update_kimchi() {
-	loading "Updating Kimchi" _update_kimchi_impl
+	_update_kimchi_impl
 }
 
 _update_kimchi_impl() {

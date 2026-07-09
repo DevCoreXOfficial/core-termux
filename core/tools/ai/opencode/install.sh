@@ -257,7 +257,7 @@ _uninstall_opencode_impl() {
 }
 
 _update_opencode() {
-	loading "Updating OpenCode" _update_opencode_impl
+	_update_opencode_impl
 }
 
 _update_opencode_impl() {

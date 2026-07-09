@@ -105,7 +105,7 @@ update_engram() {
 }
 
 _update_engram() {
-	loading "Updating Engram" _update_engram_impl
+	_update_engram_impl
 }
 
 _update_engram_impl() {

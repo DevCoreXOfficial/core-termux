@@ -86,7 +86,7 @@ update_codex() {
 }
 
 _update_codex() {
-	loading "Updating Codex CLI" _update_codex_impl
+	_update_codex_impl
 }
 
 _update_codex_impl() {
