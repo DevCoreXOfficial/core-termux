@@ -283,115 +283,86 @@ uninstall_all_ai_tools() {
 }
 
 update_all_ai_tools() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${AI_TOOLS[@]}"; do
     case "$tool" in
     qwen-code)
-      loading "Updating Qwen Code" update_qwen_code
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_qwen_code
       ;;
     gemini-cli)
-      loading "Updating Gemini CLI" update_gemini_cli
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_gemini_cli
       ;;
     claude-code)
-      loading "Updating Claude Code" update_claude_code
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_claude_code
       ;;
     mistral-vibe)
-      loading "Updating Mistral Vibe" update_mistral_vibe
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_mistral_vibe
       ;;
     openclaude)
-      loading "Updating OpenClaude" update_openclaude
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_openclaude
       ;;
     openclaw)
-      loading "Updating OpenClaw" update_openclaw
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_openclaw
       ;;
     ollama)
-      loading "Updating Ollama" update_ollama
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_ollama
       ;;
     codex)
-      loading "Updating Codex CLI" update_codex
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_codex
       ;;
     opencode)
-      loading "Updating OpenCode" update_opencode
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_opencode
       ;;
     kilocode-cli)
-      loading "Updating Kilo Code CLI" update_kilocode_cli
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_kilocode_cli
       ;;
     kimchi)
-      loading "Updating Kimchi" update_kimchi
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_kimchi
       ;;
     mimocode)
-      loading "Updating MiMo Code" update_mimocode
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_mimocode
       ;;
     engram)
-      loading "Updating Engram" update_engram
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_engram
       ;;
     codegraph)
-      loading "Updating CodeGraph" update_codegraph
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_codegraph
       ;;
     pi)
-      loading "Updating Pi" update_pi
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_pi
       ;;
     antigravity-cli)
-      loading "Updating Antigravity CLI" update_antigravity_cli
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_antigravity_cli
       ;;
     gentle-ai)
-      loading "Updating Gentle AI" update_gentle_ai
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_gentle_ai
       ;;
     minimax-cli)
-      loading "Updating Minimax CLI" update_minimax_cli
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_minimax_cli
       ;;
     gga)
-      loading "Updating GGA" update_gga
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_gga
       ;;
     hermes-agent)
-      loading "Updating Hermes Agent" update_hermes_agent
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_hermes_agent
       ;;
     kimi-code)
-      loading "Updating Kimi Code" update_kimi_code
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_kimi_code
       ;;
     command-code)
-      loading "Updating Command Code" update_command_code
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_command_code
       ;;
     freebuff)
-      loading "Updating Freebuff" update_freebuff
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_freebuff
       ;;
     ctx7)
-      loading "Updating Context7" update_ctx7
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_ctx7
       ;;
     openspec)
-      loading "Updating OpenSpec" update_openspec
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_openspec
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_ai_tools() {

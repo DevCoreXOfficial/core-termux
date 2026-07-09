@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 COMMAND_CODE_DATA_DIR="$HOME/.local/share/core-termux-data/command-code"
@@ -107,7 +108,10 @@ _uninstall_command_code_impl() {
 }
 
 update_command_code() {
-  log_info "Updating Command Code..."
+  _check_update_needed "Command Code" "$(_get_installed_version command-code)" "$(_get_remote_npm_version command-code)" _update_command_code
+}
+
+_update_command_code() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -d "$COMMAND_CODE_DATA_DIR" ]; then
@@ -122,7 +126,7 @@ update_command_code() {
 }
 
 _update_command_code_impl() {
-  if (cd "$COMMAND_CODE_DATA_DIR" && npm update command-code &>>"$LOG_FILE"); then
+  if (cd "$COMMAND_CODE_DATA_DIR" && npm install command-code@latest &>>"$LOG_FILE"); then
     return 0
   else
     log_error "Failed to update Command Code"

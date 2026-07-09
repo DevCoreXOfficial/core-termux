@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -100,13 +101,7 @@ _uninstall_engram_impl() {
 }
 
 update_engram() {
-  log_info "Updating Engram..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
-  loading "Updating Engram" _update_engram_impl
-
-  log_success "Engram updated"
-  return 0
+  _check_update_needed "Engram" "$(_get_installed_version engram)" "$(_get_remote_github_version Gentleman-Programming/engram)" _update_engram
 }
 
 _update_engram_impl() {
@@ -114,11 +109,20 @@ _update_engram_impl() {
   export GOCACHE="$HOME/.cache/go"
   export GOMODCACHE="$GOPATH/pkg/mod"
 
+  loading "Pulling latest code" _update_engram_pull
+  loading "Building Engram binary" _update_engram_build
+  return $?
+}
+
+_update_engram_pull() {
   if ! git -C "$CORE_DATA/engram" pull &>>"$LOG_FILE"; then
     log_error "Failed to update Engram repository"
     return 1
   fi
+  return 0
+}
 
+_update_engram_build() {
   rm -f "$PREFIX/bin/engram"
   go clean -C "$CORE_DATA/engram" -cache &>>"$LOG_FILE"
   go mod tidy -C "$CORE_DATA/engram" &>>"$LOG_FILE"

@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
@@ -52,19 +53,17 @@ uninstall_mongodb() {
 }
 
 _update_mongodb_impl() {
+	loading "Updating MongoDB" _do_mongodb_update
+}
+
+_do_mongodb_update() {
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade mongodb -y &>>"$LOG_FILE"; then
-		log_success "MongoDB updated"
-		return 0
-	else
-		log_error "Failed to update MongoDB"
-		return 1
-	fi
+	pkg upgrade mongodb -y &>>"$LOG_FILE"
 }
 
 update_mongodb() {
-	log_info "Updating MongoDB..."
-	loading "Updating MongoDB" _update_mongodb_impl
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "MongoDB" "$(_get_installed_pkg_version mongodb "MongoDB")" "$(_get_remote_pkg_version mongodb)" _update_mongodb_impl
 }
 
 reinstall_mongodb() {

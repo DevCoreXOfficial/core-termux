@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -86,13 +87,11 @@ _uninstall_openclaw_impl() {
 }
 
 update_openclaw() {
-  log_info "Updating OpenClaw..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "OpenClaw" "$(_get_installed_version openclaw)" "$(_get_remote_npm_version openclaw)" _update_openclaw
+}
 
+_update_openclaw() {
   loading "Updating OpenClaw" _update_openclaw_impl
-
-  log_success "OpenClaw updated"
-  return 0
 }
 
 _update_openclaw_impl() {

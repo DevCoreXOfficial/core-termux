@@ -143,59 +143,44 @@ uninstall_all_npm_packages() {
 }
 
 update_all_npm_packages() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${NODE_PACKAGES[@]}"; do
     case "$tool" in
     typescript)
-      loading "Updating TypeScript" update_typescript
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_typescript
       ;;
     nestjs)
-      loading "Updating NestJS CLI" update_nestjs
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_nestjs
       ;;
     prettier)
-      loading "Updating Prettier" update_prettier
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_prettier
       ;;
     live-server)
-      loading "Updating Live Server" update_live_server
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_live_server
       ;;
     localtunnel)
-      loading "Updating Localtunnel" update_localtunnel
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_localtunnel
       ;;
     vercel)
-      loading "Updating Vercel CLI" update_vercel
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_vercel
       ;;
     markserv)
-      loading "Updating Markserv" update_markserv
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_markserv
       ;;
     psqlformat)
-      loading "Updating PSQL Format" update_psqlformat
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_psqlformat
       ;;
     ncu)
-      loading "Updating NPM Check Updates" update_ncu
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_ncu
       ;;
     ngrok)
-      loading "Updating Ngrok" update_ngrok
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_ngrok
       ;;
     turbopack)
-      loading "Updating Turbopack toolchain" update_turbopack
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_turbopack
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_npm_packages() {

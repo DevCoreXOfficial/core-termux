@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ui.log"
 
@@ -141,8 +142,7 @@ _update_banner_impl() {
 }
 
 update_banner() {
-	log_info "Updating Core-Termux Banner..."
-	loading "Updating Banner" _update_banner_impl
+  _update_banner_impl
 }
 
 reinstall_banner() {

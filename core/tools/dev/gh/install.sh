@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_gh_pkg_impl() {
 }
 
 _update_gh_pkg() {
-	loading "Updating GitHub CLI" _update_gh_pkg_impl
+  loading "Updating GitHub CLI" _do_gh_update
 }
 
-_update_gh_pkg_impl() {
-	if ! pkg upgrade gh -y &>>"$LOG_FILE"; then
-		log_error "Failed to update GitHub CLI"
-		return 1
-	fi
-	return 0
+_do_gh_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade gh -y &>>"$LOG_FILE"
 }
 
 install_gh() {
@@ -68,12 +66,7 @@ uninstall_gh() {
 }
 
 update_gh() {
-	log_info "Updating GitHub CLI..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_gh_pkg || return 1
-	log_success "GitHub CLI updated"
-	return 0
+	_check_update_needed "GitHub CLI" "$(_get_installed_pkg_version gh "GitHub CLI")" "$(_get_remote_pkg_version gh)" _update_gh_pkg
 }
 
 reinstall_gh() {

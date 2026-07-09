@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -67,23 +68,17 @@ uninstall_npmjs() {
 }
 
 _update_npmjs_pkg() {
-	loading "Updating Node.js LTS" _update_npmjs_pkg_impl
+  loading "Updating Node.js LTS" _do_npmjs_update
 }
 
-_update_npmjs_pkg_impl() {
-	if ! pkg upgrade nodejs-lts -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Node.js LTS"
-		return 1
-	fi
-	return 0
+_do_npmjs_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade nodejs-lts -y &>>"$LOG_FILE"
 }
 
 update_npmjs() {
-	log_info "Updating Node.js LTS..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	_update_npmjs_pkg || return 1
-	log_success "Node.js LTS updated"
-	return 0
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Node.js LTS" "$(_get_installed_pkg_version nodejs-lts "Node.js LTS")" "$(_get_remote_pkg_version nodejs-lts)" _update_npmjs_pkg
 }
 
 reinstall_npmjs() {

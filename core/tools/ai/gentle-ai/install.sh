@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 : "${CORE_CACHE:=$HOME/.cache/core-termux}"
 : "${CORE_PATH:=$HOME/core-termux/core}"
@@ -233,8 +234,7 @@ uninstall_gentle_ai() {
   fi
 }
 
-update_gentle_ai() {
-  log_info "Updating gentle-ai..."
+_update_gentle_ai() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _clone_or_update_repo || return 1
@@ -245,6 +245,10 @@ update_gentle_ai() {
 
   log_success "gentle-ai updated"
   return 0
+}
+
+update_gentle_ai() {
+  _check_update_needed "Gentle AI" "$(_get_installed_version gentle-ai)" "$(_get_remote_github_version Gentleman-Programming/gentle-ai)" _update_gentle_ai
 }
 
 reinstall_gentle_ai() {

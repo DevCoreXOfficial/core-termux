@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
@@ -255,7 +256,7 @@ _uninstall_opencode_impl() {
   fi
 }
 
-update_opencode() {
+_update_opencode_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
@@ -264,6 +265,10 @@ update_opencode() {
   fi
 
   loading "Updating OpenCode (proot-distro)" _update_opencode_proot_impl
+}
+
+update_opencode() {
+  _check_update_needed "OpenCode" "$(_get_installed_version opencode)" "$(_get_remote_github_version anomalyco/opencode)" _update_opencode
 }
 
 _update_opencode_proot_impl() {

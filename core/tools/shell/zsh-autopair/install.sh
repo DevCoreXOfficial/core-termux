@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_zsh_autopair_git_impl() {
     log_error "Failed to install zsh-autopair"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/zsh-autopair" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_zsh_autopair() {
   loading "Uninstalling zsh-autopair" _uninstall_zsh_autopair_impl
 }
 
+_update_zsh_autopair() {
+  loading "Updating zsh-autopair" _update_zsh_autopair_impl
+}
+
 _update_zsh_autopair_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autopair/.git" ]]; then
     log_warn "zsh-autopair not installed"
@@ -76,7 +82,7 @@ _update_zsh_autopair_impl() {
 }
 
 update_zsh_autopair() {
-  loading "Updating zsh-autopair" _update_zsh_autopair_impl
+  _check_update_needed "zsh-autopair" "$(_get_installed_git_version "$ZSH_PLUGINS_DIR/zsh-autopair" "zsh-autopair")" "$(_get_remote_github_version hlissner/zsh-autopair)" _update_zsh_autopair
 }
 
 reinstall_zsh_autopair() {

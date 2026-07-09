@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -24,6 +25,7 @@ _install_zsh_syntax_highlighting_git_impl() {
     log_error "Failed to install zsh-syntax-highlighting"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -53,6 +55,10 @@ uninstall_zsh_syntax_highlighting() {
   loading "Uninstalling zsh-syntax-highlighting" _uninstall_zsh_syntax_highlighting_impl
 }
 
+_update_zsh_syntax_highlighting() {
+  loading "Updating zsh-syntax-highlighting" _update_zsh_syntax_highlighting_impl
+}
+
 _update_zsh_syntax_highlighting_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/.git" ]]; then
     log_warn "zsh-syntax-highlighting not installed"
@@ -63,7 +69,7 @@ _update_zsh_syntax_highlighting_impl() {
 }
 
 update_zsh_syntax_highlighting() {
-  loading "Updating zsh-syntax-highlighting" _update_zsh_syntax_highlighting_impl
+  _check_update_needed "zsh-syntax-highlighting" "$(_get_installed_git_version "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting" "zsh-syntax-highlighting")" "$(_get_remote_github_version zsh-users/zsh-syntax-highlighting)" _update_zsh_syntax_highlighting
 }
 
 reinstall_zsh_syntax_highlighting() {

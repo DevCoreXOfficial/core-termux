@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_you_should_use_git_impl() {
     log_error "Failed to install zsh-you-should-use"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/zsh-you-should-use" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_you_should_use() {
   loading "Uninstalling zsh-you-should-use" _uninstall_you_should_use_impl
 }
 
+_update_you_should_use() {
+  loading "Updating zsh-you-should-use" _update_you_should_use_impl
+}
+
 _update_you_should_use_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-you-should-use/.git" ]]; then
     log_warn "zsh-you-should-use not installed"
@@ -76,7 +82,7 @@ _update_you_should_use_impl() {
 }
 
 update_you_should_use() {
-  loading "Updating zsh-you-should-use" _update_you_should_use_impl
+  _check_update_needed "zsh-you-should-use" "$(_get_installed_git_version "$ZSH_PLUGINS_DIR/zsh-you-should-use" "zsh-you-should-use")" "$(_get_remote_github_version MichaelAquilina/zsh-you-should-use)" _update_you_should_use
 }
 
 reinstall_you_should_use() {

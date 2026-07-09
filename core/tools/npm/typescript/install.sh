@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_typescript() {
   return 0
 }
 
-_update_typescript_npm() {
-  loading "Updating TypeScript" _update_typescript_npm_impl
-}
-
-_update_typescript_npm_impl() {
-  if ! npm update -g typescript &>>"$LOG_FILE"; then
-    log_error "Failed to update TypeScript"
-    return 1
-  fi
-  return 0
-}
-
 update_typescript() {
-  log_info "Updating TypeScript..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "TypeScript" "$(_get_installed_npm_version typescript TypeScript)" "$(_get_remote_npm_version typescript)" _update_typescript_impl
+}
 
-  _update_typescript_npm || return 1
-  log_success "TypeScript updated"
-  return 0
+_update_typescript_impl() {
+  loading "Updating TypeScript" _do_typescript_update
+}
+
+_do_typescript_update() {
+  npm update -g typescript &>>"$LOG_FILE"
 }
 
 reinstall_typescript() {

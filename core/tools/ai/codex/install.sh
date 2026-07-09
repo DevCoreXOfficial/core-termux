@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -81,21 +82,19 @@ _uninstall_codex_impl() {
 }
 
 update_codex() {
-	log_info "Updating Codex CLI..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	loading "Updating Codex CLI" _update_codex_impl
-
-	log_success "Codex CLI updated"
-	return 0
+	_check_update_needed "Codex CLI" "$(_get_installed_version codex)" "$(_get_remote_npm_version @mmmbuto/codex-cli-termux)" _update_codex
 }
 
 _update_codex_impl() {
-	if ! npm update -g @mmmbuto/codex-cli-termux &>>"$LOG_FILE"; then
-		log_error "Failed to update Codex CLI"
-		return 1
-	fi
-	return 0
+  loading "Updating Codex CLI" _update_codex_npm
+}
+
+_update_codex_npm() {
+  if ! npm update -g @mmmbuto/codex-cli-termux &>>"$LOG_FILE"; then
+    log_error "Failed to update Codex CLI"
+    return 1
+  fi
+  return 0
 }
 
 reinstall_codex() {

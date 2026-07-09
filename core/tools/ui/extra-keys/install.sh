@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ui.log"
 TERMUX_DIR="$HOME/.termux"
@@ -52,8 +53,7 @@ _update_extra_keys_impl() {
 }
 
 update_extra_keys() {
-	log_info "Updating Extra Keys..."
-	loading "Updating Extra Keys" _update_extra_keys_impl
+  _update_extra_keys_impl
 }
 
 reinstall_extra_keys() {

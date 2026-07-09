@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_powerlevel10k_git_impl() {
     log_error "Failed to install powerlevel10k"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/powerlevel10k" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_powerlevel10k() {
   loading "Uninstalling powerlevel10k" _uninstall_powerlevel10k_impl
 }
 
+_update_powerlevel10k() {
+  loading "Updating powerlevel10k" _update_powerlevel10k_impl
+}
+
 _update_powerlevel10k_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/powerlevel10k/.git" ]]; then
     log_warn "powerlevel10k not installed"
@@ -76,7 +82,7 @@ _update_powerlevel10k_impl() {
 }
 
 update_powerlevel10k() {
-  loading "Updating powerlevel10k" _update_powerlevel10k_impl
+  _check_update_needed "powerlevel10k" "$(_get_installed_git_version "$ZSH_PLUGINS_DIR/powerlevel10k" "powerlevel10k")" "$(_get_remote_github_version romkatv/powerlevel10k)" _update_powerlevel10k
 }
 
 reinstall_powerlevel10k() {

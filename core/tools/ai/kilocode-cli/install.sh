@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 KILOCODE_DATA_DIR="$HOME/.local/share/core-termux-data/kilocode"
@@ -261,7 +262,7 @@ _uninstall_kilocode_cli_impl() {
   fi
 }
 
-update_kilocode_cli() {
+_update_kilocode_cli() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$KILOCODE_DATA_DIR/kilo" ]; then
@@ -270,6 +271,10 @@ update_kilocode_cli() {
   fi
 
   loading "Updating Kilo Code CLI (proot-distro)" _update_kilocode_proot_impl
+}
+
+update_kilocode_cli() {
+  _check_update_needed "Kilo Code CLI" "$(_get_installed_version kilocode)" "$(_get_remote_github_version Kilo-Org/kilocode)" _update_kilocode_cli
 }
 
 _update_kilocode_proot_impl() {

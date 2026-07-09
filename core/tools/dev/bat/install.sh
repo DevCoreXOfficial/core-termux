@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_bat_pkg_impl() {
 }
 
 _update_bat_pkg() {
-	loading "Updating Bat" _update_bat_pkg_impl
+  loading "Updating Bat" _do_bat_update
 }
 
-_update_bat_pkg_impl() {
-	if ! pkg upgrade bat -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Bat"
-		return 1
-	fi
-	return 0
+_do_bat_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade bat -y &>>"$LOG_FILE"
 }
 
 install_bat() {
@@ -68,12 +66,7 @@ uninstall_bat() {
 }
 
 update_bat() {
-	log_info "Updating Bat..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_bat_pkg || return 1
-	log_success "Bat updated"
-	return 0
+	_check_update_needed "Bat" "$(_get_installed_pkg_version bat "Bat")" "$(_get_remote_pkg_version bat)" _update_bat_pkg
 }
 
 reinstall_bat() {

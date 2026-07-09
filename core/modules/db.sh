@@ -23,6 +23,7 @@ install_db() {
 	list_item "MariaDB (MySQL)"
 	list_item "SQLite"
 	list_item "MongoDB"
+	list_item "Redis"
 	echo
 }
 
@@ -85,6 +86,7 @@ reinstall_db() {
   list_item "MariaDB (MySQL)"
   list_item "SQLite"
   list_item "MongoDB"
+  list_item "Redis"
   echo
 }
 

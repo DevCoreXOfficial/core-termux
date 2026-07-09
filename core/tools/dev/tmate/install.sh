@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_tmate_pkg_impl() {
 }
 
 _update_tmate_pkg() {
-	loading "Updating Tmate" _update_tmate_pkg_impl
+  loading "Updating Tmate" _do_tmate_update
 }
 
-_update_tmate_pkg_impl() {
-	if ! pkg upgrade tmate -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Tmate"
-		return 1
-	fi
-	return 0
+_do_tmate_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade tmate -y &>>"$LOG_FILE"
 }
 
 install_tmate() {
@@ -68,12 +66,7 @@ uninstall_tmate() {
 }
 
 update_tmate() {
-	log_info "Updating Tmate..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_tmate_pkg || return 1
-	log_success "Tmate updated"
-	return 0
+	_check_update_needed "Tmate" "$(_get_installed_pkg_version tmate Tmate)" "$(_get_remote_pkg_version tmate)" _update_tmate_pkg
 }
 
 reinstall_tmate() {

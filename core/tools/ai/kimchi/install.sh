@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 KIMCHI_DATA_DIR="$HOME/.local/share/core-termux-data/kimchi"
@@ -268,7 +269,7 @@ _uninstall_kimchi_impl() {
   fi
 }
 
-update_kimchi() {
+_update_kimchi_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$KIMCHI_DATA_DIR/bin/kimchi" ]; then
@@ -277,6 +278,10 @@ update_kimchi() {
   fi
 
   loading "Updating Kimchi (proot-distro)" _update_kimchi_proot_impl
+}
+
+update_kimchi() {
+  _check_update_needed "Kimchi" "$(_get_installed_version kimchi)" "$(_get_remote_github_version getkimchi/kimchi)" _update_kimchi_impl
 }
 
 _update_kimchi_proot_impl() {

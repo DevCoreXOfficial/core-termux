@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
@@ -44,19 +45,17 @@ uninstall_postgresql() {
 }
 
 _update_postgresql_impl() {
+	loading "Updating PostgreSQL" _do_postgresql_update
+}
+
+_do_postgresql_update() {
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade postgresql -y &>>"$LOG_FILE"; then
-		log_success "PostgreSQL updated"
-		return 0
-	else
-		log_error "Failed to update PostgreSQL"
-		return 1
-	fi
+	pkg upgrade postgresql -y &>>"$LOG_FILE"
 }
 
 update_postgresql() {
-	log_info "Updating PostgreSQL..."
-	loading "Updating PostgreSQL" _update_postgresql_impl
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "PostgreSQL" "$(_get_installed_pkg_version postgresql "PostgreSQL")" "$(_get_remote_pkg_version postgresql)" _update_postgresql_impl
 }
 
 reinstall_postgresql() {

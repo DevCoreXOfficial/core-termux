@@ -264,6 +264,10 @@ _uninstall_specific_tools() {
         uninstall_mongodb
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      redis)
+        uninstall_redis
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown database: --$tool"
         ;;
@@ -316,6 +320,14 @@ _uninstall_specific_tools() {
         ;;
       tmate)
         uninstall_tmate
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
+      tmux)
+        uninstall_tmux
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
+      openssh)
+        uninstall_openssh
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)

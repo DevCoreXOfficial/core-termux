@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_fzf_tab_git_impl() {
     log_error "Failed to install fzf-tab"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/fzf-tab" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_fzf_tab() {
   loading "Uninstalling fzf-tab" _uninstall_fzf_tab_impl
 }
 
+_update_fzf_tab() {
+  loading "Updating fzf-tab" _update_fzf_tab_impl
+}
+
 _update_fzf_tab_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/fzf-tab/.git" ]]; then
     log_warn "fzf-tab not installed"
@@ -76,7 +82,7 @@ _update_fzf_tab_impl() {
 }
 
 update_fzf_tab() {
-  loading "Updating fzf-tab" _update_fzf_tab_impl
+  _check_update_needed "fzf-tab" "$(_get_installed_git_version "$ZSH_PLUGINS_DIR/fzf-tab" "fzf-tab")" "$(_get_remote_github_version Aloxaf/fzf-tab)" _update_fzf_tab
 }
 
 reinstall_fzf_tab() {

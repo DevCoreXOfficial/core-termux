@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.8.3-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.9.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -91,7 +91,7 @@ These modules are available across most commands (`core list`, `core install`, `
 | Module | Description |
 |--------|-------------|
 | `lang` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
-| `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB) |
+| `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB, Redis) |
 | `ai` | AI agents and coding assistants — see [AI Agents](#ai-agents) |
 | `editor` | Code editor components (Neovim, NvChad) |
 | `dev` | Development tools (gh, wget, curl, fzf, lsd, bat, etc.) |
@@ -153,7 +153,7 @@ core --version
 
 **Output:**
 ```
-4.8.3
+4.9.0
 ```
 
 ---
@@ -764,6 +764,8 @@ core install dev
 | **Proot** | `proot` | Chroot alternative for user-space |
 | **Ncurses Utils** | `ncurses-utils` | Terminal UI manipulation tools |
 | **Tmate** | `tmate` | Instant terminal sharing |
+| **Tmux** | `tmux` | Terminal multiplexer |
+| **OpenSSH** | `openssh` | SSH server and client |
 | **Cloudflared** | `cloudflared` | Cloudflare Tunnel client |
 | **Translate Shell** | `translate-shell` | Command-line translator |
 | **html2text** | `html2text` | HTML to plain text converter |
@@ -989,6 +991,12 @@ core-termux/
 │   │   ├── npm/
 │   │   ├── lang/
 │   │   ├── db/
+│   │   │   ├── all.sh
+│   │   │   ├── postgresql/
+│   │   │   ├── mariadb/
+│   │   │   ├── sqlite/
+│   │   │   ├── mongodb/
+│   │   │   └── redis/
 │   │   ├── editor/
 │   │   ├── dev/
 │   │   ├── shell/
@@ -999,7 +1007,8 @@ core-termux/
 │       ├── banner.sh
 │       ├── colors.sh
 │       ├── env.sh
-│       └── log.sh
+│       ├── log.sh
+│       └── version.sh
 └── install.sh
 ```
 
@@ -1056,7 +1065,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.8.4 (current: 4.8.3)
+⚠ New version available: 4.9.1 (current: 4.9.0)
 
 ➜ Run: core update core to update
 ```

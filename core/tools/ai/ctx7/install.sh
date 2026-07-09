@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -80,13 +81,11 @@ _uninstall_ctx7_impl() {
 }
 
 update_ctx7() {
-  log_info "Updating Context7..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Context7" "$(_get_installed_version ctx7)" "$(_get_remote_npm_version ctx7)" _update_ctx7
+}
 
+_update_ctx7() {
   loading "Updating Context7" _update_ctx7_impl
-
-  log_success "Context7 updated successfully"
-  return 0
 }
 
 _update_ctx7_impl() {

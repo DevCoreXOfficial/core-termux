@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_shfmt_pkg_impl() {
 }
 
 _update_shfmt_pkg() {
-	loading "Updating Shfmt" _update_shfmt_pkg_impl
+  loading "Updating Shfmt" _do_shfmt_update
 }
 
-_update_shfmt_pkg_impl() {
-	if ! pkg upgrade shfmt -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Shfmt"
-		return 1
-	fi
-	return 0
+_do_shfmt_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade shfmt -y &>>"$LOG_FILE"
 }
 
 install_shfmt() {
@@ -68,12 +66,7 @@ uninstall_shfmt() {
 }
 
 update_shfmt() {
-	log_info "Updating Shfmt..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_shfmt_pkg || return 1
-	log_success "Shfmt updated"
-	return 0
+	_check_update_needed "Shfmt" "$(_get_installed_pkg_version shfmt Shfmt)" "$(_get_remote_pkg_version shfmt)" _update_shfmt_pkg
 }
 
 reinstall_shfmt() {

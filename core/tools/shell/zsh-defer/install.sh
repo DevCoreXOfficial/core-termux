@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_zsh_defer_git_impl() {
     log_error "Failed to install zsh-defer"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/zsh-defer" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_zsh_defer() {
   loading "Uninstalling zsh-defer" _uninstall_zsh_defer_impl
 }
 
+_update_zsh_defer() {
+  loading "Updating zsh-defer" _update_zsh_defer_impl
+}
+
 _update_zsh_defer_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-defer/.git" ]]; then
     log_warn "zsh-defer not installed"
@@ -76,7 +82,7 @@ _update_zsh_defer_impl() {
 }
 
 update_zsh_defer() {
-  loading "Updating zsh-defer" _update_zsh_defer_impl
+  _update_zsh_defer
 }
 
 reinstall_zsh_defer() {

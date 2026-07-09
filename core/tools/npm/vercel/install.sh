@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_vercel() {
   return 0
 }
 
-_update_vercel_npm() {
-  loading "Updating Vercel CLI" _update_vercel_npm_impl
-}
-
-_update_vercel_npm_impl() {
-  if ! npm update -g vercel &>>"$LOG_FILE"; then
-    log_error "Failed to update Vercel CLI"
-    return 1
-  fi
-  return 0
-}
-
 update_vercel() {
-  log_info "Updating Vercel CLI..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Vercel CLI" "$(_get_installed_npm_version vercel Vercel CLI)" "$(_get_remote_npm_version vercel)" _update_vercel_impl
+}
 
-  _update_vercel_npm || return 1
-  log_success "Vercel CLI updated"
-  return 0
+_update_vercel_impl() {
+  loading "Updating Vercel CLI" _do_vercel_update
+}
+
+_do_vercel_update() {
+  npm update -g vercel &>>"$LOG_FILE"
 }
 
 reinstall_vercel() {

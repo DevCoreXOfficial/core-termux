@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_psqlformat() {
   return 0
 }
 
-_update_psqlformat_npm() {
-  loading "Updating PSQL Format" _update_psqlformat_npm_impl
-}
-
-_update_psqlformat_npm_impl() {
-  if ! npm update -g psqlformat &>>"$LOG_FILE"; then
-    log_error "Failed to update PSQL Format"
-    return 1
-  fi
-  return 0
-}
-
 update_psqlformat() {
-  log_info "Updating PSQL Format..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "PSQL Format" "$(_get_installed_npm_version psqlformat PSQL Format)" "$(_get_remote_npm_version psqlformat)" _update_psqlformat_impl
+}
 
-  _update_psqlformat_npm || return 1
-  log_success "PSQL Format updated"
-  return 0
+_update_psqlformat_impl() {
+  loading "Updating PSQL Format" _do_psqlformat_update
+}
+
+_do_psqlformat_update() {
+  npm update -g psqlformat &>>"$LOG_FILE"
 }
 
 reinstall_psqlformat() {

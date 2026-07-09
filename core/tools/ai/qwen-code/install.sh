@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -85,13 +86,11 @@ _uninstall_qwen_code_impl() {
 }
 
 update_qwen_code() {
-  log_info "Updating Qwen Code..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Qwen Code" "$(_get_installed_version qwen)" "$(_get_remote_npm_version @qwen-code/qwen-code)" _update_qwen_code
+}
 
+_update_qwen_code() {
   loading "Updating Qwen Code" _update_qwen_code_impl
-
-  log_success "Qwen Code updated successfully"
-  return 0
 }
 
 _update_qwen_code_impl() {

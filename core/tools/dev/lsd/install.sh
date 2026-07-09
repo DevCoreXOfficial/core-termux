@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_lsd_pkg_impl() {
 }
 
 _update_lsd_pkg() {
-	loading "Updating LSD" _update_lsd_pkg_impl
+  loading "Updating LSD" _do_lsd_update
 }
 
-_update_lsd_pkg_impl() {
-	if ! pkg upgrade lsd -y &>>"$LOG_FILE"; then
-		log_error "Failed to update LSD"
-		return 1
-	fi
-	return 0
+_do_lsd_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade lsd -y &>>"$LOG_FILE"
 }
 
 install_lsd() {
@@ -68,12 +66,7 @@ uninstall_lsd() {
 }
 
 update_lsd() {
-	log_info "Updating LSD..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_lsd_pkg || return 1
-	log_success "LSD updated"
-	return 0
+	_check_update_needed "LSD" "$(_get_installed_pkg_version lsd "LSD")" "$(_get_remote_pkg_version lsd)" _update_lsd_pkg
 }
 
 reinstall_lsd() {

@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -55,13 +56,11 @@ _uninstall_ollama_impl() {
 }
 
 update_ollama() {
-  log_info "Updating Ollama..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Ollama" "$(_get_installed_version ollama)" "$(_get_remote_pkg_version ollama)" _update_ollama
+}
 
+_update_ollama() {
   loading "Updating Ollama" _update_ollama_impl
-
-  log_success "Ollama updated"
-  return 0
 }
 
 _update_ollama_impl() {

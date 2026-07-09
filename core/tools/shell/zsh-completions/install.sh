@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_zsh_completions_git_impl() {
     log_error "Failed to install zsh-completions"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/zsh-completions" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_zsh_completions() {
   loading "Uninstalling zsh-completions" _uninstall_zsh_completions_impl
 }
 
+_update_zsh_completions() {
+  loading "Updating zsh-completions" _update_zsh_completions_impl
+}
+
 _update_zsh_completions_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-completions/.git" ]]; then
     log_warn "zsh-completions not installed"
@@ -76,7 +82,7 @@ _update_zsh_completions_impl() {
 }
 
 update_zsh_completions() {
-  loading "Updating zsh-completions" _update_zsh_completions_impl
+  _check_update_needed "zsh-completions" "$(_get_installed_git_version "$ZSH_PLUGINS_DIR/zsh-completions" "zsh-completions")" "$(_get_remote_github_version zsh-users/zsh-completions)" _update_zsh_completions
 }
 
 reinstall_zsh_completions() {

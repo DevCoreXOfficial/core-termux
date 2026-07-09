@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_editor.log"
 NVCHAD_REPO="https://github.com/DevCoreXOfficial/nvchad-termux.git"
@@ -85,23 +86,17 @@ uninstall_nvchad() {
   loading "Uninstalling NvChad" _uninstall_nvchad_impl
 }
 
-_update_nvchad_impl() {
-  mkdir -p "$(dirname "$LOG_FILE")"
+_update_nvchad() {
+  loading "Updating NvChad" _do_nvchad_update
+}
 
-  rm -rf "$NVCHAD_DIR" &>>"$LOG_FILE"
-  if git clone "$NVCHAD_REPO" "$NVCHAD_DIR" &>>"$LOG_FILE"; then
-    cp -r "$NVCHAD_DIR/nvim" ~/.config/ &>>"$LOG_FILE"
-    log_success "NvChad updated"
-    return 0
-  else
-    log_error "Failed to update NvChad"
-    return 1
-  fi
+_do_nvchad_update() {
+  rm -rf "$HOME/.config/nvim" 2>/dev/null
+  cp -r "$NVCHAD_DIR/nvim" "$HOME/.config/nvim"
 }
 
 update_nvchad() {
-  log_info "Updating NvChad..."
-  loading "Updating NvChad" _update_nvchad_impl
+  _update_nvchad
 }
 
 reinstall_nvchad() {

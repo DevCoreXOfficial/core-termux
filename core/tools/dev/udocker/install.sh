@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_udocker_pkg_impl() {
 }
 
 _update_udocker_pkg() {
-	loading "Updating Udocker" _update_udocker_pkg_impl
+  loading "Updating Udocker" _do_udocker_update
 }
 
-_update_udocker_pkg_impl() {
-	if ! pkg upgrade udocker -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Udocker"
-		return 1
-	fi
-	return 0
+_do_udocker_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade udocker -y &>>"$LOG_FILE"
 }
 
 install_udocker() {
@@ -68,12 +66,7 @@ uninstall_udocker() {
 }
 
 update_udocker() {
-	log_info "Updating Udocker..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_udocker_pkg || return 1
-	log_success "Udocker updated"
-	return 0
+	_check_update_needed "Udocker" "$(_get_installed_pkg_version udocker "Udocker")" "$(_get_remote_pkg_version udocker)" _update_udocker_pkg
 }
 
 reinstall_udocker() {

@@ -13,6 +13,8 @@ TOOLS_PACKAGES=(
 	"proot"
 	"ncurses"
 	"tmate"
+	"tmux"
+	"openssh"
 	"cloudflared"
 	"translate"
 	"html2text"
@@ -34,6 +36,8 @@ source "$(dirname "$BASH_SOURCE")/bat/install.sh"
 source "$(dirname "$BASH_SOURCE")/proot/install.sh"
 source "$(dirname "$BASH_SOURCE")/ncurses/install.sh"
 source "$(dirname "$BASH_SOURCE")/tmate/install.sh"
+source "$(dirname "$BASH_SOURCE")/tmux/install.sh"
+source "$(dirname "$BASH_SOURCE")/openssh/install.sh"
 source "$(dirname "$BASH_SOURCE")/cloudflared/install.sh"
 source "$(dirname "$BASH_SOURCE")/translate/install.sh"
 source "$(dirname "$BASH_SOURCE")/html2text/install.sh"
@@ -82,6 +86,14 @@ install_all_dev() {
 			;;
 		tmate)
 			loading "Installing Tmate" install_tmate
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+			;;
+		tmux)
+			loading "Installing Tmux" install_tmux
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+			;;
+		openssh)
+			loading "Installing OpenSSH" install_openssh
 			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		cloudflared)
@@ -172,6 +184,14 @@ uninstall_all_dev() {
 			loading "Uninstalling Tmate" uninstall_tmate
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
+		tmux)
+			loading "Uninstalling Tmux" uninstall_tmux
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+			;;
+		openssh)
+			loading "Uninstalling OpenSSH" uninstall_openssh
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+			;;
 		cloudflared)
 			loading "Uninstalling Cloudflared" uninstall_cloudflared
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -223,91 +243,74 @@ uninstall_all_dev() {
 }
 
 update_all_dev() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${TOOLS_PACKAGES[@]}"; do
     case "$tool" in
     gh)
-      loading "Updating GitHub CLI" update_gh
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_gh
       ;;
     wget)
-      loading "Updating Wget" update_wget
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_wget
       ;;
     curl)
-      loading "Updating Curl" update_curl
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_curl
       ;;
     lsd)
-      loading "Updating LSD" update_lsd
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_lsd
       ;;
     bat)
-      loading "Updating Bat" update_bat
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_bat
       ;;
     proot)
-      loading "Updating Proot" update_proot
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_proot
       ;;
     ncurses)
-      loading "Updating Ncurses Utils" update_ncurses
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_ncurses
       ;;
     tmate)
-      loading "Updating Tmate" update_tmate
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_tmate
+      ;;
+    tmux)
+      update_tmux
+      ;;
+    openssh)
+      update_openssh
       ;;
     cloudflared)
-      loading "Updating Cloudflared" update_cloudflared
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_cloudflared
       ;;
     translate)
-      loading "Updating Translate Shell" update_translate
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_translate
       ;;
     html2text)
-      loading "Updating html2text" update_html2text
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_html2text
       ;;
     jq)
-      loading "Updating jq" update_jq
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_jq
       ;;
     bc)
-      loading "Updating bc" update_bc
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_bc
       ;;
     tree)
-      loading "Updating Tree" update_tree
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_tree
       ;;
     fzf)
-      loading "Updating Fzf" update_fzf
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_fzf
       ;;
     imagemagick)
-      loading "Updating ImageMagick" update_imagemagick
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_imagemagick
       ;;
     shfmt)
-      loading "Updating Shfmt" update_shfmt
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_shfmt
       ;;
     make)
-      loading "Updating Make" update_make
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_make
       ;;
     udocker)
-      loading "Updating Udocker" update_udocker
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_udocker
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_dev() {
@@ -344,11 +347,19 @@ reinstall_all_dev() {
       loading "Reinstalling Ncurses Utils" reinstall_ncurses
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
-    tmate)
-      loading "Reinstalling Tmate" reinstall_tmate
-      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
-      ;;
-    cloudflared)
+		tmate)
+			loading "Reinstalling Tmate" reinstall_tmate
+			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+			;;
+		tmux)
+			loading "Reinstalling Tmux" reinstall_tmux
+			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+			;;
+		openssh)
+			loading "Reinstalling OpenSSH" reinstall_openssh
+			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+			;;
+		cloudflared)
       loading "Reinstalling Cloudflared" reinstall_cloudflared
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;

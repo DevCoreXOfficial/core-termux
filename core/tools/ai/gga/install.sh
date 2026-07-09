@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 GGA_DATA_DIR="$CORE_DATA/gga-termux"
@@ -117,8 +118,7 @@ uninstall_gga() {
 	fi
 }
 
-update_gga() {
-	log_info "Updating GGA..."
+_update_gga() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	_gga_clone_or_update_repo || return 1
@@ -126,6 +126,10 @@ update_gga() {
 
 	log_success "GGA updated"
 	return 0
+}
+
+update_gga() {
+	_check_update_needed "GGA" "$(_get_installed_version gga)" "$(_get_remote_github_version DevCoreXOfficial/gga-termux)" _update_gga
 }
 
 reinstall_gga() {

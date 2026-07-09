@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
@@ -44,19 +45,17 @@ uninstall_sqlite() {
 }
 
 _update_sqlite_impl() {
+	loading "Updating SQLite" _do_sqlite_update
+}
+
+_do_sqlite_update() {
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade sqlite -y &>>"$LOG_FILE"; then
-		log_success "SQLite updated"
-		return 0
-	else
-		log_error "Failed to update SQLite"
-		return 1
-	fi
+	pkg upgrade sqlite -y &>>"$LOG_FILE"
 }
 
 update_sqlite() {
-	log_info "Updating SQLite..."
-	loading "Updating SQLite" _update_sqlite_impl
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "SQLite" "$(_get_installed_pkg_version sqlite "SQLite")" "$(_get_remote_pkg_version sqlite)" _update_sqlite_impl
 }
 
 reinstall_sqlite() {

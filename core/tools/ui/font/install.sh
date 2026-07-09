@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ui.log"
 TERMUX_DIR="$HOME/.termux"
@@ -53,8 +54,7 @@ _update_font_impl() {
 }
 
 update_font() {
-	log_info "Updating Meslo Nerd Font..."
-	loading "Updating Meslo Nerd Font" _update_font_impl
+  _update_font_impl
 }
 
 reinstall_font() {

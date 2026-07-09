@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -54,23 +55,17 @@ uninstall_rust() {
 }
 
 _update_rust_pkg() {
-	loading "Updating Rust" _update_rust_pkg_impl
+  loading "Updating Rust" _do_rust_update
 }
 
-_update_rust_pkg_impl() {
-	if ! pkg upgrade rust -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Rust"
-		return 1
-	fi
-	return 0
+_do_rust_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade rust -y &>>"$LOG_FILE"
 }
 
 update_rust() {
-	log_info "Updating Rust..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	_update_rust_pkg || return 1
-	log_success "Rust updated"
-	return 0
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Rust" "$(_get_installed_pkg_version rust "Rust")" "$(_get_remote_pkg_version rust)" _update_rust_pkg
 }
 
 reinstall_rust() {

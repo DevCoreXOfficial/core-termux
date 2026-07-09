@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_prettier() {
   return 0
 }
 
-_update_prettier_npm() {
-  loading "Updating Prettier" _update_prettier_npm_impl
-}
-
-_update_prettier_npm_impl() {
-  if ! npm update -g prettier &>>"$LOG_FILE"; then
-    log_error "Failed to update Prettier"
-    return 1
-  fi
-  return 0
-}
-
 update_prettier() {
-  log_info "Updating Prettier..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Prettier" "$(_get_installed_npm_version prettier Prettier)" "$(_get_remote_npm_version prettier)" _update_prettier_impl
+}
 
-  _update_prettier_npm || return 1
-  log_success "Prettier updated"
-  return 0
+_update_prettier_impl() {
+  loading "Updating Prettier" _do_prettier_update
+}
+
+_do_prettier_update() {
+  npm update -g prettier &>>"$LOG_FILE"
 }
 
 reinstall_prettier() {

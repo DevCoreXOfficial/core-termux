@@ -74,31 +74,23 @@ uninstall_all_ui_components() {
 }
 
 update_all_ui_components() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${UI_COMPONENTS[@]}"; do
     case "$tool" in
     font)
-      loading "Updating Meslo Nerd Font" update_font
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_font
       ;;
     extra-keys)
-      loading "Updating Extra Keys" update_extra_keys
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_extra_keys
       ;;
     cursor)
-      loading "Updating Cursor Color" update_cursor
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_cursor
       ;;
     banner)
-      loading "Updating Core-Termux Banner" update_banner
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_banner
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_ui_components() {

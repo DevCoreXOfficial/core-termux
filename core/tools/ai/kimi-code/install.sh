@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -83,18 +84,11 @@ _uninstall_kimi_code_impl() {
 }
 
 update_kimi_code() {
-  if ! command -v kimi &>/dev/null; then
-    log_error "Kimi Code is not installed"
-    return 1
-  fi
+  _check_update_needed "Kimi Code" "$(_get_installed_version kimi)" "$(_get_remote_npm_version @moonshot-ai/kimi-code)" _update_kimi_code
+}
 
-  log_info "Updating Kimi Code..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
+_update_kimi_code() {
   loading "Updating Kimi Code" _update_kimi_code_impl
-
-  log_success "Kimi Code updated successfully"
-  return 0
 }
 
 _update_kimi_code_impl() {

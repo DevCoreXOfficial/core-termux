@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -54,23 +55,17 @@ uninstall_golang() {
 }
 
 _update_golang_pkg() {
-	loading "Updating Go (Golang)" _update_golang_pkg_impl
+  loading "Updating Go (Golang)" _do_golang_update
 }
 
-_update_golang_pkg_impl() {
-	if ! pkg upgrade golang -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Go (golang)"
-		return 1
-	fi
-	return 0
+_do_golang_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade golang -y &>>"$LOG_FILE"
 }
 
 update_golang() {
-	log_info "Updating Go (Golang)..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	_update_golang_pkg || return 1
-	log_success "Go (golang) updated"
-	return 0
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Go (golang)" "$(_get_installed_version go version Go)" "$(_get_remote_pkg_version golang)" _update_golang_pkg
 }
 
 reinstall_golang() {

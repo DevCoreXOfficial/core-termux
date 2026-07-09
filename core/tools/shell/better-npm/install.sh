@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_better_npm_git_impl() {
     log_error "Failed to install zsh-better-npm-completion"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/zsh-better-npm-completion" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_better_npm() {
   loading "Uninstalling zsh-better-npm-completion" _uninstall_better_npm_impl
 }
 
+_update_better_npm() {
+  loading "Updating zsh-better-npm-completion" _update_better_npm_impl
+}
+
 _update_better_npm_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-better-npm-completion/.git" ]]; then
     log_warn "zsh-better-npm-completion not installed"
@@ -76,7 +82,7 @@ _update_better_npm_impl() {
 }
 
 update_better_npm() {
-  loading "Updating zsh-better-npm-completion" _update_better_npm_impl
+  _update_better_npm
 }
 
 reinstall_better_npm() {

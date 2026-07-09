@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_editor.log"
 
@@ -45,19 +46,16 @@ uninstall_neovim() {
 }
 
 _update_neovim_impl() {
+  loading "Updating Neovim" _do_neovim_update
+}
+
+_do_neovim_update() {
   mkdir -p "$(dirname "$LOG_FILE")"
-  if pkg upgrade neovim -y &>>"$LOG_FILE"; then
-    log_success "Neovim updated"
-    return 0
-  else
-    log_error "Failed to update Neovim"
-    return 1
-  fi
+  yes | pkg upgrade neovim -y &>>"$LOG_FILE"
 }
 
 update_neovim() {
-  log_info "Updating Neovim..."
-  loading "Updating Neovim" _update_neovim_impl
+  _check_update_needed "Neovim" "$(_get_installed_pkg_version neovim "Neovim")" "$(_get_remote_pkg_version neovim)" _update_neovim_impl
 }
 
 reinstall_neovim() {

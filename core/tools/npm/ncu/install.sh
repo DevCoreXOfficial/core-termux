@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_ncu() {
   return 0
 }
 
-_update_ncu_npm() {
-  loading "Updating NPM Check Updates" _update_ncu_npm_impl
-}
-
-_update_ncu_npm_impl() {
-  if ! npm update -g npm-check-updates &>>"$LOG_FILE"; then
-    log_error "Failed to update NPM Check Updates"
-    return 1
-  fi
-  return 0
-}
-
 update_ncu() {
-  log_info "Updating NPM Check Updates..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "NPM Check Updates" "$(_get_installed_npm_version npm-check-updates NPM Check Updates)" "$(_get_remote_npm_version npm-check-updates)" _update_ncu_impl
+}
 
-  _update_ncu_npm || return 1
-  log_success "NPM Check Updates updated"
-  return 0
+_update_ncu_impl() {
+  loading "Updating NPM Check Updates" _do_ncu_update
+}
+
+_do_ncu_update() {
+  npm update -g npm-check-updates &>>"$LOG_FILE"
 }
 
 reinstall_ncu() {

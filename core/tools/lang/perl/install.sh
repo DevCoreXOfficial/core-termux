@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -54,23 +55,17 @@ uninstall_perl() {
 }
 
 _update_perl_pkg() {
-	loading "Updating Perl" _update_perl_pkg_impl
+  loading "Updating Perl" _do_perl_update
 }
 
-_update_perl_pkg_impl() {
-	if ! pkg upgrade perl -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Perl"
-		return 1
-	fi
-	return 0
+_do_perl_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade perl -y &>>"$LOG_FILE"
 }
 
 update_perl() {
-	log_info "Updating Perl..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	_update_perl_pkg || return 1
-	log_success "Perl updated"
-	return 0
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Perl" "$(_get_installed_pkg_version perl "Perl")" "$(_get_remote_pkg_version perl)" _update_perl_pkg
 }
 
 reinstall_perl() {

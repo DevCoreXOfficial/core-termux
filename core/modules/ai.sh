@@ -45,10 +45,11 @@ install_ai() {
   list_item "Hermes Agent ${GRAY}(${D_GREEN}hermes${GRAY})"
   list_item "Kimi Code ${GRAY}(${D_GREEN}kimi${GRAY})"
   list_item "Command Code ${GRAY}(${D_GREEN}cmdc${GRAY})"
-  list_item "Freebuff ${GRAY}(${D_GREEN}freebuff${GRAY})"  list_item "Context7 ${GRAY}(${D_GREEN}ctx7${GRAY})"
+  list_item "Freebuff ${GRAY}(${D_GREEN}freebuff${GRAY})"
+  list_item "Context7 ${GRAY}(${D_GREEN}ctx7${GRAY})"
   list_item "OpenSpec ${GRAY}(${D_GREEN}openspec${GRAY})"
   echo
-
+}
 
 _install_ai_tools_wrapper() {
   import "@/tools/ai/all"
@@ -128,10 +129,11 @@ reinstall_ai() {
   list_item "Hermes Agent"
   list_item "Kimi Code"
   list_item "Command Code"
-  list_item "Freebuff"  list_item "Context7"
+  list_item "Freebuff"
+  list_item "Context7"
   list_item "OpenSpec"
   echo
-
+}
 
 _reinstall_ai_tools_wrapper() {
   import "@/tools/ai/all"

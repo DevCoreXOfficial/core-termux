@@ -103,43 +103,32 @@ uninstall_all_lang_packages() {
 }
 
 update_all_lang_packages() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${LANGUAGE_PACKAGES[@]}"; do
     case "$tool" in
     nodejs)
-      loading "Updating Node.js LTS" update_npmjs
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_npmjs
       ;;
     python)
-      loading "Updating Python" update_python
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_python
       ;;
     perl)
-      loading "Updating Perl" update_perl
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_perl
       ;;
     php)
-      loading "Updating PHP" update_php
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_php
       ;;
     rust)
-      loading "Updating Rust" update_rust
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_rust
       ;;
     clang)
-      loading "Updating C/C++ (clang)" update_clang
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_clang
       ;;
     golang)
-      loading "Updating Go (golang)" update_golang
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_golang
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_lang_packages() {

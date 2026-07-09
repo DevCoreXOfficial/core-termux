@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -93,13 +94,11 @@ _uninstall_mistral_vibe_impl() {
 }
 
 update_mistral_vibe() {
-  log_info "Updating Mistral Vibe..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Mistral Vibe" "$(_get_installed_version vibe)" "$(_get_remote_pip_version mistral-vibe)" _update_mistral_vibe
+}
 
+_update_mistral_vibe() {
   loading "Updating Mistral Vibe" _update_mistral_vibe_impl
-
-  log_success "Mistral Vibe updated"
-  return 0
 }
 
 _update_mistral_vibe_impl() {

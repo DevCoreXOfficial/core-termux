@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -85,13 +86,11 @@ _uninstall_gemini_cli_impl() {
 }
 
 update_gemini_cli() {
-  log_info "Updating Gemini CLI..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Gemini CLI" "$(_get_installed_version gemini)" "$(_get_remote_npm_version @google/gemini-cli)" _update_gemini_cli
+}
 
+_update_gemini_cli() {
   loading "Updating Gemini CLI" _update_gemini_cli_impl
-
-  log_success "Gemini CLI updated"
-  return 0
 }
 
 _update_gemini_cli_impl() {

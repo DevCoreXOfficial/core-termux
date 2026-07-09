@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_jq_pkg_impl() {
 }
 
 _update_jq_pkg() {
-	loading "Updating jq" _update_jq_pkg_impl
+  loading "Updating jq" _do_jq_update
 }
 
-_update_jq_pkg_impl() {
-	if ! pkg upgrade jq -y &>>"$LOG_FILE"; then
-		log_error "Failed to update jq"
-		return 1
-	fi
-	return 0
+_do_jq_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade jq -y &>>"$LOG_FILE"
 }
 
 install_jq() {
@@ -68,12 +66,7 @@ uninstall_jq() {
 }
 
 update_jq() {
-	log_info "Updating jq..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_jq_pkg || return 1
-	log_success "jq updated"
-	return 0
+	_check_update_needed "jq" "$(_get_installed_pkg_version jq "jq")" "$(_get_remote_pkg_version jq)" _update_jq_pkg
 }
 
 reinstall_jq() {

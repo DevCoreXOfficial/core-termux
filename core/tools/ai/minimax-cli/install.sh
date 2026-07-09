@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -83,18 +84,11 @@ _uninstall_minimax_cli_impl() {
 }
 
 update_minimax_cli() {
-  if ! command -v mmx &>/dev/null; then
-    log_error "MiniMax CLI is not installed"
-    return 1
-  fi
+  _check_update_needed "MiniMax CLI" "$(_get_installed_version mmx)" "$(_get_remote_npm_version mmx-cli)" _update_minimax_cli
+}
 
-  log_info "Updating MiniMax CLI..."
-  mkdir -p "$(dirname "$LOG_FILE")"
-
+_update_minimax_cli() {
   loading "Updating MiniMax CLI" _update_minimax_cli_impl
-
-  log_success "MiniMax CLI updated successfully"
-  return 0
 }
 
 _update_minimax_cli_impl() {

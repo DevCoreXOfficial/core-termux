@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -37,6 +38,7 @@ _install_zsh_autosuggestions_git_impl() {
     log_error "Failed to install zsh-autosuggestions"
     return 1
   fi
+  git -C "$ZSH_PLUGINS_DIR/zsh-autosuggestions" fetch --tags --depth=1 &>>"$LOG_FILE"
   return 0
 }
 
@@ -66,6 +68,10 @@ uninstall_zsh_autosuggestions() {
   loading "Uninstalling zsh-autosuggestions" _uninstall_zsh_autosuggestions_impl
 }
 
+_update_zsh_autosuggestions() {
+  loading "Updating zsh-autosuggestions" _update_zsh_autosuggestions_impl
+}
+
 _update_zsh_autosuggestions_impl() {
   if [[ ! -d "$ZSH_PLUGINS_DIR/zsh-autosuggestions/.git" ]]; then
     log_warn "zsh-autosuggestions not installed"
@@ -76,7 +82,7 @@ _update_zsh_autosuggestions_impl() {
 }
 
 update_zsh_autosuggestions() {
-  loading "Updating zsh-autosuggestions" _update_zsh_autosuggestions_impl
+  _check_update_needed "zsh-autosuggestions" "$(_get_installed_git_version "$ZSH_PLUGINS_DIR/zsh-autosuggestions" "zsh-autosuggestions")" "$(_get_remote_github_version zsh-users/zsh-autosuggestions)" _update_zsh_autosuggestions
 }
 
 reinstall_zsh_autosuggestions() {

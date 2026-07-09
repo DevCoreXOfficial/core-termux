@@ -100,6 +100,7 @@ _list_db() {
   table_row "MariaDB" "--mariadb" "$(_check_pkg "mariadb")"
   table_row "SQLite" "--sqlite" "$(_check_pkg "sqlite")"
   table_row "MongoDB" "--mongodb" "$(_check_pkg "mongodb")"
+  table_row "Redis" "--redis" "$(_check_pkg "redis")"
   table_end
 
   echo
@@ -186,6 +187,8 @@ _list_dev() {
   table_row "Proot" "--proot" "$(_check_pkg "proot")"
   table_row "Ncurses Utils" "--ncurses" "$(_check_pkg "ncurses-utils")"
   table_row "Tmate" "--tmate" "$(_check_pkg "tmate")"
+  table_row "Tmux" "--tmux" "$(_check_pkg "tmux")"
+  table_row "OpenSSH" "--openssh" "$(_check_pkg "openssh")"
   table_row "Cloudflared" "--cloudflared" "$(_check_pkg "cloudflared")"
   table_row "Translate Shell" "--translate" "$(_check_pkg "translate-shell")"
   table_row "html2text" "--html2text" "$(_check_pkg "html2text")"

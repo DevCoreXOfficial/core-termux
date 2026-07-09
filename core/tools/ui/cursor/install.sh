@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ui.log"
 TERMUX_DIR="$HOME/.termux"
@@ -48,8 +49,7 @@ _update_cursor_impl() {
 }
 
 update_cursor() {
-	log_info "Updating Cursor Color..."
-	loading "Updating Cursor Color" _update_cursor_impl
+  _update_cursor_impl
 }
 
 reinstall_cursor() {

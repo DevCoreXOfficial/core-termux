@@ -43,19 +43,14 @@ uninstall_all_auto_tools() {
 }
 
 update_all_auto_tools() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${AUTOMATION_TOOLS[@]}"; do
     case "$tool" in
     n8n)
-      loading "Updating n8n" update_n8n
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_n8n
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_auto_tools() {

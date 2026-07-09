@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_cloudflared_pkg_impl() {
 }
 
 _update_cloudflared_pkg() {
-	loading "Updating Cloudflared" _update_cloudflared_pkg_impl
+  loading "Updating Cloudflared" _do_cloudflared_update
 }
 
-_update_cloudflared_pkg_impl() {
-	if ! pkg upgrade cloudflared -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Cloudflared"
-		return 1
-	fi
-	return 0
+_do_cloudflared_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade cloudflared -y &>>"$LOG_FILE"
 }
 
 install_cloudflared() {
@@ -68,12 +66,7 @@ uninstall_cloudflared() {
 }
 
 update_cloudflared() {
-	log_info "Updating Cloudflared..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_cloudflared_pkg || return 1
-	log_success "Cloudflared updated"
-	return 0
+	_check_update_needed "Cloudflared" "$(_get_installed_pkg_version cloudflared "Cloudflared")" "$(_get_remote_pkg_version cloudflared)" _update_cloudflared_pkg
 }
 
 reinstall_cloudflared() {

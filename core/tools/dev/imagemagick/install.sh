@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_imagemagick_pkg_impl() {
 }
 
 _update_imagemagick_pkg() {
-	loading "Updating ImageMagick" _update_imagemagick_pkg_impl
+  loading "Updating ImageMagick" _do_imagemagick_update
 }
 
-_update_imagemagick_pkg_impl() {
-	if ! pkg upgrade imagemagick -y &>>"$LOG_FILE"; then
-		log_error "Failed to update ImageMagick"
-		return 1
-	fi
-	return 0
+_do_imagemagick_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade imagemagick -y &>>"$LOG_FILE"
 }
 
 install_imagemagick() {
@@ -68,12 +66,7 @@ uninstall_imagemagick() {
 }
 
 update_imagemagick() {
-	log_info "Updating ImageMagick..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_imagemagick_pkg || return 1
-	log_success "ImageMagick updated"
-	return 0
+	_check_update_needed "ImageMagick" "$(_get_installed_pkg_version imagemagick "ImageMagick")" "$(_get_remote_pkg_version imagemagick)" _update_imagemagick_pkg
 }
 
 reinstall_imagemagick() {

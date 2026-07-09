@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_auto.log"
 
@@ -77,23 +78,20 @@ uninstall_n8n() {
   loading "Uninstalling n8n" _uninstall_n8n_impl
 }
 
-_update_n8n_impl() {
+_update_n8n() {
+  loading "Updating n8n" _do_n8n_update
+}
+
+_do_n8n_update() {
   mkdir -p "$(dirname "$LOG_FILE")"
   export GYP_DEFINES="android_ndk_path=''"
   export ANDROID_API_LEVEL=24
 
-  if npm update -g n8n &>>"$LOG_FILE"; then
-    log_success "n8n updated"
-    return 0
-  else
-    log_error "Failed to update n8n"
-    return 1
-  fi
+  npm update -g n8n &>>"$LOG_FILE"
 }
 
 update_n8n() {
-  log_info "Updating n8n..."
-  loading "Updating n8n" _update_n8n_impl
+  _check_update_needed "n8n" "$(_get_installed_version n8n)" "$(_get_remote_npm_version n8n)" _update_n8n
 }
 
 reinstall_n8n() {

@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_ngrok() {
   return 0
 }
 
-_update_ngrok_npm() {
-  loading "Updating Ngrok" _update_ngrok_npm_impl
-}
-
-_update_ngrok_npm_impl() {
-  if ! npm update -g ngrok &>>"$LOG_FILE"; then
-    log_error "Failed to update Ngrok"
-    return 1
-  fi
-  return 0
-}
-
 update_ngrok() {
-  log_info "Updating Ngrok..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Ngrok" "$(_get_installed_npm_version ngrok Ngrok)" "$(_get_remote_npm_version ngrok)" _update_ngrok_impl
+}
 
-  _update_ngrok_npm || return 1
-  log_success "Ngrok updated"
-  return 0
+_update_ngrok_impl() {
+  loading "Updating Ngrok" _do_ngrok_update
+}
+
+_do_ngrok_update() {
+  npm update -g ngrok &>>"$LOG_FILE"
 }
 
 reinstall_ngrok() {

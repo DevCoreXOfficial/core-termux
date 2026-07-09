@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_ncurses_pkg_impl() {
 }
 
 _update_ncurses_pkg() {
-	loading "Updating Ncurses Utils" _update_ncurses_pkg_impl
+  loading "Updating Ncurses Utils" _do_ncurses_update
 }
 
-_update_ncurses_pkg_impl() {
-	if ! pkg upgrade ncurses-utils -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Ncurses Utils"
-		return 1
-	fi
-	return 0
+_do_ncurses_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade ncurses-utils -y &>>"$LOG_FILE"
 }
 
 install_ncurses() {
@@ -68,12 +66,7 @@ uninstall_ncurses() {
 }
 
 update_ncurses() {
-	log_info "Updating Ncurses Utils..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_ncurses_pkg || return 1
-	log_success "Ncurses Utils updated"
-	return 0
+	_check_update_needed "Ncurses Utils" "$(_get_installed_pkg_version ncurses-utils "Ncurses Utils")" "$(_get_remote_pkg_version ncurses-utils)" _update_ncurses_pkg
 }
 
 reinstall_ncurses() {

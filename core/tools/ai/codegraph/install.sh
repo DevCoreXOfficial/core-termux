@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -115,8 +116,7 @@ _uninstall_codegraph_impl() {
 	fi
 }
 
-update_codegraph() {
-	log_info "Updating CodeGraph..."
+_update_codegraph_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	loading "Removing old CodeGraph" _update_codegraph_remove_impl
@@ -126,6 +126,10 @@ update_codegraph() {
 
 	log_success "CodeGraph updated"
 	return 0
+}
+
+update_codegraph() {
+	_check_update_needed "CodeGraph" "$(_get_installed_version codegraph)" "$(_get_remote_github_version colbymchenry/codegraph)" _update_codegraph
 }
 
 _update_codegraph_remove_impl() {

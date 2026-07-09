@@ -258,6 +258,10 @@ _reinstall_specific_tools() {
         reinstall_mongodb
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      redis)
+        reinstall_redis
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown database: --$tool"
         ;;
@@ -310,6 +314,14 @@ _reinstall_specific_tools() {
         ;;
       tmate)
         reinstall_tmate
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
+      tmux)
+        reinstall_tmux
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
+      openssh)
+        reinstall_openssh
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)

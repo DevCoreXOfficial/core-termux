@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -80,13 +81,11 @@ _uninstall_openspec_impl() {
 }
 
 update_openspec() {
-  log_info "Updating OpenSpec..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "OpenSpec" "$(_get_installed_version openspec)" "$(_get_remote_npm_version @fission-ai/openspec)" _update_openspec
+}
 
+_update_openspec() {
   loading "Updating OpenSpec" _update_openspec_impl
-
-  log_success "OpenSpec updated successfully"
-  return 0
 }
 
 _update_openspec_impl() {

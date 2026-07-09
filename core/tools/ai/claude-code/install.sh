@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CLAUDE_DATA_DIR="$HOME/.local/share/core-termux-data/claude"
@@ -249,8 +250,7 @@ uninstall_claude_code() {
   fi
 }
 
-update_claude_code() {
-  log_info "Updating Claude Code..."
+_update_claude_code() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$CLAUDE_DATA_DIR/claude" ]; then
@@ -259,9 +259,9 @@ update_claude_code() {
   fi
 
   _claude_proot_ubuntu /bin/bash -c '
-		export HOME=/root
-		curl -fsSL https://claude.ai/install.sh | bash
-	' &>>"$LOG_FILE"
+    export HOME=/root
+    curl -fsSL https://claude.ai/install.sh | bash
+  ' &>>"$LOG_FILE"
 
   if ! _claude_proot_ubuntu test -x /root/.local/bin/claude &>>"$LOG_FILE"; then
     log_error "Claude Code binary not found after update"
@@ -270,6 +270,10 @@ update_claude_code() {
 
   log_success "Claude Code (proot-distro) updated"
   return 0
+}
+
+update_claude_code() {
+  _check_update_needed "Claude Code" "$(_get_installed_version claude)" "$(_get_remote_github_version anthropics/claude-code)" _update_claude_code
 }
 
 reinstall_claude_code() {

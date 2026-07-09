@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_proot_pkg_impl() {
 }
 
 _update_proot_pkg() {
-	loading "Updating Proot" _update_proot_pkg_impl
+  loading "Updating Proot" _do_proot_update
 }
 
-_update_proot_pkg_impl() {
-	if ! pkg upgrade proot -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Proot"
-		return 1
-	fi
-	return 0
+_do_proot_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade proot -y &>>"$LOG_FILE"
 }
 
 install_proot() {
@@ -68,12 +66,7 @@ uninstall_proot() {
 }
 
 update_proot() {
-	log_info "Updating Proot..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_proot_pkg || return 1
-	log_success "Proot updated"
-	return 0
+	_check_update_needed "Proot" "$(_get_installed_pkg_version proot Proot)" "$(_get_remote_pkg_version proot)" _update_proot_pkg
 }
 
 reinstall_proot() {

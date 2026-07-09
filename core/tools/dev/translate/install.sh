@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_translate_pkg_impl() {
 }
 
 _update_translate_pkg() {
-	loading "Updating Translate Shell" _update_translate_pkg_impl
+  loading "Updating Translate Shell" _do_translate_update
 }
 
-_update_translate_pkg_impl() {
-	if ! pkg upgrade translate-shell -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Translate Shell"
-		return 1
-	fi
-	return 0
+_do_translate_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade translate-shell -y &>>"$LOG_FILE"
 }
 
 install_translate() {
@@ -68,12 +66,7 @@ uninstall_translate() {
 }
 
 update_translate() {
-	log_info "Updating Translate Shell..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_translate_pkg || return 1
-	log_success "Translate Shell updated"
-	return 0
+	_check_update_needed "Translate Shell" "$(_get_installed_pkg_version translate-shell "Translate Shell")" "$(_get_remote_pkg_version translate-shell)" _update_translate_pkg
 }
 
 reinstall_translate() {

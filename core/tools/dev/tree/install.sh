@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_tree_pkg_impl() {
 }
 
 _update_tree_pkg() {
-	loading "Updating Tree" _update_tree_pkg_impl
+  loading "Updating Tree" _do_tree_update
 }
 
-_update_tree_pkg_impl() {
-	if ! pkg upgrade tree -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Tree"
-		return 1
-	fi
-	return 0
+_do_tree_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade tree -y &>>"$LOG_FILE"
 }
 
 install_tree() {
@@ -68,12 +66,7 @@ uninstall_tree() {
 }
 
 update_tree() {
-	log_info "Updating Tree..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_tree_pkg || return 1
-	log_success "Tree updated"
-	return 0
+	_check_update_needed "Tree" "$(_get_installed_pkg_version tree "Tree")" "$(_get_remote_pkg_version tree)" _update_tree_pkg
 }
 
 reinstall_tree() {

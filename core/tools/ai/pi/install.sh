@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -81,13 +82,11 @@ _uninstall_pi_impl() {
 }
 
 update_pi() {
-  log_info "Updating Pi Coding Agent..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Pi Coding Agent" "$(_get_installed_version pi)" "$(_get_remote_npm_version @earendil-works/pi-coding-agent)" _update_pi
+}
 
+_update_pi() {
   loading "Updating Pi Coding Agent" _update_pi_impl
-
-  log_success "Pi updated"
-  return 0
 }
 
 _update_pi_impl() {

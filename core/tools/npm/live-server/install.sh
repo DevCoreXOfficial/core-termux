@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -68,25 +69,16 @@ uninstall_live_server() {
   return 0
 }
 
-_update_live_server_npm() {
-  loading "Updating Live Server" _update_live_server_npm_impl
-}
-
-_update_live_server_npm_impl() {
-  if ! npm update -g live-server &>>"$LOG_FILE"; then
-    log_error "Failed to update Live Server"
-    return 1
-  fi
-  return 0
-}
-
 update_live_server() {
-  log_info "Updating Live Server..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Live Server" "$(_get_installed_npm_version live-server Live Server)" "$(_get_remote_npm_version live-server)" _update_live_server_impl
+}
 
-  _update_live_server_npm || return 1
-  log_success "Live Server updated"
-  return 0
+_update_live_server_impl() {
+  loading "Updating Live Server" _do_live_server_update
+}
+
+_do_live_server_update() {
+  npm update -g live-server &>>"$LOG_FILE"
 }
 
 reinstall_live_server() {

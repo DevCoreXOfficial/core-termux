@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -84,25 +85,16 @@ uninstall_localtunnel() {
   return 0
 }
 
-_update_localtunnel_npm() {
-  loading "Updating Localtunnel" _update_localtunnel_npm_impl
-}
-
-_update_localtunnel_npm_impl() {
-  if ! npm update -g localtunnel &>>"$LOG_FILE"; then
-    log_error "Failed to update Localtunnel"
-    return 1
-  fi
-  return 0
-}
-
 update_localtunnel() {
-  log_info "Updating Localtunnel..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Localtunnel" "$(_get_installed_npm_version localtunnel Localtunnel)" "$(_get_remote_npm_version localtunnel)" _update_localtunnel_impl
+}
 
-  _update_localtunnel_npm || return 1
-  log_success "Localtunnel updated"
-  return 0
+_update_localtunnel_impl() {
+  loading "Updating Localtunnel" _do_localtunnel_update
+}
+
+_do_localtunnel_update() {
+  npm update -g localtunnel &>>"$LOG_FILE"
 }
 
 reinstall_localtunnel() {

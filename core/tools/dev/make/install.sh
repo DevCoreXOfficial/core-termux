@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_make_pkg_impl() {
 }
 
 _update_make_pkg() {
-	loading "Updating Make" _update_make_pkg_impl
+  loading "Updating Make" _do_make_update
 }
 
-_update_make_pkg_impl() {
-	if ! pkg upgrade make -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Make"
-		return 1
-	fi
-	return 0
+_do_make_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade make -y &>>"$LOG_FILE"
 }
 
 install_make() {
@@ -68,12 +66,7 @@ uninstall_make() {
 }
 
 update_make() {
-	log_info "Updating Make..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_make_pkg || return 1
-	log_success "Make updated"
-	return 0
+	_check_update_needed "Make" "$(_get_installed_pkg_version make "Make")" "$(_get_remote_pkg_version make)" _update_make_pkg
 }
 
 reinstall_make() {

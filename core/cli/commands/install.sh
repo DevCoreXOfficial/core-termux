@@ -265,6 +265,10 @@ _install_specific_tools() {
         install_mongodb
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      redis)
+        install_redis
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown database: --$tool"
         ;;
@@ -317,6 +321,14 @@ _install_specific_tools() {
         ;;
       tmate)
         install_tmate
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
+      tmux)
+        install_tmux
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
+      openssh)
+        install_openssh
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)

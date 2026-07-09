@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -54,23 +55,17 @@ uninstall_php() {
 }
 
 _update_php_pkg() {
-	loading "Updating PHP" _update_php_pkg_impl
+  loading "Updating PHP" _do_php_update
 }
 
-_update_php_pkg_impl() {
-	if ! pkg upgrade php -y &>>"$LOG_FILE"; then
-		log_error "Failed to update PHP"
-		return 1
-	fi
-	return 0
+_do_php_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade php -y &>>"$LOG_FILE"
 }
 
 update_php() {
-	log_info "Updating PHP..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	_update_php_pkg || return 1
-	log_success "PHP updated"
-	return 0
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "PHP" "$(_get_installed_pkg_version php "PHP")" "$(_get_remote_pkg_version php)" _update_php_pkg
 }
 
 reinstall_php() {

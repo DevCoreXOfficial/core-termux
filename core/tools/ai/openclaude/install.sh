@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -84,13 +85,11 @@ _uninstall_openclaude_impl() {
 }
 
 update_openclaude() {
-  log_info "Updating OpenClaude..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "OpenClaude" "$(_get_installed_version openclaude)" "$(_get_remote_npm_version @gitlawb/openclaude)" _update_openclaude
+}
 
+_update_openclaude() {
   loading "Updating OpenClaude" _update_openclaude_impl
-
-  log_success "OpenClaude updated"
-  return 0
 }
 
 _update_openclaude_impl() {

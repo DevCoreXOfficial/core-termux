@@ -9,12 +9,14 @@ DB_TOOLS=(
 	"mariadb"
 	"sqlite"
 	"mongodb"
+	"redis"
 )
 
 source "$(dirname "$BASH_SOURCE")/postgresql/install.sh"
 source "$(dirname "$BASH_SOURCE")/mariadb/install.sh"
 source "$(dirname "$BASH_SOURCE")/sqlite/install.sh"
 source "$(dirname "$BASH_SOURCE")/mongodb/install.sh"
+source "$(dirname "$BASH_SOURCE")/redis/install.sh"
 
 install_all_db_tools() {
 	local installed_count=0
@@ -36,6 +38,10 @@ install_all_db_tools() {
 			;;
 		mongodb)
 			loading "Installing MongoDB" install_mongodb
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+			;;
+		redis)
+			loading "Installing Redis" install_redis
 			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
@@ -66,6 +72,10 @@ uninstall_all_db_tools() {
 			loading "Uninstalling MongoDB" uninstall_mongodb
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
+		redis)
+			loading "Uninstalling Redis" uninstall_redis
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+			;;
 		esac
 	done
 
@@ -73,31 +83,26 @@ uninstall_all_db_tools() {
 }
 
 update_all_db_tools() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${DB_TOOLS[@]}"; do
     case "$tool" in
     postgresql)
-      loading "Updating PostgreSQL" update_postgresql
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_postgresql
       ;;
     mariadb)
-      loading "Updating MariaDB" update_mariadb
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_mariadb
       ;;
     sqlite)
-      loading "Updating SQLite" update_sqlite
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_sqlite
       ;;
     mongodb)
-      loading "Updating MongoDB" update_mongodb
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_mongodb
+      ;;
+    redis)
+      update_redis
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_db_tools() {
@@ -120,6 +125,10 @@ reinstall_all_db_tools() {
       ;;
     mongodb)
       loading "Reinstalling MongoDB" reinstall_mongodb
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    redis)
+      loading "Reinstalling Redis" reinstall_redis
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

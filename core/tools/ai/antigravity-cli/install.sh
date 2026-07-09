@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 AGY_DATA_DIR="$HOME/.local/share/core-termux-data/antigravity-cli"
@@ -370,8 +371,7 @@ uninstall_antigravity_cli() {
   fi
 }
 
-update_antigravity_cli() {
-  log_info "Updating Antigravity CLI..."
+_update_antigravity_cli() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$AGY_DATA_DIR/agy.va39" ]; then
@@ -461,6 +461,10 @@ PY
   chmod +x "${upstream_bin}.va39"
   log_success "Antigravity CLI (proot-distro) updated"
   return 0
+}
+
+update_antigravity_cli() {
+  _check_update_needed "Antigravity CLI" "$(_get_installed_version agy)" "$(_spin_capture "Checking version" _antigravity_get_latest_version)" _update_antigravity_cli
 }
 
 reinstall_antigravity_cli() {

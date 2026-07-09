@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 FREEBUFF_DATA_DIR="$HOME/.local/share/core-termux-data/freebuff"
@@ -254,8 +255,7 @@ uninstall_freebuff() {
   fi
 }
 
-update_freebuff() {
-  log_info "Updating Freebuff..."
+_update_freebuff() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$FREEBUFF_DATA_DIR/freebuff" ]; then
@@ -288,6 +288,10 @@ update_freebuff() {
 
   log_success "Freebuff (proot-distro) updated"
   return 0
+}
+
+update_freebuff() {
+  _check_update_needed "Freebuff" "$(_get_installed_version freebuff)" "$(_get_remote_github_version CodebuffAI/codebuff-community)" _update_freebuff
 }
 
 reinstall_freebuff() {

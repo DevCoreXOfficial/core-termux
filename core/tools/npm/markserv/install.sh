@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_markserv() {
   return 0
 }
 
-_update_markserv_npm() {
-  loading "Updating Markserv" _update_markserv_npm_impl
-}
-
-_update_markserv_npm_impl() {
-  if ! npm update -g markserv &>>"$LOG_FILE"; then
-    log_error "Failed to update Markserv"
-    return 1
-  fi
-  return 0
-}
-
 update_markserv() {
-  log_info "Updating Markserv..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Markserv" "$(_get_installed_npm_version markserv Markserv)" "$(_get_remote_npm_version markserv)" _update_markserv_impl
+}
 
-  _update_markserv_npm || return 1
-  log_success "Markserv updated"
-  return 0
+_update_markserv_impl() {
+  loading "Updating Markserv" _do_markserv_update
+}
+
+_do_markserv_update() {
+  npm update -g markserv &>>"$LOG_FILE"
 }
 
 reinstall_markserv() {

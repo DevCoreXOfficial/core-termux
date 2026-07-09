@@ -134,55 +134,41 @@ uninstall_all_shell_plugins() {
 }
 
 update_all_shell_plugins() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${SHELL_PLUGINS[@]}"; do
     case "$tool" in
     powerlevel10k)
-      loading "Updating powerlevel10k" update_powerlevel10k
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_powerlevel10k
       ;;
     zsh-defer)
-      loading "Updating zsh-defer" update_zsh_defer
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_zsh_defer
       ;;
     zsh-autosuggestions)
-      loading "Updating zsh-autosuggestions" update_zsh_autosuggestions
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_zsh_autosuggestions
       ;;
     zsh-syntax-highlighting)
-      loading "Updating zsh-syntax-highlighting" update_zsh_syntax_highlighting
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_zsh_syntax_highlighting
       ;;
     history-substring)
-      loading "Updating zsh-history-substring-search" update_history_substring
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_history_substring
       ;;
     zsh-completions)
-      loading "Updating zsh-completions" update_zsh_completions
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_zsh_completions
       ;;
     fzf-tab)
-      loading "Updating fzf-tab" update_fzf_tab
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_fzf_tab
       ;;
     you-should-use)
-      loading "Updating zsh-you-should-use" update_you_should_use
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_you_should_use
       ;;
     zsh-autopair)
-      loading "Updating zsh-autopair" update_zsh_autopair
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_zsh_autopair
       ;;
     better-npm)
-      loading "Updating zsh-better-npm-completion" update_better_npm
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_better_npm
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_shell_plugins() {

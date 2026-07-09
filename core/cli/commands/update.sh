@@ -266,6 +266,10 @@ _update_specific_tools() {
         update_mongodb
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      redis)
+        update_redis
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown database: --$tool"
         ;;
@@ -318,6 +322,14 @@ _update_specific_tools() {
         ;;
       tmate)
         update_tmate
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
+      tmux)
+        update_tmux
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
+      openssh)
+        update_openssh
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
       cloudflared)

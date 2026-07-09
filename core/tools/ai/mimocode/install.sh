@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 MIMOCODE_DATA_DIR="$HOME/.local/share/core-termux-data/mimocode"
@@ -250,8 +251,7 @@ uninstall_mimocode() {
   fi
 }
 
-update_mimocode() {
-  log_info "Updating mimocode..."
+_update_mimocode() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$MIMOCODE_DATA_DIR/mimocode" ]; then
@@ -279,6 +279,10 @@ update_mimocode() {
 
   log_success "mimocode (proot-distro) updated"
   return 0
+}
+
+update_mimocode() {
+  _check_update_needed "MiMo Code" "$(_get_installed_version mimo)" "$(_get_remote_github_version XiaomiMiMo/MiMo-Code)" _update_mimocode
 }
 
 reinstall_mimocode() {

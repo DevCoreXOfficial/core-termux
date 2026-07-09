@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -67,25 +68,16 @@ uninstall_nestjs() {
   return 0
 }
 
-_update_nestjs_npm() {
-  loading "Updating NestJS CLI" _update_nestjs_npm_impl
-}
-
-_update_nestjs_npm_impl() {
-  if ! npm update -g @nestjs/cli &>>"$LOG_FILE"; then
-    log_error "Failed to update NestJS CLI"
-    return 1
-  fi
-  return 0
-}
-
 update_nestjs() {
-  log_info "Updating NestJS CLI..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "NestJS CLI" "$(_get_installed_npm_version @nestjs/cli NestJS CLI)" "$(_get_remote_npm_version @nestjs/cli)" _update_nestjs_impl
+}
 
-  _update_nestjs_npm || return 1
-  log_success "NestJS CLI updated"
-  return 0
+_update_nestjs_impl() {
+  loading "Updating NestJS CLI" _do_nestjs_update
+}
+
+_do_nestjs_update() {
+  npm update -g @nestjs/cli &>>"$LOG_FILE"
 }
 
 reinstall_nestjs() {

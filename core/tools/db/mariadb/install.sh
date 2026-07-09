@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
@@ -44,19 +45,17 @@ uninstall_mariadb() {
 }
 
 _update_mariadb_impl() {
+	loading "Updating MariaDB" _do_mariadb_update
+}
+
+_do_mariadb_update() {
 	mkdir -p "$(dirname "$LOG_FILE")"
-	if pkg upgrade mariadb -y &>>"$LOG_FILE"; then
-		log_success "MariaDB updated"
-		return 0
-	else
-		log_error "Failed to update MariaDB"
-		return 1
-	fi
+	pkg upgrade mariadb -y &>>"$LOG_FILE"
 }
 
 update_mariadb() {
-	log_info "Updating MariaDB..."
-	loading "Updating MariaDB" _update_mariadb_impl
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "MariaDB" "$(_get_installed_pkg_version mariadb "MariaDB")" "$(_get_remote_pkg_version mariadb)" _update_mariadb_impl
 }
 
 reinstall_mariadb() {

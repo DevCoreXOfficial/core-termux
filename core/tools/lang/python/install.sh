@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -54,23 +55,17 @@ uninstall_python() {
 }
 
 _update_python_pkg() {
-	loading "Updating Python" _update_python_pkg_impl
+  loading "Updating Python" _do_python_update
 }
 
-_update_python_pkg_impl() {
-	if ! pkg upgrade python -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Python"
-		return 1
-	fi
-	return 0
+_do_python_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade python -y &>>"$LOG_FILE"
 }
 
 update_python() {
-	log_info "Updating Python..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-	_update_python_pkg || return 1
-	log_success "Python updated"
-	return 0
+  mkdir -p "$(dirname "$LOG_FILE")"
+  _check_update_needed "Python" "$(_get_installed_pkg_version python "Python")" "$(_get_remote_pkg_version python)" _update_python_pkg
 }
 
 reinstall_python() {

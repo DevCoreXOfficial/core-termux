@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 import "@/utils/log"
+import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -29,15 +30,12 @@ _uninstall_fzf_pkg_impl() {
 }
 
 _update_fzf_pkg() {
-	loading "Updating Fzf" _update_fzf_pkg_impl
+  loading "Updating Fzf" _do_fzf_update
 }
 
-_update_fzf_pkg_impl() {
-	if ! pkg upgrade fzf -y &>>"$LOG_FILE"; then
-		log_error "Failed to update Fzf"
-		return 1
-	fi
-	return 0
+_do_fzf_update() {
+  mkdir -p "$(dirname "$LOG_FILE")"
+  yes | pkg upgrade fzf -y &>>"$LOG_FILE"
 }
 
 install_fzf() {
@@ -68,12 +66,7 @@ uninstall_fzf() {
 }
 
 update_fzf() {
-	log_info "Updating Fzf..."
-	mkdir -p "$(dirname "$LOG_FILE")"
-
-	_update_fzf_pkg || return 1
-	log_success "Fzf updated"
-	return 0
+	_check_update_needed "Fzf" "$(_get_installed_pkg_version fzf "Fzf")" "$(_get_remote_pkg_version fzf)" _update_fzf_pkg
 }
 
 reinstall_fzf() {

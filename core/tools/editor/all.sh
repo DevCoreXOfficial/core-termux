@@ -53,23 +53,17 @@ uninstall_all_editor_components() {
 }
 
 update_all_editor_components() {
-  local updated_count=0
-  local failed_count=0
-
   for tool in "${EDITOR_COMPONENTS[@]}"; do
     case "$tool" in
     neovim)
-      loading "Updating Neovim" update_neovim
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_neovim
       ;;
     nvchad)
-      loading "Updating NvChad" update_nvchad
-      case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+      update_nvchad
       ;;
     esac
   done
-
-  return 0
+  echo
 }
 
 reinstall_all_editor_components() {
