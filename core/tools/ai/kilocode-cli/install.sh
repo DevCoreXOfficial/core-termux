@@ -53,7 +53,6 @@ _kilocode_install_deps_native_impl() {
   declare -A DEPS=(
     ["git"]="git"
     ["ripgrep"]="rg"
-    ["python"]="python"
     ["clang"]="clang"
     ["jq"]="jq"
     ["nodejs-lts"]="node"

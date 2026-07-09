@@ -15,7 +15,7 @@ Kilo Code is an AI coding agent that meets you everywhere you work: VS Code, Jet
 
 ## Dependencies
 
-- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, python, jq, nodejs-lts, curl, tar
+- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
 - **Proot mode:** proot-distro, curl, ca-certificates
 
 ## Install

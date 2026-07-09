@@ -15,7 +15,7 @@ OpenCode is an AI-powered coding agent developed by anomalyco that operates dire
 
 ## Dependencies
 
-- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, python, jq, nodejs-lts, curl, tar
+- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
 - **Proot mode:** proot-distro, curl, ca-certificates
 
 ## Install

@@ -15,7 +15,7 @@ CodeGraph analyzes your codebase structure and dependencies to improve navigatio
 
 ## Dependencies
 
-- nodejs-lts, ripgrep, sqlite, git, python, clang, make, curl
+- nodejs-lts, ripgrep, sqlite, git, clang, make, curl
 
 ## Install
 

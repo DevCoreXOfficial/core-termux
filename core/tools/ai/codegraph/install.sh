@@ -13,7 +13,6 @@ _codegraph_dependencies_impl() {
 		["ripgrep"]="rg"
 		["sqlite"]="sqlite3"
 		["git"]="git"
-		["python"]="python"
 		["clang"]="clang"
 		["make"]="make"
 		["curl"]="curl"

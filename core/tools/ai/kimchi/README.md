@@ -15,7 +15,7 @@ A coding agent CLI powered by kimchi. Built on the pi-mono coding agent SDK, kim
 
 ## Dependencies
 
-- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, python, jq, nodejs-lts, curl, tar
+- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
 - **Proot mode:** proot-distro, curl, ca-certificates, tar
 
 ## Install
