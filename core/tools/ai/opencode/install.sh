@@ -256,6 +256,10 @@ _uninstall_opencode_impl() {
   fi
 }
 
+_update_opencode() {
+	loading "Updating OpenCode" _update_opencode_impl
+}
+
 _update_opencode_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 

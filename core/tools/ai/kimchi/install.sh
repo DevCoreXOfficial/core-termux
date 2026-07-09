@@ -269,6 +269,10 @@ _uninstall_kimchi_impl() {
   fi
 }
 
+_update_kimchi() {
+	loading "Updating Kimchi" _update_kimchi_impl
+}
+
 _update_kimchi_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -281,7 +285,7 @@ _update_kimchi_impl() {
 }
 
 update_kimchi() {
-  _check_update_needed "Kimchi" "$(_get_installed_version kimchi)" "$(_get_remote_github_version getkimchi/kimchi)" _update_kimchi_impl
+  _check_update_needed "Kimchi" "$(_get_installed_version kimchi)" "$(_get_remote_github_version getkimchi/kimchi)" _update_kimchi
 }
 
 _update_kimchi_proot_impl() {

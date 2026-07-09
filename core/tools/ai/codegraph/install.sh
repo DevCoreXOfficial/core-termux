@@ -116,6 +116,10 @@ _uninstall_codegraph_impl() {
 	fi
 }
 
+_update_codegraph() {
+	loading "Updating CodeGraph" _update_codegraph_impl
+}
+
 _update_codegraph_impl() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 

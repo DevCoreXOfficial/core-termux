@@ -104,6 +104,10 @@ update_engram() {
   _check_update_needed "Engram" "$(_get_installed_version engram)" "$(_get_remote_github_version Gentleman-Programming/engram)" _update_engram
 }
 
+_update_engram() {
+	loading "Updating Engram" _update_engram_impl
+}
+
 _update_engram_impl() {
   export GOPATH="$HOME/.local/go"
   export GOCACHE="$HOME/.cache/go"

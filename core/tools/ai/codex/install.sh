@@ -85,8 +85,12 @@ update_codex() {
 	_check_update_needed "Codex CLI" "$(_get_installed_version codex)" "$(_get_remote_npm_version @mmmbuto/codex-cli-termux)" _update_codex
 }
 
+_update_codex() {
+	loading "Updating Codex CLI" _update_codex_impl
+}
+
 _update_codex_impl() {
-  loading "Updating Codex CLI" _update_codex_npm
+	_update_codex_npm
 }
 
 _update_codex_npm() {
