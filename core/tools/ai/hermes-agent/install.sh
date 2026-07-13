@@ -214,19 +214,20 @@ update_hermes_agent() {
 }
 
 _update_hermes_agent() {
-  if hermes update; then
-    return 0
+  local HERMES_DIR="$HOME/.hermes/hermes-agent"
+
+  if [ ! -d "$HERMES_DIR/.git" ]; then
+    log_error "Hermes Agent repo not found, run a full install first"
+    return 1
   fi
 
-  # hermes update failed — apply patches and reinstall
-  if [ -f "$HOME/.hermes/hermes-agent/pyproject.toml" ]; then
-    _hermes_apply_patches || return 1
-    _hermes_run_installer && return 0
-    _hermes_pip_fallback && return 0
-  fi
+  loading "Pulling latest changes" _hermes_git_pull_impl
+  _hermes_apply_patches
+  _hermes_pip_fallback
+}
 
-  log_error "Failed to update Hermes Agent"
-  return 1
+_hermes_git_pull_impl() {
+  git -C "$HOME/.hermes/hermes-agent" pull --ff-only &>>"$LOG_FILE"
 }
 
 reinstall_hermes_agent() {
