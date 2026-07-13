@@ -28,8 +28,8 @@ _kilocode_proot_ubuntu() {
 }
 
 _get_latest_kilocode_version() {
-  curl -fsSL https://api.github.com/repos/Kilo-Org/kilocode/releases/latest |
-    grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
+  curl -fsSL "https://api.github.com/repos/Kilo-Org/kilocode/releases?per_page=10" |
+    jq -r '.[].tag_name' | grep -v '^jetbrains/' | head -1
 }
 
 _kilocode_install_deps_native() {
@@ -274,7 +274,7 @@ _update_kilocode_cli() {
 }
 
 update_kilocode_cli() {
-  _check_update_needed "Kilo Code CLI" "$(_get_installed_version kilocode)" "$(_get_remote_github_version Kilo-Org/kilocode)" _update_kilocode_cli
+  _check_update_needed "Kilo Code CLI" "$(_get_installed_version kilocode)" "$(_get_latest_kilocode_version)" _update_kilocode_cli
 }
 
 _update_kilocode_proot_impl() {
