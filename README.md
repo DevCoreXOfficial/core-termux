@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.9.5-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.9.6-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -153,7 +153,7 @@ core --version
 
 **Output:**
 ```
-4.9.5
+4.9.6
 ```
 
 ---
@@ -1065,7 +1065,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.9.6 (current: 4.9.5)
+⚠ New version available: 4.9.7 (current: 4.9.6)
 
 ➜ Run: core update core to update
 ```
