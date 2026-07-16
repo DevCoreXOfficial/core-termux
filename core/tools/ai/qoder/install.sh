@@ -142,12 +142,12 @@ _compile_qoder_helper_impl() {
     return 1
   fi
 
-  if ! clang -O2 -o "$PREFIX/bin/qoder" "$HELPER_SRC" &>>"$LOG_FILE"; then
+  if ! clang -O2 -o "$PREFIX/bin/qodercli" "$HELPER_SRC" &>>"$LOG_FILE"; then
     log_error "Failed to compile qoder helper"
     return 1
   fi
 
-  chmod +x "$PREFIX/bin/qoder"
+  chmod +x "$PREFIX/bin/qodercli"
   return 0
 }
 
@@ -217,13 +217,13 @@ _install_qoder_proot_impl() {
 
   chmod +x "$qoder_dir/qodercli"
 
-  local wrapper_src="$CORE_PATH/tools/ai/qoder/bin/qoder"
+  local wrapper_src="$CORE_PATH/tools/ai/qoder/bin/qodercli"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
     return 1
   fi
-  sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/qoder"
-  chmod +x "$PREFIX/bin/qoder"
+  sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/qodercli"
+  chmod +x "$PREFIX/bin/qodercli"
 
   if ! grep -q '.qodercli' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
     printf '\n# qoder\nexport PATH=/root/.qodercli:$PATH\n' >>"$ubuntu_root/root/.bashrc"
@@ -233,7 +233,7 @@ _install_qoder_proot_impl() {
 }
 
 install_qoder() {
-  if command -v qoder &>/dev/null; then
+  if command -v qodercli &>/dev/null; then
     log_info "Qoder is already installed"
     return 2
   fi
@@ -257,7 +257,7 @@ install_qoder() {
 uninstall_qoder() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if [ ! -f "$PREFIX/bin/qoder" ]; then
+  if [ ! -f "$PREFIX/bin/qodercli" ]; then
     log_warn "Qoder is not installed"
     return 1
   fi
@@ -267,7 +267,7 @@ uninstall_qoder() {
 
 _uninstall_qoder_impl() {
   if [ -f "$QODER_DATA_DIR/qodercli" ]; then
-    rm -f "$PREFIX/bin/qoder"
+    rm -f "$PREFIX/bin/qodercli"
     rm -rf "$QODER_DATA_DIR"
     log_success "Qoder (native) uninstalled"
     return 0
@@ -282,7 +282,7 @@ _uninstall_qoder_impl() {
     sed -i '/# qoder/d; /export PATH=\/root\/.qodercli:/d' "$ubuntu_bashrc"
   fi
 
-  if rm -f "$PREFIX/bin/qoder" &>>"$LOG_FILE"; then
+  if rm -f "$PREFIX/bin/qodercli" &>>"$LOG_FILE"; then
     log_success "Qoder (proot-distro) uninstalled"
     return 0
   else
@@ -311,7 +311,7 @@ _get_remote_qoder_version() {
 }
 
 update_qoder() {
-  _check_update_needed "Qoder" "$(_get_installed_version qoder)" "$(_get_remote_qoder_version)" _update_qoder
+  _check_update_needed "Qoder" "$(_get_installed_version qodercli)" "$(_get_remote_qoder_version)" _update_qoder
 }
 
 _update_qoder_proot_impl() {

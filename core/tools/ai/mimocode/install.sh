@@ -282,7 +282,7 @@ _update_mimocode() {
 }
 
 update_mimocode() {
-  _check_update_needed "MiMo Code" "$(_get_installed_version mimo)" "$(_get_remote_github_version XiaomiMiMo/MiMo-Code)" _update_mimocode
+  _check_update_needed "MiMoCode" "$(_get_installed_version mimo)" "$(_get_remote_github_version XiaomiMiMo/MiMo-Code)" _update_mimocode
 }
 
 reinstall_mimocode() {
