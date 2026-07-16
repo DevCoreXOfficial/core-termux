@@ -1,0 +1,50 @@
+# Qoder
+
+AI-powered coding agent that helps you write and understand code
+
+**Package:** qoder  
+**Author:** DevCoreX  
+**Repository:** https://github.com/DevCoreXOfficial/core-termux  
+**Official:** https://qoder.com  
+**Type:** AI coding agent (Binary + glibc bootstrapper)  
+**License:** Proprietary
+
+## Description
+
+Qoder is an AI-powered coding agent developed by Qoder that operates directly in your terminal. It provides intelligent code completion, refactoring suggestions, and natural language code generation. Core-Termux offers two installation methods: native with glibc support for best performance, or via proot-distro Ubuntu container for maximum compatibility.
+
+## Dependencies
+
+- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
+- **Proot mode:** proot-distro, curl, ca-certificates
+
+## Install
+
+```bash
+core install ai --qoder
+```
+
+You will be prompted to choose:
+
+1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest Qoder binary
+2. **Proot-distro (alternative)** — Runs Qoder inside an Ubuntu proot-distro container
+
+## Uninstall
+
+```bash
+core uninstall ai --qoder
+```
+
+## Update
+
+```bash
+core update ai --qoder
+```
+
+## Notes
+
+- **Native mode** requires `glibc-repo`, `glibc`, `clang`, and other dependencies (installed automatically)
+- The native binary is stored in `~/.local/share/core-termux-data/qoder/`
+- A small C bootstrapper (`qoder_helper.c`) handles ELF loading via the glibc dynamic linker
+- **Proot mode** uses `proot-distro ubuntu` and installs via the official qoder.com installer
+- Data directory: `~/.local/share/core-termux-data/qoder/`

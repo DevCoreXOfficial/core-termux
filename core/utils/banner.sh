@@ -80,6 +80,7 @@ CORE_TIPS=(
 	"Install all AI agents: ${D_CYAN}core install ai${NC}"
 	"Run Ollama locally on your phone: ${D_CYAN}core install ai --ollama${NC}"
 	"Install OpenCode: ${D_CYAN}core install ai --opencode${NC}"
+	"Install Qoder: ${D_CYAN}core install ai --qoder${NC}"
 	"Install Claude Code: ${D_CYAN}core install ai --claude-code${NC}"
 	"Install Codex CLI: ${D_CYAN}core install ai --codex${NC}"
 	"Install Gemini CLI: ${D_CYAN}core install ai --gemini-cli${NC}"

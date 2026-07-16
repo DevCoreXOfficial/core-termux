@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.9.6-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.10.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -122,6 +122,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Ollama** | `--ollama` | Run open-source LLMs locally on Termux |
 | **Codex CLI** | `--codex` | Coding agent from OpenAI that runs locally on your computer |
 | **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
+| **Qoder** | `--qoder` | AI-powered coding agent that helps you write and understand code |
 | **Kilo Code CLI** | `--kilocode-cli` | The open source coding agent for building with AI in VS Code, JetBrains, or the CLI |
 | **Kimchi** | `--kimchi` | Terminal coding agent powered by Kimchi's multi-model orchestration |
 | **MiMoCode** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
@@ -153,7 +154,7 @@ core --version
 
 **Output:**
 ```
-4.9.6
+4.10.0
 ```
 
 ---
@@ -310,6 +311,7 @@ core voice !                  # Alias for 'text'
 | Agent | Command |
 |-------|---------|
 | `opencode` | `opencode run "prompt"` |
+| `qoder` | `qoder -p "prompt"` |
 | `claude-code` | `claude -p "prompt"` |
 | `codex` | `codex "prompt"` |
 | `gemini-cli` | `gemini -p "prompt"` |
@@ -982,6 +984,11 @@ core-termux/
 │   │   │   │   ├── install.sh
 │   │   │   │   ├── bin/opencode
 │   │   │   │   └── README.md
+│   │   │   ├── qoder/
+│   │   │   │   ├── install.sh
+│   │   │   │   ├── bin/qoder
+│   │   │   │   ├── helper/qoder_helper.c
+│   │   │   │   └── README.md
 │   │   │   ├── freebuff/
 │   │   │   │   ├── install.sh
 │   │   │   │   ├── bin/freebuff
@@ -1065,7 +1072,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.9.7 (current: 4.9.6)
+⚠ New version available: 4.10.1 (current: 4.10.0)
 
 ➜ Run: core update core to update
 ```

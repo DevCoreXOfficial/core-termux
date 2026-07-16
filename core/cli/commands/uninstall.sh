@@ -162,6 +162,10 @@ _uninstall_specific_tools() {
         uninstall_opencode
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      qoder)
+        uninstall_qoder
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       kilocode-cli)
         uninstall_kilocode_cli
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac

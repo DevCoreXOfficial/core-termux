@@ -14,6 +14,7 @@ AI_TOOLS=(
   "ollama"
   "codex"
   "opencode"
+  "qoder"
   "kilocode-cli"
   "kimchi"
   "mimocode"
@@ -41,6 +42,7 @@ source "$(dirname "$BASH_SOURCE")/openclaw/install.sh"
 source "$(dirname "$BASH_SOURCE")/ollama/install.sh"
 source "$(dirname "$BASH_SOURCE")/codex/install.sh"
 source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
+source "$(dirname "$BASH_SOURCE")/qoder/install.sh"
 source "$(dirname "$BASH_SOURCE")/kilocode-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/kimchi/install.sh"
 source "$(dirname "$BASH_SOURCE")/mimocode/install.sh"
@@ -98,6 +100,10 @@ install_all_ai_tools() {
       ;;
     opencode)
       loading "Installing OpenCode" install_opencode
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    qoder)
+      loading "Installing Qoder" install_qoder
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     kilocode-cli)
@@ -212,6 +218,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling OpenCode" uninstall_opencode
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    qoder)
+      loading "Uninstalling Qoder" uninstall_qoder
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     kilocode-cli)
       loading "Uninstalling Kilo Code CLI" uninstall_kilocode_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -312,6 +322,9 @@ update_all_ai_tools() {
     opencode)
       update_opencode
       ;;
+    qoder)
+      update_qoder
+      ;;
     kilocode-cli)
       update_kilocode_cli
       ;;
@@ -405,6 +418,10 @@ reinstall_all_ai_tools() {
       ;;
     opencode)
       loading "Reinstalling OpenCode" reinstall_opencode
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    qoder)
+      loading "Reinstalling Qoder" reinstall_qoder
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kilocode-cli)

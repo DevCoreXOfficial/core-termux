@@ -24,6 +24,7 @@ voice_help() {
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "mistral-vibe" "vibe --prompt \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "openclaude" "openclaude --bg \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "pi" "pi -p \"prompt\""
+	printf "    ${D_CYAN}%-16s${NC} %s\n" "qoder" "qoder -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "qwen-code" "qwen -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "text" "Print prompt to stdout"
 	echo
@@ -31,6 +32,7 @@ voice_help() {
 	echo
 	printf "    ${D_CYAN}core voice${NC}                   # Show this help\n"
 	printf "    ${D_CYAN}core voice opencode${NC}          # Capture → nvim → opencode\n"
+	printf "    ${D_CYAN}core voice qoder${NC}             # Capture → nvim → qoder\n"
 	printf "    ${D_CYAN}core voice claude-code${NC}        # Capture → nvim → claude -p\n"
 	printf "    ${D_CYAN}core voice text${NC}               # Capture → nvim → print to stdout\n"
 	printf "    ${D_CYAN}core voice !${NC}                  # Alias for 'text'\n"
@@ -157,6 +159,9 @@ voice_main() {
 	pi)
 		pi -p "$prompt"
 		;;
+	qoder)
+		qoder -p "$prompt"
+		;;
 	qwen-code)
 		qwen -p "$prompt"
 		;;
@@ -164,7 +169,7 @@ voice_main() {
 		log_error "Unknown agent: $agent"
 		echo
 		log_info "Supported agents:"
-		echo "  opencode, claude-code, codex, gemini-cli, hermes-agent,"
+		echo "  opencode, qoder, claude-code, codex, gemini-cli, hermes-agent,"
 		echo "  kilocode-cli, kimi-code, mimocode, mistral-vibe, openclaude, pi, qwen-code"
 		separator
 		exit 1
