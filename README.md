@@ -132,7 +132,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Antigravity CLI** | `--antigravity-cli` | Lightweight, terminal-first surface for Antigravity agents |
 | **MiniMax CLI** | `--minimax-cli` | Generate text, images, video, speech, and music from the terminal |
 | **Gentle AI** | `--gentle-ai` | Ecosystem, Frameworks, Workflows for AI coding agents |
-| **GGA** | `--gga` | Provider-agnostic AI code review for every commit |
+| **Gentleman Guardian Angel** | `--gga` | Provider-agnostic AI code review for every commit |
 | **Hermes Agent** | `--hermes-agent` | The self-improving AI agent built by Nous Research |
 | **Kimi Code** | `--kimi-code` | Kimi Code CLI — The Starting Point for Next-Gen Agents |
 | **Command Code** | `--command-code` | The coding agent that learns your coding taste |
@@ -311,7 +311,7 @@ core voice !                  # Alias for 'text'
 | Agent | Command |
 |-------|---------|
 | `opencode` | `opencode run "prompt"` |
-| `qoder` | `qoder -p "prompt"` |
+| `qoder` | `qodercli -p "prompt"` |
 | `claude-code` | `claude -p "prompt"` |
 | `codex` | `codex "prompt"` |
 | `gemini-cli` | `gemini -p "prompt"` |
@@ -1072,7 +1072,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.10.3 (current: 4.10.3)
+⚠ New version available: 4.10.4 (current: 4.10.3)
 
 ➜ Run: core update core to update
 ```
