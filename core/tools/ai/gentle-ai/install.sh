@@ -55,7 +55,7 @@ _gentle_ai_ensure_go_impl() {
   fi
 
   if [ -z "$go_required" ]; then
-    go_required="1.25.0"
+    go_required="1.25.10"
   fi
 
   if ! _version_ge "$go_installed" "$go_required"; then
@@ -158,13 +158,16 @@ _compile_impl() {
 
   pushd "$GENTLE_AI_DATA_DIR" &>/dev/null || return 1
 
+  local version
+  version=$(git describe --tags --always 2>/dev/null || echo "dev")
+
   if ! go mod download &>>"$LOG_FILE"; then
     popd &>/dev/null || true
     log_error "Failed to download Go dependencies"
     return 1
   fi
 
-  if ! go build -trimpath -ldflags="-s -w" -o gentle-ai ./cmd/gentle-ai/ &>>"$LOG_FILE"; then
+  if ! go build -trimpath -ldflags="-s -w -X main.version=$version" -o gentle-ai ./cmd/gentle-ai/ &>>"$LOG_FILE"; then
     popd &>/dev/null || true
     log_error "Failed to compile gentle-ai"
     return 1
