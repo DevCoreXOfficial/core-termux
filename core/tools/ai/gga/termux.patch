@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# Parches Termux para gentleman-guardian-angel
+# Se aplica al repo upstream después del clone, antes del install.sh
+set -e
+
+REPO_DIR="$1"
+[ -d "$REPO_DIR" ] || { echo "Usage: $0 <repo-dir>" >&2; exit 1; }
+
+# --- install.sh ---
+# 1) Fix shebang for Termux
+sed -i '1s|#!/usr/bin/env bash|#!/data/data/com.termux/files/usr/bin/bash|' "$REPO_DIR/install.sh"
+
+# 2) Agregar detección de Termux en detect_os()
+sed -i '/^  if \[\[ -n "\${GGA_TEST_OS:-}" \]\]; then$/,/^$/{
+  /^$/a\
+\
+  if [[ -n "${TERMUX_VERSION:-}" ]]; then\
+    echo "termux"\
+    return 0\
+  fi
+}' "$REPO_DIR/install.sh"
+
+# 3) Agregar TERMUX para INSTALL_DIR (después del bloque windows)
+sed -i '/INSTALL_DIR="\$HOME\/bin"/,/elif \[\[ -w "\/usr\/local\/bin" \]\]/{
+  /elif \[\[ -w "\/usr\/local\/bin" \]\]/i\
+elif [[ "$GGA_OS" == "termux" ]]; then\
+    INSTALL_DIR="${PREFIX:-/data/data/com.termux/files/usr}/bin"\
+    mkdir -p "$INSTALL_DIR"
+}' "$REPO_DIR/install.sh"
+
+# 4) Agregar TERMUX para LIB_INSTALL_DIR (después del bloque windows)
+sed -i '/LIB_INSTALL_DIR="\$HOME\/bin\/lib\/gga"/,/else$/{
+  /else$/i\
+elif [[ "$GGA_OS" == "termux" ]]; then\
+    LIB_INSTALL_DIR="${PREFIX:-/data/data/com.termux/files/usr}/share/gga/lib"
+}' "$REPO_DIR/install.sh"
+
+# --- bin/gga ---
+# 5) Fix shebang for Termux (/usr/bin/env doesn't exist)
+sed -i '1s|#!/usr/bin/env bash|#!/data/data/com.termux/files/usr/bin/bash|' "$REPO_DIR/bin/gga"
+
+# 6) Agregar detección de Termux en detect_os()
+sed -i '/^detect_os() {$/,/^}$/{
+  /^  case "\$(uname -s)" in$/i\
+  if [[ -n "${TERMUX_VERSION:-}" ]]; then\
+    echo "termux"\
+    return 0\
+  fi
+}' "$REPO_DIR/bin/gga"
+
+# --- uninstall.sh ---
+# 7) Fix shebang for Termux
+sed -i '1s|#!/usr/bin/env bash|#!/data/data/com.termux/files/usr/bin/bash|' "$REPO_DIR/uninstall.sh"
+
+# 8) Agregar detección de Termux en detect_os()
+sed -i '/^detect_os() {$/,/^}$/{
+  /^  case "\$(uname -s)" in$/i\
+  if [[ -n "${TERMUX_VERSION:-}" ]]; then\
+    echo "termux"\
+    return 0\
+  fi
+}' "$REPO_DIR/uninstall.sh"
+
+# 9) Agregar Termux path al array LOCATIONS
+sed -i '/  "\$HOME\/bin\/gga"/a\  "${PREFIX:-/data/data/com.termux/files/usr}/bin/gga"' "$REPO_DIR/uninstall.sh"
+
+# 10) Agregar Termux lib path al loop de limpieza
+sed -i 's|for lib_dir in "\$HOME/.local/share/gga" "\$HOME/bin/lib/gga";|for lib_dir in "$HOME/.local/share/gga" "$HOME/bin/lib/gga" "${PREFIX:-/data/data/com.termux/files/usr}/share/gga";|' "$REPO_DIR/uninstall.sh"
+
+echo "Termux patches applied successfully"
