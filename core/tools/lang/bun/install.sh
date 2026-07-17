@@ -43,8 +43,47 @@ _bun_fetch_version() {
 	_parse_version "$tag"
 }
 
+_bun_install_deps_native() {
+	loading "Installing glibc and dependencies" _bun_install_deps_native_impl
+}
+
+_bun_install_deps_native_impl() {
+	if [[ ! -f $PREFIX/etc/apt/sources.list.d/glibc.list ]]; then
+		if ! yes | pkg install glibc-repo &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc-repo"
+			return 1
+		fi
+	fi
+
+	if [[ ! -f $PREFIX/glibc/lib/libc.so.6 ]]; then
+		if ! yes | pkg install glibc &>>"$LOG_FILE"; then
+			log_error "Failed to install glibc"
+			return 1
+		fi
+	fi
+
+	declare -A DEPS=(
+		["clang"]="clang"
+		["unzip"]="unzip"
+		["curl"]="curl"
+	)
+
+	local pkg_name bin_name
+	for pkg_name in "${!DEPS[@]}"; do
+		bin_name="${DEPS[$pkg_name]}"
+		if ! command -v "$bin_name" &>/dev/null; then
+			if ! yes | pkg install "$pkg_name" &>>"$LOG_FILE"; then
+				log_error "Failed to install $pkg_name"
+				return 1
+			fi
+		fi
+	done
+
+	return 0
+}
+
 _download_bun_binary_native() {
-	loading "Downloading Bun (native)" _download_bun_binary_native_impl
+	loading "Downloading Bun (glibc)" _download_bun_binary_native_impl
 }
 
 _download_bun_binary_native_impl() {
@@ -64,7 +103,7 @@ _download_bun_binary_native_impl() {
 
 	mkdir -p "$BUN_DATA_DIR"
 
-	local zip_name="bun-linux-aarch64-android.zip"
+	local zip_name="bun-linux-aarch64.zip"
 	curl -fsSL "https://github.com/$BUN_REPO/releases/download/bun-v$version/$zip_name" \
 		-o "$BUN_DATA_DIR/$zip_name" &>>"$LOG_FILE" || {
 		log_error "Failed to download Bun binary"
@@ -78,45 +117,69 @@ _download_bun_binary_native_impl() {
 
 	rm -f "$BUN_DATA_DIR/$zip_name"
 
-	local extracted="$BUN_DATA_DIR/bun-linux-aarch64-android/bun"
+	local extracted="$BUN_DATA_DIR/bun-linux-aarch64/bun"
 	if [ ! -f "$extracted" ]; then
 		log_error "Bun binary not found after extraction"
 		return 1
 	fi
 
-	mv -f "$extracted" "$BUN_DATA_DIR/bun"
-	rm -rf "$BUN_DATA_DIR/bun-linux-aarch64-android"
+	mv -f "$extracted" "$BUN_DATA_DIR/bun.real"
+	rm -rf "$BUN_DATA_DIR/bun-linux-aarch64"
 
-	if [ ! -f "$BUN_DATA_DIR/bun" ]; then
+	if [ ! -f "$BUN_DATA_DIR/bun.real" ]; then
 		log_error "Bun binary not found after extraction"
 		return 1
 	fi
 
-	chmod +x "$BUN_DATA_DIR/bun"
+	chmod +x "$BUN_DATA_DIR/bun.real"
+	return 0
+}
+
+_compile_bun_helper() {
+	loading "Compiling bun helper" _compile_bun_helper_impl
+}
+
+_compile_bun_helper_impl() {
+	local shim_src="$CORE_PATH/tools/lang/bun/src/bun-shim.c"
+	local wrapper_src="$CORE_PATH/tools/lang/bun/src/bun_wrapper.c"
+
+	if [ ! -f "$shim_src" ]; then
+		log_error "Shim source not found at $shim_src"
+		return 1
+	fi
+
+	if [ ! -f "$wrapper_src" ]; then
+		log_error "Wrapper source not found at $wrapper_src"
+		return 1
+	fi
+
+	mkdir -p "$PREFIX/lib"
+
+	if ! clang -O2 -fPIC -shared -nostdlib -o "$PREFIX/lib/bun-shim.so" "$shim_src" &>>"$LOG_FILE"; then
+		log_error "Failed to compile bun shim"
+		return 1
+	fi
+	chmod +x "$PREFIX/lib/bun-shim.so"
+
+	local wrapper_tmp="$TMPDIR/bun_wrapper_$$.c"
+	sed "s|__BUN_REAL__|$BUN_DATA_DIR/bun.real|g" "$wrapper_src" >"$wrapper_tmp"
+
+	if ! clang -O2 -o "$PREFIX/bin/bun" "$wrapper_tmp" &>>"$LOG_FILE"; then
+		rm -f "$wrapper_tmp"
+		log_error "Failed to compile bun wrapper"
+		return 1
+	fi
+	chmod +x "$PREFIX/bin/bun"
+	rm -f "$wrapper_tmp"
+
 	return 0
 }
 
 _install_bun_native() {
-	if ! command -v unzip &>/dev/null; then
-		loading "Installing unzip" _install_bun_unzip_impl
-	fi
+	_bun_install_deps_native || return 1
 	_download_bun_binary_native || return 1
-	_install_bun_symlink || return 1
-	log_success "Bun installed natively (android build)"
-	return 0
-}
-
-_install_bun_unzip_impl() {
-	if ! yes | pkg install unzip &>>"$LOG_FILE"; then
-		log_error "Failed to install unzip"
-		return 1
-	fi
-	return 0
-}
-
-_install_bun_symlink() {
-	mkdir -p "$PREFIX/bin"
-	ln -sf "$BUN_DATA_DIR/bun" "$PREFIX/bin/bun"
+	_compile_bun_helper || return 1
+	log_success "Bun installed natively (glibc build)"
 	return 0
 }
 
@@ -194,7 +257,7 @@ install_bun() {
 	log_info "Select installation method for Bun:"
 
 	read_select "Installation method" SELECTED_METHOD \
-		"Native (recommended) - Android build" \
+		"Native (recommended) - glibc build with shim" \
 		"Proot-distro (alternative) - Ubuntu container"
 
 	case "$SELECTED_METHOD" in
@@ -208,13 +271,11 @@ install_bun() {
 }
 
 _uninstall_bun_native() {
-	if [ -f "$BUN_DATA_DIR/bun" ]; then
-		rm -f "$PREFIX/bin/bun"
-		rm -rf "$BUN_DATA_DIR"
-		log_success "Bun (native) uninstalled"
-		return 0
-	fi
-	return 1
+	rm -f "$PREFIX/bin/bun"
+	rm -f "$PREFIX/lib/bun-shim.so"
+	rm -rf "$BUN_DATA_DIR"
+	log_success "Bun (native) uninstalled"
+	return 0
 }
 
 _uninstall_bun_proot() {
@@ -241,7 +302,7 @@ uninstall_bun() {
 }
 
 _uninstall_bun_impl() {
-	if [ -f "$BUN_DATA_DIR/bun" ]; then
+	if [ -f "$BUN_DATA_DIR/bun.real" ]; then
 		_uninstall_bun_native
 		return $?
 	fi
@@ -250,7 +311,7 @@ _uninstall_bun_impl() {
 
 _update_bun_native() {
 	_download_bun_binary_native || return 1
-	_install_bun_symlink || return 1
+	_compile_bun_helper || return 1
 	log_success "Bun (native) updated"
 	return 0
 }
@@ -298,7 +359,7 @@ update_bun() {
 _update_bun() {
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	if [ -f "$BUN_DATA_DIR/bun" ]; then
+	if [ -f "$BUN_DATA_DIR/bun.real" ]; then
 		_update_bun_native
 		return $?
 	fi

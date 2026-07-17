@@ -11,11 +11,11 @@ JavaScript runtime, bundler, test runner, and package manager (all-in-one toolki
 
 ## Description
 
-Bun is a fast all-in-one JavaScript runtime built with the Zig programming language. It provides a native implementation of JavaScriptCore, a bundler, a transpiler, a task runner, an npm-compatible package manager, and a test runner. The Android build runs natively on Termux.
+Bun is a fast all-in-one JavaScript runtime built with the Zig programming language. It provides a native implementation of JavaScriptCore, a bundler, a transpiler, a task runner, an npm-compatible package manager, and a test runner. The native build uses the glibc-based Linux binary with an LD_PRELOAD shim for Termux path compatibility.
 
 ## Dependencies
 
-- Native: `unzip` (recommended): Android native
+- Native: `glibc`, `clang`, `unzip`, `curl`
 - Proot-distro (alternative): Ubuntu container, `curl`, `ca-certificates`, `unzip`
 
 ## Install
@@ -39,5 +39,5 @@ core update lang --bun
 ## Notes
 
 - Commands: `bun`
-- The native build uses `bun-linux-aarch64-android.zip` from the official releases
+- The native build uses `bun-linux-aarch64.zip` (glibc) with a compiled C shim and wrapper for Termux path compatibility
 - A Proot-distro Ubuntu method is available as an alternative installation path
