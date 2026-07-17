@@ -98,8 +98,8 @@ _get_remote_github_version() {
   tag=$(echo "$raw" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
   if [ -z "$tag" ]; then
-    raw=$(_spin_capture "Checking GitHub tags" curl -fsSL "https://api.github.com/repos/$repo/tags?per_page=5" 2>/dev/null)
-    tag=$(echo "$raw" | grep '"name":' | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+    raw=$(_spin_capture "Checking GitHub tags" curl -fsSL "https://api.github.com/repos/$repo/tags?per_page=100" 2>/dev/null)
+    tag=$(echo "$raw" | grep '"name":' | sed -E 's/.*"([^"]+)".*/\1/' | sort -V | tail -1)
   fi
 
   _parse_version "$tag"

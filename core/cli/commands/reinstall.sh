@@ -488,6 +488,10 @@ _reinstall_specific_tools() {
         reinstall_golang
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      bun)
+        reinstall_bun
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown language: --$tool"
         ;;

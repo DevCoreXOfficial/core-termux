@@ -495,6 +495,10 @@ _install_specific_tools() {
         install_golang
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      bun)
+        install_bun
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown language: --$tool"
         ;;

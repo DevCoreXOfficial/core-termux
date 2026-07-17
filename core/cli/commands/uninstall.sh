@@ -494,6 +494,10 @@ _uninstall_specific_tools() {
         uninstall_golang
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      bun)
+        uninstall_bun
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown language: --$tool"
         ;;

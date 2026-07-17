@@ -24,7 +24,7 @@ voice_help() {
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "mistral-vibe" "vibe --prompt \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "openclaude" "openclaude --bg \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "pi" "pi -p \"prompt\""
-	printf "    ${D_CYAN}%-16s${NC} %s\n" "qoder" "qoder -p \"prompt\""
+	printf "    ${D_CYAN}%-16s${NC} %s\n" "qoder" "qodercli -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "qwen-code" "qwen -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${NC} %s\n" "text" "Print prompt to stdout"
 	echo
@@ -160,7 +160,7 @@ voice_main() {
 		pi -p "$prompt"
 		;;
 	qoder)
-		qoder -p "$prompt"
+		qodercli -p "$prompt"
 		;;
 	qwen-code)
 		qwen -p "$prompt"

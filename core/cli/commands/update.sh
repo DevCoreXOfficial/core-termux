@@ -496,6 +496,10 @@ _update_specific_tools() {
         update_golang
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      bun)
+        update_bun
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown language: --$tool"
         ;;

@@ -79,6 +79,7 @@ _list_lang() {
   table_row "Rust" "--rust" "$(_check_pkg "rust")"
   table_row "C/C++ (clang)" "--clang" "$(_check_pkg "clang")"
   table_row "Go (golang)" "--golang" "$(_check_pkg "golang")"
+  table_row "Bun (JS runtime)" "--bun" "$(_check_cmd "bun")"
   table_end
 
   echo

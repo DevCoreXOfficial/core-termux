@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.10.3-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.11.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -90,7 +90,7 @@ These modules are available across most commands (`core list`, `core install`, `
 
 | Module | Description |
 |--------|-------------|
-| `lang` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go) |
+| `lang` | Language packages (Node.js, Python, Perl, PHP, Rust, C/C++, Go, Bun.js) |
 | `db` | Databases (PostgreSQL, MariaDB, SQLite, MongoDB, Redis) |
 | `ai` | AI agents and coding assistants — see [AI Agents](#ai-agents) |
 | `editor` | Code editor components (Neovim, NvChad) |
@@ -154,7 +154,7 @@ core --version
 
 **Output:**
 ```
-4.10.3
+4.11.0
 ```
 
 ---
@@ -745,6 +745,7 @@ core install lang
 | **Rust** | `rust` | Rust compiler and Cargo |
 | **C/C++** | `clang` | LLVM C/C++ compiler |
 | **Go** | `golang` | Go programming language |
+| **Bun** | `bun` | Bun JavaScript runtime |
 
 ---
 
@@ -1072,7 +1073,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.10.4 (current: 4.10.3)
+⚠ New version available: 4.11.1 (current: 4.11.0)
 
 ➜ Run: core update core to update
 ```

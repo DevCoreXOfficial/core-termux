@@ -21,6 +21,7 @@ source "$(dirname "$BASH_SOURCE")/php/install.sh"
 source "$(dirname "$BASH_SOURCE")/rust/install.sh"
 source "$(dirname "$BASH_SOURCE")/clang/install.sh"
 source "$(dirname "$BASH_SOURCE")/golang/install.sh"
+source "$(dirname "$BASH_SOURCE")/bun/install.sh"
 
 install_all_lang_packages() {
 	local installed_count=0
@@ -54,6 +55,10 @@ install_all_lang_packages() {
 			;;
 		golang)
 			loading "Installing Go (golang)" install_golang
+			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+			;;
+		bun)
+			loading "Installing Bun" install_bun
 			case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
@@ -96,6 +101,10 @@ uninstall_all_lang_packages() {
 			loading "Uninstalling Go (golang)" uninstall_golang
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
+		bun)
+			loading "Uninstalling Bun" uninstall_bun
+			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+			;;
 		esac
 	done
 
@@ -123,12 +132,15 @@ update_all_lang_packages() {
     clang)
       update_clang
       ;;
-    golang)
-      update_golang
-      ;;
-    esac
-  done
-  echo
+		golang)
+			update_golang
+			;;
+		bun)
+			update_bun
+			;;
+		esac
+	done
+	echo
 }
 
 reinstall_all_lang_packages() {
@@ -161,12 +173,16 @@ reinstall_all_lang_packages() {
       loading "Reinstalling C/C++ (clang)" reinstall_clang
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
-    golang)
-      loading "Reinstalling Go (golang)" reinstall_golang
-      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
-      ;;
-    esac
-  done
+		golang)
+			loading "Reinstalling Go (golang)" reinstall_golang
+			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+			;;
+		bun)
+			loading "Reinstalling Bun" reinstall_bun
+			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+			;;
+		esac
+	done
 
-  return 0
+	return 0
 }
