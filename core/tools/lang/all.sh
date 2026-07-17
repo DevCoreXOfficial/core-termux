@@ -12,6 +12,7 @@ LANGUAGE_PACKAGES=(
 	"rust"
 	"clang"
 	"golang"
+  "bun"
 )
 
 source "$(dirname "$BASH_SOURCE")/nodejs/install.sh"
