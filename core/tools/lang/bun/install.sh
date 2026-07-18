@@ -179,6 +179,7 @@ _install_bun_native() {
 	_bun_install_deps_native || return 1
 	_download_bun_binary_native || return 1
 	_compile_bun_helper || return 1
+	ln -sf bun "$PREFIX/bin/bunx"
 	log_success "Bun installed natively (glibc build)"
 	return 0
 }
@@ -272,6 +273,7 @@ install_bun() {
 
 _uninstall_bun_native() {
 	rm -f "$PREFIX/bin/bun"
+	rm -f "$PREFIX/bin/bunx"
 	rm -f "$PREFIX/lib/bun-shim.so"
 	rm -rf "$BUN_DATA_DIR"
 	log_success "Bun (native) uninstalled"

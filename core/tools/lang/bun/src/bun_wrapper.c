@@ -3,6 +3,7 @@
  *
  * Sets up Termux-compatible environment, then exec's bun through
  * ld-linux-aarch64.so.1 with bun-shim.so preloaded.
+ * LD_LIBRARY_PATH is set so bun's child processes can find glibc.
  * Compiled with: clang -O2 -o bun bun_wrapper.c
  */
 #include <limits.h>
@@ -11,9 +12,11 @@
 #include <unistd.h>
 
 int main(int argc, char **argv) {
-    unsetenv("LD_PRELOAD");
-    unsetenv("LD_LIBRARY_PATH");
+    const char *lib_path = "/data/data/com.termux/files/usr/glibc/lib";
+    const char *shim_path = "/data/data/com.termux/files/usr/lib/bun-shim.so";
 
+    setenv("LD_PRELOAD", shim_path, 1);
+    setenv("LD_LIBRARY_PATH", lib_path, 1);
     setenv("HOME", "/data/data/com.termux/files/home", 1);
     setenv("BUN_INSTALL_CACHE_DIR",
            "/data/data/com.termux/files/home/.bun/cache", 1);
@@ -25,14 +28,12 @@ int main(int argc, char **argv) {
            "/data/data/com.termux/files/usr/etc/tls/cert.pem", 1);
     setenv("BUN_OPTIONS", "--backend=copyfile", 0);
 
-    const char *lib_path = "/data/data/com.termux/files/usr/glibc/lib";
-    const char *shim_path = "/data/data/com.termux/files/usr/lib/bun-shim.so";
-
     const char *ld_so = "ld-linux-aarch64.so.1";
     char loader[PATH_MAX];
     snprintf(loader, sizeof(loader),
              "/data/data/com.termux/files/usr/glibc/lib/%s", ld_so);
     const char *real_bin = "__BUN_REAL__";
+    setenv("BUN_REAL_PATH", real_bin, 1);
 
     char **new_argv = malloc((argc + 6) * sizeof(char *));
     if (!new_argv)
