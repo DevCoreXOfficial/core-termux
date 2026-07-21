@@ -56,6 +56,7 @@ _cline_install_deps_native_impl() {
     ["curl"]="curl"
     ["tar"]="tar"
     ["jq"]="jq"
+    ["python"]="python"
   )
 
   local pkg_name bin_name
