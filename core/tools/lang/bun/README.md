@@ -2,27 +2,59 @@
 
 JavaScript runtime, bundler, test runner, and package manager (all-in-one toolkit)
 
-**Package:** bun (binary)  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core-termux  
+**Package:** bun (binary)
+**Author:** DevCoreX
+**Repository:** https://github.com/DevCoreXOfficial/core-termux
 **Official:** https://bun.com
-**Type:** Language runtime (binary)  
+**Type:** Language runtime (binary)
 **License:** MIT
 
 ## Description
 
-Bun is a fast all-in-one JavaScript runtime built with the Zig programming language. It provides a native implementation of JavaScriptCore, a bundler, a transpiler, a task runner, an npm-compatible package manager, and a test runner. The native build uses Bun's official Android binary (`bun-linux-aarch64-android`) with a C wrapper that resolves relative paths and an LD_PRELOAD shim that enables `bun build` by intercepting directory traversal at Termux's sandbox boundary.
+Bun is a fast all-in-one JavaScript runtime built with the Zig programming language. It provides a native implementation of JavaScriptCore, a bundler, a transpiler, a task runner, an npm-compatible package manager, and a test runner.
 
-## Dependencies
+Two installation methods are available depending on your use case.
 
-- Native: `clang`, `unzip`, `curl`
-- Proot-distro (alternative): Ubuntu container, `curl`, `ca-certificates`, `unzip`
+## Installation Methods
+
+### Native (recommended)
+
+Uses Bun's official Android NDK binary with C wrappers and an LD_PRELOAD shim for full Termux compatibility.
+
+**Best for:** Running and developing JavaScript/TypeScript projects directly on Termux/Android.
+
+**Pros:**
+- Fastest execution (native ARM64, no container overhead)
+- Full `bun build --compile` support with `bun-bundle`
+- Small footprint (~35MB installed)
+
+**Cons:**
+- Compiled standalone binaries are **Android ELFs** (interpreter `/system/bin/linker64`, bionic libc)
+- Cannot run on standard Linux systems (Ubuntu, Debian, etc.)
+
+### Proot-distro (alternative)
+
+Installs Bun's official Linux glibc binary (`bun-linux-aarch64.zip`) inside an Ubuntu container via `proot-distro`.
+
+**Best for:** Compiling standalone binaries that need to run on standard Linux systems (servers, Docker, CI/CD).
+
+**Pros:**
+- Produces **Linux-compatible** standalone binaries (`bun build --compile` outputs glibc ELF)
+- Full Linux environment for testing and deployment workflows
+- No shim needed — Ubuntu has no `/data/` sandbox restriction
+
+**Cons:**
+- Slower execution (container overhead)
+- Requires ~500MB for Ubuntu rootfs
+- `bun-bundle` not needed (no LD_PRELOAD fix required)
 
 ## Install
 
 ```bash
 core install lang --bun
 ```
+
+The installer will prompt you to choose between Native and Proot-distro. Both methods always install the latest available version.
 
 ## Uninstall
 
@@ -36,23 +68,42 @@ core uninstall lang --bun
 core update lang --bun
 ```
 
-## Notes
+Compares installed version against the latest release on GitHub. If an update is available, prompts for confirmation before proceeding.
 
-- Commands: `bun`, `bun-bundle`
-- The native build uses `bun-linux-aarch64-android.zip` (Android NDK build, runs via `/system/bin/linker64`)
-- Three components work together for full functionality:
-  - **C wrapper** (`bun_wrapper.c`): resolves relative file paths to absolute via `realpath()`, working around the Android `CouldntReadCurrentDirectory` bug in Bun
-  - **LD_PRELOAD shim** (`bun-android-shim.c`): provides two fixes:
-    1. Intercepts `opendir`/`openat64` for `/data/` and `/data/data/`, returning ENOENT so Bun's project-root discovery stops at the Termux sandbox boundary instead of crashing with "Cannot read directory /data/" — this enables `bun build` on Termux
-    2. At process start, maps the `.bun` section at its ELF virtual address via `MAP_FIXED`, fixing the SEGFAULT in compiled standalone binaries where Bun's embedded runtime has hardcoded absolute pointers that the Android dynamic linker does not relocate
-  - **bun-bundle post-processor** (`bun-bundle.c`): after `bun build --compile`, wraps the output binary in a shell script that sets `LD_PRELOAD` to the shim, making compiled binaries runnable on Termux
-- C wrapper compiled to `$PREFIX/bin/bun`, shim installed to `$PREFIX/lib/bun-android-shim.so`, bundler to `$PREFIX/bin/bun-bundle`
-- Proot-distro installation still uses the Linux glibc binary (`bun-linux-aarch64.zip`) and does not need the shim since Ubuntu's filesystem has no `/data/` restriction
-- A Proot-distro Ubuntu method is available as an alternative installation path
+## Reinstall
 
-## Workflow: compiled standalone binaries
+```bash
+core reinstall lang --bun
+```
 
-`bun build --compile` produces ELF standalone binaries that crash on Android Termux due to non-relocated absolute pointers in the embedded Bun runtime. Use `bun-bundle` to make them runnable:
+## Dependencies
+
+- **Native:** `clang`, `unzip`, `curl`
+- **Proot-distro:** `proot-distro`, Ubuntu container, `unzip`
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `bun` | JavaScript runtime, package manager, bundler, test runner |
+| `bunx` | Run npm packages without installing (like `npx`) |
+| `bun-bundle` | Post-process compiled standalone binaries for Termux (native only) |
+
+## Native: How It Works
+
+Three components work together for full functionality on Termux:
+
+1. **C wrapper** (`bun_wrapper.c`): resolves relative file paths to absolute via `realpath()`, working around the Android `CouldntReadCurrentDirectory` bug in Bun
+2. **LD_PRELOAD shim** (`bun-android-shim.c`): provides two fixes:
+   - Intercepts `opendir`/`openat64` for `/data/` and `/data/data/`, returning ENOENT so Bun's project-root discovery stops at the Termux sandbox boundary instead of crashing with "Cannot read directory /data/"
+   - At process start, maps the `.bun` section at its ELF virtual address via `MAP_FIXED`, fixing the SEGFAULT in compiled standalone binaries where Bun's embedded runtime has hardcoded absolute pointers
+3. **bun-bundle post-processor** (`bun-bundle.c`): after `bun build --compile`, wraps the output binary in a shell script that sets `LD_PRELOAD` to the shim, making compiled binaries runnable on Termux
+
+## Workflow: Compiled Standalone Binaries
+
+### On Termux (native installation)
+
+`bun build --compile` produces Android ELF standalone binaries. Use `bun-bundle` to make them runnable:
 
 ```bash
 # Compile your TypeScript/JS file
@@ -63,10 +114,36 @@ bun-bundle hello
 
 # Run it — works!
 ./hello
+```
 
-# The original binary is renamed to hello.bun, and hello becomes a shell wrapper.
-# You can also run the binary directly with LD_PRELOAD:
+The original binary is renamed to `hello.bun`, and `hello` becomes a shell wrapper. You can also run the binary directly:
+
+```bash
 LD_PRELOAD=$PREFIX/lib/bun-android-shim.so ./hello.bun
 ```
 
-Note: `bun build --compile` standalone binaries produced on Android Termux are **Android ELF binaries** (interpreter `/system/bin/linker64`, bionic libc). They cannot run on standard Linux systems (Ubuntu, Debian, etc.). To produce Linux-compatible standalone binaries, use the proot-distro installation instead.
+### On Linux (proot-distro installation)
+
+Compiled binaries are standard Linux glibc ELFs — no wrapper needed:
+
+```bash
+# Compile inside proot
+bun build --compile hello.ts
+
+# Run directly
+./hello
+```
+
+To copy the binary out of proot to your Termux filesystem:
+
+```bash
+cp /root/hello ~/hello
+```
+
+## Notes
+
+- Both methods download the latest version from GitHub at install/update time
+- Native uses `bun-linux-aarch64-android.zip` (Android NDK build, runs via `/system/bin/linker64`)
+- Proot-distro uses `bun-linux-aarch64.zip` (Linux glibc build, runs via `ld-linux-aarch64.so.1`)
+- C wrapper compiled to `$PREFIX/bin/bun`, shim installed to `$PREFIX/lib/bun-android-shim.so`, bundler to `$PREFIX/bin/bun-bundle`
+- Proot-distro creates wrapper scripts at `$PREFIX/bin/bun` and `$PREFIX/bin/bunx` that route into the Ubuntu container

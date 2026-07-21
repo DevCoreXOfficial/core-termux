@@ -33,6 +33,12 @@ _get_latest_kilocode_version() {
   echo "$raw" | jq -r '.[].tag_name' | grep -v '^jetbrains/' | head -1
 }
 
+_get_latest_kilocode_version_silent() {
+  local raw
+  raw=$(curl -fsSL "https://api.github.com/repos/Kilo-Org/kilocode/releases?per_page=10" 2>/dev/null)
+  echo "$raw" | jq -r '.[].tag_name' | grep -v '^jetbrains/' | head -1
+}
+
 _kilocode_install_deps_native() {
   loading "Installing glibc and dependencies" _kilocode_install_deps_native_impl
 }
@@ -82,7 +88,7 @@ _download_kilocode_binary() {
 
 _download_kilocode_binary_impl() {
   local latest_version
-  latest_version=$(_get_latest_kilocode_version)
+  latest_version=$(_get_latest_kilocode_version_silent)
   if [ -z "$latest_version" ]; then
     log_error "Failed to fetch latest Kilo Code CLI version"
     return 1
@@ -165,7 +171,7 @@ _install_kilocode_proot_impl() {
     &>>"$LOG_FILE"
 
   local latest_version
-  latest_version=$(_get_latest_kilocode_version)
+  latest_version=$(_get_latest_kilocode_version_silent)
   if [ -z "$latest_version" ]; then
     log_error "Failed to fetch latest Kilo Code CLI version"
     return 1

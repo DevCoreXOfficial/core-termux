@@ -33,6 +33,12 @@ _get_latest_cline_version() {
   echo "$raw" | python3 -c "import json,sys; print(json.load(sys.stdin).get('version',''))" 2>/dev/null
 }
 
+_get_latest_cline_version_silent() {
+  local raw
+  raw=$(curl -fsSL "https://registry.npmjs.org/@cline%2fcli-linux-arm64/latest" 2>/dev/null)
+  echo "$raw" | python3 -c "import json,sys; print(json.load(sys.stdin).get('version',''))" 2>/dev/null
+}
+
 _cline_install_deps_native() {
   loading "Installing glibc and dependencies" _cline_install_deps_native_impl
 }
@@ -79,7 +85,7 @@ _download_cline_binary() {
 
 _download_cline_binary_impl() {
   local latest_version
-  latest_version=$(_get_latest_cline_version)
+  latest_version=$(_get_latest_cline_version_silent)
   if [ -z "$latest_version" ]; then
     log_error "Failed to fetch latest Cline CLI version"
     return 1
