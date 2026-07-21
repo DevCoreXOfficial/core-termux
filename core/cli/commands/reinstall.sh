@@ -224,6 +224,10 @@ _reinstall_specific_tools() {
         reinstall_openspec
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      cline)
+        reinstall_cline
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

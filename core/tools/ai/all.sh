@@ -31,6 +31,7 @@ AI_TOOLS=(
   "freebuff"
   "ctx7"
   "openspec"
+  "cline"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -59,6 +60,7 @@ source "$(dirname "$BASH_SOURCE")/command-code/install.sh"
 source "$(dirname "$BASH_SOURCE")/freebuff/install.sh"
 source "$(dirname "$BASH_SOURCE")/ctx7/install.sh"
 source "$(dirname "$BASH_SOURCE")/openspec/install.sh"
+source "$(dirname "$BASH_SOURCE")/cline/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
@@ -168,6 +170,10 @@ install_all_ai_tools() {
       ;;
     openspec)
       loading "Installing OpenSpec" install_openspec
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    cline)
+      loading "Installing Cline CLI" install_cline
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     esac
@@ -286,6 +292,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling OpenSpec" uninstall_openspec
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    cline)
+      loading "Uninstalling Cline CLI" uninstall_cline
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -372,6 +382,9 @@ update_all_ai_tools() {
       ;;
     openspec)
       update_openspec
+      ;;
+    cline)
+      update_cline
       ;;
     esac
   done
@@ -486,6 +499,10 @@ reinstall_all_ai_tools() {
       ;;
     openspec)
       loading "Reinstalling OpenSpec" reinstall_openspec
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    cline)
+      loading "Reinstalling Cline CLI" reinstall_cline
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
