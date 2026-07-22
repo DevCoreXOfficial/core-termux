@@ -41,6 +41,14 @@ int main(int argc, char **argv) {
            "/data/data/com.termux/files/home/.cache", 0);
     setenv("BUN_MANIFEST_CACHE",
            "/data/data/com.termux/files/home/.cache/bun/manifest", 0);
+    setenv("npm_config_cache",
+           "/data/data/com.termux/files/home/.npm", 0);
+
+    /*
+     * Android restricts hardlink creation (EPERM/EACCES).
+     * Force bun's package installer to use copyfile instead.
+     */
+    setenv("BUN_INSTALL_BACKEND", "copyfile", 1);
 
     /* Build new argv: [real_bun, resolved_args...] */
     char **new_argv = malloc((argc + 1) * sizeof(char *));

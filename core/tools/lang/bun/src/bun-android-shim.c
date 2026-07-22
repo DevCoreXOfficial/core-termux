@@ -57,7 +57,7 @@ static int should_block(const char *path) {
     for (int i = 0; blocked_prefixes[i]; i++) {
         if (strncmp(path, blocked_prefixes[i], strlen(blocked_prefixes[i])) == 0) {
             /* Don't block if it's the Termux sandbox itself */
-            if (strncmp(path, "/data/data/com.termux.", 22) == 0)
+            if (strncmp(path, "/data/data/com.termux", 21) == 0)
                 return 0;
             return 1;
         }
@@ -97,7 +97,110 @@ int openat64(int fd, const char *path, int flags, ...) {
 
 
 /* ================================================================
- * PART 2: mmap fix for compiled standalone binaries
+ * getcwd fallback — Android's getcwd() fails with
+ * "CouldntReadCurrentDirectory" when the process was started via
+ * execv() with a relative cwd.  Read /proc/self/cwd as fallback.
+ * ================================================================ */
+
+typedef char *(*getcwd_fn_t)(char *, size_t);
+static getcwd_fn_t real_getcwd = NULL;
+
+char *getcwd(char *buf, size_t size) {
+    if (!real_getcwd)
+        real_getcwd = (getcwd_fn_t)dlsym(RTLD_NEXT, "getcwd");
+
+    /* Try real getcwd first */
+    char *result = real_getcwd(buf, size);
+    if (result) return result;
+
+    /* Fallback: read /proc/self/cwd symlink */
+    ssize_t len = readlink("/proc/self/cwd", buf, size - 1);
+    if (len < 0) return NULL;
+    buf[len] = '\0';
+    return buf;
+}
+
+
+/* ================================================================
+ * PART 2: linkat/link → copy fallback
+ *
+ * Android restricts hardlink creation across mount points and app
+ * sandboxes.  Bun's installer tries linkat() first; when the kernel
+ * returns EACCES/EPERM, Bun aborts instead of falling back to copy.
+ * This interception converts hardlink requests into copy_file_range
+ * (or read+write fallback), so Bun's install flow succeeds.
+ * ================================================================ */
+
+#include <sys/sendfile.h>
+
+static int copy_file(const char *src, const char *dst) {
+    int fd_in = open(src, O_RDONLY);
+    if (fd_in < 0) return -1;
+
+    struct stat st;
+    if (fstat(fd_in, &st) < 0) { close(fd_in); return -1; }
+
+    int fd_out = open(dst, O_WRONLY | O_CREAT | O_TRUNC, st.st_mode);
+    if (fd_out < 0) { close(fd_in); return -1; }
+
+    ssize_t sent = 0;
+    off_t offset = 0;
+    while (offset < st.st_size) {
+        sent = sendfile(fd_out, fd_in, &offset, st.st_size - offset);
+        if (sent <= 0) break;
+    }
+
+    close(fd_in);
+    close(fd_out);
+    return (offset == st.st_size) ? 0 : -1;
+}
+
+int linkat(int olddirfd, const char *oldpath,
+           int newdirfd, const char *newpath, int flags) {
+    /* Resolve absolute paths for copy fallback */
+    char src[PATH_MAX], dst[PATH_MAX];
+
+    if (oldpath && oldpath[0] != '/') {
+        char dir[PATH_MAX];
+        if (olddirfd == AT_FDCWD) {
+            if (getcwd(dir, sizeof(dir)) == NULL) return -1;
+        } else {
+            char fdpath[32];
+            snprintf(fdpath, sizeof(fdpath), "/proc/self/fd/%d", olddirfd);
+            ssize_t n = readlink(fdpath, dir, sizeof(dir) - 1);
+            if (n < 0) return -1;
+            dir[n] = '\0';
+        }
+        snprintf(src, sizeof(src), "%s/%s", dir, oldpath);
+    } else {
+        snprintf(src, sizeof(src), "%s", oldpath ? oldpath : "");
+    }
+
+    if (newpath && newpath[0] != '/') {
+        char dir[PATH_MAX];
+        if (newdirfd == AT_FDCWD) {
+            if (getcwd(dir, sizeof(dir)) == NULL) return -1;
+        } else {
+            char fdpath[32];
+            snprintf(fdpath, sizeof(fdpath), "/proc/self/fd/%d", newdirfd);
+            ssize_t n = readlink(fdpath, dir, sizeof(dir) - 1);
+            if (n < 0) return -1;
+            dir[n] = '\0';
+        }
+        snprintf(dst, sizeof(dst), "%s/%s", dir, newpath);
+    } else {
+        snprintf(dst, sizeof(dst), "%s", newpath ? newpath : "");
+    }
+
+    return copy_file(src, dst);
+}
+
+int link(const char *oldpath, const char *newpath) {
+    return copy_file(oldpath, newpath);
+}
+
+/* ================================================================
+ * PART 3: mmap fix for compiled standalone binaries
  * ================================================================ */
 
 /* ELF64 structures */
