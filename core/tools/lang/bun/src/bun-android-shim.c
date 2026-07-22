@@ -39,28 +39,50 @@
  * PART 1: opendir/openat64 interception
  * ================================================================ */
 
-/* Paths to block — any path starting with these is denied */
-static const char *blocked_prefixes[] = {
-    "/data/",
-    "/data/data/",
-    NULL
-};
+/* CWD captured at shim load time — used as redirect for inaccessible ancestors */
+static char shim_cwd[4096] = {0};
+static int shim_cwd_len = 0;
 
 /* Original functions (resolved via dlsym) */
 typedef DIR *(*opendir_fn_t)(const char *);
+typedef int (*open_fn_t)(const char *, int, ...);
 typedef int (*openat64_fn_t)(int, const char *, int, ...);
 static opendir_fn_t real_opendir = NULL;
 static openat64_fn_t real_openat64 = NULL;
 
+/* Check if a path is an inaccessible ancestor that needs redirect */
+static int needs_redirect(const char *path) {
+    if (!path || path[0] == '\0') return 0;
+    /* Redirect "/", "/data/", and "/data/data/" to CWD */
+    if (path[0] == '/' && path[1] == '\0') return 1;  /* exactly "/" */
+    if (strncmp(path, "/data/", 6) == 0) {
+        /* Don't redirect if it's the Termux sandbox itself */
+        if (strncmp(path, "/data/data/com.termux", 21) == 0)
+            return 0;
+        return 1;
+    }
+    return 0;
+}
+
+/* Redirect open to CWD — uses a fresh dlsym so it works from any interceptor */
+static int open_cwd_redirect_impl(int flags, mode_t mode) {
+    if (shim_cwd_len == 0) {
+        errno = ENOENT;
+        return -1;
+    }
+    open_fn_t real = (open_fn_t)dlsym(RTLD_NEXT, "open");
+    if (!real) {
+        errno = ENOENT;
+        return -1;
+    }
+    return real(shim_cwd, flags, mode);
+}
+
 static int should_block(const char *path) {
-    if (!path) return 0;
-    for (int i = 0; blocked_prefixes[i]; i++) {
-        if (strncmp(path, blocked_prefixes[i], strlen(blocked_prefixes[i])) == 0) {
-            /* Don't block if it's the Termux sandbox itself */
-            if (strncmp(path, "/data/data/com.termux", 21) == 0)
-                return 0;
+    /* Block exact "/data/" paths that are NOT under /data/data/com.termux */
+    if (path && strncmp(path, "/data/", 6) == 0) {
+        if (strncmp(path, "/data/data/com.termux", 21) != 0)
             return 1;
-        }
     }
     return 0;
 }
@@ -68,6 +90,10 @@ static int should_block(const char *path) {
 DIR *opendir(const char *path) {
     if (!real_opendir) {
         real_opendir = (opendir_fn_t)dlsym(RTLD_NEXT, "opendir");
+    }
+    /* Redirect blocked ancestors to CWD so bun's directory walk succeeds */
+    if (needs_redirect(path) && shim_cwd_len > 0) {
+        return real_opendir(shim_cwd);
     }
     if (should_block(path)) {
         errno = ENOENT;
@@ -80,10 +106,7 @@ int openat64(int fd, const char *path, int flags, ...) {
     if (!real_openat64) {
         real_openat64 = (openat64_fn_t)dlsym(RTLD_NEXT, "openat64");
     }
-    if (should_block(path)) {
-        errno = ENOENT;
-        return -1;
-    }
+
     /* Pass mode if O_CREAT is set */
     mode_t mode = 0;
     if (flags & O_CREAT) {
@@ -92,7 +115,97 @@ int openat64(int fd, const char *path, int flags, ...) {
         mode = (mode_t)va_arg(ap, int);
         va_end(ap);
     }
+
+    /* Redirect blocked ancestors to CWD so bun's directory walk succeeds */
+    if (needs_redirect(path) && shim_cwd_len > 0) {
+        return real_openat64(fd, shim_cwd, flags, mode);
+    }
+    if (should_block(path)) {
+        errno = ENOENT;
+        return -1;
+    }
     return real_openat64(fd, path, flags, mode);
+}
+
+
+/* ================================================================
+ * open/open64 interception — Android sandbox blocks open("/")
+ *
+ * Bun v1.3.14's resolver calls openat64(AT_FDCWD, "/", O_DIRECTORY)
+ * as part of its directory info walk.  The kernel returns EACCES
+ * because Android's sandbox restricts root access.
+ *
+ * Returning EACCES or ENOENT both cause bun's resolver to abort
+ * with "CouldntReadCurrentDirectory" (bun treats ANY ancestor-open
+ * failure as fatal in v1.3.14 — this is fixed in a later commit,
+ * PR #28782, which skips permission-denied ancestors).
+ *
+ * Our fix: redirect "/" to the current working directory instead of
+ * failing.  Bun gets a valid directory fd, completes its walk, and
+ * doesn't crash.  The entries read will be the CWD entries (not root
+ * entries), but that is harmless since root never has bun config files.
+ * ================================================================ */
+
+static open_fn_t real_open = NULL;
+
+int open(const char *path, int flags, ...) {
+    if (!real_open)
+        real_open = (open_fn_t)dlsym(RTLD_NEXT, "open");
+
+    /* Redirect blocked ancestors to CWD so bun's directory walk succeeds */
+    if (needs_redirect(path)) {
+        mode_t m = 0;
+        if (flags & O_CREAT) {
+            va_list ap;
+            va_start(ap, flags);
+            m = (mode_t)va_arg(ap, int);
+            va_end(ap);
+        }
+        return open_cwd_redirect_impl(flags, m);
+    }
+    if (should_block(path)) {
+        errno = ENOENT;
+        return -1;
+    }
+
+    mode_t mode = 0;
+    if (flags & O_CREAT) {
+        va_list ap;
+        va_start(ap, flags);
+        mode = (mode_t)va_arg(ap, int);
+        va_end(ap);
+    }
+    return real_open(path, flags, mode);
+}
+
+int open64(const char *path, int flags, ...) {
+    if (!real_open)
+        real_open = (open_fn_t)dlsym(RTLD_NEXT, "open");
+
+    /* Redirect blocked ancestors to CWD so bun's directory walk succeeds */
+    if (needs_redirect(path)) {
+        mode_t m = 0;
+        if (flags & O_CREAT) {
+            va_list ap;
+            va_start(ap, flags);
+            m = (mode_t)va_arg(ap, int);
+            va_end(ap);
+        }
+        return open_cwd_redirect_impl(flags, m);
+    }
+    if (should_block(path)) {
+        errno = ENOENT;
+        return -1;
+    }
+
+    mode_t mode = 0;
+    if (flags & O_CREAT) {
+        va_list ap;
+        va_start(ap, flags);
+        mode = (mode_t)va_arg(ap, int);
+        va_end(ap);
+    }
+    return real_open(path, flags, mode);
 }
 
 
@@ -356,8 +469,13 @@ static void fix_bun_standalone(void) {
     close(fd);
 }
 
-/* Constructor runs at process start — handles both fixes */
+/* Constructor runs at process start — captures CWD and fixes standalone bins */
 __attribute__((constructor(1)))
 static void init(void) {
+    /* Capture CWD for "/" redirect before any sandbox restriction matters */
+    if (getcwd(shim_cwd, sizeof(shim_cwd)) != NULL) {
+        shim_cwd_len = strlen(shim_cwd);
+    }
+
     fix_bun_standalone();
 }

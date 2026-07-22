@@ -50,6 +50,36 @@ int main(int argc, char **argv) {
      */
     setenv("BUN_INSTALL_BACKEND", "copyfile", 1);
 
+    /*
+     * Resolve CWD to absolute path before exec'ing bun.
+     *
+     * On Android/bionic, getcwd() can fail with ENOENT and return
+     * "CouldntReadCurrentDirectory" when the kernel's CWD tracking
+     * loses the path (e.g., after certain exec chains, or when the
+     * CWD's parent directory was manipulated by another process).
+     *
+     * We resolve the CWD now, chdir() to the absolute path, and set
+     * PWD explicitly. This way bun's process starts with a valid,
+     * resolvable CWD regardless of bionic's getcwd() behavior.
+     */
+    {
+        char cwd_buf[PATH_MAX];
+        char *cwd = getcwd(cwd_buf, sizeof(cwd_buf));
+        if (!cwd) {
+            /* getcwd() failed — read /proc/self/cwd as fallback */
+            ssize_t len = readlink("/proc/self/cwd", cwd_buf,
+                                   sizeof(cwd_buf) - 1);
+            if (len > 0) {
+                cwd_buf[len] = '\0';
+                cwd = cwd_buf;
+            }
+        }
+        if (cwd) {
+            chdir(cwd);
+            setenv("PWD", cwd, 1);
+        }
+    }
+
     /* Build new argv: [real_bun, resolved_args...] */
     char **new_argv = malloc((argc + 1) * sizeof(char *));
     if (!new_argv)
