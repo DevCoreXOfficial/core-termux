@@ -82,7 +82,7 @@ _get_installed_npm_version() {
 }
 
 _get_remote_npm_version() {
-  _spin_capture "Checking npm" npm view "$1" version 2>/dev/null
+  _spin_capture "Checking npm" bash -c "npm view '$1' version --loglevel=error 2>/dev/null"
 }
 
 _get_remote_pip_version() {
@@ -138,10 +138,6 @@ _compare_versions() {
     return 2
   fi
 
-  if [ "$v1" = "$v2" ]; then
-    return 0
-  fi
-
   local strip_v1="${v1#v}"
   local strip_v2="${v2#v}"
 
@@ -149,7 +145,11 @@ _compare_versions() {
     return 0
   fi
 
-  return 1
+  # Return 0 if v1 >= v2 (installed is same or newer, no update needed)
+  # Return 1 if v1 < v2 (remote is newer, update needed)
+  local highest
+  highest=$(printf '%s\n%s\n' "$strip_v1" "$strip_v2" | sort -V | tail -1)
+  [ "$highest" = "$strip_v1" ]
 }
 
 _check_update_needed() {
