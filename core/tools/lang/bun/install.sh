@@ -212,7 +212,19 @@ _install_bun_binary_impl() {
 		cd "$(pwd -P 2>/dev/null || pwd)" || true
 		export PWD="$(pwd -P 2>/dev/null || pwd)"
 
-		exec __BUN_REAL__ "$@"
+		# Detect bunx invocation: bun detects argv[0] for "bunx" mode,
+		# but the wrapper breaks this detection. Inject "x" when needed.
+		_BUN_CMD="x"
+		case "$0" in
+			*bunx*) _BUN_CMD="x" ;;
+			*)      _BUN_CMD=""   ;;
+		esac
+
+		if [ -n "$_BUN_CMD" ]; then
+			exec __BUN_REAL__ "$_BUN_CMD" "$@"
+		else
+			exec __BUN_REAL__ "$@"
+		fi
 		WRAPPER_EOF
 
   sed -i "s|__BUN_SHIM__|${shim_path}|g" "${bin_dir}/bun"

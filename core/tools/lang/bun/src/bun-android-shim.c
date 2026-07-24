@@ -313,6 +313,62 @@ int link(const char *oldpath, const char *newpath) {
 }
 
 /* ================================================================
+ * symlink → copy fallback
+ *
+ * Android restricts symlink creation in app sandboxes.
+ * Bun's package manager creates symlinks in node_modules/.bin/.
+ * When symlink() fails with EACCES/EPERM, fall back to copying the
+ * target file so package binaries work.
+ * ================================================================ */
+
+int symlink(const char *target, const char *linkpath) {
+    /* Try real symlinkat first */
+    static int (*real_symlinkat)(const char *, int, const char *) = NULL;
+    if (!real_symlinkat)
+        real_symlinkat = (int (*)(const char *, int, const char *))
+            dlsym(RTLD_NEXT, "symlinkat");
+
+    if (real_symlinkat) {
+        int r = real_symlinkat(target, AT_FDCWD, linkpath);
+        if (r == 0) return 0;
+
+        int err = errno;
+        /* If blocked by sandbox, fall back to copy */
+        if (err == EACCES || err == EPERM) {
+            goto fallback_copy;
+        }
+        errno = err;
+        return -1;
+    }
+
+fallback_copy:;
+    /* Resolve target relative to linkpath's directory */
+    char resolved[PATH_MAX];
+    if (target && target[0] != '/') {
+        char dir[PATH_MAX];
+        int len = 0;
+        const char *p = linkpath;
+        while (*p) { len++; p++; }
+        int i = len;
+        while (i > 0 && linkpath[i - 1] != '/')
+            i--;
+        if (i > 0) {
+            int dlen = i - 1;
+            if (dlen >= (int)sizeof(dir)) dlen = sizeof(dir) - 1;
+            for (int j = 0; j < dlen; j++)
+                dir[j] = linkpath[j];
+            dir[dlen] = '\0';
+            snprintf(resolved, sizeof(resolved), "%s/%s", dir, target);
+        } else {
+            snprintf(resolved, sizeof(resolved), "%s", target);
+        }
+    } else {
+        snprintf(resolved, sizeof(resolved), "%s", target ? target : "");
+    }
+    return copy_file(resolved, linkpath);
+}
+
+/* ================================================================
  * PART 3: mmap fix for compiled standalone binaries
  * ================================================================ */
 
@@ -467,6 +523,221 @@ static void fix_bun_standalone(void) {
     }
 
     close(fd);
+}
+
+/* ================================================================
+ * execve symlink resolution + JS redirect
+ *
+ * Two fixes for Android/Termux:
+ *
+ * 1. Android's kernel returns ENOENT when execve() is called on a
+ *    symlink.  Intercept, resolve symlinks via readlink() loop,
+ *    then call the real execve with the resolved path.
+ *
+ * 2. JS/TS files with #!/usr/bin/env node shebang fail because
+ *    /usr/bin/env doesn't exist on Termux.  Redirect these to
+ *    bun.real which handles JS execution natively.
+ * ================================================================ */
+
+typedef int (*execve_fn_t)(const char *, char *const *, char *const *);
+static execve_fn_t real_execve = NULL;
+
+/* Path to bun.real for JS redirect */
+static const char *bun_real_path = "/data/data/com.termux/files/usr/bin/bun.real";
+
+/* Raw syscall for execve (used for JS redirect to avoid recursion) */
+static long raw_execve(const char *pathname, char *const argv[], char *const envp[]) {
+    register long x0 __asm__("x0") = (long)pathname;
+    register long x1 __asm__("x1") = (long)argv;
+    register long x2 __asm__("x2") = (long)envp;
+    register long r __asm__("x8") = 221; /* SYS_execve */
+    __asm__ volatile("svc #0"
+                     : "+r"(r), "+r"(x0), "+r"(x1), "+r"(x2)
+                     :
+                     : "memory");
+    return r;
+}
+#define SEXECVE(p, a, e) raw_execve((p), (a), (e))
+
+/* Resolve symlink chain (up to 16 hops) */
+static int resolve_symlink(const char *path, char *buf, size_t bufsiz) {
+    char tmp[PATH_MAX];
+    snprintf(tmp, sizeof(tmp), "%s", path);
+
+    for (int i = 0; i < 16; i++) {
+        struct stat st;
+        if (lstat(tmp, &st) < 0)
+            return -1;
+
+        /* Not a symlink — we're done */
+        if (!S_ISLNK(st.st_mode)) {
+            snprintf(buf, bufsiz, "%s", tmp);
+            return 0;
+        }
+
+        /* Read symlink target */
+        ssize_t len = readlink(tmp, buf, bufsiz - 1);
+        if (len < 0)
+            return -1;
+        buf[len] = '\0';
+
+        /* If target is absolute, use it directly */
+        if (buf[0] == '/') {
+            snprintf(tmp, sizeof(tmp), "%s", buf);
+            continue;
+        }
+
+        /* Relative target: resolve against symlink's directory */
+        char dir[PATH_MAX];
+        int dlen = 0;
+        const char *p = tmp;
+        while (*p) { dlen++; p++; }
+        int slash = dlen;
+        while (slash > 0 && tmp[slash - 1] != '/')
+            slash--;
+        if (slash > 0) {
+            if (slash >= (int)sizeof(dir)) slash = sizeof(dir) - 1;
+            for (int j = 0; j < slash; j++)
+                dir[j] = tmp[j];
+            dir[slash] = '\0';
+            snprintf(tmp, sizeof(tmp), "%s%s", dir, buf);
+        } else {
+            snprintf(tmp, sizeof(tmp), "%s", buf);
+        }
+    }
+
+    return -1; /* too many levels */
+}
+
+/* Check if a file extension is JS/TS */
+static int is_js_file(const char *path) {
+    int plen = 0;
+    const char *p = path;
+    while (*p) { plen++; p++; }
+
+    if (plen > 3) {
+        const char *ext = path + plen - 3;
+        if (ext[0] == '.' && ((ext[1] == 'j' && ext[2] == 's') ||
+                              (ext[1] == 't' && ext[2] == 's')))
+            return 1;
+    }
+    if (plen > 5) {
+        const char *ext = path + plen - 5;
+        if (ext[0] == '.' && ext[1] == 'm' &&
+            ((ext[2] == 'j' && ext[3] == 's') ||
+             (ext[2] == 't' && ext[3] == 's')) && ext[4] == '\0')
+            return 1;
+        if (ext[0] == '.' && ext[1] == 'c' &&
+            ((ext[2] == 'j' && ext[3] == 's') ||
+             (ext[2] == 't' && ext[3] == 's')) && ext[4] == '\0')
+            return 1;
+    }
+    return 0;
+}
+
+/* Resolve relative path against CWD to make it absolute */
+static int make_absolute(const char *path, char *buf, size_t bufsiz) {
+    if (path[0] == '/') {
+        snprintf(buf, bufsiz, "%s", path);
+        return 0;
+    }
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) == NULL)
+        return -1;
+    snprintf(buf, bufsiz, "%s/%s", cwd, path);
+    return 0;
+}
+
+int execve(const char *pathname, char *const argv[], char *const envp[]) {
+    if (!real_execve)
+        real_execve = (execve_fn_t)dlsym(RTLD_NEXT, "execve");
+    if (!real_execve) {
+        errno = ENOENT;
+        return -1;
+    }
+
+    /* Try the original path first */
+    int r = real_execve(pathname, argv, envp);
+    if (r == 0)
+        return 0;
+
+    int err = errno;
+
+    /* If ENOENT, try two fixes for both absolute and relative paths:
+     * 1. Resolve symlinks (Android blocks symlink exec in some contexts)
+     * 2. For JS/TS files, redirect to bun.real (shebang /usr/bin/env
+     *    doesn't exist on Termux, so kernel can't resolve #!/usr/bin/env)
+     */
+    if (err == ENOENT && pathname) {
+        /* Make path absolute for symlink resolution */
+        char abs_path[PATH_MAX];
+        if (pathname[0] == '/') {
+            snprintf(abs_path, sizeof(abs_path), "%s", pathname);
+        } else {
+            if (make_absolute(pathname, abs_path, sizeof(abs_path)) < 0) {
+                errno = err;
+                return -1;
+            }
+        }
+
+        char resolved[PATH_MAX];
+        int resolved_ok = (resolve_symlink(abs_path, resolved, sizeof(resolved)) == 0);
+        const char *try_path = resolved_ok ? resolved : abs_path;
+        int is_js_file_check = 0;
+
+        /* Also check shebang for extensionless Node scripts (e.g. next, vite) */
+        if (!is_js_file(try_path)) {
+            int fd = open(try_path, O_RDONLY);
+            if (fd >= 0) {
+                char buf[32];
+                ssize_t n = read(fd, buf, sizeof(buf) - 1);
+                close(fd);
+                if (n > 2 && buf[0] == '#' && buf[1] == '!') {
+                    /* Check for #!/usr/bin/env node or #!/usr/bin/env bun */
+                    const char *shebang = buf + 2;
+                    int slen = 0;
+                    while (slen < n - 2 && shebang[slen] != '\n') slen++;
+                    /* Skip whitespace */
+                    int start = 0;
+                    while (start < slen && (shebang[start] == ' ' || shebang[start] == '\t'))
+                        start++;
+                    /* Check for "node" or "bun" at the end of the shebang */
+                    if (slen - start >= 4) {
+                        const char *end = shebang + slen;
+                        if ((end[-4] == 'n' && end[-3] == 'o' && end[-2] == 'd' && end[-1] == 'e') ||
+                            (end[-3] == 'b' && end[-2] == 'u' && end[-1] == 'n')) {
+                            is_js_file_check = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (is_js_file(try_path) || is_js_file_check) {
+            /* Redirect to bun.real: execve(bun.real, [bun.real, script, ...args], env) */
+            char *new_argv[256];
+            int argc = 0;
+            while (argv[argc]) argc++;
+
+            new_argv[0] = (char *)bun_real_path;
+            new_argv[1] = (char *)try_path;
+            for (int j = 1; j < argc && j < 254; j++)
+                new_argv[j + 1] = (char *)argv[j];
+            new_argv[argc + 1] = NULL;
+
+            return (int)SEXECVE(bun_real_path, new_argv, envp);
+        }
+
+        /* Not a JS file — just retry with resolved symlink */
+        if (resolved_ok) {
+            r = real_execve(resolved, argv, envp);
+            if (r == 0)
+                return 0;
+        }
+    }
+
+    errno = err;
+    return -1;
 }
 
 /* Constructor runs at process start — captures CWD and fixes standalone bins */
