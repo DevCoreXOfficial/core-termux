@@ -235,6 +235,10 @@ _install_specific_tools() {
         install_cline
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      ampcode)
+        install_amp_code_cli
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

@@ -104,6 +104,7 @@ CORE_TIPS=(
 	"Install Context7: ${D_CYAN}core install ai --ctx7${NC}"
 	"Install OpenSpec: ${D_CYAN}core install ai --openspec${NC}"
 	"Install Cline CLI: ${D_CYAN}core install ai --cline${NC}"
+	"Install AMP Code CLI: ${D_CYAN}core install ai --ampcode${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"

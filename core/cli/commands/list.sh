@@ -146,6 +146,7 @@ _list_ai() {
   table_row "Context7" "--ctx7" "ctx7" "$(_check_cmd "ctx7")"
   table_row "OpenSpec" "--openspec" "openspec" "$(_check_cmd "openspec")"
   table_row "Cline CLI" "--cline" "cline" "$(_check_cmd "cline")"
+  table_row "AMP Code CLI" "--ampcode" "amp" "$(_check_cmd "amp")"
   table_end
 
   echo

@@ -236,6 +236,10 @@ _update_specific_tools() {
         update_cline
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      ampcode)
+        update_amp_code_cli
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

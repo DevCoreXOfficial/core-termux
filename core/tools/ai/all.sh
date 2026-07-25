@@ -32,6 +32,7 @@ AI_TOOLS=(
   "ctx7"
   "openspec"
   "cline"
+  "amp-code-cli"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -61,6 +62,7 @@ source "$(dirname "$BASH_SOURCE")/freebuff/install.sh"
 source "$(dirname "$BASH_SOURCE")/ctx7/install.sh"
 source "$(dirname "$BASH_SOURCE")/openspec/install.sh"
 source "$(dirname "$BASH_SOURCE")/cline/install.sh"
+source "$(dirname "$BASH_SOURCE")/amp-code-cli/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
@@ -174,6 +176,10 @@ install_all_ai_tools() {
       ;;
     cline)
       loading "Installing Cline CLI" install_cline
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    ampcode)
+      loading "Installing AMP Code CLI" install_amp_code_cli
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     esac
@@ -296,6 +302,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling Cline CLI" uninstall_cline
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    ampcode)
+      loading "Uninstalling AMP Code CLI" uninstall_amp_code_cli
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -385,6 +395,9 @@ update_all_ai_tools() {
       ;;
     cline)
       update_cline
+      ;;
+    ampcode)
+      update_amp_code_cli
       ;;
     esac
   done
@@ -503,6 +516,10 @@ reinstall_all_ai_tools() {
       ;;
     cline)
       loading "Reinstalling Cline CLI" reinstall_cline
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    ampcode)
+      loading "Reinstalling AMP Code CLI" reinstall_amp_code_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

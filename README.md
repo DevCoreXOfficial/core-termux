@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.12.7-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.13.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -140,6 +140,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Context7** | `--ctx7` | Live documentation provider for AI coding agents |
 | **OpenSpec** | `--openspec` | Spec-Driven Development framework for AI coding agents |
 | **Cline CLI** | `--cline` | The open source coding agent in your IDE and terminal |
+| **AMP Code CLI** | `--ampcode` | AMP — coding agent by Sourcegraph for the terminal |
 
 ---
 
@@ -155,7 +156,7 @@ core --version
 
 **Output:**
 ```
-4.12.7
+4.13.0
 ```
 
 ---
@@ -1074,7 +1075,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.12.8 (current: 4.12.7)
+⚠ New version available: 4.13.1 (current: 4.13.0)
 
 ➜ Run: core update core to update
 ```

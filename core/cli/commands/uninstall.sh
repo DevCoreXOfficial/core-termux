@@ -234,6 +234,10 @@ _uninstall_specific_tools() {
         uninstall_cline
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      ampcode)
+        uninstall_amp_code_cli
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;
