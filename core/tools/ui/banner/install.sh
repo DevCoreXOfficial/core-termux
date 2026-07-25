@@ -83,7 +83,6 @@ _install_banner_impl() {
 			'!inserted && index($0, p10k) == 1 {
 				print marker
 				print "source \"" script "\""
-				print ""
 				inserted = 1
 			}
 			{ print }' \
