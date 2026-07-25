@@ -62,7 +62,7 @@ source "$(dirname "$BASH_SOURCE")/freebuff/install.sh"
 source "$(dirname "$BASH_SOURCE")/ctx7/install.sh"
 source "$(dirname "$BASH_SOURCE")/openspec/install.sh"
 source "$(dirname "$BASH_SOURCE")/cline/install.sh"
-source "$(dirname "$BASH_SOURCE")/amp-code-cli/install.sh"
+source "$(dirname "$BASH_SOURCE")/ampcode/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
