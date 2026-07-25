@@ -68,11 +68,33 @@ _install_banner_impl() {
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
-	cat >>"$shell_config" <<EOF
+	# Insert banner BEFORE the Powerlevel10k instant-prompt block if present.
+	# Appending after that block causes p10k's "console output during zsh
+	# initialization" warning, because the banner prints to stdout.
+	local p10k_marker="# Enable Powerlevel10k instant prompt."
+	if grep -qF "$p10k_marker" "$shell_config" 2>/dev/null; then
+		# Use awk with index() for fixed-string matching — no regex escaping
+		# needed and no external language dependencies beyond standard POSIX tools.
+		local tmp_config="${shell_config}.core_tmp"
+		awk \
+			-v p10k="$p10k_marker" \
+			-v marker="$CORE_BANNER_MARKER" \
+			-v script="$banner_script" \
+			'!inserted && index($0, p10k) == 1 {
+				print marker
+				print "source \"" script "\""
+				print ""
+				inserted = 1
+			}
+			{ print }' \
+			"$shell_config" > "$tmp_config" && mv "$tmp_config" "$shell_config"
+	else
+		cat >>"$shell_config" <<EOF
 
 $CORE_BANNER_MARKER
 source "$banner_script"
 EOF
+	fi
 
 	log_success "Core-Termux Banner installed"
 
