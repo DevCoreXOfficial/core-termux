@@ -5,7 +5,7 @@ import "@/utils/colors"
 import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
-AMP_DATA_DIR="$HOME/.local/share/core-termux-data/amp-code-cli"
+AMP_DATA_DIR="$HOME/.local/share/core-termux-data/ampcode"
 
 _amp_detect_ubuntu_root() {
   local root
@@ -134,7 +134,7 @@ _compile_amp_helper() {
 }
 
 _compile_amp_helper_impl() {
-  local HELPER_SRC="$CORE_PATH/tools/ai/amp-code-cli/helper/amp_helper.c"
+  local HELPER_SRC="$CORE_PATH/tools/ai/ampcode/helper/amp_helper.c"
   if [ ! -f "$HELPER_SRC" ]; then
     log_error "Helper source not found at $HELPER_SRC"
     return 1
@@ -210,7 +210,7 @@ _install_amp_proot_impl() {
     return 1
   fi
 
-  local wrapper_src="$CORE_PATH/tools/ai/amp-code-cli/bin/amp"
+  local wrapper_src="$CORE_PATH/tools/ai/ampcode/bin/amp"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
     return 1

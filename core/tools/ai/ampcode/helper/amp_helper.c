@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
     // 4. Construct paths for the glibc loader and the real binary
     char* loader = "/data/data/com.termux/files/usr/glibc/lib/ld-linux-aarch64.so.1";
-    char real_bin[] = "/data/data/com.termux/files/home/.local/share/core-termux-data/amp-code-cli/amp";
+    char real_bin[] = "/data/data/com.termux/files/home/.local/share/core-termux-data/ampcode/amp";
     char lib_path[] = "/data/data/com.termux/files/usr/glibc/lib";
 
     // 5. Construct argument array for execv

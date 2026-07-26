@@ -32,7 +32,7 @@ AI_TOOLS=(
   "ctx7"
   "openspec"
   "cline"
-  "amp-code-cli"
+  "ampcode"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
