@@ -16,6 +16,7 @@ AI_TOOLS=(
   "opencode"
   "qoder"
   "kilocode-cli"
+  "cursor-cli"
   "kimchi"
   "mimocode"
   "engram"
@@ -46,6 +47,7 @@ source "$(dirname "$BASH_SOURCE")/codex/install.sh"
 source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
 source "$(dirname "$BASH_SOURCE")/qoder/install.sh"
 source "$(dirname "$BASH_SOURCE")/kilocode-cli/install.sh"
+source "$(dirname "$BASH_SOURCE")/cursor-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/kimchi/install.sh"
 source "$(dirname "$BASH_SOURCE")/mimocode/install.sh"
 source "$(dirname "$BASH_SOURCE")/engram/install.sh"
@@ -112,6 +114,10 @@ install_all_ai_tools() {
       ;;
     kilocode-cli)
       loading "Installing Kilo Code CLI" install_kilocode_cli
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    cursor-cli)
+      loading "Installing Cursor CLI" install_cursor_cli
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     kimchi)
@@ -238,6 +244,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling Kilo Code CLI" uninstall_kilocode_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    cursor-cli)
+      loading "Uninstalling Cursor CLI" uninstall_cursor_cli
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     kimchi)
       loading "Uninstalling Kimchi" uninstall_kimchi
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -348,6 +358,9 @@ update_all_ai_tools() {
     kilocode-cli)
       update_kilocode_cli
       ;;
+    cursor-cli)
+      update_cursor_cli
+      ;;
     kimchi)
       update_kimchi
       ;;
@@ -452,6 +465,10 @@ reinstall_all_ai_tools() {
       ;;
     kilocode-cli)
       loading "Reinstalling Kilo Code CLI" reinstall_kilocode_cli
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    cursor-cli)
+      loading "Reinstalling Cursor CLI" reinstall_cursor_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kimchi)

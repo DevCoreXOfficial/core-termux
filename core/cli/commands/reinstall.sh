@@ -164,6 +164,10 @@ _reinstall_specific_tools() {
         reinstall_kilocode_cli
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      cursor-cli)
+        reinstall_cursor_cli
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       kimchi)
         reinstall_kimchi
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac

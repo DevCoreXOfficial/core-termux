@@ -171,6 +171,10 @@ _install_specific_tools() {
         install_kilocode_cli
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      cursor-cli)
+        install_cursor_cli
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       kimchi)
         install_kimchi
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac

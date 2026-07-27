@@ -27,10 +27,16 @@ _amp_proot_ubuntu() {
     -- "$@"
 }
 
-_get_latest_amp_version() {
+_get_latest_amp_version_raw() {
   local raw
   raw=$(curl -fsSL "https://registry.npmjs.org/@ampcode/cli-linux-arm64/latest" 2>/dev/null)
   echo "$raw" | python3 -c "import json,sys; print(json.load(sys.stdin).get('version',''))" 2>/dev/null
+}
+
+_get_latest_amp_version() {
+  local raw
+  raw=$(_spin_capture "Checking npm" _get_latest_amp_version_raw)
+  _parse_version "$raw"
 }
 
 _get_latest_amp_version_silent() {

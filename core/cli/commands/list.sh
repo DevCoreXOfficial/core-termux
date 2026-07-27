@@ -130,6 +130,7 @@ _list_ai() {
   table_row "OpenCode" "--opencode" "opencode" "$(_check_cmd "opencode")"
   table_row "Qoder" "--qoder" "qodercli" "$(_check_cmd "qodercli")"
   table_row "Kilo Code CLI" "--kilocode-cli" "kilo" "$(_check_cmd "kilo")"
+  table_row "Cursor CLI" "--cursor-cli" "cursor" "$(_check_cmd "cursor")"
   table_row "Kimchi" "--kimchi" "kimchi" "$(_check_cmd "kimchi")"
   table_row "MiMoCode" "--mimocode" "mimo" "$(_check_cmd "mimo")"
   table_row "Engram" "--engram" "engram" "$(_check_cmd "engram")"
