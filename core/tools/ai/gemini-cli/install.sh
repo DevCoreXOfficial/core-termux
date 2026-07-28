@@ -5,13 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _gemini_cli_dependencies() {
   loading "Installing dependencies" _gemini_cli_dependencies_impl
 }
 
 _gemini_cli_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["git"]="git"
     ["ripgrep"]="rg"
   )
@@ -27,18 +31,17 @@ _gemini_cli_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_gemini_cli_npm() {
-  loading "Installing Gemini CLI" _install_gemini_cli_npm_impl
+_install_gemini_cli_bun() {
+  loading "Installing Gemini CLI" _install_gemini_cli_bun_impl
 }
 
-_install_gemini_cli_npm_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
-
-  if ! npm install -g @google/gemini-cli &>>"$LOG_FILE"; then
+_install_gemini_cli_bun_impl() {
+  if ! bun install -g @google/gemini-cli &>>"$LOG_FILE"; then
     log_error "Failed to install Gemini CLI"
     return 1
   fi
@@ -57,7 +60,7 @@ install_gemini_cli() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _gemini_cli_dependencies || return 1
-  _install_gemini_cli_npm || return 1
+  _install_gemini_cli_bun || return 1
 
   log_success "Gemini CLI installed"
   return 0
@@ -78,7 +81,7 @@ uninstall_gemini_cli() {
 }
 
 _uninstall_gemini_cli_impl() {
-  if ! npm uninstall -g @google/gemini-cli &>>"$LOG_FILE"; then
+  if ! bun uninstall -g @google/gemini-cli &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Gemini CLI"
     return 1
   fi
@@ -94,10 +97,7 @@ _update_gemini_cli() {
 }
 
 _update_gemini_cli_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
-
-  if ! npm update -g @google/gemini-cli &>>"$LOG_FILE"; then
+  if ! bun install -g @google/gemini-cli@latest &>>"$LOG_FILE"; then
     log_error "Failed to update Gemini CLI"
     return 1
   fi

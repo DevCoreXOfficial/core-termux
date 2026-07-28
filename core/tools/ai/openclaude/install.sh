@@ -5,13 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _openclaude_dependencies() {
   loading "Installing dependencies" _openclaude_dependencies_impl
 }
 
 _openclaude_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["git"]="git"
     ["ripgrep"]="rg"
   )
@@ -27,18 +31,17 @@ _openclaude_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_openclaude_npm() {
-  loading "Installing OpenClaude" _install_openclaude_npm_impl
+_install_openclaude_bun() {
+  loading "Installing OpenClaude" _install_openclaude_bun_impl
 }
 
-_install_openclaude_npm_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
-
-  if ! npm install -g @gitlawb/openclaude &>>"$LOG_FILE"; then
+_install_openclaude_bun_impl() {
+  if ! bun install -g @gitlawb/openclaude &>>"$LOG_FILE"; then
     log_error "Failed to install OpenClaude"
     return 1
   fi
@@ -56,7 +59,7 @@ install_openclaude() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _openclaude_dependencies || return 1
-  _install_openclaude_npm || return 1
+  _install_openclaude_bun || return 1
 
   log_success "OpenClaude installed"
   return 0
@@ -77,7 +80,7 @@ uninstall_openclaude() {
 }
 
 _uninstall_openclaude_impl() {
-  if ! npm uninstall -g @gitlawb/openclaude &>>"$LOG_FILE"; then
+  if ! bun uninstall -g @gitlawb/openclaude &>>"$LOG_FILE"; then
     log_error "Failed to uninstall OpenClaude"
     return 1
   fi
@@ -93,10 +96,7 @@ _update_openclaude() {
 }
 
 _update_openclaude_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
-
-  if ! npm update -g @gitlawb/openclaude &>>"$LOG_FILE"; then
+  if ! bun install -g @gitlawb/openclaude@latest &>>"$LOG_FILE"; then
     log_error "Failed to update OpenClaude"
     return 1
   fi

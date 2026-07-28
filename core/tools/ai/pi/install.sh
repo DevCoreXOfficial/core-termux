@@ -4,13 +4,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _pi_dependencies() {
   loading "Installing dependencies" _pi_dependencies_impl
 }
 
 _pi_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["ripgrep"]="rg"
     ["git"]="git"
     ["fd"]="fd"
@@ -27,15 +31,17 @@ _pi_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_pi_npm() {
-  loading "Installing Pi Coding Agent" _install_pi_npm_impl
+_install_pi_bun() {
+  loading "Installing Pi Coding Agent" _install_pi_bun_impl
 }
 
-_install_pi_npm_impl() {
-  if ! npm install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
+_install_pi_bun_impl() {
+  if ! bun install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
     log_error "Failed to install Pi"
     return 1
   fi
@@ -53,7 +59,7 @@ install_pi() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _pi_dependencies || return 1
-  _install_pi_npm || return 1
+  _install_pi_bun || return 1
 
   log_success "Pi Coding Agent installed"
   return 0
@@ -74,7 +80,7 @@ uninstall_pi() {
 }
 
 _uninstall_pi_impl() {
-  if ! npm uninstall -g @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
+  if ! bun uninstall -g @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Pi"
     return 1
   fi
@@ -90,7 +96,7 @@ _update_pi() {
 }
 
 _update_pi_impl() {
-  if ! npm install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
+  if ! bun install -g --ignore-scripts @earendil-works/pi-coding-agent@latest &>>"$LOG_FILE"; then
     log_error "Failed to update Pi"
     return 1
   fi

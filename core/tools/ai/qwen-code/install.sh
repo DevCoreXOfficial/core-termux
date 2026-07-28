@@ -5,13 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _qwen_code_dependencies() {
   loading "Installing dependencies" _qwen_code_dependencies_impl
 }
 
 _qwen_code_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["git"]="git"
     ["ripgrep"]="rg"
   )
@@ -27,18 +31,17 @@ _qwen_code_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_qwen_code_npm() {
-  loading "Installing Qwen Code" _install_qwen_code_npm_impl
+_install_qwen_code_bun() {
+  loading "Installing Qwen Code" _install_qwen_code_bun_impl
 }
 
-_install_qwen_code_npm_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
-
-  if ! npm install -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+_install_qwen_code_bun_impl() {
+  if ! bun install -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
     log_error "Failed to install Qwen Code"
     return 1
   fi
@@ -57,7 +60,7 @@ install_qwen_code() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _qwen_code_dependencies || return 1
-  _install_qwen_code_npm || return 1
+  _install_qwen_code_bun || return 1
 
   log_success "Qwen Code installed successfully"
   return 0
@@ -78,7 +81,7 @@ uninstall_qwen_code() {
 }
 
 _uninstall_qwen_code_impl() {
-  if ! npm uninstall -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+  if ! bun uninstall -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Qwen Code"
     return 1
   fi
@@ -94,10 +97,7 @@ _update_qwen_code() {
 }
 
 _update_qwen_code_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
-
-  if ! npm update -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+  if ! bun install -g @qwen-code/qwen-code@latest &>>"$LOG_FILE"; then
     log_error "Failed to update Qwen Code"
     return 1
   fi

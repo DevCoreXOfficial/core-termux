@@ -5,13 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _kimi_code_dependencies() {
   loading "Installing dependencies" _kimi_code_dependencies_impl
 }
 
 _kimi_code_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["git"]="git"
     ["ripgrep"]="rg"
   )
@@ -27,15 +31,17 @@ _kimi_code_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_kimi_code_npm() {
-  loading "Installing Kimi Code" _install_kimi_code_npm_impl
+_install_kimi_code_bun() {
+  loading "Installing Kimi Code" _install_kimi_code_bun_impl
 }
 
-_install_kimi_code_npm_impl() {
-  if ! npm install -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
+_install_kimi_code_bun_impl() {
+  if ! bun install -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
     log_error "Failed to install Kimi Code"
     return 1
   fi
@@ -54,7 +60,7 @@ install_kimi_code() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _kimi_code_dependencies || return 1
-  _install_kimi_code_npm || return 1
+  _install_kimi_code_bun || return 1
 
   log_success "Kimi Code installed successfully"
   return 0
@@ -76,7 +82,7 @@ uninstall_kimi_code() {
 }
 
 _uninstall_kimi_code_impl() {
-  if ! npm uninstall -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
+  if ! bun uninstall -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Kimi Code"
     return 1
   fi
@@ -92,7 +98,7 @@ _update_kimi_code() {
 }
 
 _update_kimi_code_impl() {
-  if ! npm update -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
+  if ! bun install -g @moonshot-ai/kimi-code@latest &>>"$LOG_FILE"; then
     log_error "Failed to update Kimi Code"
     return 1
   fi

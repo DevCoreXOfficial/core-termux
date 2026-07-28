@@ -5,13 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _minimax_cli_dependencies() {
   loading "Installing dependencies" _minimax_cli_dependencies_impl
 }
 
 _minimax_cli_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["git"]="git"
     ["ripgrep"]="rg"
   )
@@ -27,15 +31,17 @@ _minimax_cli_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_minimax_cli_npm() {
-  loading "Installing MiniMax CLI" _install_minimax_cli_npm_impl
+_install_minimax_cli_bun() {
+  loading "Installing MiniMax CLI" _install_minimax_cli_bun_impl
 }
 
-_install_minimax_cli_npm_impl() {
-  if ! npm install -g mmx-cli &>>"$LOG_FILE"; then
+_install_minimax_cli_bun_impl() {
+  if ! bun install -g mmx-cli &>>"$LOG_FILE"; then
     log_error "Failed to install MiniMax CLI"
     return 1
   fi
@@ -54,7 +60,7 @@ install_minimax_cli() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _minimax_cli_dependencies || return 1
-  _install_minimax_cli_npm || return 1
+  _install_minimax_cli_bun || return 1
 
   log_success "MiniMax CLI installed successfully"
   return 0
@@ -76,7 +82,7 @@ uninstall_minimax_cli() {
 }
 
 _uninstall_minimax_cli_impl() {
-  if ! npm uninstall -g mmx-cli &>>"$LOG_FILE"; then
+  if ! bun uninstall -g mmx-cli &>>"$LOG_FILE"; then
     log_error "Failed to uninstall MiniMax CLI"
     return 1
   fi
@@ -92,7 +98,7 @@ _update_minimax_cli() {
 }
 
 _update_minimax_cli_impl() {
-  if ! npm update -g mmx-cli &>>"$LOG_FILE"; then
+  if ! bun install -g mmx-cli@latest &>>"$LOG_FILE"; then
     log_error "Failed to update MiniMax CLI"
     return 1
   fi

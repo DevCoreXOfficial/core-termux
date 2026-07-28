@@ -549,3 +549,32 @@ reinstall_bun() {
   uninstall_bun
   install_bun
 }
+
+# ===== AUTO-INSTALL FOR TOOL DEPENDENCIES (non-interactive) =====
+# Used by tool installers that depend on bun as a runtime.
+# Installs bun natively without any interactive prompt.
+_ensure_bun() {
+  command -v bun &>/dev/null && return 0
+
+  local _saved_log="${LOG_FILE:-}"
+  local _log_dir
+  _log_dir="$(dirname "$_saved_log" 2>/dev/null || echo "$CORE_CACHE")"
+  local _log="$_log_dir/install_ensure_bun.log"
+
+  LOG_FILE="$_log"
+  mkdir -p "$(dirname "$LOG_FILE")" "$CORE_CACHE"
+
+  _install_bun_native || {
+    LOG_FILE="$_saved_log"
+    return 1
+  }
+  _bun_setup_path_native
+
+  LOG_FILE="$_saved_log"
+  return 0
+}
+
+# Also export as a public alias used by CLI tools
+install_bun_native_auto() {
+  _ensure_bun
+}

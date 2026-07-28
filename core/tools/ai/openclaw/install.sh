@@ -5,13 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _openclaw_dependencies() {
   loading "Installing dependencies" _openclaw_dependencies_impl
 }
 
 _openclaw_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["git"]="git"
     ["ripgrep"]="rg"
   )
@@ -27,20 +31,19 @@ _openclaw_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_openclaw_npm() {
-  loading "Installing OpenClaw and dependencies" _install_openclaw_npm_impl
+_install_openclaw_bun() {
+  loading "Installing OpenClaw and dependencies" _install_openclaw_bun_impl
 }
 
-_install_openclaw_npm_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
+_install_openclaw_bun_impl() {
+  bun install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 
-  npm install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
-
-  if ! npm install -g openclaw@latest &>>"$LOG_FILE"; then
+  if ! bun install -g openclaw@latest &>>"$LOG_FILE"; then
     log_error "Failed to install OpenClaw"
     return 1
   fi
@@ -58,7 +61,7 @@ install_openclaw() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _openclaw_dependencies || return 1
-  _install_openclaw_npm || return 1
+  _install_openclaw_bun || return 1
 
   log_success "OpenClaw installed"
   return 0
@@ -79,7 +82,9 @@ uninstall_openclaw() {
 }
 
 _uninstall_openclaw_impl() {
-  if ! npm uninstall -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
+  bun uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+
+  if ! bun uninstall -g openclaw &>>"$LOG_FILE"; then
     log_error "Failed to uninstall OpenClaw"
     return 1
   fi
@@ -95,10 +100,9 @@ _update_openclaw() {
 }
 
 _update_openclaw_impl() {
-  export GYP_DEFINES="android_ndk_path=''"
-  export ANDROID_API_LEVEL=24
+  bun install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
 
-  if ! npm update -g openclaw @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"; then
+  if ! bun install -g openclaw@latest &>>"$LOG_FILE"; then
     log_error "Failed to update OpenClaw"
     return 1
   fi

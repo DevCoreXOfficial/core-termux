@@ -6,13 +6,17 @@ import "@/utils/version"
 LOG_FILE="$CORE_CACHE/install_ai.log"
 COMMAND_CODE_DATA_DIR="$HOME/.local/share/core-termux-data/command-code"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _command_code_dependencies() {
   loading "Installing dependencies" _command_code_dependencies_impl
 }
 
 _command_code_dependencies_impl() {
   declare -A DEPS=(
-    ["nodejs-lts"]="node"
     ["git"]="git"
     ["ripgrep"]="rg"
   )
@@ -28,22 +32,24 @@ _command_code_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_command_code_npm() {
-  loading "Installing command-code via npm" _install_command_code_npm_impl
+_install_command_code_bun() {
+  loading "Installing command-code via bun" _install_command_code_bun_impl
 }
 
-_install_command_code_npm_impl() {
+_install_command_code_bun_impl() {
   mkdir -p "$COMMAND_CODE_DATA_DIR"
 
-  if ! (cd "$COMMAND_CODE_DATA_DIR" && npm init -y &>>"$LOG_FILE"); then
-    log_error "Failed to initialize npm project"
+  if ! (cd "$COMMAND_CODE_DATA_DIR" && bun init -y &>>"$LOG_FILE"); then
+    log_error "Failed to initialize bun project"
     return 1
   fi
 
-  if ! (cd "$COMMAND_CODE_DATA_DIR" && npm install command-code@latest &>>"$LOG_FILE"); then
+  if ! (cd "$COMMAND_CODE_DATA_DIR" && bun install command-code@latest &>>"$LOG_FILE"); then
     log_error "Failed to install command-code package"
     return 1
   fi
@@ -58,7 +64,7 @@ _install_command_code_wrappers() {
 _install_command_code_wrappers_impl() {
   local wrapper_content='#!/data/data/com.termux/files/usr/bin/bash
 
-exec node '"$COMMAND_CODE_DATA_DIR"'/node_modules/command-code/dist/index.mjs "$@"'
+exec bun '"$COMMAND_CODE_DATA_DIR"'/node_modules/command-code/dist/index.mjs "$@"'
 
   echo "$wrapper_content" >"$PREFIX/bin/command-code"
   chmod +x "$PREFIX/bin/command-code"
@@ -79,7 +85,7 @@ install_command_code() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _command_code_dependencies || return 1
-  _install_command_code_npm || return 1
+  _install_command_code_bun || return 1
   _install_command_code_wrappers || return 1
 
   log_success "Command Code installed successfully"
@@ -126,7 +132,7 @@ _update_command_code() {
 }
 
 _update_command_code_impl() {
-  if (cd "$COMMAND_CODE_DATA_DIR" && npm install command-code@latest &>>"$LOG_FILE"); then
+  if (cd "$COMMAND_CODE_DATA_DIR" && bun install command-code@latest &>>"$LOG_FILE"); then
     return 0
   else
     log_error "Failed to update Command Code"

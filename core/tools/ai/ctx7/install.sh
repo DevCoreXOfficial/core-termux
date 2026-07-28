@@ -5,14 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _ctx7_dependencies() {
   loading "Installing dependencies" _ctx7_dependencies_impl
 }
 
 _ctx7_dependencies_impl() {
-  declare -A DEPS=(
-    ["nodejs-lts"]="node"
-  )
+  declare -A DEPS=()
 
   local pkg_name bin_name
   for pkg_name in "${!DEPS[@]}"; do
@@ -25,15 +28,17 @@ _ctx7_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_ctx7_npm() {
-  loading "Installing Context7" _install_ctx7_npm_impl
+_install_ctx7_bun() {
+  loading "Installing Context7" _install_ctx7_bun_impl
 }
 
-_install_ctx7_npm_impl() {
-  if ! npm install -g ctx7 &>>"$LOG_FILE"; then
+_install_ctx7_bun_impl() {
+  if ! bun install -g ctx7 &>>"$LOG_FILE"; then
     log_error "Failed to install Context7"
     return 1
   fi
@@ -52,7 +57,7 @@ install_ctx7() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _ctx7_dependencies || return 1
-  _install_ctx7_npm || return 1
+  _install_ctx7_bun || return 1
 
   log_success "Context7 installed successfully"
   return 0
@@ -73,7 +78,7 @@ uninstall_ctx7() {
 }
 
 _uninstall_ctx7_impl() {
-  if ! npm uninstall -g ctx7 &>>"$LOG_FILE"; then
+  if ! bun uninstall -g ctx7 &>>"$LOG_FILE"; then
     log_error "Failed to uninstall Context7"
     return 1
   fi
@@ -89,7 +94,7 @@ _update_ctx7() {
 }
 
 _update_ctx7_impl() {
-  if ! npm update -g ctx7 &>>"$LOG_FILE"; then
+  if ! bun install -g ctx7@latest &>>"$LOG_FILE"; then
     log_error "Failed to update Context7"
     return 1
   fi

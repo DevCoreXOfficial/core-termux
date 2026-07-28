@@ -82,7 +82,19 @@ _get_installed_npm_version() {
 }
 
 _get_remote_npm_version() {
-  _spin_capture "Checking npm" bash -c "npm view '$1' version --loglevel=error 2>/dev/null"
+  local pkg="$1"
+  local version=""
+
+  if command -v npm &>/dev/null; then
+    version=$(_spin_capture "Checking npm" bash -c "npm view '$pkg' version --loglevel=error 2>/dev/null")
+  fi
+
+  # Fallback: npm registry API via curl
+  if [ -z "$version" ] && command -v curl &>/dev/null; then
+    version=$(_spin_capture "Checking npm registry" bash -c "curl -fsSL 'https://registry.npmjs.org/$pkg/latest' 2>/dev/null | sed 's/.*\"version\":\"\([^\"]*\)\".*/\1/'")
+  fi
+
+  echo "$version"
 }
 
 _get_remote_pip_version() {

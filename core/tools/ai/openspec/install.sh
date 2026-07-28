@@ -5,14 +5,17 @@ import "@/utils/version"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
+# Source bun installer for dependency auto-install
+_BUN_SAVED_LOG="$LOG_FILE"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
+LOG_FILE="$_BUN_SAVED_LOG"
+
 _openspec_dependencies() {
   loading "Installing dependencies" _openspec_dependencies_impl
 }
 
 _openspec_dependencies_impl() {
-  declare -A DEPS=(
-    ["nodejs-lts"]="node"
-  )
+  declare -A DEPS=()
 
   local pkg_name bin_name
   for pkg_name in "${!DEPS[@]}"; do
@@ -25,15 +28,17 @@ _openspec_dependencies_impl() {
     fi
   done
 
+  _ensure_bun || return 1
+
   return 0
 }
 
-_install_openspec_npm() {
-  loading "Installing OpenSpec" _install_openspec_npm_impl
+_install_openspec_bun() {
+  loading "Installing OpenSpec" _install_openspec_bun_impl
 }
 
-_install_openspec_npm_impl() {
-  if ! npm install -g @fission-ai/openspec@latest &>>"$LOG_FILE"; then
+_install_openspec_bun_impl() {
+  if ! bun install -g @fission-ai/openspec@latest &>>"$LOG_FILE"; then
     log_error "Failed to install OpenSpec"
     return 1
   fi
@@ -52,7 +57,7 @@ install_openspec() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   _openspec_dependencies || return 1
-  _install_openspec_npm || return 1
+  _install_openspec_bun || return 1
 
   log_success "OpenSpec installed successfully"
   return 0
@@ -73,7 +78,7 @@ uninstall_openspec() {
 }
 
 _uninstall_openspec_impl() {
-  if ! npm uninstall -g @fission-ai/openspec &>>"$LOG_FILE"; then
+  if ! bun uninstall -g @fission-ai/openspec &>>"$LOG_FILE"; then
     log_error "Failed to uninstall OpenSpec"
     return 1
   fi
@@ -89,7 +94,7 @@ _update_openspec() {
 }
 
 _update_openspec_impl() {
-  if ! npm update -g @fission-ai/openspec &>>"$LOG_FILE"; then
+  if ! bun install -g @fission-ai/openspec@latest &>>"$LOG_FILE"; then
     log_error "Failed to update OpenSpec"
     return 1
   fi
