@@ -1,4 +1,4 @@
-# Core-Termux — Modular Dev Environment
+# haha Core-Termux — Modular Dev Environment
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/assets/images/logo.svg" alt="Core-Termux Logo" width="600">
