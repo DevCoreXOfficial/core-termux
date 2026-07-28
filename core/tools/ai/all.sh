@@ -22,6 +22,7 @@ AI_TOOLS=(
   "engram"
   "codegraph"
   "pi"
+  "oh-my-pi"
   "antigravity-cli"
   "gentle-ai"
   "minimax-cli"
@@ -53,6 +54,7 @@ source "$(dirname "$BASH_SOURCE")/mimocode/install.sh"
 source "$(dirname "$BASH_SOURCE")/engram/install.sh"
 source "$(dirname "$BASH_SOURCE")/codegraph/install.sh"
 source "$(dirname "$BASH_SOURCE")/pi/install.sh"
+source "$(dirname "$BASH_SOURCE")/oh-my-pi/install.sh"
 source "$(dirname "$BASH_SOURCE")/antigravity-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/gentle-ai/install.sh"
 source "$(dirname "$BASH_SOURCE")/minimax-cli/install.sh"
@@ -138,6 +140,10 @@ install_all_ai_tools() {
       ;;
     pi)
       loading "Installing Pi" install_pi
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    oh-my-pi)
+      loading "Installing Oh-My-Pi" install_oh_my_pi
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
@@ -268,6 +274,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling Pi" uninstall_pi
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    oh-my-pi)
+      loading "Uninstalling Oh-My-Pi" uninstall_oh_my_pi
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     antigravity-cli)
       loading "Uninstalling Antigravity CLI" uninstall_antigravity_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -375,6 +385,9 @@ update_all_ai_tools() {
       ;;
     pi)
       update_pi
+      ;;
+    oh-my-pi)
+      update_oh_my_pi
       ;;
     antigravity-cli)
       update_antigravity_cli
@@ -489,6 +502,10 @@ reinstall_all_ai_tools() {
       ;;
     pi)
       loading "Reinstalling Pi" reinstall_pi
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    oh-my-pi)
+      loading "Reinstalling Oh-My-Pi" reinstall_oh_my_pi
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)

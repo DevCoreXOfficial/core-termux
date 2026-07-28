@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.14.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.15.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -131,6 +131,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Pi Coding Agent** | `--pi` | Minimal terminal coding harness — adapt Pi to your workflows |
 | **Antigravity CLI** | `--antigravity-cli` | Lightweight, terminal-first surface for Antigravity agents |
 | **MiniMax CLI** | `--minimax-cli` | Generate text, images, video, speech, and music from the terminal |
+| **Oh-My-Pi** | `--oh-my-pi` | Autonomous coding agent that learns your codebase and writes production-ready code |
 | **Gentle AI** | `--gentle-ai` | Ecosystem, Frameworks, Workflows for AI coding agents |
 | **Gentleman Guardian Angel** | `--gga` | Provider-agnostic AI code review for every commit |
 | **Hermes Agent** | `--hermes-agent` | The self-improving AI agent built by Nous Research |
@@ -156,7 +157,7 @@ core --version
 
 **Output:**
 ```
-4.14.0
+4.15.0
 ```
 
 ---

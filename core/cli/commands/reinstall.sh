@@ -188,6 +188,10 @@ _reinstall_specific_tools() {
         reinstall_pi
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      oh-my-pi)
+        reinstall_oh_my_pi
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       antigravity-cli)
         reinstall_antigravity_cli
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac

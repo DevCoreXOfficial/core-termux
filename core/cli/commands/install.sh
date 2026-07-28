@@ -195,6 +195,10 @@ _install_specific_tools() {
         install_pi
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      oh-my-pi)
+        install_oh_my_pi
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       antigravity-cli)
         install_antigravity_cli
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac

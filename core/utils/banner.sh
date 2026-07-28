@@ -105,6 +105,8 @@ CORE_TIPS=(
 	"Install OpenSpec: ${D_CYAN}core install ai --openspec${NC}"
 	"Install Cline CLI: ${D_CYAN}core install ai --cline${NC}"
 	"Install AMP Code CLI: ${D_CYAN}core install ai --ampcode${NC}"
+	"Install Cursor CLI: ${D_CYAN}core install ai --cursor-cli${NC}"
+	"Install Oh-My-Pi: ${D_CYAN}core install ai --oh-my-pi${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"

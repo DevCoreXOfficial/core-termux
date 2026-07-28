@@ -194,6 +194,10 @@ _uninstall_specific_tools() {
         uninstall_pi
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      oh-my-pi)
+        uninstall_oh_my_pi
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       antigravity-cli)
         uninstall_antigravity_cli
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac

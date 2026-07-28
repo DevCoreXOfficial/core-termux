@@ -136,6 +136,7 @@ _list_ai() {
   table_row "Engram" "--engram" "engram" "$(_check_cmd "engram")"
   table_row "CodeGraph" "--codegraph" "codegraph" "$(_check_cmd "codegraph")"
   table_row "Pi Coding Agent" "--pi" "pi" "$(_check_cmd "pi")"
+  table_row "Oh-My-Pi" "--oh-my-pi" "omp" "$(_check_cmd "omp")"
   table_row "Antigravity CLI" "--antigravity-cli" "agy" "$(_check_cmd "agy")"
   table_row "Minimax CLI" "--minimax-cli" "mmx" "$(_check_cmd "mmx")"
   table_row "Gentle AI" "--gentle-ai" "gentle-ai" "$(_check_cmd "gentle-ai")"
