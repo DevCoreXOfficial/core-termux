@@ -1,13 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
 import "@/utils/log"
 import "@/utils/version"
+import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
-
-# Source bun installer for dependency auto-install
-_BUN_SAVED_LOG="$LOG_FILE"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
-LOG_FILE="$_BUN_SAVED_LOG"
 
 _pi_dependencies() {
   loading "Installing dependencies" _pi_dependencies_impl

@@ -33,6 +33,7 @@ AI_TOOLS=(
   "freebuff"
   "ctx7"
   "openspec"
+  "supercode"
   "cline"
   "ampcode"
 )
@@ -65,6 +66,7 @@ source "$(dirname "$BASH_SOURCE")/command-code/install.sh"
 source "$(dirname "$BASH_SOURCE")/freebuff/install.sh"
 source "$(dirname "$BASH_SOURCE")/ctx7/install.sh"
 source "$(dirname "$BASH_SOURCE")/openspec/install.sh"
+source "$(dirname "$BASH_SOURCE")/supercode/install.sh"
 source "$(dirname "$BASH_SOURCE")/cline/install.sh"
 source "$(dirname "$BASH_SOURCE")/ampcode/install.sh"
 
@@ -184,6 +186,10 @@ install_all_ai_tools() {
       ;;
     openspec)
       loading "Installing OpenSpec" install_openspec
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    supercode)
+      loading "Installing SuperCode" install_supercode
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     cline)
@@ -318,6 +324,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling OpenSpec" uninstall_openspec
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    supercode)
+      loading "Uninstalling SuperCode" uninstall_supercode
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     cline)
       loading "Uninstalling Cline CLI" uninstall_cline
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -418,6 +428,9 @@ update_all_ai_tools() {
       ;;
     openspec)
       update_openspec
+      ;;
+    supercode)
+      update_supercode
       ;;
     cline)
       update_cline
@@ -546,6 +559,10 @@ reinstall_all_ai_tools() {
       ;;
     openspec)
       loading "Reinstalling OpenSpec" reinstall_openspec
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    supercode)
+      loading "Reinstalling SuperCode" reinstall_supercode
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     cline)

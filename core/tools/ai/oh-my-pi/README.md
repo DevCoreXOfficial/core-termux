@@ -1,4 +1,4 @@
-# Oh-My-Pi (omp)
+# Oh-My-Pi
 
 Enhanced AI coding agent — improved version of Pi, built as a standalone binary with `bun build --compile`.
 

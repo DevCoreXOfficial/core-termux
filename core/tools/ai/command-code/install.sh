@@ -3,13 +3,10 @@
 import "@/utils/log"
 import "@/utils/version"
 
+import "@/tools/lang/bun/install"
+
 LOG_FILE="$CORE_CACHE/install_ai.log"
 COMMAND_CODE_DATA_DIR="$HOME/.local/share/core-termux-data/command-code"
-
-# Source bun installer for dependency auto-install
-_BUN_SAVED_LOG="$LOG_FILE"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../lang/bun/install.sh"
-LOG_FILE="$_BUN_SAVED_LOG"
 
 _command_code_dependencies() {
   loading "Installing dependencies" _command_code_dependencies_impl

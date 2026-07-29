@@ -238,6 +238,10 @@ _uninstall_specific_tools() {
         uninstall_openspec
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      supercode)
+        uninstall_supercode
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       cline)
         uninstall_cline
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac

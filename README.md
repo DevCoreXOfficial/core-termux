@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.16.1-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.17.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -123,7 +123,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Codex CLI** | `--codex` | Coding agent from OpenAI that runs locally on your computer |
 | **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
 | **Qoder** | `--qoder` | A terminal-native AI coding partner—and an agent engine you can build on |
-| **Kilo Code CLI** | `--kilocode-cli` | The open source coding agent for building with AI in VS Code, JetBrains, or the CLI |
+| **KiloCode CLI** | `--kilocode-cli` | The open source coding agent for building with AI in VS Code, JetBrains, or the CLI |
 | **Kimchi** | `--kimchi` | Terminal coding agent powered by Kimchi's multi-model orchestration |
 | **MiMoCode** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
 | **Engram** | `--engram` | Persistent memory system for coding agents |
@@ -140,6 +140,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Freebuff** | `--freebuff` | A 100% free coding agent, right from your terminal |
 | **Context7** | `--ctx7` | Live documentation provider for AI coding agents |
 | **OpenSpec** | `--openspec` | Spec-Driven Development framework for AI coding agents |
+| **SuperCode CLI** | `--supercode` | Open source SWE agent — free models included, or bring your own |
 | **Cline CLI** | `--cline` | The open source coding agent in your IDE and terminal |
 | **AMP Code CLI** | `--ampcode` | AMP — coding agent by Sourcegraph for the terminal |
 | **Cursor CLI** | `--cursor-cli` | Deliver code with agents directly from your terminal |
@@ -158,7 +159,7 @@ core --version
 
 **Output:**
 ```
-4.16.1
+4.17.0
 ```
 
 ---
@@ -1077,7 +1078,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.14.1 (current: 4.14.0)
+⚠ New version available: 4.17.1 (current: 4.17.0)
 
 ➜ Run: core update core to update
 ```
