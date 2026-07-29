@@ -64,6 +64,25 @@ static int needs_redirect(const char *path) {
     return 0;
 }
 
+/* Check if path is exactly a blocked parent directory (not a file under it).
+   Returns 1 for "/", "/data", "/data/", "/data/data", "/data/data/" and 0
+   for paths like "/data/data/package.json" or "/data/app/foo". */
+static int is_blocked_dir_ref(const char *path) {
+    if (!path || path[0] == '\0') return 0;
+    /* Just "/" */
+    if (path[0] == '/' && path[1] == '\0') return 1;
+    /* Starts with "/data"? */
+    if (strncmp(path, "/data", 5) != 0) return 0;
+    /* /data or /data/ exactly */
+    if (path[5] == '\0' || (path[5] == '/' && path[6] == '\0')) return 1;
+    /* /data/data or /data/data/ exactly */
+    if (strncmp(path + 5, "/data", 5) == 0) {
+        if (path[10] == '\0' || (path[10] == '/' && path[11] == '\0'))
+            return 1;
+    }
+    return 0;
+}
+
 /* Redirect open to CWD — uses a fresh dlsym so it works from any interceptor */
 static int open_cwd_redirect_impl(int flags, mode_t mode) {
     if (shim_cwd_len == 0) {
@@ -116,14 +135,27 @@ int openat64(int fd, const char *path, int flags, ...) {
         va_end(ap);
     }
 
-    /* Redirect blocked ancestors to CWD so bun's directory walk succeeds */
-    if (needs_redirect(path) && shim_cwd_len > 0) {
+    /* Redirect root "/" to CWD so Bun's directory walk succeeds */
+    if (path && path[0] == '/' && path[1] == '\0') {
+        if (shim_cwd_len == 0) { errno = ENOENT; return -1; }
         return real_openat64(fd, shim_cwd, flags, mode);
     }
+
+    /* For paths under /data/ outside Termux sandbox:
+     * - Directory opens (O_DIRECTORY or pure directory ref) → redirect to CWD,
+     *   so Bun's ancestor walk succeeds with a valid directory fd.
+     * - File opens (e.g. /data/data/package.json) → ENOENT, because the
+     *   file doesn't exist. NEVER redirect file opens to CWD — that would
+     *   give Bun a directory fd where it expects a file, causing "IsDir". */
     if (should_block(path)) {
+        if ((flags & O_DIRECTORY) || is_blocked_dir_ref(path)) {
+            if (shim_cwd_len == 0) { errno = ENOENT; return -1; }
+            return real_openat64(fd, shim_cwd, flags, mode);
+        }
         errno = ENOENT;
         return -1;
     }
+
     return real_openat64(fd, path, flags, mode);
 }
 
@@ -152,22 +184,6 @@ int open(const char *path, int flags, ...) {
     if (!real_open)
         real_open = (open_fn_t)dlsym(RTLD_NEXT, "open");
 
-    /* Redirect blocked ancestors to CWD so bun's directory walk succeeds */
-    if (needs_redirect(path)) {
-        mode_t m = 0;
-        if (flags & O_CREAT) {
-            va_list ap;
-            va_start(ap, flags);
-            m = (mode_t)va_arg(ap, int);
-            va_end(ap);
-        }
-        return open_cwd_redirect_impl(flags, m);
-    }
-    if (should_block(path)) {
-        errno = ENOENT;
-        return -1;
-    }
-
     mode_t mode = 0;
     if (flags & O_CREAT) {
         va_list ap;
@@ -175,6 +191,21 @@ int open(const char *path, int flags, ...) {
         mode = (mode_t)va_arg(ap, int);
         va_end(ap);
     }
+
+    /* Redirect root "/" to CWD so Bun's directory walk succeeds */
+    if (path && path[0] == '/' && path[1] == '\0') {
+        return open_cwd_redirect_impl(flags, mode);
+    }
+
+    /* Block file opens under /data/ outside Termux sandbox with ENOENT.
+     * NEVER redirect file paths like /data/data/package.json to CWD —
+     * that would give Bun a directory fd where it expects a file,
+     * causing "IsDir" errors. */
+    if (should_block(path)) {
+        errno = ENOENT;
+        return -1;
+    }
+
     return real_open(path, flags, mode);
 }
 
@@ -182,22 +213,6 @@ int open64(const char *path, int flags, ...) {
     if (!real_open)
         real_open = (open_fn_t)dlsym(RTLD_NEXT, "open");
 
-    /* Redirect blocked ancestors to CWD so bun's directory walk succeeds */
-    if (needs_redirect(path)) {
-        mode_t m = 0;
-        if (flags & O_CREAT) {
-            va_list ap;
-            va_start(ap, flags);
-            m = (mode_t)va_arg(ap, int);
-            va_end(ap);
-        }
-        return open_cwd_redirect_impl(flags, m);
-    }
-    if (should_block(path)) {
-        errno = ENOENT;
-        return -1;
-    }
-
     mode_t mode = 0;
     if (flags & O_CREAT) {
         va_list ap;
@@ -205,6 +220,18 @@ int open64(const char *path, int flags, ...) {
         mode = (mode_t)va_arg(ap, int);
         va_end(ap);
     }
+
+    /* Redirect root "/" to CWD */
+    if (path && path[0] == '/' && path[1] == '\0') {
+        return open_cwd_redirect_impl(flags, mode);
+    }
+
+    /* Block file opens under /data/ outside Termux sandbox */
+    if (should_block(path)) {
+        errno = ENOENT;
+        return -1;
+    }
+
     return real_open(path, flags, mode);
 }
 
