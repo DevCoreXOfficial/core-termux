@@ -37,7 +37,7 @@ _install_kimi_code_bun() {
 }
 
 _install_kimi_code_bun_impl() {
-  if ! bun install -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@moonshot-ai/kimi-code"; then
     log_error "Failed to install Kimi Code"
     return 1
   fi
@@ -78,10 +78,7 @@ uninstall_kimi_code() {
 }
 
 _uninstall_kimi_code_impl() {
-  if ! bun uninstall -g @moonshot-ai/kimi-code &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall Kimi Code"
-    return 1
-  fi
+  _uninstall_pkg_fallback "@moonshot-ai/kimi-code"
   return 0
 }
 
@@ -94,7 +91,7 @@ _update_kimi_code() {
 }
 
 _update_kimi_code_impl() {
-  if ! bun install -g @moonshot-ai/kimi-code@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@moonshot-ai/kimi-code@latest"; then
     log_error "Failed to update Kimi Code"
     return 1
   fi

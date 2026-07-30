@@ -34,7 +34,7 @@ _install_ctx7_bun() {
 }
 
 _install_ctx7_bun_impl() {
-  if ! bun install -g ctx7 &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "ctx7"; then
     log_error "Failed to install Context7"
     return 1
   fi
@@ -74,10 +74,7 @@ uninstall_ctx7() {
 }
 
 _uninstall_ctx7_impl() {
-  if ! bun uninstall -g ctx7 &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall Context7"
-    return 1
-  fi
+  _uninstall_pkg_fallback "ctx7"
   return 0
 }
 
@@ -90,7 +87,7 @@ _update_ctx7() {
 }
 
 _update_ctx7_impl() {
-  if ! bun install -g ctx7@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "ctx7@latest"; then
     log_error "Failed to update Context7"
     return 1
   fi

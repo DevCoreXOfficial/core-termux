@@ -37,7 +37,7 @@ _install_gemini_cli_bun() {
 }
 
 _install_gemini_cli_bun_impl() {
-  if ! bun install -g @google/gemini-cli &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@google/gemini-cli"; then
     log_error "Failed to install Gemini CLI"
     return 1
   fi
@@ -77,10 +77,7 @@ uninstall_gemini_cli() {
 }
 
 _uninstall_gemini_cli_impl() {
-  if ! bun uninstall -g @google/gemini-cli &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall Gemini CLI"
-    return 1
-  fi
+  _uninstall_pkg_fallback "@google/gemini-cli"
   return 0
 }
 
@@ -93,7 +90,7 @@ _update_gemini_cli() {
 }
 
 _update_gemini_cli_impl() {
-  if ! bun install -g @google/gemini-cli@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@google/gemini-cli@latest"; then
     log_error "Failed to update Gemini CLI"
     return 1
   fi

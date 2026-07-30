@@ -37,9 +37,13 @@ _install_openclaw_bun() {
 }
 
 _install_openclaw_bun_impl() {
-  bun install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+  # Install extra dependencies (best-effort, individual failures ignored)
+  for dep in @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys; do
+    _install_pkg_fallback "$dep" 2>/dev/null
+  done
 
-  if ! bun install -g openclaw@latest &>>"$LOG_FILE"; then
+  # Main package
+  if ! _install_pkg_fallback "openclaw@latest"; then
     log_error "Failed to install OpenClaw"
     return 1
   fi
@@ -78,12 +82,13 @@ uninstall_openclaw() {
 }
 
 _uninstall_openclaw_impl() {
-  bun uninstall -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+  # Uninstall extra dependencies (best-effort)
+  for dep in @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys; do
+    _uninstall_pkg_fallback "$dep" 2>/dev/null
+  done
 
-  if ! bun uninstall -g openclaw &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall OpenClaw"
-    return 1
-  fi
+  # Main package
+  _uninstall_pkg_fallback "openclaw"
   return 0
 }
 
@@ -96,9 +101,12 @@ _update_openclaw() {
 }
 
 _update_openclaw_impl() {
-  bun install -g @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys &>>"$LOG_FILE"
+  # Re-install extra dependencies (best-effort)
+  for dep in @larksuiteoapi/node-sdk nostr-tools @slack/web-api @whiskeysockets/baileys; do
+    _install_pkg_fallback "$dep" 2>/dev/null
+  done
 
-  if ! bun install -g openclaw@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "openclaw@latest"; then
     log_error "Failed to update OpenClaw"
     return 1
   fi

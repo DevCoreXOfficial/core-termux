@@ -37,7 +37,7 @@ _install_minimax_cli_bun() {
 }
 
 _install_minimax_cli_bun_impl() {
-  if ! bun install -g mmx-cli &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "mmx-cli"; then
     log_error "Failed to install MiniMax CLI"
     return 1
   fi
@@ -78,10 +78,7 @@ uninstall_minimax_cli() {
 }
 
 _uninstall_minimax_cli_impl() {
-  if ! bun uninstall -g mmx-cli &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall MiniMax CLI"
-    return 1
-  fi
+  _uninstall_pkg_fallback "mmx-cli"
   return 0
 }
 
@@ -94,7 +91,7 @@ _update_minimax_cli() {
 }
 
 _update_minimax_cli_impl() {
-  if ! bun install -g mmx-cli@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "mmx-cli@latest"; then
     log_error "Failed to update MiniMax CLI"
     return 1
   fi

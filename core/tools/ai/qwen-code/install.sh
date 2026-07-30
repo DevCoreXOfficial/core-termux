@@ -37,7 +37,7 @@ _install_qwen_code_bun() {
 }
 
 _install_qwen_code_bun_impl() {
-  if ! bun install -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@qwen-code/qwen-code"; then
     log_error "Failed to install Qwen Code"
     return 1
   fi
@@ -77,10 +77,7 @@ uninstall_qwen_code() {
 }
 
 _uninstall_qwen_code_impl() {
-  if ! bun uninstall -g @qwen-code/qwen-code &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall Qwen Code"
-    return 1
-  fi
+  _uninstall_pkg_fallback "@qwen-code/qwen-code"
   return 0
 }
 
@@ -93,7 +90,7 @@ _update_qwen_code() {
 }
 
 _update_qwen_code_impl() {
-  if ! bun install -g @qwen-code/qwen-code@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@qwen-code/qwen-code@latest"; then
     log_error "Failed to update Qwen Code"
     return 1
   fi

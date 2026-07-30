@@ -20,7 +20,7 @@ _install_supercode_bun() {
 }
 
 _install_supercode_bun_impl() {
-  if ! bun install -g supercode-cli &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "supercode-cli"; then
     log_error "Failed to install SuperCode"
     return 1
   fi
@@ -59,10 +59,7 @@ uninstall_supercode() {
 }
 
 _uninstall_supercode_impl() {
-  if ! bun uninstall -g supercode-cli &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall SuperCode"
-    return 1
-  fi
+  _uninstall_pkg_fallback "supercode-cli"
   return 0
 }
 
@@ -75,7 +72,7 @@ _update_supercode() {
 }
 
 _update_supercode_impl() {
-  if ! bun install -g supercode-cli@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "supercode-cli@latest"; then
     log_error "Failed to update SuperCode"
     return 1
   fi

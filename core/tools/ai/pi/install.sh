@@ -37,7 +37,7 @@ _install_pi_bun() {
 }
 
 _install_pi_bun_impl() {
-  if ! bun install -g --ignore-scripts @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@earendil-works/pi-coding-agent" "--ignore-scripts"; then
     log_error "Failed to install Pi"
     return 1
   fi
@@ -76,10 +76,7 @@ uninstall_pi() {
 }
 
 _uninstall_pi_impl() {
-  if ! bun uninstall -g @earendil-works/pi-coding-agent &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall Pi"
-    return 1
-  fi
+  _uninstall_pkg_fallback "@earendil-works/pi-coding-agent"
   return 0
 }
 
@@ -92,7 +89,7 @@ _update_pi() {
 }
 
 _update_pi_impl() {
-  if ! bun install -g --ignore-scripts @earendil-works/pi-coding-agent@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@earendil-works/pi-coding-agent@latest" "--ignore-scripts"; then
     log_error "Failed to update Pi"
     return 1
   fi

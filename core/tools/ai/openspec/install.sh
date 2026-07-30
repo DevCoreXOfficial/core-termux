@@ -34,7 +34,7 @@ _install_openspec_bun() {
 }
 
 _install_openspec_bun_impl() {
-  if ! bun install -g @fission-ai/openspec@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@fission-ai/openspec@latest"; then
     log_error "Failed to install OpenSpec"
     return 1
   fi
@@ -74,10 +74,7 @@ uninstall_openspec() {
 }
 
 _uninstall_openspec_impl() {
-  if ! bun uninstall -g @fission-ai/openspec &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall OpenSpec"
-    return 1
-  fi
+  _uninstall_pkg_fallback "@fission-ai/openspec"
   return 0
 }
 
@@ -90,7 +87,7 @@ _update_openspec() {
 }
 
 _update_openspec_impl() {
-  if ! bun install -g @fission-ai/openspec@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@fission-ai/openspec@latest"; then
     log_error "Failed to update OpenSpec"
     return 1
   fi

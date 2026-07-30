@@ -37,7 +37,7 @@ _install_openclaude_bun() {
 }
 
 _install_openclaude_bun_impl() {
-  if ! bun install -g @gitlawb/openclaude &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@gitlawb/openclaude"; then
     log_error "Failed to install OpenClaude"
     return 1
   fi
@@ -76,10 +76,7 @@ uninstall_openclaude() {
 }
 
 _uninstall_openclaude_impl() {
-  if ! bun uninstall -g @gitlawb/openclaude &>>"$LOG_FILE"; then
-    log_error "Failed to uninstall OpenClaude"
-    return 1
-  fi
+  _uninstall_pkg_fallback "@gitlawb/openclaude"
   return 0
 }
 
@@ -92,7 +89,7 @@ _update_openclaude() {
 }
 
 _update_openclaude_impl() {
-  if ! bun install -g @gitlawb/openclaude@latest &>>"$LOG_FILE"; then
+  if ! _install_pkg_fallback "@gitlawb/openclaude@latest"; then
     log_error "Failed to update OpenClaude"
     return 1
   fi

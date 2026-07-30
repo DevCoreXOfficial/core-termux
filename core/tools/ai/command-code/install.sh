@@ -39,14 +39,7 @@ _install_command_code_bun() {
 }
 
 _install_command_code_bun_impl() {
-  mkdir -p "$COMMAND_CODE_DATA_DIR"
-
-  if ! (cd "$COMMAND_CODE_DATA_DIR" && bun init -y &>>"$LOG_FILE"); then
-    log_error "Failed to initialize bun project"
-    return 1
-  fi
-
-  if ! (cd "$COMMAND_CODE_DATA_DIR" && bun install command-code@latest &>>"$LOG_FILE"); then
+  if ! _install_pkg_fallback_local "$COMMAND_CODE_DATA_DIR" "command-code@latest"; then
     log_error "Failed to install command-code package"
     return 1
   fi
@@ -129,12 +122,32 @@ _update_command_code() {
 }
 
 _update_command_code_impl() {
+  if [ ! -d "$COMMAND_CODE_DATA_DIR/node_modules" ]; then
+    # Not installed yet — do a fresh install
+    _install_command_code_bun_impl
+    return $?
+  fi
+
+  # Try bun first
   if (cd "$COMMAND_CODE_DATA_DIR" && bun install command-code@latest &>>"$LOG_FILE"); then
     return 0
-  else
-    log_error "Failed to update Command Code"
-    return 1
   fi
+
+  # Fall back to npm
+  log_warn "bun update failed for command-code, falling back to npm..."
+  if ! command -v npm &>/dev/null; then
+    if ! yes | pkg install nodejs-lts &>>"$LOG_FILE"; then
+      log_error "Failed to install Node.js/npm for fallback"
+      return 1
+    fi
+  fi
+
+  if (cd "$COMMAND_CODE_DATA_DIR" && npm install command-code@latest &>>"$LOG_FILE"); then
+    return 0
+  fi
+
+  log_error "Failed to update Command Code"
+  return 1
 }
 
 reinstall_command_code() {

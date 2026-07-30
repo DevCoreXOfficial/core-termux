@@ -360,23 +360,36 @@ _bun_setup_path_native() {
   local rc_file=""
   local path_line='export PATH="/data/data/com.termux/files/home/.cache/.bun/bin:$PATH"'
 
+  # Priority: .zshrc > .bashrc
+  # If .zshrc exists, use it (zsh user — priority shell).
+  # Otherwise fall back to .bashrc.
   if [ -f "$HOME/.zshrc" ]; then
     rc_file="$HOME/.zshrc"
   elif [ -f "$HOME/.bashrc" ]; then
     rc_file="$HOME/.bashrc"
   fi
 
-  if [ -n "$rc_file" ]; then
-    if ! grep -qxF "$path_line" "$rc_file" 2>/dev/null; then
-      echo "" >>"$rc_file"
-      echo "$path_line" >>"$rc_file"
-      log_success "Added bun PATH to $(basename "$rc_file")"
-    else
-      log_info "bun PATH already in $(basename "$rc_file")"
-    fi
-  else
+  if [ -z "$rc_file" ]; then
     log_info "No .zshrc or .bashrc found, skipping PATH setup"
+    return 0
   fi
+
+  # Idempotent: only add if the exact line is not already present
+  if grep -qxF "$path_line" "$rc_file" 2>/dev/null; then
+    log_info "bun PATH already in $(basename "$rc_file")"
+    return 0
+  fi
+
+  # Ensure the file ends with a newline before appending
+  local last_char
+  last_char="$(tail -c 1 "$rc_file" 2>/dev/null || echo "")"
+  if [ -n "$last_char" ] && [ "$last_char" != $'\n' ]; then
+    echo "" >>"$rc_file"
+  fi
+
+  echo "# Added by core-termux bun installer" >>"$rc_file"
+  echo "$path_line" >>"$rc_file"
+  log_success "Added bun PATH to $(basename "$rc_file")"
 }
 
 _bun_setup_path_proot() {
@@ -577,4 +590,88 @@ _ensure_bun() {
 # Also export as a public alias used by CLI tools
 install_bun_native_auto() {
   _ensure_bun
+}
+
+# ===== PKG FALLBACK — bun → npm =====
+# Used by tool installers that depend on bun as a runtime.
+# Tries bun first; if bun fails (e.g. "bad system call" on Android),
+# falls back to npm automatically.
+
+_ensure_npm() {
+  if command -v npm &>/dev/null; then
+    return 0
+  fi
+  log_info "Installing Node.js/npm for fallback package installation..."
+  if ! yes | pkg install nodejs-lts &>>"$LOG_FILE"; then
+    log_error "Failed to install Node.js/npm"
+    return 1
+  fi
+  return 0
+}
+
+# Install a package globally: try bun, fall back to npm on failure.
+# Usage: _install_pkg_fallback <package> [extra_flags]
+#   extra_flags are passed to BOTH bun and npm (e.g. --ignore-scripts)
+_install_pkg_fallback() {
+  local pkg="$1"
+  local extra_flags="${2:-}"
+
+  # Try bun first (fast path)
+  if bun install -g $extra_flags "$pkg" &>>"$LOG_FILE"; then
+    return 0
+  fi
+
+  log_warn "bun install failed for '${pkg}', falling back to npm..."
+  _ensure_npm || return 1
+
+  if npm install -g $extra_flags "$pkg" &>>"$LOG_FILE"; then
+    log_info "Installed '${pkg}' via npm (fallback)"
+    return 0
+  fi
+
+  log_error "Failed to install '${pkg}' via both bun and npm"
+  return 1
+}
+
+# Uninstall a package globally: try bun, then npm (don't fail).
+# Usage: _uninstall_pkg_fallback <package>
+_uninstall_pkg_fallback() {
+  local pkg="$1"
+
+  # Try bun first
+  bun uninstall -g "$pkg" &>>"$LOG_FILE" 2>/dev/null
+
+  # Also try npm (may have been installed via fallback)
+  if command -v npm &>/dev/null; then
+    npm uninstall -g "$pkg" &>>"$LOG_FILE" 2>/dev/null
+  fi
+
+  # Never fail uninstall — package may already be gone
+  return 0
+}
+
+# Install in a local directory: try bun, fall back to npm.
+# Uses bun init / npm init to create a package.json, then installs.
+# Usage: _install_pkg_fallback_local <directory> <package>
+_install_pkg_fallback_local() {
+  local dir="$1"
+  local pkg="$2"
+
+  mkdir -p "$dir"
+
+  # Try bun first
+  if (cd "$dir" && bun init -y &>>"$LOG_FILE" && bun install "$pkg" &>>"$LOG_FILE"); then
+    return 0
+  fi
+
+  log_warn "bun install failed for '${pkg}', falling back to npm..."
+  _ensure_npm || return 1
+
+  if (cd "$dir" && npm init -y &>>"$LOG_FILE" && npm install "$pkg" &>>"$LOG_FILE"); then
+    log_info "Installed '${pkg}' locally via npm (fallback)"
+    return 0
+  fi
+
+  log_error "Failed to install '${pkg}' locally via both bun and npm"
+  return 1
 }
