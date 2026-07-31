@@ -138,6 +138,32 @@ _install_freebuff_native() {
   return 0
 }
 
+_install_freebuff_proot_glibc() {
+  loading "Installing Freebuff (native + proot)" _install_freebuff_proot_glibc_impl
+}
+
+_install_freebuff_proot_glibc_impl() {
+  _freebuff_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_freebuff_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/freebuff/bin/freebuff.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$FREEBUFF_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/freebuff"
+  chmod +x "$PREFIX/bin/freebuff"
+
+  printf 'proot-glibc' >"$FREEBUFF_DATA_DIR/.install-method"
+  log_success "Freebuff installed with glibc + proot"
+  return 0
+}
+
 _install_freebuff_proot() {
   loading "Installing Freebuff (proot-distro)" _install_freebuff_proot_impl
 }
@@ -208,14 +234,18 @@ install_freebuff() {
   log_info "Select installation method for Freebuff:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Compile with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_freebuff_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_freebuff_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_freebuff_proot
     ;;
   esac
@@ -231,9 +261,13 @@ uninstall_freebuff() {
   fi
 
   if [ -f "$FREEBUFF_DATA_DIR/freebuff" ]; then
+    local method="native"
+    if [ -f "$FREEBUFF_DATA_DIR/.install-method" ]; then
+      method="$(cat "$FREEBUFF_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/freebuff"
     rm -rf "$FREEBUFF_DATA_DIR"
-    log_success "Freebuff (native) uninstalled"
+    log_success "Freebuff ($method) uninstalled"
     return 0
   fi
 
@@ -259,7 +293,15 @@ _update_freebuff() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$FREEBUFF_DATA_DIR/freebuff" ]; then
-    _install_freebuff_native
+    local method="native"
+    if [ -f "$FREEBUFF_DATA_DIR/.install-method" ]; then
+      method="$(cat "$FREEBUFF_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_freebuff_proot_glibc
+    else
+      _install_freebuff_native
+    fi
     return $?
   fi
 

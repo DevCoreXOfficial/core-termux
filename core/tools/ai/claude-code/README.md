@@ -11,11 +11,12 @@ Anthropic's CLI tool with Claude AI
 
 ## Description
 
-Claude Code is Anthropic's AI-powered coding assistant that runs directly in your terminal. It leverages Claude's advanced language models to help with code generation, debugging, refactoring, and answering technical questions. Core-Termux provides two installation methods: native with glibc support for best performance, or via proot-distro Ubuntu container.
+Claude Code is Anthropic's AI-powered coding assistant that runs directly in your terminal. It leverages Claude's advanced language models to help with code generation, debugging, refactoring, and answering technical questions. Core-Termux provides three installation methods: native with glibc support for best performance, native + proot to bypass "bad system call" errors, or via proot-distro Ubuntu container.
 
 ## Dependencies
 
 - **Native mode:** glibc-repo, glibc, clang, curl, tar
+- **Native + proot mode:** proot
 - **Proot mode:** proot-distro, curl, ca-certificates
 
 ## Install

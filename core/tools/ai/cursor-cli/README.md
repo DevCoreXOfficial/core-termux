@@ -11,11 +11,12 @@ AI-powered coding agent that runs in your terminal
 
 ## Description
 
-Cursor CLI (cursor-agent) is an AI-powered coding agent from Cursor that operates directly in your terminal. It provides intelligent code generation, editing, and debugging assistance. Since Cursor is not open source, the binary is downloaded directly from Cursor's CDN. The package is a Node.js application bundled with its own Node.js runtime. Core-Termux offers two installation methods: native with glibc support for best performance, or via proot-distro Ubuntu container for maximum compatibility.
+Cursor CLI (cursor-agent) is an AI-powered coding agent from Cursor that operates directly in your terminal. It provides intelligent code generation, editing, and debugging assistance. Since Cursor is not open source, the binary is downloaded directly from Cursor's CDN. The package is a Node.js application bundled with its own Node.js runtime. Core-Termux offers three installation methods: native with glibc support for best performance, native + proot to bypass "bad system call" errors, or via proot-distro Ubuntu container for maximum compatibility.
 
 ## Dependencies
 
 - **Native mode:** glibc-repo, glibc, git, ripgrep, jq, nodejs-lts, curl, tar
+- **Native + proot mode:** proot
 - **Proot mode:** proot-distro, curl, ca-certificates, tar
 
 ## Install
@@ -27,7 +28,8 @@ core install ai --cursor-cli
 You will be prompted to choose:
 
 1. **Native (recommended)** — Downloads the latest Cursor CLI package and creates a launcher wrapper that runs the bundled Node.js via the glibc dynamic linker
-2. **Proot-distro (alternative)** — Runs Cursor CLI inside an Ubuntu proot-distro container
+2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
+3. **Proot-distro (alternative)** — Runs Cursor CLI inside an Ubuntu proot-distro container
 
 ## Uninstall
 

@@ -147,6 +147,32 @@ _install_omp_native() {
   return 0
 }
 
+_install_omp_proot_glibc() {
+  loading "Installing Oh-My-Pi (native + proot)" _install_omp_proot_glibc_impl
+}
+
+_install_omp_proot_glibc_impl() {
+  _omp_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_omp_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/oh-my-pi/bin/omp.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$OMP_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/omp"
+  chmod +x "$PREFIX/bin/omp"
+
+  printf 'proot-glibc' >"$OMP_DATA_DIR/.install-method"
+  log_success "Oh-My-Pi installed with glibc + proot"
+  return 0
+}
+
 # ===== PROOT-DISTRO INSTALL =====
 
 _install_omp_proot() {
@@ -223,14 +249,18 @@ install_oh_my_pi() {
   log_info "Select installation method for Oh-My-Pi:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Compile with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_omp_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_omp_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_omp_proot
     ;;
   esac
@@ -247,6 +277,10 @@ _omp_is_native() {
   [ -d "$OMP_DATA_DIR" ] && [ -f "$OMP_DATA_DIR/omp" ]
 }
 
+_omp_is_proot_glibc() {
+  [ -f "$OMP_DATA_DIR/.install-method" ] && [ "$(cat "$OMP_DATA_DIR/.install-method")" = "proot-glibc" ]
+}
+
 _omp_is_proot() {
   local root
   root="$(_omp_detect_ubuntu_root)"
@@ -256,7 +290,10 @@ _omp_is_proot() {
 uninstall_oh_my_pi() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if _omp_is_native; then
+  if _omp_is_proot_glibc; then
+    loading "Uninstalling Oh-My-Pi (native + proot)" _uninstall_omp_native_impl
+    log_success "Oh-My-Pi (native + proot) uninstalled"
+  elif _omp_is_native; then
     loading "Uninstalling Oh-My-Pi (native)" _uninstall_omp_native_impl
     log_success "Oh-My-Pi (native) uninstalled"
   elif _omp_is_proot; then
@@ -316,6 +353,11 @@ _update_omp_proot_impl() {
 }
 
 _update_omp_impl() {
+  if _omp_is_proot_glibc; then
+    _install_omp_proot_glibc
+    return $?
+  fi
+
   if _omp_is_native; then
     _update_omp_native_impl
     return $?

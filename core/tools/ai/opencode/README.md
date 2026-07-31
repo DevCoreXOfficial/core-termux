@@ -11,11 +11,12 @@ Open-source agent that helps you write code in your terminal
 
 ## Description
 
-OpenCode is an AI-powered coding agent developed by anomalyco that operates directly in your terminal. It provides intelligent code completion, refactoring suggestions, and natural language code generation. Core-Termux offers two installation methods: native with glibc support for best performance, or via proot-distro Ubuntu container for maximum compatibility.
+OpenCode is an AI-powered coding agent developed by anomalyco that operates directly in your terminal. It provides intelligent code completion, refactoring suggestions, and natural language code generation. Core-Termux offers three installation methods: native with glibc support for best performance, native + proot to bypass "bad system call" errors, or via proot-distro Ubuntu container for maximum compatibility.
 
 ## Dependencies
 
 - **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
+- **Native + proot mode:** proot
 - **Proot mode:** proot-distro, curl, ca-certificates
 
 ## Install
@@ -27,7 +28,8 @@ core install ai --opencode
 You will be prompted to choose:
 
 1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest OpenCode binary from GitHub releases
-2. **Proot-distro (alternative)** — Runs OpenCode inside an Ubuntu proot-distro container
+2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
+3. **Proot-distro (alternative)** — Runs OpenCode inside an Ubuntu proot-distro container
 
 ## Uninstall
 

@@ -179,6 +179,33 @@ _install_cursor_native() {
   return 0
 }
 
+_install_cursor_proot_glibc() {
+  loading "Installing Cursor CLI (native + proot)" _install_cursor_proot_glibc_impl
+}
+
+_install_cursor_proot_glibc_impl() {
+  _cursor_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_cursor_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/cursor-cli/bin/cursor.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$CURSOR_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/cursor"
+  chmod +x "$PREFIX/bin/cursor"
+  ln -sf "$PREFIX/bin/cursor" "$PREFIX/bin/cursor-agent"
+
+  printf 'proot-glibc' >"$CURSOR_DATA_DIR/.install-method"
+  log_success "Cursor CLI installed with glibc + proot"
+  return 0
+}
+
 _install_cursor_proot() {
   loading "Installing Cursor CLI (proot-distro)" _install_cursor_proot_impl
 }
@@ -262,14 +289,18 @@ install_cursor_cli() {
   log_info "Select installation method for Cursor CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Run with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_cursor_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_cursor_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_cursor_proot
     ;;
   esac
@@ -288,9 +319,13 @@ uninstall_cursor_cli() {
 
 _uninstall_cursor_cli_impl() {
   if [ -f "$CURSOR_DATA_DIR/cursor-agent" ]; then
+    local method="native"
+    if [ -f "$CURSOR_DATA_DIR/.install-method" ]; then
+      method="$(cat "$CURSOR_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/cursor" "$PREFIX/bin/cursor-agent"
     rm -rf "$CURSOR_DATA_DIR"
-    log_success "Cursor CLI (native) uninstalled"
+    log_success "Cursor CLI ($method) uninstalled"
     return 0
   fi
 
@@ -309,7 +344,15 @@ _update_cursor_cli() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$CURSOR_DATA_DIR/cursor-agent" ]; then
-    _install_cursor_native
+    local method="native"
+    if [ -f "$CURSOR_DATA_DIR/.install-method" ]; then
+      method="$(cat "$CURSOR_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_cursor_proot_glibc
+    else
+      _install_cursor_native
+    fi
     return $?
   fi
 

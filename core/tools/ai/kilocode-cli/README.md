@@ -16,6 +16,7 @@ Kilo Code is an AI coding agent that meets you everywhere you work: VS Code, Jet
 ## Dependencies
 
 - **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
+- **Native + proot mode:** proot
 - **Proot mode:** proot-distro, curl, ca-certificates
 
 ## Install
@@ -27,7 +28,8 @@ core install ai --kilocode-cli
 You will be prompted to choose:
 
 1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest Kilo Code CLI binary from GitHub releases
-2. **Proot-distro (alternative)** — Runs Kilo Code CLI inside an Ubuntu proot-distro container
+2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
+3. **Proot-distro (alternative)** — Runs Kilo Code CLI inside an Ubuntu proot-distro container
 
 ## Uninstall
 

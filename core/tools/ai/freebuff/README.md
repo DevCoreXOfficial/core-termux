@@ -12,11 +12,12 @@ A 100% free coding agent, right from your terminal
 
 ## Description
 
-Freebuff is the free coding agent: a free CLI coding agent and Freebuff Web, the free way to build full-stack apps. No subscription, no setup, no lock-in. Core-Termux offers two installation methods: native with glibc support for best performance, or via proot-distro Ubuntu container for maximum compatibility.
+Freebuff is the free coding agent: a free CLI coding agent and Freebuff Web, the free way to build full-stack apps. No subscription, no setup, no lock-in. Core-Termux offers three installation methods: native with glibc support for best performance, native + proot to bypass "bad system call" errors, or via proot-distro Ubuntu container for maximum compatibility.
 
 ## Dependencies
 
 - **Native mode:** glibc-repo, glibc, clang, git, curl, tar
+- **Native + proot mode:** proot
 - **Proot mode:** proot-distro, curl, ca-certificates, tar
 
 ## Install
@@ -28,7 +29,8 @@ core install ai --freebuff
 You will be prompted to choose:
 
 1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest Freebuff binary from GitHub releases
-2. **Proot-distro (alternative)** — Runs Freebuff inside an Ubuntu proot-distro container
+2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
+3. **Proot-distro (alternative)** — Runs Freebuff inside an Ubuntu proot-distro container
 
 ## Uninstall
 

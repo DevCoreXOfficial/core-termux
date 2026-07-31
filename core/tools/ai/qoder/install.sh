@@ -159,6 +159,32 @@ _install_qoder_native() {
   return 0
 }
 
+_install_qoder_proot_glibc() {
+  loading "Installing Qoder (native + proot)" _install_qoder_proot_glibc_impl
+}
+
+_install_qoder_proot_glibc_impl() {
+  _qoder_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_qoder_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/qoder/bin/qodercli.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$QODER_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/qodercli"
+  chmod +x "$PREFIX/bin/qodercli"
+
+  printf 'proot-glibc' >"$QODER_DATA_DIR/.install-method"
+  log_success "Qoder installed with glibc + proot"
+  return 0
+}
+
 _install_qoder_proot() {
   loading "Installing Qoder (proot-distro)" _install_qoder_proot_impl
 }
@@ -241,14 +267,18 @@ install_qoder() {
   log_info "Select installation method for Qoder:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Compile with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_qoder_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_qoder_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_qoder_proot
     ;;
   esac
@@ -267,9 +297,13 @@ uninstall_qoder() {
 
 _uninstall_qoder_impl() {
   if [ -f "$QODER_DATA_DIR/qodercli" ]; then
+    local method="native"
+    if [ -f "$QODER_DATA_DIR/.install-method" ]; then
+      method="$(cat "$QODER_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/qodercli"
     rm -rf "$QODER_DATA_DIR"
-    log_success "Qoder (native) uninstalled"
+    log_success "Qoder ($method) uninstalled"
     return 0
   fi
 
@@ -299,7 +333,15 @@ _update_qoder_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$QODER_DATA_DIR/qodercli" ]; then
-    _install_qoder_native
+    local method="native"
+    if [ -f "$QODER_DATA_DIR/.install-method" ]; then
+      method="$(cat "$QODER_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_qoder_proot_glibc
+    else
+      _install_qoder_native
+    fi
     return $?
   fi
 

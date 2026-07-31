@@ -141,6 +141,32 @@ _install_opencode_native() {
   return 0
 }
 
+_install_opencode_proot_glibc() {
+  loading "Installing OpenCode (native + proot)" _install_opencode_proot_glibc_impl
+}
+
+_install_opencode_proot_glibc_impl() {
+  _opencode_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_opencode_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/opencode/bin/opencode.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$OPENCODE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/opencode"
+  chmod +x "$PREFIX/bin/opencode"
+
+  printf 'proot-glibc' >"$OPENCODE_DATA_DIR/.install-method"
+  log_success "OpenCode installed with glibc + proot"
+  return 0
+}
+
 _install_opencode_proot() {
   loading "Installing OpenCode (proot-distro)" _install_opencode_proot_impl
 }
@@ -206,14 +232,18 @@ install_opencode() {
   log_info "Select installation method for OpenCode:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Compile with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_opencode_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_opencode_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_opencode_proot
     ;;
   esac
@@ -232,9 +262,13 @@ uninstall_opencode() {
 
 _uninstall_opencode_impl() {
   if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
+    local method="native"
+    if [ -f "$OPENCODE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$OPENCODE_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/opencode"
     rm -rf "$OPENCODE_DATA_DIR"
-    log_success "OpenCode (native) uninstalled"
+    log_success "OpenCode ($method) uninstalled"
     return 0
   fi
 
@@ -264,7 +298,15 @@ _update_opencode_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
-    _install_opencode_native
+    local method="native"
+    if [ -f "$OPENCODE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$OPENCODE_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_opencode_proot_glibc
+    else
+      _install_opencode_native
+    fi
     return $?
   fi
 

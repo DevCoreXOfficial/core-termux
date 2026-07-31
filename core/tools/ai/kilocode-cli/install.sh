@@ -151,6 +151,33 @@ _install_kilocode_native() {
   return 0
 }
 
+_install_kilocode_proot_glibc() {
+  loading "Installing Kilo Code CLI (native + proot)" _install_kilocode_proot_glibc_impl
+}
+
+_install_kilocode_proot_glibc_impl() {
+  _kilocode_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_kilocode_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/kilocode-cli/bin/kilocode.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$KILOCODE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/kilocode"
+  chmod +x "$PREFIX/bin/kilocode"
+  ln -sf "$PREFIX/bin/kilocode" "$PREFIX/bin/kilo"
+
+  printf 'proot-glibc' >"$KILOCODE_DATA_DIR/.install-method"
+  log_success "Kilo Code CLI installed with glibc + proot"
+  return 0
+}
+
 _install_kilocode_proot() {
   loading "Installing Kilo Code CLI (proot-distro)" _install_kilocode_proot_impl
 }
@@ -226,14 +253,18 @@ install_kilocode_cli() {
   log_info "Select installation method for Kilo Code CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Compile with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_kilocode_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_kilocode_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_kilocode_proot
     ;;
   esac
@@ -252,9 +283,13 @@ uninstall_kilocode_cli() {
 
 _uninstall_kilocode_cli_impl() {
   if [ -f "$KILOCODE_DATA_DIR/kilo" ]; then
+    local method="native"
+    if [ -f "$KILOCODE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$KILOCODE_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/kilocode" "$PREFIX/bin/kilo"
     rm -rf "$KILOCODE_DATA_DIR"
-    log_success "Kilo Code CLI (native) uninstalled"
+    log_success "Kilo Code CLI ($method) uninstalled"
     return 0
   fi
 
@@ -273,7 +308,15 @@ _update_kilocode_cli() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$KILOCODE_DATA_DIR/kilo" ]; then
-    _install_kilocode_native
+    local method="native"
+    if [ -f "$KILOCODE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$KILOCODE_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_kilocode_proot_glibc
+    else
+      _install_kilocode_native
+    fi
     return $?
   fi
 

@@ -37,5 +37,8 @@ cline --help
 ### Native (recommended)
 Downloads the prebuilt ARM64 binary from npm registry and sets up glibc compatibility.
 
+### Native + proot (fix)
+Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels.
+
 ### Proot-distro (alternative)
 Installs inside an Ubuntu container using proot-distro for maximum compatibility.

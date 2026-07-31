@@ -139,6 +139,32 @@ _install_mimocode_native() {
   return 0
 }
 
+_install_mimocode_proot_glibc() {
+  loading "Installing mimocode (native + proot)" _install_mimocode_proot_glibc_impl
+}
+
+_install_mimocode_proot_glibc_impl() {
+  _mimocode_install_deps || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_mimocode_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/mimocode/bin/mimo.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$MIMOCODE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/mimo"
+  chmod +x "$PREFIX/bin/mimo"
+
+  printf 'proot-glibc' >"$MIMOCODE_DATA_DIR/.install-method"
+  log_success "mimocode installed with glibc + proot"
+  return 0
+}
+
 _install_mimocode_proot() {
   loading "Installing mimocode (proot-distro)" _install_mimocode_proot_impl
 }
@@ -204,14 +230,18 @@ install_mimocode() {
   log_info "Select installation method for mimocode:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Compile with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_mimocode_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_mimocode_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_mimocode_proot
     ;;
   esac
@@ -227,9 +257,13 @@ uninstall_mimocode() {
   fi
 
   if [ -f "$MIMOCODE_DATA_DIR/mimocode" ]; then
+    local method="native"
+    if [ -f "$MIMOCODE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$MIMOCODE_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/mimo"
     rm -rf "$MIMOCODE_DATA_DIR"
-    log_success "mimocode (native) uninstalled"
+    log_success "mimocode ($method) uninstalled"
     return 0
   fi
 
@@ -255,7 +289,15 @@ _update_mimocode() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$MIMOCODE_DATA_DIR/mimocode" ]; then
-    _install_mimocode_native
+    local method="native"
+    if [ -f "$MIMOCODE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$MIMOCODE_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_mimocode_proot_glibc
+    else
+      _install_mimocode_native
+    fi
     return $?
   fi
 

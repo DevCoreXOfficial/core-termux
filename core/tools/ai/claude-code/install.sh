@@ -138,6 +138,32 @@ _install_claude_native() {
   return 0
 }
 
+_install_claude_proot_glibc() {
+  loading "Installing Claude Code (native + proot)" _install_claude_proot_glibc_impl
+}
+
+_install_claude_proot_glibc_impl() {
+  _claude_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_claude_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/claude-code/bin/claude.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$CLAUDE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/claude"
+  chmod +x "$PREFIX/bin/claude"
+
+  printf 'proot-glibc' >"$CLAUDE_DATA_DIR/.install-method"
+  log_success "Claude Code installed with glibc + proot"
+  return 0
+}
+
 _install_claude_proot() {
   loading "Installing Claude Code (proot-distro)" _install_claude_proot_impl
 }
@@ -201,14 +227,18 @@ install_claude_code() {
   log_info "Select installation method for Claude Code:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Run with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_claude_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_claude_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_claude_proot
     ;;
   esac
@@ -224,9 +254,13 @@ uninstall_claude_code() {
   fi
 
   if [ -f "$CLAUDE_DATA_DIR/claude" ]; then
+    local method="native"
+    if [ -f "$CLAUDE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$CLAUDE_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/claude"
     rm -rf "$CLAUDE_DATA_DIR"
-    log_success "Claude Code (native) uninstalled"
+    log_success "Claude Code ($method) uninstalled"
     return 0
   fi
 
@@ -254,7 +288,15 @@ _update_claude_code() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$CLAUDE_DATA_DIR/claude" ]; then
-    _install_claude_native
+    local method="native"
+    if [ -f "$CLAUDE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$CLAUDE_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_claude_proot_glibc
+    else
+      _install_claude_native
+    fi
     return $?
   fi
 

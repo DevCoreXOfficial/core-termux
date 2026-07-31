@@ -152,6 +152,32 @@ _install_cline_native() {
   return 0
 }
 
+_install_cline_proot_glibc() {
+  loading "Installing Cline CLI (native + proot)" _install_cline_proot_glibc_impl
+}
+
+_install_cline_proot_glibc_impl() {
+  _cline_install_deps_native || return 1
+
+  if ! command -v proot &>/dev/null; then
+    yes | pkg install proot &>>"$LOG_FILE"
+  fi
+
+  _download_cline_binary || return 1
+
+  local wrapper_src="$CORE_PATH/tools/ai/cline/bin/cline.proot"
+  if [ ! -f "$wrapper_src" ]; then
+    log_error "Wrapper template not found at $wrapper_src"
+    return 1
+  fi
+  sed "s|__DATA_DIR__|$CLINE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/cline"
+  chmod +x "$PREFIX/bin/cline"
+
+  printf 'proot-glibc' >"$CLINE_DATA_DIR/.install-method"
+  log_success "Cline CLI installed with glibc + proot"
+  return 0
+}
+
 _install_cline_proot() {
   loading "Installing Cline CLI (proot-distro)" _install_cline_proot_impl
 }
@@ -222,14 +248,18 @@ install_cline() {
   log_info "Select installation method for Cline CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "Native (recommended) - Compile with glibc support" \
-    "Proot-distro (alternative) - Ubuntu container"
+    "native glibc (recommended)" \
+    "native glibc + proot (fix)" \
+    "proot-distro (ubuntu)"
 
   case "$SELECTED_METHOD" in
-  *Native*)
+  *"native glibc + proot"*)
+    _install_cline_proot_glibc
+    ;;
+  *"native glibc"*)
     _install_cline_native
     ;;
-  *Proot-distro*)
+  *proot-distro*)
     _install_cline_proot
     ;;
   esac
@@ -248,9 +278,13 @@ uninstall_cline() {
 
 _uninstall_cline_impl() {
   if [ -f "$CLINE_DATA_DIR/cline" ]; then
+    local method="native"
+    if [ -f "$CLINE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$CLINE_DATA_DIR/.install-method")"
+    fi
     rm -f "$PREFIX/bin/cline"
     rm -f "$CLINE_DATA_DIR/cline"
-    log_success "Cline CLI (native) uninstalled"
+    log_success "Cline CLI ($method) uninstalled"
     return 0
   fi
 
@@ -280,7 +314,15 @@ _update_cline_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$CLINE_DATA_DIR/cline" ]; then
-    _install_cline_native
+    local method="native"
+    if [ -f "$CLINE_DATA_DIR/.install-method" ]; then
+      method="$(cat "$CLINE_DATA_DIR/.install-method")"
+    fi
+    if [ "$method" = "proot-glibc" ]; then
+      _install_cline_proot_glibc
+    else
+      _install_cline_native
+    fi
     return $?
   fi
 

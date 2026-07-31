@@ -16,6 +16,7 @@ A coding agent CLI powered by kimchi. Built on the pi-mono coding agent SDK, kim
 ## Dependencies
 
 - **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
+- **Native + proot mode:** proot
 - **Proot mode:** proot-distro, curl, ca-certificates, tar
 
 ## Install
@@ -27,7 +28,8 @@ core install ai --kimchi
 You will be prompted to choose:
 
 1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest Kimchi binary from GitHub releases
-2. **Proot-distro (alternative)** — Runs Kimchi inside an Ubuntu proot-distro container
+2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
+3. **Proot-distro (alternative)** — Runs Kimchi inside an Ubuntu proot-distro container
 
 ## Uninstall
 

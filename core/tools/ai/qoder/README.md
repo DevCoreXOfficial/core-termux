@@ -11,11 +11,12 @@ A terminal-native AI coding partner—and an agent engine you can build on.
 
 ## Description
 
-Work with Qoder around your codebase from the terminal.Turn ideas into working software - from building and debugging to shipping. Core-Termux offers two installation methods: native with glibc support for best performance, or via proot-distro Ubuntu container for maximum compatibility.
+Work with Qoder around your codebase from the terminal.Turn ideas into working software - from building and debugging to shipping. Core-Termux offers three installation methods: native with glibc support for best performance, native + proot to bypass "bad system call" errors, or via proot-distro Ubuntu container for maximum compatibility.
 
 ## Dependencies
 
 - **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
+- **Native + proot mode:** proot
 - **Proot mode:** proot-distro, curl, ca-certificates
 
 ## Install
@@ -27,7 +28,8 @@ core install ai --qoder
 You will be prompted to choose:
 
 1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest Qoder binary
-2. **Proot-distro (alternative)** — Runs Qoder inside an Ubuntu proot-distro container
+2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
+3. **Proot-distro (alternative)** — Runs Qoder inside an Ubuntu proot-distro container
 
 ## Uninstall
 
