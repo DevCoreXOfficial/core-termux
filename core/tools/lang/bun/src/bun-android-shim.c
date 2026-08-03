@@ -29,11 +29,17 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <limits.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <errno.h>
 #include <dlfcn.h>
 #include <dirent.h>
+
+#ifndef __NR_close_range
+#define __NR_close_range 436
+#endif
 
 /* ================================================================
  * PART 1: opendir/openat64 interception
@@ -49,6 +55,8 @@ typedef int (*open_fn_t)(const char *, int, ...);
 typedef int (*openat64_fn_t)(int, const char *, int, ...);
 static opendir_fn_t real_opendir = NULL;
 static openat64_fn_t real_openat64 = NULL;
+typedef long (*syscall_fn_t)(long, ...);
+static syscall_fn_t real_syscall = NULL;
 
 /* Check if a path is an inaccessible ancestor that needs redirect */
 static int needs_redirect(const char *path) {
@@ -258,6 +266,65 @@ char *getcwd(char *buf, size_t size) {
     if (len < 0) return NULL;
     buf[len] = '\0';
     return buf;
+}
+
+/* ================================================================
+ * close_range fallback — some Android 9 kernels/seccomp profiles kill
+ * processes that call close_range with SIGSYS. Bun calls it during
+ * startup, so emulate the common cases with close/fcntl.
+ * ================================================================ */
+
+#ifndef CLOSE_RANGE_CLOEXEC
+#define CLOSE_RANGE_CLOEXEC (1U << 2)
+#endif
+
+int close_range(unsigned int first, unsigned int last, int flags) {
+    long open_max = sysconf(_SC_OPEN_MAX);
+    unsigned int max_fd = open_max > 0 ? (unsigned int)open_max : 1024U;
+
+    if (last == UINT_MAX || last >= max_fd)
+        last = max_fd - 1;
+
+    if (first > last)
+        return 0;
+
+    if (flags & CLOSE_RANGE_CLOEXEC) {
+        for (unsigned int fd = first; fd <= last; fd++)
+            (void)fcntl((int)fd, F_SETFD, FD_CLOEXEC);
+        return 0;
+    }
+
+    if (flags != 0) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    for (unsigned int fd = first; fd <= last; fd++)
+        (void)close((int)fd);
+
+    return 0;
+}
+
+long syscall(long number, ...) {
+    va_list ap;
+    long a1, a2, a3, a4, a5, a6;
+
+    if (!real_syscall)
+        real_syscall = (syscall_fn_t)dlsym(RTLD_NEXT, "syscall");
+
+    va_start(ap, number);
+    a1 = va_arg(ap, long);
+    a2 = va_arg(ap, long);
+    a3 = va_arg(ap, long);
+    a4 = va_arg(ap, long);
+    a5 = va_arg(ap, long);
+    a6 = va_arg(ap, long);
+    va_end(ap);
+
+    if (number == __NR_close_range)
+        return close_range((unsigned int)a1, (unsigned int)a2, (int)a3);
+
+    return real_syscall(number, a1, a2, a3, a4, a5, a6);
 }
 
 
