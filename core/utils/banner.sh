@@ -108,6 +108,7 @@ CORE_TIPS=(
 	"Install Cursor CLI: ${D_CYAN}core install ai --cursor-cli${NC}"
 	"Install Oh-My-Pi: ${D_CYAN}core install ai --oh-my-pi${NC}"
 	"Install SuperCode CLI: ${D_CYAN}core install ai --supercode${NC}"
+	"Install Droid Factory: ${D_CYAN}core install ai --droid-factory${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"

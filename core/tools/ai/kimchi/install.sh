@@ -251,15 +251,15 @@ install_kimchi() {
   log_info "Select installation method for Kimchi:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "native glibc (recommended)" \
-    "native glibc + proot (fix)" \
-    "proot-distro (ubuntu)"
+    "glibc (recommended)" \
+    "glibc + proot (bad system call)" \
+    "proot-distro (ubuntu container)"
 
   case "$SELECTED_METHOD" in
-  *"native glibc + proot"*)
+  *"glibc + proot"*)
     _install_kimchi_proot_glibc
     ;;
-  *"native glibc"*)
+  *"glibc (recommended)"*)
     _install_kimchi_native
     ;;
   *proot-distro*)

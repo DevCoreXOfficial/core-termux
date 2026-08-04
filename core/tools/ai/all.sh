@@ -23,6 +23,7 @@ AI_TOOLS=(
   "codegraph"
   "pi"
   "oh-my-pi"
+  "droid-factory"
   "antigravity-cli"
   "gentle-ai"
   "minimax-cli"
@@ -56,6 +57,7 @@ source "$(dirname "$BASH_SOURCE")/engram/install.sh"
 source "$(dirname "$BASH_SOURCE")/codegraph/install.sh"
 source "$(dirname "$BASH_SOURCE")/pi/install.sh"
 source "$(dirname "$BASH_SOURCE")/oh-my-pi/install.sh"
+source "$(dirname "$BASH_SOURCE")/droid-factory/install.sh"
 source "$(dirname "$BASH_SOURCE")/antigravity-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/gentle-ai/install.sh"
 source "$(dirname "$BASH_SOURCE")/minimax-cli/install.sh"
@@ -146,6 +148,10 @@ install_all_ai_tools() {
       ;;
     oh-my-pi)
       loading "Installing Oh-My-Pi" install_oh_my_pi
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    droid-factory)
+      loading "Installing Droid Factory" install_droid_factory
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
@@ -284,6 +290,10 @@ uninstall_all_ai_tools() {
       loading "Uninstalling Oh-My-Pi" uninstall_oh_my_pi
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    droid-factory)
+      loading "Uninstalling Droid Factory" uninstall_droid_factory
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     antigravity-cli)
       loading "Uninstalling Antigravity CLI" uninstall_antigravity_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -398,6 +408,9 @@ update_all_ai_tools() {
       ;;
     oh-my-pi)
       update_oh_my_pi
+      ;;
+    droid-factory)
+      update_droid_factory
       ;;
     antigravity-cli)
       update_antigravity_cli
@@ -519,6 +532,10 @@ reinstall_all_ai_tools() {
       ;;
     oh-my-pi)
       loading "Reinstalling Oh-My-Pi" reinstall_oh_my_pi
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    droid-factory)
+      loading "Reinstalling Droid Factory" reinstall_droid_factory
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)

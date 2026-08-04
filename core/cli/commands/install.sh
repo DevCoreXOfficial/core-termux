@@ -251,6 +251,10 @@ _install_specific_tools() {
         install_amp_code_cli
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      droid-factory)
+        install_droid_factory
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

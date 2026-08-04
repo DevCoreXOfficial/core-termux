@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.18.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.19.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -144,6 +144,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Cline CLI** | `--cline` | The open source coding agent in your IDE and terminal |
 | **AMP Code CLI** | `--ampcode` | AMP — coding agent by Sourcegraph for the terminal |
 | **Cursor CLI** | `--cursor-cli` | Deliver code with agents directly from your terminal |
+| **Droid Factory** | `--droid-factory` | Factory's AI coding agent — droid CLI for the terminal |
 
 ---
 
@@ -159,7 +160,7 @@ core --version
 
 **Output:**
 ```
-4.18.0
+4.19.0
 ```
 
 ---
@@ -1078,7 +1079,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.18.1 (current: 4.18.0)
+⚠ New version available: 4.19.1 (current: 4.19.0)
 
 ➜ Run: core update core to update
 ```

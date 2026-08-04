@@ -344,15 +344,15 @@ install_antigravity_cli() {
   log_info "Select installation method for Antigravity CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "native glibc (recommended)" \
-    "native glibc + proot (fix)" \
-    "proot-distro (ubuntu)"
+    "glibc (recommended)" \
+    "glibc + proot (bad system call)" \
+    "proot-distro (ubuntu container)"
 
   case "$SELECTED_METHOD" in
-  *"native glibc + proot"*)
+  *"glibc + proot"*)
     _install_antigravity_proot_glibc
     ;;
-  *"native glibc"*)
+  *"glibc (recommended)"*)
     _antigravity_cli_dependencies || return 1
     _antigravity_download_binary || return 1
     _antigravity_apply_va39_patches || return 1

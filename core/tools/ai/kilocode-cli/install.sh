@@ -83,14 +83,14 @@ _kilocode_install_deps_native_impl() {
 }
 
 _download_kilocode_binary() {
-  loading "Downloading Kilo Code CLI" _download_kilocode_binary_impl
+  loading "Downloading KiloCode CLI" _download_kilocode_binary_impl
 }
 
 _download_kilocode_binary_impl() {
   local latest_version
   latest_version=$(_get_latest_kilocode_version_silent)
   if [ -z "$latest_version" ]; then
-    log_error "Failed to fetch latest Kilo Code CLI version"
+    log_error "Failed to fetch latest KiloCode CLI version"
     return 1
   fi
 
@@ -100,19 +100,19 @@ _download_kilocode_binary_impl() {
   local download_url="https://github.com/Kilo-Org/kilocode/releases/download/$latest_version/$tarball"
 
   if ! curl -fsSL "$download_url" -o "$KILOCODE_DATA_DIR/$tarball" &>>"$LOG_FILE"; then
-    log_error "Failed to download Kilo Code CLI binary"
+    log_error "Failed to download KiloCode CLI binary"
     return 1
   fi
 
   if ! tar -zxf "$KILOCODE_DATA_DIR/$tarball" -C "$KILOCODE_DATA_DIR" &>>"$LOG_FILE"; then
-    log_error "Failed to extract Kilo Code CLI binary"
+    log_error "Failed to extract KiloCode CLI binary"
     return 1
   fi
 
   rm -f "$KILOCODE_DATA_DIR/$tarball"
 
   if [ ! -f "$KILOCODE_DATA_DIR/kilo" ]; then
-    log_error "Kilo Code CLI binary not found after extraction"
+    log_error "KiloCode CLI binary not found after extraction"
     return 1
   fi
 
@@ -147,12 +147,12 @@ _install_kilocode_native() {
   _kilocode_install_deps_native || return 1
   _download_kilocode_binary || return 1
   _compile_kilocode_helper || return 1
-  log_success "Kilo Code CLI installed natively"
+  log_success "KiloCode CLI installed natively"
   return 0
 }
 
 _install_kilocode_proot_glibc() {
-  loading "Installing Kilo Code CLI (native + proot)" _install_kilocode_proot_glibc_impl
+  loading "Installing KiloCode CLI (native + proot)" _install_kilocode_proot_glibc_impl
 }
 
 _install_kilocode_proot_glibc_impl() {
@@ -174,12 +174,12 @@ _install_kilocode_proot_glibc_impl() {
   ln -sf "$PREFIX/bin/kilocode" "$PREFIX/bin/kilo"
 
   printf 'proot-glibc' >"$KILOCODE_DATA_DIR/.install-method"
-  log_success "Kilo Code CLI installed with glibc + proot"
+  log_success "KiloCode CLI installed with glibc + proot"
   return 0
 }
 
 _install_kilocode_proot() {
-  loading "Installing Kilo Code CLI (proot-distro)" _install_kilocode_proot_impl
+  loading "Installing KiloCode CLI (proot-distro)" _install_kilocode_proot_impl
 }
 
 _install_kilocode_proot_impl() {
@@ -200,7 +200,7 @@ _install_kilocode_proot_impl() {
   local latest_version
   latest_version=$(_get_latest_kilocode_version_silent)
   if [ -z "$latest_version" ]; then
-    log_error "Failed to fetch latest Kilo Code CLI version"
+    log_error "Failed to fetch latest KiloCode CLI version"
     return 1
   fi
 
@@ -227,7 +227,7 @@ _install_kilocode_proot_impl() {
   local kilocode_bin="$ubuntu_root/usr/local/bin/kilo"
 
   if [ ! -f "$kilocode_bin" ]; then
-    log_error "Kilo Code CLI binary not found after install"
+    log_error "KiloCode CLI binary not found after install"
     return 1
   fi
 
@@ -246,22 +246,22 @@ _install_kilocode_proot_impl() {
 
 install_kilocode_cli() {
   if command -v kilocode &>/dev/null; then
-    log_info "Kilo Code CLI is already installed"
+    log_info "KiloCode CLI is already installed"
     return 2
   fi
 
-  log_info "Select installation method for Kilo Code CLI:"
+  log_info "Select installation method for KiloCode CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "native glibc (recommended)" \
-    "native glibc + proot (fix)" \
-    "proot-distro (ubuntu)"
+    "glibc (recommended)" \
+    "glibc + proot (bad system call)" \
+    "proot-distro (ubuntu container)"
 
   case "$SELECTED_METHOD" in
-  *"native glibc + proot"*)
+  *"glibc + proot"*)
     _install_kilocode_proot_glibc
     ;;
-  *"native glibc"*)
+  *"glibc (recommended)"*)
     _install_kilocode_native
     ;;
   *proot-distro*)
@@ -274,11 +274,11 @@ uninstall_kilocode_cli() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/kilocode" ]; then
-    log_warn "Kilo Code CLI is not installed"
+    log_warn "KiloCode CLI is not installed"
     return 1
   fi
 
-  loading "Uninstalling Kilo Code CLI" _uninstall_kilocode_cli_impl
+  loading "Uninstalling KiloCode CLI" _uninstall_kilocode_cli_impl
 }
 
 _uninstall_kilocode_cli_impl() {
@@ -289,17 +289,17 @@ _uninstall_kilocode_cli_impl() {
     fi
     rm -f "$PREFIX/bin/kilocode" "$PREFIX/bin/kilo"
     rm -rf "$KILOCODE_DATA_DIR"
-    log_success "Kilo Code CLI ($method) uninstalled"
+    log_success "KiloCode CLI ($method) uninstalled"
     return 0
   fi
 
   _kilocode_proot_ubuntu /bin/bash -c 'rm -f /usr/local/bin/kilo' &>>"$LOG_FILE"
 
   if rm -f "$PREFIX/bin/kilocode" "$PREFIX/bin/kilo" &>>"$LOG_FILE"; then
-    log_success "Kilo Code CLI (proot-distro) uninstalled"
+    log_success "KiloCode CLI (proot-distro) uninstalled"
     return 0
   else
-    log_error "Failed to uninstall Kilo Code CLI"
+    log_error "Failed to uninstall KiloCode CLI"
     return 1
   fi
 }
@@ -320,18 +320,18 @@ _update_kilocode_cli() {
     return $?
   fi
 
-  loading "Updating Kilo Code CLI (proot-distro)" _update_kilocode_proot_impl
+  loading "Updating KiloCode CLI (proot-distro)" _update_kilocode_proot_impl
 }
 
 update_kilocode_cli() {
-  _check_update_needed "Kilo Code CLI" "$(_get_installed_version kilocode)" "$(_parse_version "$(_get_latest_kilocode_version)")" _update_kilocode_cli
+  _check_update_needed "KiloCode CLI" "$(_get_installed_version kilocode)" "$(_parse_version "$(_get_latest_kilocode_version)")" _update_kilocode_cli
 }
 
 _update_kilocode_proot_impl() {
   local latest_version
   latest_version=$(_get_latest_kilocode_version)
   if [ -z "$latest_version" ]; then
-    log_error "Failed to fetch latest Kilo Code CLI version"
+    log_error "Failed to fetch latest KiloCode CLI version"
     return 1
   fi
 
@@ -351,11 +351,11 @@ _update_kilocode_proot_impl() {
   kilocode_bin="$(_kilocode_detect_ubuntu_root)/usr/local/bin/kilo"
 
   if [ ! -f "$kilocode_bin" ]; then
-    log_error "Kilo Code CLI binary not found after update"
+    log_error "KiloCode CLI binary not found after update"
     return 1
   fi
 
-  log_success "Kilo Code CLI (proot-distro) updated"
+  log_success "KiloCode CLI (proot-distro) updated"
   return 0
 }
 

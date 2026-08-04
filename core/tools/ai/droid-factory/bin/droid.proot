@@ -1,0 +1,22 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# droid wrapper - termux-glibc loader + proot syscall emulation
+
+unset LD_PRELOAD
+
+GLIBC_LOADER="/data/data/com.termux/files/usr/glibc/lib/ld-linux-aarch64.so.1"
+GLIBC_LIB="/data/data/com.termux/files/usr/glibc/lib"
+TOOL_DATA_DIR="__DATA_DIR__"
+
+if [ ! -f "$GLIBC_LOADER" ] || [ ! -f "$TOOL_DATA_DIR/droid" ]; then
+  echo "Error: termux-glibc or droid binary not found" >&2
+  echo "Run: pkg install glibc" >&2
+  exit 1
+fi
+
+# proot with host rootfs for syscall translation
+# Note: no -- separator, pass args directly after loader
+exec proot -r / \
+  -b /dev:/dev -b /proc:/proc -b /sys:/sys \
+  "$GLIBC_LOADER" \
+  --library-path "$GLIBC_LIB" \
+  "$TOOL_DATA_DIR/droid" "$@"

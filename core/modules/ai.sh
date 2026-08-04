@@ -52,6 +52,7 @@ install_ai() {
   list_item "OpenSpec ${GRAY}(${D_GREEN}openspec${GRAY})"
   list_item "SuperCode ${GRAY}(${D_GREEN}supercode${GRAY})"
   list_item "Cline CLI ${GRAY}(${D_GREEN}cline${GRAY})"
+  list_item "Droid Factory ${GRAY}(${D_GREEN}droid${GRAY})"
   list_item "AMP Code CLI ${GRAY}(${D_GREEN}amp${GRAY})"
   echo
 }
@@ -142,6 +143,7 @@ reinstall_ai() {
   list_item "SuperCode"
   list_item "Cline CLI"
   list_item "AMP Code CLI"
+  list_item "Droid Factory"
   echo
 }
 

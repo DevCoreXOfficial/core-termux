@@ -252,6 +252,10 @@ _update_specific_tools() {
         update_amp_code_cli
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      droid-factory)
+        update_droid_factory
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;
