@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
@@ -67,6 +68,10 @@ uninstall_qwen_code() {
     log_info "Qwen Code is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Qwen Code" \
+    "$HOME/.qwen"
+
   log_info "Uninstalling Qwen Code..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

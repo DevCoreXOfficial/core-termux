@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 : "${CORE_CACHE:=$HOME/.cache/core-termux}"
 : "${CORE_PATH:=$HOME/core-termux/core}"
@@ -289,6 +290,14 @@ _omp_is_proot() {
 
 uninstall_oh_my_pi() {
   mkdir -p "$(dirname "$LOG_FILE")"
+
+  if ! _omp_is_proot_glibc && ! _omp_is_native && ! _omp_is_proot; then
+    log_info "Oh-My-Pi is not installed"
+    return 2
+  fi
+
+  confirm_remove_configs "Oh My Pi" \
+    "$HOME/.omp"
 
   if _omp_is_proot_glibc; then
     loading "Uninstalling Oh-My-Pi (native + proot)" _uninstall_omp_native_impl

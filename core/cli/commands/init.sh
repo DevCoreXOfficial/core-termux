@@ -722,13 +722,13 @@ import productRoutes from "@/routes/product.routes";
 
 const app = express();
 
-// monitorear peticiones HTTP (logger)
+// monitor HTTP requests (logger)
 app.use(morgan("dev"));
 
-// proteger cabeceras HTTP (seguridad)
+// protect HTTP headers (security)
 app.use(helmet());
 
-// habilitar acceso desde otros orígenes
+// enable access from other origins
 app.use(
   cors({
     origin: FRONTEND_URL,
@@ -736,7 +736,7 @@ app.use(
   }),
 );
 
-// limitar número de peticiones
+// limit number of requests
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 200,

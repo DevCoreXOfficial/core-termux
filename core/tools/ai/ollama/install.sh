@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -38,6 +39,11 @@ uninstall_ollama() {
     log_info "Ollama is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Ollama" \
+    "$HOME/.ollama" \
+    "$HOME/.ollama_code_history"
+
   log_info "Uninstalling Ollama..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

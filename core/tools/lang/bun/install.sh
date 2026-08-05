@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 BUN_DATA_DIR="$HOME/.local/share/core-termux-data/bun"
@@ -474,6 +475,16 @@ _bun_is_proot() {
 
 uninstall_bun() {
   mkdir -p "$(dirname "$LOG_FILE")"
+
+  if ! _bun_is_native && ! _bun_is_proot; then
+    log_info "Bun is not installed"
+    return 2
+  fi
+
+  confirm_remove_configs "Bun" \
+    "$HOME/.bun" \
+    "$HOME/.bunfig.toml" \
+    "$HOME/.cache/bun"
 
   if _bun_is_native; then
     loading "Uninstalling Bun (native)" _uninstall_bun_native_impl

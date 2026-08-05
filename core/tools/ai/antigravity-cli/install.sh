@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 AGY_DATA_DIR="$HOME/.local/share/core-termux-data/antigravity-cli"
@@ -374,6 +375,9 @@ uninstall_antigravity_cli() {
     log_warn "Antigravity CLI is not installed"
     return 1
   fi
+
+  confirm_remove_configs "Antigravity CLI" \
+    "$HOME/.cache/antigravity"
 
   if [ -f "$AGY_DATA_DIR/agy.va39" ]; then
     local method="native"

@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 QODER_DATA_DIR="$HOME/.local/share/core-termux-data/qoder"
@@ -291,6 +292,9 @@ uninstall_qoder() {
     log_warn "Qoder is not installed"
     return 1
   fi
+
+  confirm_remove_configs "Qoder" \
+    "$HOME/.qoder"
 
   loading "Uninstalling Qoder" _uninstall_qoder_impl
 }

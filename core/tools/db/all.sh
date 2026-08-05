@@ -57,7 +57,7 @@ uninstall_all_db_tools() {
 	for tool in "${DB_TOOLS[@]}"; do
 		case "$tool" in
 		postgresql)
-			loading "Uninstalling PostgreSQL" uninstall_postgresql
+			uninstall_postgresql
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		mariadb)
@@ -112,7 +112,7 @@ reinstall_all_db_tools() {
   for tool in "${DB_TOOLS[@]}"; do
     case "$tool" in
     postgresql)
-      loading "Reinstalling PostgreSQL" reinstall_postgresql
+      reinstall_postgresql
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mariadb)

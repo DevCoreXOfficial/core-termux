@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
@@ -67,6 +68,10 @@ uninstall_kimi_code() {
     log_success "Kimi Code is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Kimi Code" \
+    "$HOME/.kimi" \
+    "$HOME/.kimi-code"
 
   log_info "Uninstalling Kimi Code..."
   mkdir -p "$(dirname "$LOG_FILE")"

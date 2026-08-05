@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 FREEBUFF_DATA_DIR="$HOME/.local/share/core-termux-data/freebuff"
@@ -259,6 +260,14 @@ uninstall_freebuff() {
     log_warn "Freebuff is not installed"
     return 1
   fi
+
+  confirm_remove_configs "FreeBuff" \
+    "$HOME/.config/fresh" \
+    "$HOME/.config/manicode" \
+    "$HOME/.config/ai-agent" \
+    "$HOME/.config/aichat" \
+    "$HOME/.local/share/fresh" \
+    "$HOME/.local/state/fresh"
 
   if [ -f "$FREEBUFF_DATA_DIR/freebuff" ]; then
     local method="native"

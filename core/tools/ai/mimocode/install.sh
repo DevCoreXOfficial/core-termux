@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 MIMOCODE_DATA_DIR="$HOME/.local/share/core-termux-data/mimocode"
@@ -255,6 +256,13 @@ uninstall_mimocode() {
     log_warn "mimocode is not installed"
     return 1
   fi
+
+  confirm_remove_configs "MimoCode" \
+    "$HOME/.mimocode" \
+    "$HOME/.config/mimocode" \
+    "$HOME/.local/share/mimocode" \
+    "$HOME/.local/state/mimocode" \
+    "$HOME/.cache/mimocode"
 
   if [ -f "$MIMOCODE_DATA_DIR/mimocode" ]; then
     local method="native"

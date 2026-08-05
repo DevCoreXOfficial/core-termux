@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_db.log"
 
@@ -40,6 +41,10 @@ uninstall_postgresql() {
 		log_info "PostgreSQL is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "PostgreSQL" \
+		"$HOME/.psql_history"
+
 	log_info "Uninstalling PostgreSQL..."
 	loading "Uninstalling PostgreSQL" _uninstall_postgresql_impl
 }

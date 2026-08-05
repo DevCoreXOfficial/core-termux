@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -76,6 +77,10 @@ uninstall_mistral_vibe() {
     log_info "Mistral Vibe is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Mistral Vibe" \
+    "$HOME/.vibe"
+
   log_info "Uninstalling Mistral Vibe..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -93,7 +93,7 @@ uninstall_all_npm_packages() {
 	for tool in "${NODE_PACKAGES[@]}"; do
 		case "$tool" in
 		typescript)
-			loading "Uninstalling TypeScript" uninstall_typescript
+			uninstall_typescript
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		nestjs)
@@ -113,7 +113,7 @@ uninstall_all_npm_packages() {
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		vercel)
-			loading "Uninstalling Vercel CLI" uninstall_vercel
+			uninstall_vercel
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		markserv)
@@ -125,11 +125,11 @@ uninstall_all_npm_packages() {
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		ncu)
-			loading "Uninstalling NPM Check Updates" uninstall_ncu
+			uninstall_ncu
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		ngrok)
-			loading "Uninstalling Ngrok" uninstall_ngrok
+			uninstall_ngrok
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		turbopack)
@@ -190,7 +190,7 @@ reinstall_all_npm_packages() {
   for tool in "${NODE_PACKAGES[@]}"; do
     case "$tool" in
     typescript)
-      loading "Reinstalling TypeScript" reinstall_typescript
+      reinstall_typescript
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     nestjs)
@@ -210,7 +210,7 @@ reinstall_all_npm_packages() {
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     vercel)
-      loading "Reinstalling Vercel CLI" reinstall_vercel
+      reinstall_vercel
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     markserv)
@@ -222,11 +222,11 @@ reinstall_all_npm_packages() {
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ncu)
-      loading "Reinstalling NPM Check Updates" reinstall_ncu
+      reinstall_ncu
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ngrok)
-      loading "Reinstalling Ngrok" reinstall_ngrok
+      reinstall_ngrok
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     turbopack)

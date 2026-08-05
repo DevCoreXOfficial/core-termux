@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -57,6 +58,10 @@ uninstall_udocker() {
 		log_info "Udocker is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "Udocker" \
+		"$HOME/.udocker"
+
 	log_info "Uninstalling Udocker..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

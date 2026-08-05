@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 KILOCODE_DATA_DIR="$HOME/.local/share/core-termux-data/kilocode"
@@ -277,6 +278,12 @@ uninstall_kilocode_cli() {
     log_warn "KiloCode CLI is not installed"
     return 1
   fi
+
+  confirm_remove_configs "KiloCode CLI" \
+    "$HOME/.config/kilo" \
+    "$HOME/.local/share/kilo" \
+    "$HOME/.local/state/kilo" \
+    "$HOME/.cache/kilo"
 
   loading "Uninstalling KiloCode CLI" _uninstall_kilocode_cli_impl
 }

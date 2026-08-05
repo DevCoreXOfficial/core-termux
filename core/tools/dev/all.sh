@@ -153,11 +153,11 @@ uninstall_all_dev() {
 	for tool in "${TOOLS_PACKAGES[@]}"; do
 		case "$tool" in
 		gh)
-			loading "Uninstalling GitHub CLI" uninstall_gh
+			uninstall_gh
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		wget)
-			loading "Uninstalling Wget" uninstall_wget
+			uninstall_wget
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		curl)
@@ -189,7 +189,7 @@ uninstall_all_dev() {
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		openssh)
-			loading "Uninstalling OpenSSH" uninstall_openssh
+			uninstall_openssh
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		cloudflared)
@@ -217,7 +217,7 @@ uninstall_all_dev() {
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		fzf)
-			loading "Uninstalling Fzf" uninstall_fzf
+			uninstall_fzf
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		imagemagick)
@@ -233,7 +233,7 @@ uninstall_all_dev() {
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		udocker)
-			loading "Uninstalling Udocker" uninstall_udocker
+			uninstall_udocker
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
@@ -320,11 +320,11 @@ reinstall_all_dev() {
   for tool in "${TOOLS_PACKAGES[@]}"; do
     case "$tool" in
     gh)
-      loading "Reinstalling GitHub CLI" reinstall_gh
+      reinstall_gh
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     wget)
-      loading "Reinstalling Wget" reinstall_wget
+      reinstall_wget
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     curl)
@@ -356,7 +356,7 @@ reinstall_all_dev() {
 			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		openssh)
-			loading "Reinstalling OpenSSH" reinstall_openssh
+			reinstall_openssh
 			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		cloudflared)
@@ -384,7 +384,7 @@ reinstall_all_dev() {
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     fzf)
-      loading "Reinstalling Fzf" reinstall_fzf
+      reinstall_fzf
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     imagemagick)
@@ -400,7 +400,7 @@ reinstall_all_dev() {
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     udocker)
-      loading "Reinstalling Udocker" reinstall_udocker
+      reinstall_udocker
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

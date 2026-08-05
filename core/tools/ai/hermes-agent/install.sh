@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -146,6 +147,11 @@ uninstall_hermes_agent() {
     log_info "Hermes Agent is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Hermes Agent" \
+    "$HOME/.hermes" \
+    "$HOME/.local/state/hermes"
+
   log_info "Uninstalling Hermes Agent..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

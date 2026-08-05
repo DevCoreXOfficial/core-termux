@@ -219,87 +219,87 @@ uninstall_all_ai_tools() {
   for tool in "${AI_TOOLS[@]}"; do
     case "$tool" in
     qwen-code)
-      loading "Uninstalling Qwen Code" uninstall_qwen_code
+      uninstall_qwen_code
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gemini-cli)
-      loading "Uninstalling Gemini CLI" uninstall_gemini_cli
+      uninstall_gemini_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     claude-code)
-      loading "Uninstalling Claude Code" uninstall_claude_code
+      uninstall_claude_code
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mistral-vibe)
-      loading "Uninstalling Mistral Vibe" uninstall_mistral_vibe
+      uninstall_mistral_vibe
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaude)
-      loading "Uninstalling OpenClaude" uninstall_openclaude
+      uninstall_openclaude
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaw)
-      loading "Uninstalling OpenClaw" uninstall_openclaw
+      uninstall_openclaw
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ollama)
-      loading "Uninstalling Ollama" uninstall_ollama
+      uninstall_ollama
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codex)
-      loading "Uninstalling Codex CLI" uninstall_codex
+      uninstall_codex
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     opencode)
-      loading "Uninstalling OpenCode" uninstall_opencode
+      uninstall_opencode
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     qoder)
-      loading "Uninstalling Qoder" uninstall_qoder
+      uninstall_qoder
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kilocode-cli)
-      loading "Uninstalling Kilo Code CLI" uninstall_kilocode_cli
+      uninstall_kilocode_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     cursor-cli)
-      loading "Uninstalling Cursor CLI" uninstall_cursor_cli
+      uninstall_cursor_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kimchi)
-      loading "Uninstalling Kimchi" uninstall_kimchi
+      uninstall_kimchi
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)
-      loading "Uninstalling MiMo Code" uninstall_mimocode
+      uninstall_mimocode
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     engram)
-      loading "Uninstalling Engram" uninstall_engram
+      uninstall_engram
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codegraph)
-      loading "Uninstalling CodeGraph" uninstall_codegraph
+      uninstall_codegraph
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     pi)
-      loading "Uninstalling Pi" uninstall_pi
+      uninstall_pi
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     oh-my-pi)
-      loading "Uninstalling Oh-My-Pi" uninstall_oh_my_pi
+      uninstall_oh_my_pi
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     droid-factory)
-      loading "Uninstalling Droid Factory" uninstall_droid_factory
+      uninstall_droid_factory
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
-      loading "Uninstalling Antigravity CLI" uninstall_antigravity_cli
+      uninstall_antigravity_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gentle-ai)
-      loading "Uninstalling Gentle AI" uninstall_gentle_ai
+      uninstall_gentle_ai
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     minimax-cli)
@@ -307,43 +307,43 @@ uninstall_all_ai_tools() {
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gga)
-      loading "Uninstalling GGA" uninstall_gga
+      uninstall_gga
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     hermes-agent)
-      loading "Uninstalling Hermes Agent" uninstall_hermes_agent
+      uninstall_hermes_agent
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kimi-code)
-      loading "Uninstalling Kimi Code" uninstall_kimi_code
+      uninstall_kimi_code
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     command-code)
-      loading "Uninstalling Command Code" uninstall_command_code
+      uninstall_command_code
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     freebuff)
-      loading "Uninstalling Freebuff" uninstall_freebuff
+      uninstall_freebuff
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ctx7)
-      loading "Uninstalling Context7" uninstall_ctx7
+      uninstall_ctx7
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openspec)
-      loading "Uninstalling OpenSpec" uninstall_openspec
+      uninstall_openspec
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     supercode)
-      loading "Uninstalling SuperCode" uninstall_supercode
+      uninstall_supercode
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     cline)
-      loading "Uninstalling Cline CLI" uninstall_cline
+      uninstall_cline
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ampcode)
-      loading "Uninstalling AMP Code CLI" uninstall_amp_code_cli
+      uninstall_amp_code_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac
@@ -463,87 +463,87 @@ reinstall_all_ai_tools() {
   for tool in "${AI_TOOLS[@]}"; do
     case "$tool" in
     qwen-code)
-      loading "Reinstalling Qwen Code" reinstall_qwen_code
+      reinstall_qwen_code
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gemini-cli)
-      loading "Reinstalling Gemini CLI" reinstall_gemini_cli
+      reinstall_gemini_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     claude-code)
-      loading "Reinstalling Claude Code" reinstall_claude_code
+      reinstall_claude_code
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mistral-vibe)
-      loading "Reinstalling Mistral Vibe" reinstall_mistral_vibe
+      reinstall_mistral_vibe
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaude)
-      loading "Reinstalling OpenClaude" reinstall_openclaude
+      reinstall_openclaude
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openclaw)
-      loading "Reinstalling OpenClaw" reinstall_openclaw
+      reinstall_openclaw
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ollama)
-      loading "Reinstalling Ollama" reinstall_ollama
+      reinstall_ollama
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codex)
-      loading "Reinstalling Codex CLI" reinstall_codex
+      reinstall_codex
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     opencode)
-      loading "Reinstalling OpenCode" reinstall_opencode
+      reinstall_opencode
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     qoder)
-      loading "Reinstalling Qoder" reinstall_qoder
+      reinstall_qoder
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kilocode-cli)
-      loading "Reinstalling Kilo Code CLI" reinstall_kilocode_cli
+      reinstall_kilocode_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     cursor-cli)
-      loading "Reinstalling Cursor CLI" reinstall_cursor_cli
+      reinstall_cursor_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kimchi)
-      loading "Reinstalling Kimchi" reinstall_kimchi
+      reinstall_kimchi
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     mimocode)
-      loading "Reinstalling MiMo Code" reinstall_mimocode
+      reinstall_mimocode
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     engram)
-      loading "Reinstalling Engram" reinstall_engram
+      reinstall_engram
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     codegraph)
-      loading "Reinstalling CodeGraph" reinstall_codegraph
+      reinstall_codegraph
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     pi)
-      loading "Reinstalling Pi" reinstall_pi
+      reinstall_pi
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     oh-my-pi)
-      loading "Reinstalling Oh-My-Pi" reinstall_oh_my_pi
+      reinstall_oh_my_pi
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     droid-factory)
-      loading "Reinstalling Droid Factory" reinstall_droid_factory
+      reinstall_droid_factory
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     antigravity-cli)
-      loading "Reinstalling Antigravity CLI" reinstall_antigravity_cli
+      reinstall_antigravity_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gentle-ai)
-      loading "Reinstalling Gentle AI" reinstall_gentle_ai
+      reinstall_gentle_ai
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     minimax-cli)
@@ -551,43 +551,43 @@ reinstall_all_ai_tools() {
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     gga)
-      loading "Reinstalling GGA" reinstall_gga
+      reinstall_gga
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     hermes-agent)
-      loading "Reinstalling Hermes Agent" reinstall_hermes_agent
+      reinstall_hermes_agent
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     kimi-code)
-      loading "Reinstalling Kimi Code" reinstall_kimi_code
+      reinstall_kimi_code
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     command-code)
-      loading "Reinstalling Command Code" reinstall_command_code
+      reinstall_command_code
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     freebuff)
-      loading "Reinstalling Freebuff" reinstall_freebuff
+      reinstall_freebuff
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ctx7)
-      loading "Reinstalling Context7" reinstall_ctx7
+      reinstall_ctx7
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     openspec)
-      loading "Reinstalling OpenSpec" reinstall_openspec
+      reinstall_openspec
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     supercode)
-      loading "Reinstalling SuperCode" reinstall_supercode
+      reinstall_supercode
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     cline)
-      loading "Reinstalling Cline CLI" reinstall_cline
+      reinstall_cline
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     ampcode)
-      loading "Reinstalling AMP Code CLI" reinstall_amp_code_cli
+      reinstall_amp_code_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

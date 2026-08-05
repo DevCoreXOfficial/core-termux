@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
@@ -49,6 +50,11 @@ uninstall_supercode() {
     log_info "SuperCode is not installed"
     return 2
   fi
+
+  confirm_remove_configs "SuperCode" \
+    "$HOME/.config/supercode" \
+    "$HOME/.config/Code"
+
   log_info "Uninstalling SuperCode..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

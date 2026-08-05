@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 AMP_DATA_DIR="$HOME/.local/share/core-termux-data/ampcode"
@@ -286,6 +287,11 @@ uninstall_amp_code_cli() {
     log_warn "AMP Code CLI is not installed"
     return 1
   fi
+
+  confirm_remove_configs "AMP Code CLI" \
+    "$HOME/.config/amp" \
+    "$HOME/.local/share/amp" \
+    "$HOME/.cache/amp"
 
   loading "Uninstalling AMP Code CLI" _uninstall_amp_code_cli_impl
 }

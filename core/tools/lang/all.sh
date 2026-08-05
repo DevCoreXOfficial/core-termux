@@ -75,11 +75,11 @@ uninstall_all_lang_packages() {
 	for tool in "${LANGUAGE_PACKAGES[@]}"; do
 		case "$tool" in
 		nodejs)
-			loading "Uninstalling Node.js LTS" uninstall_npmjs
+			uninstall_npmjs
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		python)
-			loading "Uninstalling Python" uninstall_python
+			uninstall_python
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		perl)
@@ -91,7 +91,7 @@ uninstall_all_lang_packages() {
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		rust)
-			loading "Uninstalling Rust" uninstall_rust
+			uninstall_rust
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		clang)
@@ -99,11 +99,11 @@ uninstall_all_lang_packages() {
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		golang)
-			loading "Uninstalling Go (golang)" uninstall_golang
+			uninstall_golang
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		bun)
-			loading "Uninstalling Bun" uninstall_bun
+			uninstall_bun
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
@@ -151,11 +151,11 @@ reinstall_all_lang_packages() {
   for tool in "${LANGUAGE_PACKAGES[@]}"; do
     case "$tool" in
     nodejs)
-      loading "Reinstalling Node.js LTS" reinstall_npmjs
+      reinstall_npmjs
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     python)
-      loading "Reinstalling Python" reinstall_python
+      reinstall_python
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     perl)
@@ -167,7 +167,7 @@ reinstall_all_lang_packages() {
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     rust)
-      loading "Reinstalling Rust" reinstall_rust
+      reinstall_rust
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     clang)
@@ -175,11 +175,11 @@ reinstall_all_lang_packages() {
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
 		golang)
-			loading "Reinstalling Go (golang)" reinstall_golang
+			reinstall_golang
 			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		bun)
-			loading "Reinstalling Bun" reinstall_bun
+			reinstall_bun
 			case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac

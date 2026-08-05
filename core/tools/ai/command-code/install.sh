@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 import "@/tools/lang/bun/install"
 
@@ -87,6 +88,10 @@ uninstall_command_code() {
     log_info "Command Code is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Command Code" \
+    "$HOME/.commandcode"
+
   log_info "Uninstalling Command Code..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

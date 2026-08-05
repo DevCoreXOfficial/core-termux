@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CLINE_DATA_DIR="$HOME/.local/share/core-termux-data/cline"
@@ -272,6 +273,9 @@ uninstall_cline() {
     log_warn "Cline CLI is not installed"
     return 1
   fi
+
+  confirm_remove_configs "Cline" \
+    "$HOME/.cline"
 
   loading "Uninstalling Cline CLI" _uninstall_cline_impl
 }

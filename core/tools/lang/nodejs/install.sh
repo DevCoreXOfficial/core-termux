@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -60,6 +61,14 @@ uninstall_npmjs() {
 		log_info "Node.js LTS is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "Node.js" \
+		"$HOME/.npm" \
+		"$HOME/.npmrc" \
+		"$HOME/.node_repl_history" \
+		"$HOME/.config/yarn" \
+		"$HOME/.cache/yarn"
+
 	log_info "Uninstalling Node.js LTS..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	_uninstall_npmjs_pkg || return 1

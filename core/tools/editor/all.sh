@@ -39,7 +39,7 @@ uninstall_all_editor_components() {
 	for tool in "${EDITOR_COMPONENTS[@]}"; do
 		case "$tool" in
 		neovim)
-			loading "Uninstalling Neovim" uninstall_neovim
+			uninstall_neovim
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		nvchad)
@@ -73,7 +73,7 @@ reinstall_all_editor_components() {
   for tool in "${EDITOR_COMPONENTS[@]}"; do
     case "$tool" in
     neovim)
-      loading "Reinstalling Neovim" reinstall_neovim
+      reinstall_neovim
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     nvchad)

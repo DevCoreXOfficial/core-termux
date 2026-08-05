@@ -36,7 +36,7 @@ pg_help() {
 	echo
 }
 
-# Verificar si PostgreSQL está instalado
+# Check if PostgreSQL is installed
 check_pg_installed() {
 	if ! command -v pg_ctl &>/dev/null; then
 		log_error "PostgreSQL is not installed"
@@ -46,9 +46,9 @@ check_pg_installed() {
 	return 0
 }
 
-# Verificar si está inicializado (solo informativo)
+# Check if initialized (informational only)
 check_pg_initialized() {
-	# Verificar múltiples rutas posibles
+	# Check multiple possible paths
 	local data_dirs=(
 		"$PREFIX/var/lib/postgresql/data"
 		"$PG_DATA/data"
@@ -58,13 +58,13 @@ check_pg_initialized() {
 
 	for dir in "${data_dirs[@]}"; do
 		if [[ -d "$dir" ]] && [[ -f "$dir/PG_VERSION" ]]; then
-			# Actualizar PG_DATA a la ruta correcta
+			# Update PG_DATA to the correct path
 			PG_DATA="$(dirname "$dir")"
 			return 0
 		fi
 	done
 
-	# También verificar si el servicio está corriendo
+	# Also check if the service is running
 	if pg_ctl status &>/dev/null; then
 		return 0
 	fi
@@ -81,7 +81,7 @@ pg_init() {
 
 	check_pg_installed || return 1
 
-	# Verificar si ya está inicializado
+	# Check if already initialized
 	if check_pg_initialized; then
 		log_warn "PostgreSQL is already initialized"
 		echo
@@ -240,9 +240,9 @@ pg_status() {
 
 	check_pg_installed || return 1
 
-	# Intentar detectar la ruta de datos
+	# Try to detect the data path
 	local found_dir=""
-	# En Termux, los datos pueden estar directamente en el directorio o en /data
+	# In Termux, data may live directly in the directory or in /data
 	local data_dirs=(
 		"$PREFIX/var/lib/postgresql"
 		"$PREFIX/var/lib/postgresql/data"
@@ -263,7 +263,7 @@ pg_status() {
 	log_info "Checking PostgreSQL status..."
 	echo
 
-	# Verificar estado
+	# Check status
 	if [[ -n "$found_dir" ]]; then
 		if pg_ctl -D "$found_dir" status &>/dev/null; then
 			log_success "PostgreSQL is RUNNING"
@@ -312,7 +312,7 @@ pg_create() {
 	fi
 }
 
-# Eliminar base de datos
+# Drop database
 pg_drop() {
 	local db_name="$1"
 
@@ -382,7 +382,7 @@ pg_shell() {
 	su - "$PG_USER" -c "psql" 2>/dev/null
 }
 
-# Función auxiliar para detectar ruta de datos
+# Helper function to detect the data path
 _detect_pg_data() {
 	local data_dirs=(
 		"$PREFIX/var/lib/postgresql"
@@ -403,7 +403,7 @@ _detect_pg_data() {
 	return 1
 }
 
-# Función principal
+# Main function
 pg_main() {
 	local cmd="$1"
 	shift || true

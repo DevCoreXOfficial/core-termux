@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CLAUDE_DATA_DIR="$HOME/.local/share/core-termux-data/claude"
@@ -252,6 +253,14 @@ uninstall_claude_code() {
     log_warn "Claude Code is not installed"
     return 1
   fi
+
+  confirm_remove_configs "Claude Code" \
+    "$HOME/.claude" \
+    "$HOME/.claude.json" \
+    "$HOME/.config/claude" \
+    "$HOME/.local/share/claude" \
+    "$HOME/.local/state/claude" \
+    "$HOME/.cache/claude"
 
   if [ -f "$CLAUDE_DATA_DIR/claude" ]; then
     local method="native"

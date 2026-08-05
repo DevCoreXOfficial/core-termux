@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -60,6 +61,12 @@ uninstall_vercel() {
     log_info "Vercel CLI is not installed"
     return 0
   fi
+
+  confirm_remove_configs "Vercel CLI" \
+    "$HOME/.local/share/com.vercel.cli" \
+    "$HOME/.cache/com.vercel.cli" \
+    "$HOME/.config/com.vercel.cli"
+
   log_info "Uninstalling Vercel CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

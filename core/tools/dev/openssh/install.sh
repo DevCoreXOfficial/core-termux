@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -48,6 +49,10 @@ uninstall_openssh() {
     log_info "OpenSSH is not installed"
     return 2
   fi
+
+  confirm_remove_configs "OpenSSH" \
+    "$HOME/.ssh"
+
   log_info "Uninstalling OpenSSH..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

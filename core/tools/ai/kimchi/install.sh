@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 KIMCHI_DATA_DIR="$HOME/.local/share/core-termux-data/kimchi"
@@ -275,6 +276,12 @@ uninstall_kimchi() {
     log_warn "Kimchi is not installed"
     return 1
   fi
+
+  confirm_remove_configs "Kimchi" \
+    "$HOME/.config/kimchi" \
+    "$HOME/.local/share/kimchi" \
+    "$HOME/.local/state/kimchi" \
+    "$HOME/.cache/kimchi"
 
   loading "Uninstalling Kimchi" _uninstall_kimchi_impl
 }

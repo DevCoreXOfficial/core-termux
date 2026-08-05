@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_editor.log"
 
@@ -41,6 +42,13 @@ uninstall_neovim() {
     log_info "Neovim is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Neovim" \
+    "$HOME/.config/nvim" \
+    "$HOME/.local/share/nvim" \
+    "$HOME/.local/state/nvim" \
+    "$HOME/.cache/nvim"
+
   log_info "Uninstalling Neovim..."
   loading "Uninstalling Neovim" _uninstall_neovim_impl
 }

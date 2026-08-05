@@ -33,7 +33,7 @@ uninstall_all_auto_tools() {
 	for tool in "${AUTOMATION_TOOLS[@]}"; do
 		case "$tool" in
 		n8n)
-			loading "Uninstalling n8n" uninstall_n8n
+			uninstall_n8n
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		esac
@@ -60,7 +60,7 @@ reinstall_all_auto_tools() {
   for tool in "${AUTOMATION_TOOLS[@]}"; do
     case "$tool" in
     n8n)
-      loading "Reinstalling n8n" reinstall_n8n
+      reinstall_n8n
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

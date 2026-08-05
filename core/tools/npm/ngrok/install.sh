@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -60,6 +61,11 @@ uninstall_ngrok() {
     log_info "Ngrok is not installed"
     return 0
   fi
+
+  confirm_remove_configs "Ngrok" \
+    "$HOME/.ngrok" \
+    "$HOME/.config/ngrok"
+
   log_info "Uninstalling Ngrok..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

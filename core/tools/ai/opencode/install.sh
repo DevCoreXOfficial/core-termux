@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
@@ -256,6 +257,12 @@ uninstall_opencode() {
     log_warn "OpenCode is not installed"
     return 1
   fi
+
+  confirm_remove_configs "OpenCode" \
+    "$HOME/.config/opencode" \
+    "$HOME/.local/share/opencode" \
+    "$HOME/.local/state/opencode" \
+    "$HOME/.cache/opencode"
 
   loading "Uninstalling OpenCode" _uninstall_opencode_impl
 }

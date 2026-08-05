@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
@@ -64,6 +65,11 @@ uninstall_ctx7() {
     log_info "Context7 is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Context7 CLI" \
+    "$HOME/.config/context7" \
+    "$HOME/.local/state/context7"
+
   log_info "Uninstalling Context7..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

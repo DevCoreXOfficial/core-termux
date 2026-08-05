@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -47,6 +48,10 @@ uninstall_rust() {
 		log_info "Rust is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "Rust" \
+		"$HOME/.cargo"
+
 	log_info "Uninstalling Rust..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	_uninstall_rust_pkg || return 1

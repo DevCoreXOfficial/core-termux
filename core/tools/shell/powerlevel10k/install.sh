@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"
@@ -65,6 +66,16 @@ _uninstall_powerlevel10k_impl() {
 }
 
 uninstall_powerlevel10k() {
+  if [[ ! -d "$ZSH_PLUGINS_DIR/powerlevel10k" ]]; then
+    log_info "powerlevel10k is not installed"
+    return 0
+  fi
+
+  confirm_remove_configs "Powerlevel10k" \
+    "$HOME/.p10k.zsh" \
+    "$HOME/.cache/gitstatus" \
+    "$HOME/.cache/p10k-1k.zsh"
+
   loading "Uninstalling powerlevel10k" _uninstall_powerlevel10k_impl
 }
 

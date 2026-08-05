@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -47,6 +48,11 @@ uninstall_golang() {
 		log_info "Go (Golang) is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "Go" \
+		"$HOME/.cache/go" \
+		"$HOME/.cache/go-build"
+
 	log_info "Uninstalling Go (Golang)..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	_uninstall_golang_pkg || return 1

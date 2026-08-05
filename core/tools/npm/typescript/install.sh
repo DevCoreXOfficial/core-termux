@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -60,6 +61,10 @@ uninstall_typescript() {
     log_info "TypeScript is not installed"
     return 0
   fi
+
+  confirm_remove_configs "TypeScript" \
+    "$HOME/.cache/typescript"
+
   log_info "Uninstalling TypeScript..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

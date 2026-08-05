@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
@@ -64,6 +65,10 @@ uninstall_openspec() {
     log_info "OpenSpec is not installed"
     return 2
   fi
+
+  confirm_remove_configs "OpenSpec" \
+    "$HOME/.config/openspec"
+
   log_info "Uninstalling OpenSpec..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

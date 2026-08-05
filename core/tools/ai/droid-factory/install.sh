@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 : "${CORE_CACHE:=$HOME/.cache/core-termux}"
 : "${CORE_PATH:=$HOME/core-termux/core}"
@@ -302,6 +303,14 @@ _uninstall_droid_native_impl() {
 
 uninstall_droid_factory() {
   mkdir -p "$(dirname "$LOG_FILE")"
+
+  if ! _droid_is_proot_glibc && ! _droid_is_native && ! _droid_is_proot; then
+    log_info "Droid Factory is not installed"
+    return 2
+  fi
+
+  confirm_remove_configs "Droid Factory" \
+    "$HOME/.factory"
 
   if _droid_is_proot_glibc; then
     loading "Uninstalling Droid Factory (glibc + proot)" _uninstall_droid_native_impl

@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_lang.log"
 
@@ -47,6 +48,12 @@ uninstall_python() {
 		log_info "Python is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "Python" \
+		"$HOME/.python_history" \
+		"$HOME/.cache/pip" \
+		"$HOME/.cache/black"
+
 	log_info "Uninstalling Python..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	_uninstall_python_pkg || return 1

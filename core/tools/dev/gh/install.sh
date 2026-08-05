@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -57,6 +58,12 @@ uninstall_gh() {
 		log_info "GitHub CLI is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "GitHub CLI" \
+		"$HOME/.config/gh" \
+		"$HOME/.local/state/gh" \
+		"$HOME/.cache/gh"
+
 	log_info "Uninstalling GitHub CLI..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_npm.log"
 
@@ -60,6 +61,10 @@ uninstall_ncu() {
     log_info "NPM Check Updates is not installed"
     return 0
   fi
+
+  confirm_remove_configs "NPM Check Updates" \
+    "$HOME/.config/configstore"
+
   log_info "Uninstalling NPM Check Updates..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

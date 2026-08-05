@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CURSOR_DATA_DIR="$HOME/.local/share/core-termux-data/cursor"
@@ -313,6 +314,11 @@ uninstall_cursor_cli() {
     log_warn "Cursor CLI is not installed"
     return 1
   fi
+
+  confirm_remove_configs "Cursor CLI" \
+    "$HOME/.cursor" \
+    "$HOME/.local/share/cursor-agent" \
+    "$HOME/.cache/cursor-compile-cache"
 
   loading "Uninstalling Cursor CLI" _uninstall_cursor_cli_impl
 }

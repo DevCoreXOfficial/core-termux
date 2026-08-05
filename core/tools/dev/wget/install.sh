@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_dev.log"
 
@@ -57,6 +58,10 @@ uninstall_wget() {
 		log_info "Wget is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "Wget" \
+		"$HOME/.wget-hsts"
+
 	log_info "Uninstalling Wget..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

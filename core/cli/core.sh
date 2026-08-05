@@ -16,7 +16,7 @@ core_main() {
 
   local command_file="$CORE_PATH/cli/commands/$cmd.sh"
 
-  # verificar si existe el comando
+  # check if the command exists
   if [[ -f "$command_file" ]]; then
     import "@/cli/commands/$cmd"
     "${cmd}_main" "$@"

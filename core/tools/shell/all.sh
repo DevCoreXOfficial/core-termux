@@ -88,7 +88,7 @@ uninstall_all_shell_plugins() {
 	for tool in "${SHELL_PLUGINS[@]}"; do
 		case "$tool" in
 		powerlevel10k)
-			loading "Uninstalling powerlevel10k" uninstall_powerlevel10k
+			uninstall_powerlevel10k
 			case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
 			;;
 		zsh-defer)
@@ -178,7 +178,7 @@ reinstall_all_shell_plugins() {
   for tool in "${SHELL_PLUGINS[@]}"; do
     case "$tool" in
     powerlevel10k)
-      loading "Reinstalling powerlevel10k" reinstall_powerlevel10k
+      reinstall_powerlevel10k
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     zsh-defer)

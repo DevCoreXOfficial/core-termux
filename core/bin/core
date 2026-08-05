@@ -24,24 +24,24 @@ import "@/utils/env"
 check_for_updates() {
   local version_file="$CORE_CACHE/last_version_check"
   local current_time=$(date +%s)
-  local check_interval=86400  # 24 horas en segundos
+  local check_interval=86400  # 24 hours in seconds
   local last_check=0
 
-  # Leer último check
+  # Read last check
   if [[ -f "$version_file" ]]; then
     last_check=$(cat "$version_file" 2>/dev/null | head -1)
   fi
 
-  # Verificar si ya pasó 24 horas
+  # Check if 24 hours have passed
   if (( current_time - last_check < check_interval )); then
     return 0
   fi
 
-  # Guardar timestamp actual
+  # Save current timestamp
   mkdir -p "$CORE_CACHE"
   echo "$current_time" > "$version_file"
 
-  # Verificar updates en background (no bloquear)
+  # Check updates in background (do not block)
   (
     local remote_version=$(curl -fsSL "https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/core/utils/env.sh" 2>/dev/null | grep "CORE_VERSION=" | cut -d'"' -f2)
     local local_version="$CORE_VERSION"
@@ -52,7 +52,7 @@ check_for_updates() {
   ) &>/dev/null &
 }
 
-# Mostrar notificación de update
+# Show update notification
 show_update_notification() {
   local new_version_file="$CORE_CACHE/new_version"
 
@@ -68,18 +68,18 @@ show_update_notification() {
   fi
 }
 
-# Check updates (solo si no es comando de update)
+# Check updates (only if not an update command)
 if [[ "$1" != "update" ]] && [[ "$1" != "uninstall" ]] && [[ "$1" != "reinstall" ]]; then
   check_for_updates
   
-  # Importar logs para la notificación
+  # Import logs for the notification
   import "@/utils/log"
   import "@/utils/colors"
   
   show_update_notification
 fi
 
-# cargar CLI
+# load CLI
 import "@/cli/core"
 
 core_main "$@"

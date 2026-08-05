@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -82,6 +83,10 @@ uninstall_engram() {
     log_info "Engram is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Engram" \
+    "$HOME/.engram"
+
   log_info "Uninstalling Engram..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

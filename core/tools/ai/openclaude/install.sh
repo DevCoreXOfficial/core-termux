@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
@@ -66,6 +67,11 @@ uninstall_openclaude() {
     log_info "OpenClaude is not installed"
     return 2
   fi
+
+  confirm_remove_configs "OpenClaude" \
+    "$HOME/.openclaude" \
+    "$HOME/.openclaude.json"
+
   log_info "Uninstalling OpenClaude..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

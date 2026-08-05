@@ -81,7 +81,7 @@ center_text() {
 	local text="$1"
 	local padding=$(( (cols - ${#text}) / 2 ))
 
-	# Remover códigos ANSI para calcular padding correcto
+	# Remove ANSI codes to calculate correct padding
 	local clean_text=$(echo -e "$text" | sed 's/\x1b\[[0-9;]*m//g')
 	local clean_len=${#clean_text}
 	padding=$(( (cols - clean_len) / 2 ))
@@ -139,14 +139,14 @@ table_start() {
 }
 
 # ===== ADD ROW =====
-# Uso simple: table_row "valor1" "valor2" "valor3"
-# Por defecto: col 1 → D_GREEN, col 2 → D_CYAN, resto → sin color
-# También acepta colores custom: table_row "${RED}valor${NC}" ...
+# Simple usage: table_row "value1" "value2" "value3"
+# By default: col 1 → D_GREEN, col 2 → D_CYAN, rest → no color
+# Also accepts custom colors: table_row "${RED}value${NC}" ...
 table_row() {
 	local -a colored=()
 	local i=0
 	for field in "$@"; do
-		# Solo aplicar color por defecto si el campo no contiene ya un escape ANSI
+		# Only apply default color if the field does not already contain an ANSI escape
 		if [[ "$field" != *$'\x1b['* ]]; then
 			case $i in
 			0) colored+=("${D_GREEN}${field}${NC}") ;;
@@ -163,7 +163,7 @@ table_row() {
 }
 
 # ===== STRIP ANSI =====
-# Elimina códigos de escape ANSI para medir la longitud visual real
+# Removes ANSI escape codes to measure the real visual length
 strip_ansi() {
 	echo -e "$1" | sed 's/\x1b\[[0-9;]*m//g'
 }
@@ -188,8 +188,8 @@ table_calc_widths() {
 }
 
 # ===== BORDER HELPERS =====
-# Genera una línea horizontal con los caracteres correctos según posición
-# $1: char izquierdo, $2: char relleno, $3: char separador, $4: char derecho
+# Generates a horizontal line with the correct characters according to position
+# $1: left char, $2: fill char, $3: separator char, $4: right char
 table_border() {
 	local left="$1" fill="$2" sep="$3" right="$4"
 	echo -ne "${GRAY}${left}"
@@ -214,7 +214,7 @@ table_end() {
 	# Top border:    ┌───┬───┐
 	table_border "┌" "─" "┬" "┐"
 
-	# Headers (D_RED por defecto)
+	# Headers (D_RED by default)
 	echo -ne "${GRAY}│${NC}"
 	for ((i = 0; i < cols; i++)); do
 		printf " ${D_RED}%-${TABLE_WIDTHS[$i]}s ${GRAY}│${NC}" "${TABLE_HEADERS[$i]}"
@@ -248,10 +248,10 @@ table_end() {
 }
 
 # ===== READ FUNCTIONS =====
-# El segundo argumento es el nombre de la variable donde se guarda el resultado.
+# The second argument is the name of the variable where the result is stored.
 
-# --- Texto simple ---
-# Uso: read_input "Prompt" VAR_NAME
+# --- Simple text ---
+# Usage: read_input "Prompt" VAR_NAME
 read_input() {
 	local prompt="$1"
 	local var="$2"
@@ -263,9 +263,9 @@ read_input() {
 	read -r "$var" <<<"$_val"
 }
 
-# --- Entrada censurada (contraseñas, tokens, API keys) ---
-# Lee carácter por carácter y muestra ● para cada uno.
-# Uso: read_secret "Prompt" VAR_NAME
+# --- Masked input (passwords, tokens, API keys) ---
+# Reads character by character and shows ● for each one.
+# Usage: read_secret "Prompt" VAR_NAME
 read_secret() {
 	local prompt="$1"
 	local var="$2"
@@ -301,9 +301,9 @@ read_secret() {
 	read -r "$var" <<<"$_val"
 }
 
-# --- Confirmación s/n ---
-# Uso: read_confirm "¿Continuar?" VAR_NAME
-# Retorna 0 si sí, 1 si no. VAR_NAME recibe "y" o "n"
+# --- Confirmation y/n ---
+# Usage: read_confirm "Continue?" VAR_NAME
+# Returns 0 if yes, 1 if no. VAR_NAME receives "y" or "n"
 read_confirm() {
 	local prompt="$1"
 	local var="$2"
@@ -323,15 +323,15 @@ read_confirm() {
 			read -r "$var" <<<"n"
 			return 1
 			;;
-		*) echo -e "    ${RED}✖${D_NC} Reply ${D_GREEN}y${D_NC} o ${D_RED}n${D_NC}" >&2 ;;
+		*) echo -e "    ${RED}✖${D_NC} Reply ${D_GREEN}y${D_NC} or ${D_RED}n${D_NC}" >&2 ;;
 		esac
 	done
 }
 
-# --- Confirmación con default ---
+# --- Confirmation with default ---
 # default="y" → [Y/n]  |  default="n" → [y/N]
-# Retorna 0 si sí, 1 si no. VAR_NAME recibe "y" o "n"
-# Uso: read_confirm_default "¿Continuar?" "y" VAR_NAME
+# Returns 0 if yes, 1 if no. VAR_NAME receives "y" or "n"
+# Usage: read_confirm_default "Continue?" "y" VAR_NAME
 read_confirm_default() {
 	local prompt="$1"
 	local default="$2"
@@ -362,14 +362,14 @@ read_confirm_default() {
 			read -r "$var" <<<"n"
 			return 1
 			;;
-		*) echo -e "    ${RED}✖${D_NC} Reply ${D_GREEN}y${D_NC} o ${D_RED}n${D_NC}" >&2 ;;
+		*) echo -e "    ${RED}✖${D_NC} Reply ${D_GREEN}y${D_NC} or ${D_RED}n${D_NC}" >&2 ;;
 		esac
 	done
 }
 
-# --- Selección de opciones ---
-# Uso: read_select "Prompt" VAR_NAME "Opción1" "Opción2" ...
-# VAR_NAME recibe el texto de la opción elegida
+# --- Option selection ---
+# Usage: read_select "Prompt" VAR_NAME "Option1" "Option2" ...
+# VAR_NAME receives the text of the selected option
 read_select() {
 	local prompt="$1"
 	local var="$2"
@@ -427,9 +427,9 @@ read_select() {
 	echo -e "    ${GRAY}└─${D_CYAN}▶ ${D_NC}${options[$selected]}${D_NC}" >&2
 }
 
-# --- Entrada multi-línea (shell interactiva, sin editor externo) ---
-# Lee contenido línea por línea hasta Ctrl+D.
-# Uso: local tmp; tmp=$(read_multiline "Initial header"); content=$(cat "$tmp"); rm -f "$tmp"
+# --- Multi-line input (interactive shell, no external editor) ---
+# Reads content line by line until Ctrl+D.
+# Usage: local tmp; tmp=$(read_multiline "Initial header"); content=$(cat "$tmp"); rm -f "$tmp"
 read_multiline() {
 	local initial="$1"
 	local tmpfile

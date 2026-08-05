@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_auto.log"
 
@@ -74,6 +75,11 @@ uninstall_n8n() {
     log_info "n8n is not installed"
     return 0
   fi
+
+  confirm_remove_configs "n8n" \
+    "$HOME/.n8n" \
+    "$HOME/.cache/n8n"
+
   log_info "Uninstalling n8n..."
   loading "Uninstalling n8n" _uninstall_n8n_impl
 }

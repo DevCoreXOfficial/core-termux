@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
@@ -66,6 +67,10 @@ uninstall_pi() {
     log_info "Pi Coding Agent is not installed"
     return 2
   fi
+
+  confirm_remove_configs "Pi" \
+    "$HOME/.pi"
+
   log_info "Uninstalling Pi Coding Agent..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

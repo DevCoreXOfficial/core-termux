@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 import "@/utils/log"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -98,6 +99,10 @@ uninstall_codegraph() {
 		log_info "CodeGraph is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "CodeGraph" \
+		"$HOME/.codegraph"
+
 	log_info "Uninstalling CodeGraph..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

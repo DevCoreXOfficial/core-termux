@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 GGA_DATA_DIR="$CORE_DATA/gentleman-guardian-angel"
@@ -121,6 +122,12 @@ uninstall_gga() {
 		log_info "GGA is not installed"
 		return 2
 	fi
+
+	confirm_remove_configs "GGA" \
+		"$HOME/.config/gga" \
+		"$HOME/.local/share/gga" \
+		"$HOME/.cache/gga"
+
 	log_info "Uninstalling GGA..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
