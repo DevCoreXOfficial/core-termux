@@ -123,6 +123,7 @@ CORE_TIPS=(
 	"GitHub CLI for PRs and issues: ${D_CYAN}core install dev --gh${NC}"
 	"Share your terminal instantly: ${D_CYAN}core install dev --tmate${NC}"
 	"Run Docker without root: ${D_CYAN}core install dev --udocker${NC}"
+	"Browse files in the terminal: ${D_CYAN}core install dev --superfile${NC}"
 	"Translate text from terminal: ${D_CYAN}core install dev --translate${NC}"
 	"Convert HTML to text: ${D_CYAN}core install dev --html2text${NC}"
 	"Format shell scripts: ${D_CYAN}core install dev --shfmt${NC}"

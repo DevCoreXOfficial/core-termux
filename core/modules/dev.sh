@@ -40,6 +40,7 @@ install_dev() {
 	list_item "Shfmt (shell script formatter)"
 	list_item "Make (build automation)"
 	list_item "Udocker (container management)"
+	list_item "SuperFile (file manager)"
 	echo
 }
 
@@ -119,6 +120,7 @@ reinstall_dev() {
   list_item "Shfmt (shell script formatter)"
   list_item "Make (build automation)"
   list_item "Udocker (container management)"
+  list_item "SuperFile (file manager)"
   echo
 }
 

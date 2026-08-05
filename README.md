@@ -758,7 +758,7 @@ core install lang
 
 ## Development Tools
 
-The `dev` module installs the following development utilities via `pkg`:
+The `dev` module installs the following development utilities via `pkg` (or compiled from source where noted):
 
 ```bash
 core install dev
@@ -787,6 +787,7 @@ core install dev
 | **Shfmt** | `shfmt` | Shell script formatter |
 | **Make** | `make` | Build automation tool |
 | **Udocker** | `udocker` | Run Docker containers without root |
+| **SuperFile** | `spf` | Terminal file manager with TUI, themes, and hotkeys |
 
 ---
 

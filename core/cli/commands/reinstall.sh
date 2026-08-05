@@ -400,6 +400,10 @@ _reinstall_specific_tools() {
         reinstall_udocker
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      superfile)
+        reinstall_superfile
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown tool: --$tool"
         ;;

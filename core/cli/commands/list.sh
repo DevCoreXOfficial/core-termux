@@ -209,6 +209,7 @@ _list_dev() {
   table_row "Shfmt" "--shfmt" "$(_check_pkg "shfmt")"
   table_row "Make" "--make" "$(_check_pkg "make")"
   table_row "Udocker" "--udocker" "$(_check_pkg "udocker")"
+  table_row "SuperFile" "--superfile" "$(_check_cmd "spf")"
   table_end
 
   echo
