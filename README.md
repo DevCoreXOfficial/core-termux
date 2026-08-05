@@ -124,6 +124,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
 | **Qoder** | `--qoder` | A terminal-native AI coding partner—and an agent engine you can build on |
 | **KiloCode CLI** | `--kilocode-cli` | The open source coding agent for building with AI in VS Code, JetBrains, or the CLI |
+| **KeelCode** | `--keelcode` | Hosted coding agent for your terminal — inspect a project, edit files, run commands, and verify its work |
 | **Kimchi** | `--kimchi` | Terminal coding agent powered by Kimchi's multi-model orchestration |
 | **MiMoCode** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
 | **Engram** | `--engram` | Persistent memory system for coding agents |
@@ -1000,6 +1001,11 @@ core-termux/
 │   │   │   │   ├── install.sh
 │   │   │   │   ├── bin/freebuff
 │   │   │   │   ├── helper/freebuff_helper.c
+│   │   │   │   └── README.md
+│   │   │   ├── keelcode/
+│   │   │   │   ├── install.sh
+│   │   │   │   ├── bin/keelcode
+│   │   │   │   ├── helper/keelcode_helper.c
 │   │   │   │   └── README.md
 │   │   │   └── ... (13 tools, each with own directory)
 │   │   ├── npm/

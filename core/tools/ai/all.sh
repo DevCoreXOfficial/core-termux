@@ -16,6 +16,7 @@ AI_TOOLS=(
   "opencode"
   "qoder"
   "kilocode-cli"
+  "keelcode"
   "cursor-cli"
   "kimchi"
   "mimocode"
@@ -50,6 +51,7 @@ source "$(dirname "$BASH_SOURCE")/codex/install.sh"
 source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
 source "$(dirname "$BASH_SOURCE")/qoder/install.sh"
 source "$(dirname "$BASH_SOURCE")/kilocode-cli/install.sh"
+source "$(dirname "$BASH_SOURCE")/keelcode/install.sh"
 source "$(dirname "$BASH_SOURCE")/cursor-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/kimchi/install.sh"
 source "$(dirname "$BASH_SOURCE")/mimocode/install.sh"
@@ -120,6 +122,10 @@ install_all_ai_tools() {
       ;;
     kilocode-cli)
       loading "Installing Kilo Code CLI" install_kilocode_cli
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    keelcode)
+      loading "Installing KeelCode" install_keelcode
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     cursor-cli)
@@ -262,6 +268,10 @@ uninstall_all_ai_tools() {
       uninstall_kilocode_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    keelcode)
+      uninstall_keelcode
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     cursor-cli)
       uninstall_cursor_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -388,6 +398,9 @@ update_all_ai_tools() {
     kilocode-cli)
       update_kilocode_cli
       ;;
+    keelcode)
+      update_keelcode
+      ;;
     cursor-cli)
       update_cursor_cli
       ;;
@@ -504,6 +517,10 @@ reinstall_all_ai_tools() {
       ;;
     kilocode-cli)
       reinstall_kilocode_cli
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    keelcode)
+      reinstall_keelcode
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     cursor-cli)

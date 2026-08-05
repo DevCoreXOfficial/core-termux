@@ -170,6 +170,10 @@ _uninstall_specific_tools() {
         uninstall_kilocode_cli
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      keelcode)
+        uninstall_keelcode
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       cursor-cli)
         uninstall_cursor_cli
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac

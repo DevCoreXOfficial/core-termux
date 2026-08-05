@@ -1,0 +1,23 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# keelcode wrapper - termux-glibc loader + proot syscall emulation
+
+unset LD_PRELOAD
+
+GLIBC_LOADER="/data/data/com.termux/files/usr/glibc/lib/ld-linux-aarch64.so.1"
+GLIBC_LIB="/data/data/com.termux/files/usr/glibc/lib"
+TOOL_DATA_DIR="__DATA_DIR__"
+
+export KEELCODE_RG_PATH="$TOOL_DATA_DIR/rg"
+
+if [ ! -f "$GLIBC_LOADER" ] || [ ! -f "$TOOL_DATA_DIR/keelcode" ]; then
+  echo "Error: termux-glibc or keelcode binary not found" >&2
+  echo "Run: pkg install glibc" >&2
+  exit 1
+fi
+
+# proot with host rootfs for syscall translation
+exec proot -r / \
+  -b /dev:/dev -b /proc:/proc -b /sys:/sys \
+  "$GLIBC_LOADER" \
+  --library-path "$GLIBC_LIB" \
+  "$TOOL_DATA_DIR/keelcode" "$@"

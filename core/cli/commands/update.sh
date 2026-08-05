@@ -172,6 +172,10 @@ _update_specific_tools() {
         update_kilocode_cli
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      keelcode)
+        update_keelcode
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       cursor-cli)
         update_cursor_cli
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
