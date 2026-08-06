@@ -68,6 +68,9 @@ uninstall_minimax_cli() {
     return 2
   fi
 
+  confirm_remove_configs "MiniMax" \
+    "$HOME/.mmx"
+
   log_info "Uninstalling MiniMax CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

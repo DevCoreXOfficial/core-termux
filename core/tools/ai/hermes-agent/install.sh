@@ -199,13 +199,20 @@ update_hermes_agent() {
     local remote_date
     remote_date=$(echo "$remote_ver" | sed 's/^v//')
 
+    local installed_display="$installed_ver"
+    [[ "$installed_display" != v* ]] && installed_display="v$installed_display"
+    local remote_display="$remote_ver"
+    [[ "$remote_display" != v* ]] && remote_display="v$remote_display"
+
     if [ -n "$local_date" ] && [ "$local_date" = "$remote_date" ]; then
-      log_success "Hermes Agent is already up to date (v${installed_ver})"
+      log_success "Hermes Agent is already up to date ($installed_display)"
       return 2
     fi
-    log_info "Hermes Agent: ${D_GREEN}v${installed_ver}${D_NC} → ${D_CYAN}v${remote_ver}${D_NC}"
+    log_info "Hermes Agent: ${D_GREEN}${installed_display}${D_NC} → ${D_CYAN}${remote_display}${D_NC}"
   else
-    log_info "Hermes Agent: v${installed_ver}"
+    local installed_display="$installed_ver"
+    [[ "$installed_display" != v* ]] && installed_display="v$installed_display"
+    log_info "Hermes Agent: $installed_display"
   fi
 
   echo

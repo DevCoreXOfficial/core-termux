@@ -197,15 +197,21 @@ _check_update_needed() {
   fi
 
   if _compare_versions "$installed_ver" "$remote_ver"; then
-    log_success "$display_name is already up to date (${D_GREEN}v${installed_ver}${D_NC})"
+    local installed_display="$installed_ver"
+    [[ "$installed_display" != v* ]] && installed_display="v$installed_display"
+    log_success "$display_name is already up to date ${D_NC}(${D_GREEN}${installed_display}${D_NC})"
     return 2
   fi
 
   echo
-  log_info "$display_name: ${D_GREEN}v${installed_ver}${D_NC} → ${D_CYAN}v${remote_ver}${D_NC}"
+  local display_ver="$installed_ver"
+  local remote_ver_display="$remote_ver"
+  [[ "$display_ver" != v* ]] && display_ver="v$display_ver"
+  [[ "$remote_ver_display" != v* ]] && remote_ver_display="v$remote_ver_display"
+  log_info "$display_name: ${D_GREEN}${display_ver}${D_NC} → ${D_CYAN}${remote_ver_display}${D_NC}"
 
   local confirm_var
-  read_confirm_default "Update $display_name to v$remote_ver?" "y" confirm_var
+  read_confirm_default "Update $display_name to $remote_ver?" "y" confirm_var
 
   if [ "$confirm_var" = "y" ]; then
     $update_func

@@ -149,6 +149,7 @@ _install_cline_native() {
   _cline_install_deps_native || return 1
   _download_cline_binary || return 1
   _compile_cline_helper || return 1
+  printf 'native' >"$CLINE_DATA_DIR/.install-method"
   log_success "Cline CLI installed natively"
   return 0
 }
@@ -285,6 +286,7 @@ _uninstall_cline_impl() {
     local method="native"
     if [ -f "$CLINE_DATA_DIR/.install-method" ]; then
       method="$(cat "$CLINE_DATA_DIR/.install-method")"
+      rm -f "$CLINE_DATA_DIR/.install-method"
     fi
     rm -f "$PREFIX/bin/cline"
     rm -f "$CLINE_DATA_DIR/cline"
