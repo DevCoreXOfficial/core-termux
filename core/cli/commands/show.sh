@@ -21,7 +21,7 @@ show_main() {
 		list_item "core show npm --typescript"
 		list_item "core show all --<tool>"
 		echo
-		log_info "Run ${D_CYAN}core list <module>${NC} to see available tools"
+		log_info "Run ${D_CYAN}core list <module>${D_NC} to see available tools"
 		echo
 		return
 	fi

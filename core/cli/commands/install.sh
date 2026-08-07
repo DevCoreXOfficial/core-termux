@@ -30,7 +30,7 @@ install_main() {
     list_item "core install ai --qwen-code --ollama"
     list_item "core install db --postgresql --sqlite"
     list_item "core install dev --gh --fzf --jq"
-    list_item "Run ${D_CYAN}core list <target>${NC} to see all available tools"
+    list_item "Run ${D_CYAN}core list <target>${D_NC} to see all available tools"
     echo
     return
   fi

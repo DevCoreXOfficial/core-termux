@@ -28,7 +28,7 @@ reinstall_main() {
     echo
     list_item "core reinstall ai --qwen-code --ollama"
     list_item "core reinstall db --postgresql --sqlite"
-    list_item "Run ${D_CYAN}core list <target>${NC} to see all available tools"
+    list_item "Run ${D_CYAN}core list <target>${D_NC} to see all available tools"
     echo
     log_warn "This will uninstall and then install the selected components!"
     echo

@@ -55,20 +55,20 @@ open_help() {
 	echo
 	separator_section "Targets"
 	echo
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "core" "Core-Termux documentation"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "devcorex" "DevCoreX website"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "lang" "Language modules"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "db" "Database modules"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "ai" "AI tools"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "editor" "Code editor"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "dev" "Dev tools"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "npm" "Node.js tools"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "shell" "ZSH shell"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "ui" "Termux UI"
-	printf "    ${D_GREEN}%-14s${NC} ${D_DIM}%s${NC}\n" "auto" "Automation tools"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "core" "Core-Termux documentation"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "devcorex" "DevCoreX website"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "lang" "Language modules"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "db" "Database modules"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "ai" "AI tools"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "editor" "Code editor"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "dev" "Dev tools"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "npm" "Node.js tools"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "shell" "ZSH shell"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "ui" "Termux UI"
+	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "auto" "Automation tools"
 	echo
 	separator_section "Website"
 	echo
-	list_item "${D_CYAN}$OPEN_BASE_URL${NC}"
+	list_item "${D_BLUE}$OPEN_BASE_URL${NC}"
 	echo
 }

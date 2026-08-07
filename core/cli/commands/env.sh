@@ -35,15 +35,15 @@ env_help() {
 	echo
 	separator_section "Available Commands"
 	echo
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "set" "Create or update an environment variable"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "unset" "Remove an environment variable"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "ls" "List all user-defined variables"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "set" "Create or update an environment variable"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "unset" "Remove an environment variable"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "ls" "List all user-defined variables"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}core env set${NC}              # Interactive: add/update a variable\n"
-	printf "    ${D_CYAN}core env unset${NC}            # Interactive: select and remove a variable\n"
-	printf "    ${D_CYAN}core env ls${NC}               # List all export vars in rc file\n"
+	printf "    ${D_CYAN}core env set${D_NC}              # Interactive: add/update a variable\n"
+	printf "    ${D_CYAN}core env unset${D_NC}            # Interactive: select and remove a variable\n"
+	printf "    ${D_CYAN}core env ls${D_NC}               # List all export vars in rc file\n"
 	echo
 }
 

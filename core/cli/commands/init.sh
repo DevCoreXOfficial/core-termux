@@ -15,10 +15,10 @@ init_help() {
 	echo
 	separator_section "Available Templates"
 	echo
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "next" "Configure Next.js project"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "react" "Configure React + Vite project"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "nest" "Configure NestJS project"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "express" "Configure Express.js API"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "next" "Configure Next.js project"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "react" "Configure React + Vite project"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "nest" "Configure NestJS project"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "express" "Configure Express.js API"
 	echo
 	separator_section "Examples"
 	echo

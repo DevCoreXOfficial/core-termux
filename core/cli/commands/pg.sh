@@ -17,22 +17,22 @@ pg_help() {
 	echo
 	separator_section "Available Commands"
 	echo
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "start" "Start PostgreSQL server"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "stop" "Stop PostgreSQL server"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "restart" "Restart PostgreSQL server"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "status" "Check PostgreSQL status"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "init" "Initialize PostgreSQL database"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "create" "Create a new database"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "drop" "Drop a database"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "list" "List all databases"
-	printf "    ${D_CYAN}%-12s${NC} %s\n" "shell" "Open psql shell"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "start" "Start PostgreSQL server"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "stop" "Stop PostgreSQL server"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "restart" "Restart PostgreSQL server"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "status" "Check PostgreSQL status"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "init" "Initialize PostgreSQL database"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "create" "Create a new database"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "drop" "Drop a database"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "list" "List all databases"
+	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "shell" "Open psql shell"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}core pg start${NC}              # Start PostgreSQL\n"
-	printf "    ${D_CYAN}core pg stop${NC}               # Stop PostgreSQL\n"
-	printf "    ${D_CYAN}core pg create mydb${NC}        # Create database 'mydb'\n"
-	printf "    ${D_CYAN}core pg shell${NC}              # Open psql shell\n"
+	printf "    ${D_CYAN}core pg start${D_NC}              # Start PostgreSQL\n"
+	printf "    ${D_CYAN}core pg stop${D_NC}               # Stop PostgreSQL\n"
+	printf "    ${D_CYAN}core pg create mydb${D_NC}        # Create database 'mydb'\n"
+	printf "    ${D_CYAN}core pg shell${D_NC}              # Open psql shell\n"
 	echo
 }
 
