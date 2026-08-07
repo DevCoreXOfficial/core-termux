@@ -377,7 +377,8 @@ uninstall_antigravity_cli() {
   fi
 
   confirm_remove_configs "Antigravity CLI" \
-    "$HOME/.cache/antigravity"
+    "$HOME/.cache/antigravity" \
+    "$HOME/.gemini"
 
   if [ -f "$AGY_DATA_DIR/agy.va39" ]; then
     local method="native"

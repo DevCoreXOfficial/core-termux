@@ -65,7 +65,7 @@ core_help() {
   printf "    ${D_GREEN}%-10s${D_NC} %s\n" "ai" "OpenCode, Gentle AI, Claude Code, etc."
   printf "    ${D_GREEN}%-10s${D_NC} %s\n" "editor" "Neovim + NvChad + Plugins"
   printf "    ${D_GREEN}%-10s${D_NC} %s\n" "dev" "GitHub CLI, wget, curl, fzf, etc."
-  printf "    ${D_GREEN}%-10s${D_NC} %s\n" "npm" "Vercel, Live Server, D_NCU, etc."
+  printf "    ${D_GREEN}%-10s${D_NC} %s\n" "npm" "Vercel, Live Server, NCU, etc."
   printf "    ${D_GREEN}%-10s${D_NC} %s\n" "shell" "ZSH + Oh My Zsh + 10 plugins"
   printf "    ${D_GREEN}%-10s${D_NC} %s\n" "ui" "Font, Cursor, Extra-keys, Banner"
   printf "    ${D_GREEN}%-10s${D_NC} %s\n" "auto" "Automation Tools (n8n)"
