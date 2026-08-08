@@ -14,9 +14,11 @@ if [ ! -f "$GLIBC_LOADER" ] || [ ! -f "$TOOL_DATA_DIR/freebuff" ]; then
 fi
 
 # proot with host rootfs for syscall translation
-# Note: no -- separator, pass args directly after loader
+# NOTE: /lib is bound to the glibc libdir because the interactive shell broker
+# re-executes the binary directly (execve without the C loader); the ELF requests
+# interpreter /lib/ld-linux-aarch64.so.1 which only exists via this bind.
 exec proot -r / \
   -b /dev:/dev -b /proc:/proc -b /sys:/sys \
-  "$GLIBC_LOADER" \
-  --library-path "$GLIBC_LIB" \
+  -b "$GLIBC_LIB:/lib" \
+  -b "$PREFIX/bin:/bin" \
   "$TOOL_DATA_DIR/freebuff" "$@"

@@ -64,6 +64,7 @@ _cline_install_deps_native_impl() {
     ["tar"]="tar"
     ["jq"]="jq"
     ["python"]="python"
+    ["patchelf"]="patchelf"
   )
 
   local pkg_name bin_name
@@ -122,35 +123,20 @@ _download_cline_binary_impl() {
   fi
 
   chmod +x "$CLINE_DATA_DIR/cline"
-  return 0
-}
 
-_compile_cline_helper() {
-  loading "Compiling helper" _compile_cline_helper_impl
-}
-
-_compile_cline_helper_impl() {
-  local HELPER_SRC="$CORE_PATH/tools/ai/cline/helper/cline_helper.c"
-  if [ ! -f "$HELPER_SRC" ]; then
-    log_error "Helper source not found at $HELPER_SRC"
+  # The interactive terminal command broker re-executes this binary directly
+  # (process.execPath + --terminal-command-broker), WITHOUT the C loader helper.
+  # The ELF requests the interpreter /lib/ld-linux-aarch64.so.1 which does not
+  # exist in Termux, so the broker child dies before writing its protocol
+  # response ("protocol response was missing"). Rewrite the ELF interpreter to
+  # the real glibc loader so the direct re-exec works. Do NOT use --set-rpath:
+  # it corrupts the Bun-packed binary (SIGSEGV).
+  if ! patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" \
+    "$CLINE_DATA_DIR/cline" &>>"$LOG_FILE"; then
+    log_error "Failed to patch cline ELF interpreter"
     return 1
   fi
 
-  if ! clang -O2 -o "$PREFIX/bin/cline" "$HELPER_SRC" &>>"$LOG_FILE"; then
-    log_error "Failed to compile cline helper"
-    return 1
-  fi
-
-  chmod +x "$PREFIX/bin/cline"
-  return 0
-}
-
-_install_cline_native() {
-  _cline_install_deps_native || return 1
-  _download_cline_binary || return 1
-  _compile_cline_helper || return 1
-  printf 'native' >"$CLINE_DATA_DIR/.install-method"
-  log_success "Cline CLI installed natively"
   return 0
 }
 
@@ -277,16 +263,12 @@ install_cline() {
   log_info "Select installation method for Cline CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
-    "glibc (recommended)" \
-    "glibc + proot (bad system call)" \
+    "glibc + proot (recommended)" \
     "proot-distro (ubuntu container)"
 
   case "$SELECTED_METHOD" in
   *"glibc + proot"*)
     _install_cline_proot_glibc
-    ;;
-  *"glibc (recommended)"*)
-    _install_cline_native
     ;;
   *proot-distro*)
     _install_cline_proot
@@ -347,15 +329,8 @@ _update_cline_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ -f "$CLINE_DATA_DIR/cline" ]; then
-    local method="native"
-    if [ -f "$CLINE_DATA_DIR/.install-method" ]; then
-      method="$(cat "$CLINE_DATA_DIR/.install-method")"
-    fi
-    if [ "$method" = "proot-glibc" ]; then
-      _install_cline_proot_glibc
-    else
-      _install_cline_native
-    fi
+    # Only proot-glibc and proot-distro remain; there is no native mode.
+    _install_cline_proot_glibc
     return $?
   fi
 

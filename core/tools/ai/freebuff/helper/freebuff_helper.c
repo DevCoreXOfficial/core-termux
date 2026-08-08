@@ -20,26 +20,24 @@ int main(int argc, char** argv) {
     exec_path[len] = '\0';
     char* dir = dirname(exec_path);
 
-    char* loader = "/data/data/com.termux/files/usr/glibc/lib/ld-linux-aarch64.so.1";
+    // The binary is patched (patchelf --set-interpreter) so it can exec directly.
+    // Launching it via the loader would make /proc/self/exe point at the loader,
+    // which breaks the interactive shell broker (it re-executes process.execPath).
     char real_bin[] = "/data/data/com.termux/files/home/.local/share/core-termux-data/freebuff/freebuff";
-    char lib_path[] = "/data/data/com.termux/files/usr/glibc/lib";
 
-    char** new_argv = malloc((argc + 4) * sizeof(char*));
+    char** new_argv = malloc((argc + 1) * sizeof(char*));
     if (!new_argv) {
         return 1;
     }
 
-    new_argv[0] = loader;
-    new_argv[1] = "--library-path";
-    new_argv[2] = lib_path;
-    new_argv[3] = real_bin;
+    new_argv[0] = real_bin;
 
     for (int i = 1; i < argc; i++) {
-        new_argv[i + 3] = argv[i];
+        new_argv[i] = argv[i];
     }
-    new_argv[argc + 3] = NULL;
+    new_argv[argc] = NULL;
 
-    execv(loader, new_argv);
+    execv(real_bin, new_argv);
 
     perror("execv");
     free(new_argv);

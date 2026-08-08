@@ -17,6 +17,6 @@ fi
 # Note: no -- separator, pass args directly after loader
 exec proot -r / \
   -b /dev:/dev -b /proc:/proc -b /sys:/sys \
-  "$GLIBC_LOADER" \
-  --library-path "$GLIBC_LIB" \
+  -b "$GLIBC_LIB:/lib" \
+  -b "$PREFIX/bin:/bin" \
   "$TOOL_DATA_DIR/kilo" "$@"

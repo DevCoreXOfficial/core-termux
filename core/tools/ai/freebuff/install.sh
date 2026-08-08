@@ -57,6 +57,7 @@ _freebuff_install_deps_native_impl() {
     ["curl"]="curl"
     ["tar"]="tar"
     ["clang"]="clang"
+    ["patchelf"]="patchelf"
   )
 
   local pkg_name bin_name
@@ -108,6 +109,19 @@ _download_freebuff_binary_impl() {
   fi
 
   chmod +x "$FREEBUFF_DATA_DIR/freebuff"
+
+  # The terminal command broker re-executes this binary directly (process.execPath +
+  # --terminal-command-broker), WITHOUT the C loader helper. The ELF requests the
+  # interpreter /lib/ld-linux-aarch64.so.1 which does not exist in Termux, so the
+  # broker child dies before writing its protocol response ("protocol response was
+  # missing"). Rewrite the ELF interpreter to the real glibc loader so the direct
+  # re-exec works. Do NOT use --set-rpath: it corrupts the Bun-packed binary (SIGSEGV).
+  if ! patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" \
+    "$FREEBUFF_DATA_DIR/freebuff" &>>"$LOG_FILE"; then
+    log_error "Failed to patch freebuff ELF interpreter"
+    return 1
+  fi
+
   return 0
 }
 

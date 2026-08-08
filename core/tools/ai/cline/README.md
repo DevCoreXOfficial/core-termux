@@ -34,11 +34,8 @@ cline --help
 
 ## Installation Methods
 
-### Native (recommended)
-Downloads the prebuilt ARM64 binary from npm registry and sets up glibc compatibility.
-
-### Native + proot (fix)
-Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels.
+### glibc + proot (recommended)
+Downloads the prebuilt ARM64 binary from npm registry, patches its ELF interpreter to the Termux glibc loader, and runs it under proot with `/lib` and `/bin` bound. The `/bin` bind is required because Cline's `run_commands` hardcodes `spawn('/bin/bash', ['-c', cmd])` and Termux has no `/bin/bash` natively.
 
 ### Proot-distro (alternative)
 Installs inside an Ubuntu container using proot-distro for maximum compatibility.

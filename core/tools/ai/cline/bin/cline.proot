@@ -14,9 +14,15 @@ if [ ! -f "$GLIBC_LOADER" ] || [ ! -f "$TOOL_DATA_DIR/cline" ]; then
 fi
 
 # proot with host rootfs for syscall translation
-# Note: no -- separator, pass args directly after loader
+# NOTE: the binary is execve-d directly so /proc/self/exe is the real binary, AND $PREFIX/bin is bound to /bin
+# because Cline's run_commands hardcodes spawn('/bin/bash', ['-c', cmd]). In Termux /bin -> /system/bin,
+# which has no bash, so the bind makes /bin/bash resolve to the real Termux bash.
+# IMPORTANT: Cline keeps a --cline-hub-daemon subprocess alive across sessions; if it was
+# started before this wrapper existed, it runs OUTSIDE proot and run_commands still fails
+# with posix_spawn('/bin/bash') ENOENT. Kill it (pkill -f cline) so a fresh daemon starts
+# inside proot.
 exec proot -r / \
   -b /dev:/dev -b /proc:/proc -b /sys:/sys \
-  "$GLIBC_LOADER" \
-  --library-path "$GLIBC_LIB" \
+  -b "$GLIBC_LIB:/lib" \
+  -b "$PREFIX/bin:/bin" \
   "$TOOL_DATA_DIR/cline" "$@"
