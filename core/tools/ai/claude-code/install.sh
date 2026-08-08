@@ -140,18 +140,27 @@ _install_claude_native() {
 }
 
 _install_claude_proot_glibc() {
-  loading "Installing Claude Code (native + proot)" _install_claude_proot_glibc_impl
+  _claude_install_deps_native || return 1
+  loading "Installing proot" _claude_install_proot_pkg || return 1
+  _download_claude_binary || return 1
+  loading "Creating proot wrapper" _claude_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$CLAUDE_DATA_DIR/.install-method"
+  log_success "Claude Code installed with glibc + proot"
+  return 0
 }
 
-_install_claude_proot_glibc_impl() {
-  _claude_install_deps_native || return 1
-
+_claude_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_claude_binary || return 1
-
+_claude_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/claude-code/bin/claude.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -159,31 +168,49 @@ _install_claude_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$CLAUDE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/claude"
   chmod +x "$PREFIX/bin/claude"
-
-  printf 'proot-glibc' >"$CLAUDE_DATA_DIR/.install-method"
-  log_success "Claude Code installed with glibc + proot"
   return 0
 }
 
 _install_claude_proot() {
-  loading "Installing Claude Code (proot-distro)" _install_claude_proot_impl
-}
-
-_install_claude_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _claude_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _claude_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _claude_ubuntu_deps || return 1
+  loading "Downloading Claude Code (Ubuntu)" _claude_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _claude_create_ubuntu_wrapper || return 1
+
+  log_success "Claude Code installed (proot-distro)"
+  return 0
+}
+
+_claude_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_claude_install_ubuntu() {
   if [ ! -d "$(_claude_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_claude_ubuntu_deps() {
   _claude_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
     &>>"$LOG_FILE"
+}
 
+_claude_ubuntu_install_bin() {
   _claude_proot_ubuntu /bin/bash -c '
 		export SHELL=/bin/bash
 		export TMPDIR=/tmp
@@ -191,16 +218,18 @@ _install_claude_proot_impl() {
 		curl -fsSL https://claude.ai/install.sh | bash
 	' &>>"$LOG_FILE"
 
-  local ubuntu_root
-  ubuntu_root="$(_claude_detect_ubuntu_root)"
-
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
   if ! _claude_proot_ubuntu test -x /root/.local/bin/claude &>>"$LOG_FILE"; then
     log_error "Claude Code binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_claude_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_claude_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
     return 1
   fi
 
@@ -215,7 +244,6 @@ _install_claude_proot_impl() {
   if ! grep -q '.local/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
     printf '\n# claude-code\nexport PATH=/root/.local/bin:$PATH\n' >>"$ubuntu_root/root/.bashrc"
   fi
-
   return 0
 }
 

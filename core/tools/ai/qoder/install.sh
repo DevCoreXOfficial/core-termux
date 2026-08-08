@@ -161,18 +161,27 @@ _install_qoder_native() {
 }
 
 _install_qoder_proot_glibc() {
-  loading "Installing Qoder (native + proot)" _install_qoder_proot_glibc_impl
+  _qoder_install_deps_native || return 1
+  loading "Installing proot" _qoder_install_proot_pkg || return 1
+  _download_qoder_binary || return 1
+  loading "Creating proot wrapper" _qoder_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$QODER_DATA_DIR/.install-method"
+  log_success "Qoder installed with glibc + proot"
+  return 0
 }
 
-_install_qoder_proot_glibc_impl() {
-  _qoder_install_deps_native || return 1
-
+_qoder_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_qoder_binary || return 1
-
+_qoder_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/qoder/bin/qodercli.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -180,31 +189,49 @@ _install_qoder_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$QODER_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/qodercli"
   chmod +x "$PREFIX/bin/qodercli"
-
-  printf 'proot-glibc' >"$QODER_DATA_DIR/.install-method"
-  log_success "Qoder installed with glibc + proot"
   return 0
 }
 
 _install_qoder_proot() {
-  loading "Installing Qoder (proot-distro)" _install_qoder_proot_impl
-}
-
-_install_qoder_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _qoder_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _qoder_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _qoder_ubuntu_deps || return 1
+  loading "Downloading Qoder (Ubuntu)" _qoder_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _qoder_create_ubuntu_wrapper || return 1
+
+  log_success "Qoder installed (proot-distro)"
+  return 0
+}
+
+_qoder_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_qoder_install_ubuntu() {
   if [ ! -d "$(_qoder_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_qoder_ubuntu_deps() {
   _qoder_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
     &>>"$LOG_FILE"
+}
 
+_qoder_ubuntu_install_bin() {
   local download_url
   download_url=$(_get_qoder_download_url "arm64")
   if [ -z "$download_url" ]; then
@@ -243,6 +270,16 @@ _install_qoder_proot_impl() {
   fi
 
   chmod +x "$qoder_dir/qodercli"
+  return 0
+}
+
+_qoder_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_qoder_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
+    return 1
+  fi
 
   local wrapper_src="$CORE_PATH/tools/ai/qoder/bin/qodercli"
   if [ ! -f "$wrapper_src" ]; then
@@ -255,7 +292,6 @@ _install_qoder_proot_impl() {
   if ! grep -q '.qodercli' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
     printf '\n# qoder\nexport PATH=/root/.qodercli:$PATH\n' >>"$ubuntu_root/root/.bashrc"
   fi
-
   return 0
 }
 

@@ -152,18 +152,27 @@ _install_kimchi_native() {
 }
 
 _install_kimchi_proot_glibc() {
-  loading "Installing Kimchi (native + proot)" _install_kimchi_proot_glibc_impl
+  _kimchi_install_deps_native || return 1
+  loading "Installing proot" _kimchi_install_proot_pkg || return 1
+  _download_kimchi_binary || return 1
+  loading "Creating proot wrapper" _kimchi_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$KIMCHI_DATA_DIR/.install-method"
+  log_success "Kimchi installed with glibc + proot"
+  return 0
 }
 
-_install_kimchi_proot_glibc_impl() {
-  _kimchi_install_deps_native || return 1
-
+_kimchi_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_kimchi_binary || return 1
-
+_kimchi_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/kimchi/bin/kimchi.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -171,31 +180,49 @@ _install_kimchi_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$KIMCHI_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/kimchi"
   chmod +x "$PREFIX/bin/kimchi"
-
-  printf 'proot-glibc' >"$KIMCHI_DATA_DIR/.install-method"
-  log_success "Kimchi installed with glibc + proot"
   return 0
 }
 
 _install_kimchi_proot() {
-  loading "Installing Kimchi (proot-distro)" _install_kimchi_proot_impl
-}
-
-_install_kimchi_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _kimchi_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _kimchi_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _kimchi_ubuntu_deps || return 1
+  loading "Downloading Kimchi (Ubuntu)" _kimchi_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _kimchi_create_ubuntu_wrapper || return 1
+
+  log_success "Kimchi installed (proot-distro)"
+  return 0
+}
+
+_kimchi_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_kimchi_install_ubuntu() {
   if [ ! -d "$(_kimchi_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_kimchi_ubuntu_deps() {
   _kimchi_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates tar' \
     &>>"$LOG_FILE"
+}
 
+_kimchi_ubuntu_install_bin() {
   local latest_version
   latest_version=$(_get_latest_kimchi_version)
   if [ -z "$latest_version" ]; then
@@ -217,18 +244,20 @@ _install_kimchi_proot_impl() {
     rm -rf /tmp/kimchi-install
   " &>>"$LOG_FILE"
 
-  local ubuntu_root
-  ubuntu_root="$(_kimchi_detect_ubuntu_root)"
-
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
-  local kimchi_bin="$ubuntu_root/usr/local/bin/kimchi"
-
+  local kimchi_bin
+  kimchi_bin="$(_kimchi_detect_ubuntu_root)/usr/local/bin/kimchi"
   if [ ! -f "$kimchi_bin" ]; then
     log_error "Kimchi binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_kimchi_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_kimchi_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
     return 1
   fi
 
@@ -239,7 +268,6 @@ _install_kimchi_proot_impl() {
   fi
   sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/kimchi"
   chmod +x "$PREFIX/bin/kimchi"
-
   return 0
 }
 

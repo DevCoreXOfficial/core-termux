@@ -160,18 +160,27 @@ _install_keelcode_native() {
 }
 
 _install_keelcode_proot_glibc() {
-  loading "Installing KeelCode (native + proot)" _install_keelcode_proot_glibc_impl
+  _keelcode_install_deps_native || return 1
+  loading "Installing proot" _keelcode_install_proot_pkg || return 1
+  _download_keelcode_binary || return 1
+  loading "Creating proot wrapper" _keelcode_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$KEELCODE_DATA_DIR/.install-method"
+  log_success "KeelCode installed with glibc + proot"
+  return 0
 }
 
-_install_keelcode_proot_glibc_impl() {
-  _keelcode_install_deps_native || return 1
-
+_keelcode_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_keelcode_binary || return 1
-
+_keelcode_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/keelcode/bin/keelcode.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -183,31 +192,49 @@ _install_keelcode_proot_glibc_impl() {
   ln -sf "$PREFIX/bin/keelcode" "$PREFIX/bin/kc"
   ln -sf "$PREFIX/bin/keelcode" "$PREFIX/bin/kcode"
   ln -sf "$PREFIX/bin/keelcode" "$PREFIX/bin/keel"
-
-  printf 'proot-glibc' >"$KEELCODE_DATA_DIR/.install-method"
-  log_success "KeelCode installed with glibc + proot"
   return 0
 }
 
 _install_keelcode_proot() {
-  loading "Installing KeelCode (proot-distro)" _install_keelcode_proot_impl
-}
-
-_install_keelcode_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _keelcode_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _keelcode_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _keelcode_ubuntu_deps || return 1
+  loading "Downloading KeelCode (Ubuntu)" _keelcode_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _keelcode_create_ubuntu_wrapper || return 1
+
+  log_success "KeelCode installed (proot-distro)"
+  return 0
+}
+
+_keelcode_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_keelcode_install_ubuntu() {
   if [ ! -d "$(_keelcode_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_keelcode_ubuntu_deps() {
   _keelcode_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates tar jq' \
     &>>"$LOG_FILE"
+}
 
+_keelcode_ubuntu_install_bin() {
   local latest_version
   latest_version=$(_get_latest_keelcode_version_silent)
   if [ -z "$latest_version" ]; then
@@ -229,18 +256,19 @@ _install_keelcode_proot_impl() {
     rm -rf /tmp/keelcode-install
   " &>>"$LOG_FILE"
 
-  local ubuntu_root
-  ubuntu_root="$(_keelcode_detect_ubuntu_root)"
-
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
-  local keelcode_bin="$ubuntu_root/usr/local/bin/keelcode"
-
+  local keelcode_bin="$(_keelcode_detect_ubuntu_root)/usr/local/bin/keelcode"
   if [ ! -f "$keelcode_bin" ]; then
     log_error "KeelCode binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_keelcode_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_keelcode_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
     return 1
   fi
 
@@ -255,7 +283,6 @@ _install_keelcode_proot_impl() {
   ln -sf "$PREFIX/bin/keelcode" "$PREFIX/bin/kc"
   ln -sf "$PREFIX/bin/keelcode" "$PREFIX/bin/kcode"
   ln -sf "$PREFIX/bin/keelcode" "$PREFIX/bin/keel"
-
   return 0
 }
 

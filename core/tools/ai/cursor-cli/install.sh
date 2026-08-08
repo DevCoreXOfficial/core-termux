@@ -181,18 +181,27 @@ _install_cursor_native() {
 }
 
 _install_cursor_proot_glibc() {
-  loading "Installing Cursor CLI (native + proot)" _install_cursor_proot_glibc_impl
+  _cursor_install_deps_native || return 1
+  loading "Installing proot" _cursor_install_proot_pkg || return 1
+  _download_cursor_binary || return 1
+  loading "Creating proot wrapper" _cursor_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$CURSOR_DATA_DIR/.install-method"
+  log_success "Cursor CLI installed with glibc + proot"
+  return 0
 }
 
-_install_cursor_proot_glibc_impl() {
-  _cursor_install_deps_native || return 1
-
+_cursor_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_cursor_binary || return 1
-
+_cursor_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/cursor-cli/bin/cursor.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -201,31 +210,49 @@ _install_cursor_proot_glibc_impl() {
   sed "s|__DATA_DIR__|$CURSOR_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/cursor"
   chmod +x "$PREFIX/bin/cursor"
   ln -sf "$PREFIX/bin/cursor" "$PREFIX/bin/cursor-agent"
-
-  printf 'proot-glibc' >"$CURSOR_DATA_DIR/.install-method"
-  log_success "Cursor CLI installed with glibc + proot"
   return 0
 }
 
 _install_cursor_proot() {
-  loading "Installing Cursor CLI (proot-distro)" _install_cursor_proot_impl
-}
-
-_install_cursor_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _cursor_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _cursor_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _cursor_ubuntu_deps || return 1
+  loading "Downloading Cursor CLI (Ubuntu)" _cursor_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _cursor_create_ubuntu_wrapper || return 1
+
+  log_success "Cursor CLI installed (proot-distro)"
+  return 0
+}
+
+_cursor_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_cursor_install_ubuntu() {
   if [ ! -d "$(_cursor_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_cursor_ubuntu_deps() {
   _cursor_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates tar' \
     &>>"$LOG_FILE"
+}
 
+_cursor_ubuntu_install_bin() {
   local latest_version
   latest_version=$(_get_latest_cursor_version_silent)
   if [ -z "$latest_version" ]; then
@@ -248,11 +275,6 @@ _install_cursor_proot_impl() {
   local ubuntu_root
   ubuntu_root="$(_cursor_detect_ubuntu_root)"
 
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
   # Check the real file path, not the symlink (symlink target is inside proot fs)
   local cursor_symlink="$ubuntu_root/usr/local/bin/cursor-agent"
   local cursor_real="$ubuntu_root/opt/cursor/cursor-agent"
@@ -267,6 +289,16 @@ _install_cursor_proot_impl() {
     log_warn "Symlink not found, creating..."
     ln -sf /opt/cursor/cursor-agent "$cursor_symlink"
   fi
+  return 0
+}
+
+_cursor_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_cursor_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
+    return 1
+  fi
 
   local wrapper_src="$CORE_PATH/tools/ai/cursor-cli/bin/cursor"
   if [ ! -f "$wrapper_src" ]; then
@@ -277,7 +309,6 @@ _install_cursor_proot_impl() {
   chmod +x "$PREFIX/bin/cursor"
 
   ln -sf "$PREFIX/bin/cursor" "$PREFIX/bin/cursor-agent"
-
   return 0
 }
 

@@ -155,18 +155,27 @@ _install_cline_native() {
 }
 
 _install_cline_proot_glibc() {
-  loading "Installing Cline CLI (native + proot)" _install_cline_proot_glibc_impl
+  _cline_install_deps_native || return 1
+  loading "Installing proot" _cline_install_proot_pkg || return 1
+  _download_cline_binary || return 1
+  loading "Creating proot wrapper" _cline_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$CLINE_DATA_DIR/.install-method"
+  log_success "Cline CLI installed with glibc + proot"
+  return 0
 }
 
-_install_cline_proot_glibc_impl() {
-  _cline_install_deps_native || return 1
-
+_cline_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_cline_binary || return 1
-
+_cline_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/cline/bin/cline.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -174,31 +183,49 @@ _install_cline_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$CLINE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/cline"
   chmod +x "$PREFIX/bin/cline"
-
-  printf 'proot-glibc' >"$CLINE_DATA_DIR/.install-method"
-  log_success "Cline CLI installed with glibc + proot"
   return 0
 }
 
 _install_cline_proot() {
-  loading "Installing Cline CLI (proot-distro)" _install_cline_proot_impl
-}
-
-_install_cline_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _cline_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _cline_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _cline_ubuntu_deps || return 1
+  loading "Downloading Cline CLI (Ubuntu)" _cline_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _cline_create_ubuntu_wrapper || return 1
+
+  log_success "Cline CLI installed (proot-distro)"
+  return 0
+}
+
+_cline_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_cline_install_ubuntu() {
   if [ ! -d "$(_cline_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_cline_ubuntu_deps() {
   _cline_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
     &>>"$LOG_FILE"
+}
 
+_cline_ubuntu_install_bin() {
   _cline_proot_ubuntu /bin/bash -c '
     export SHELL=/bin/bash
     export TMPDIR=/tmp
@@ -211,18 +238,19 @@ _install_cline_proot_impl() {
     rm -rf /tmp/cline.tgz /tmp/package
   ' &>>"$LOG_FILE"
 
-  local ubuntu_root
-  ubuntu_root="$(_cline_detect_ubuntu_root)"
-
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
-  local cline_bin="$ubuntu_root/root/.cline/bin/cline"
-
+  local cline_bin="$(_cline_detect_ubuntu_root)/root/.cline/bin/cline"
   if [ ! -f "$cline_bin" ]; then
     log_error "Cline CLI binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_cline_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_cline_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
     return 1
   fi
 
@@ -237,7 +265,6 @@ _install_cline_proot_impl() {
   if ! grep -q '.cline/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
     printf '\n# cline\nexport PATH=/root/.cline/bin:$PATH\n' >>"$ubuntu_root/root/.bashrc"
   fi
-
   return 0
 }
 

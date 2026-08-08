@@ -152,18 +152,27 @@ _install_goose_native() {
 }
 
 _install_goose_proot_glibc() {
-  loading "Installing Goose CLI (native + proot)" _install_goose_proot_glibc_impl
+  _goose_install_deps_native || return 1
+  loading "Installing proot" _goose_install_proot_pkg || return 1
+  _download_goose_binary || return 1
+  loading "Creating proot wrapper" _goose_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$GOOSE_DATA_DIR/.install-method"
+  log_success "Goose CLI installed with glibc + proot"
+  return 0
 }
 
-_install_goose_proot_glibc_impl() {
-  _goose_install_deps_native || return 1
-
+_goose_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_goose_binary || return 1
-
+_goose_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/goose/bin/goose.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -171,31 +180,49 @@ _install_goose_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$GOOSE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/goose"
   chmod +x "$PREFIX/bin/goose"
-
-  printf 'proot-glibc' >"$GOOSE_DATA_DIR/.install-method"
-  log_success "Goose CLI installed with glibc + proot"
   return 0
 }
 
 _install_goose_proot() {
-  loading "Installing Goose CLI (proot-distro)" _install_goose_proot_impl
-}
-
-_install_goose_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _goose_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _goose_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _goose_ubuntu_deps || return 1
+  loading "Downloading Goose CLI (Ubuntu)" _goose_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _goose_create_ubuntu_wrapper || return 1
+
+  log_success "Goose CLI installed (proot-distro)"
+  return 0
+}
+
+_goose_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_goose_install_ubuntu() {
   if [ ! -d "$(_goose_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_goose_ubuntu_deps() {
   _goose_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates tar bzip2' \
     &>>"$LOG_FILE"
+}
 
+_goose_ubuntu_install_bin() {
   local latest_version
   latest_version=$(_get_latest_goose_version_silent)
   if [ -z "$latest_version" ]; then
@@ -215,18 +242,19 @@ _install_goose_proot_impl() {
     rm -rf /tmp/goose-install
   " &>>"$LOG_FILE"
 
-  local ubuntu_root
-  ubuntu_root="$(_goose_detect_ubuntu_root)"
-
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
-  local goose_bin="$ubuntu_root/usr/local/bin/goose"
-
+  local goose_bin="$(_goose_detect_ubuntu_root)/usr/local/bin/goose"
   if [ ! -f "$goose_bin" ]; then
     log_error "Goose CLI binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_goose_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_goose_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
     return 1
   fi
 
@@ -237,7 +265,6 @@ _install_goose_proot_impl() {
   fi
   sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/goose"
   chmod +x "$PREFIX/bin/goose"
-
   return 0
 }
 

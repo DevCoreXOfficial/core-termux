@@ -202,19 +202,28 @@ _antigravity_compile_helper_impl() {
 }
 
 _install_antigravity_proot_glibc() {
-  loading "Installing Antigravity CLI (native + proot)" _install_antigravity_proot_glibc_impl
-}
-
-_install_antigravity_proot_glibc_impl() {
   _antigravity_cli_dependencies || return 1
-
-  if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
-  fi
-
+  loading "Installing proot" _antigravity_install_proot_pkg || return 1
   _antigravity_download_binary || return 1
   _antigravity_apply_va39_patches || return 1
+  loading "Creating proot wrapper" _antigravity_create_proot_wrapper || return 1
 
+  printf 'proot-glibc' >"$AGY_DATA_DIR/.install-method"
+  log_success "Antigravity CLI installed with glibc + proot"
+  return 0
+}
+
+_antigravity_install_proot_pkg() {
+  if ! command -v proot &>/dev/null; then
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
+  fi
+  return 0
+}
+
+_antigravity_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/antigravity-cli/bin/agy.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -222,31 +231,65 @@ _install_antigravity_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$AGY_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/agy"
   chmod +x "$PREFIX/bin/agy"
-
-  printf 'proot-glibc' >"$AGY_DATA_DIR/.install-method"
-  log_success "Antigravity CLI installed with glibc + proot"
   return 0
 }
 
 _install_antigravity_proot() {
-  loading "Installing Antigravity CLI (proot-distro)" _install_antigravity_proot_impl
-}
-
-_install_antigravity_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _antigravity_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _antigravity_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _antigravity_ubuntu_deps || return 1
+  loading "Downloading Antigravity CLI (Ubuntu)" _antigravity_ubuntu_install_bin || return 1
+  loading "Applying VA39 memory patches (Ubuntu)" _antigravity_ubuntu_va39_patches || return 1
+  loading "Creating wrapper" _antigravity_create_ubuntu_wrapper || return 1
+
+  log_success "Antigravity CLI installed (proot-distro)"
+  return 0
+}
+
+_antigravity_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_antigravity_install_ubuntu() {
   if [ ! -d "$(_antigravity_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_antigravity_ubuntu_deps() {
   _antigravity_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
     &>>"$LOG_FILE"
+}
 
+_antigravity_ubuntu_find_bin() {
+  local ubuntu_root="$1"
+  local p
+  for p in \
+    "$ubuntu_root/root/.local/bin/agy" \
+    "$ubuntu_root/root/.agy/bin/agy" \
+    "$ubuntu_root/usr/local/bin/agy"; do
+    if [ -f "$p" ]; then
+      echo "$p"
+      return 0
+    fi
+  done
+  return 1
+}
+
+_antigravity_ubuntu_install_bin() {
   _antigravity_proot_ubuntu /bin/bash -c '
     export SHELL=/bin/bash
     export TMPDIR=/tmp
@@ -257,26 +300,23 @@ _install_antigravity_proot_impl() {
   local ubuntu_root
   ubuntu_root="$(_antigravity_detect_ubuntu_root)"
 
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
-  local upstream_bin=""
-  local candidates=(
-    "$ubuntu_root/root/.local/bin/agy"
-    "$ubuntu_root/root/.agy/bin/agy"
-    "$ubuntu_root/usr/local/bin/agy"
-  )
-  for p in "${candidates[@]}"; do
-    if [ -f "$p" ]; then
-      upstream_bin="$p"
-      break
-    fi
-  done
-
+  local upstream_bin
+  upstream_bin="$(_antigravity_ubuntu_find_bin "$ubuntu_root")"
   if [ -z "$upstream_bin" ]; then
     log_error "Antigravity CLI binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_antigravity_ubuntu_va39_patches() {
+  local ubuntu_root
+  ubuntu_root="$(_antigravity_detect_ubuntu_root)"
+
+  local upstream_bin
+  upstream_bin="$(_antigravity_ubuntu_find_bin "$ubuntu_root")"
+  if [ -z "$upstream_bin" ]; then
+    log_error "Binary not found for patching"
     return 1
   fi
 
@@ -320,6 +360,16 @@ dst.write_bytes(data)
 PY
 
   chmod +x "${upstream_bin}.va39"
+  return 0
+}
+
+_antigravity_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_antigravity_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
+    return 1
+  fi
 
   local wrapper_src="$CORE_PATH/tools/ai/antigravity-cli/bin/agy"
   if [ ! -f "$wrapper_src" ]; then
@@ -332,7 +382,6 @@ PY
   if ! grep -q '.local/bin' "$ubuntu_root/root/.bashrc" 2>/dev/null; then
     printf '\n# antigravity-cli\nexport PATH=/root/.local/bin:$PATH\n' >>"$ubuntu_root/root/.bashrc"
   fi
-
   return 0
 }
 

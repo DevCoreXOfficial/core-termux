@@ -162,18 +162,27 @@ _install_droid_native() {
 }
 
 _install_droid_proot_glibc() {
-  loading "Installing Droid Factory (glibc + proot)" _install_droid_proot_glibc_impl
+  _droid_install_deps_native || return 1
+  loading "Installing proot" _droid_install_proot_pkg || return 1
+  _download_droid_binary || return 1
+  loading "Creating proot wrapper" _droid_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$DROID_DATA_DIR/.install-method"
+  log_success "Droid Factory installed with glibc + proot"
+  return 0
 }
 
-_install_droid_proot_glibc_impl() {
-  _droid_install_deps_native || return 1
-
+_droid_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_droid_binary || return 1
-
+_droid_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/droid-factory/bin/droid.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -181,33 +190,51 @@ _install_droid_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$DROID_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/droid"
   chmod +x "$PREFIX/bin/droid"
-
-  printf 'proot-glibc' >"$DROID_DATA_DIR/.install-method"
-  log_success "Droid Factory installed with glibc + proot"
   return 0
 }
 
 # ===== PROOT-DISTRO INSTALL =====
 
 _install_droid_proot() {
-  loading "Installing Droid Factory (proot-distro)" _install_droid_proot_impl
-}
-
-_install_droid_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _droid_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _droid_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _droid_ubuntu_deps || return 1
+  loading "Downloading Droid Factory (Ubuntu)" _droid_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _droid_create_ubuntu_wrapper || return 1
+
+  log_success "Droid Factory installed (proot-distro)"
+  return 0
+}
+
+_droid_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_droid_install_ubuntu() {
   if [ ! -d "$(_droid_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_droid_ubuntu_deps() {
   _droid_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
     &>>"$LOG_FILE"
+}
 
+_droid_ubuntu_install_bin() {
   local latest_version
   latest_version=$(_get_latest_droid_version_silent)
   if [ -z "$latest_version" ]; then
@@ -226,18 +253,19 @@ _install_droid_proot_impl() {
     rm -rf /tmp/droid-install
   " &>>"$LOG_FILE"
 
-  local ubuntu_root
-  ubuntu_root="$(_droid_detect_ubuntu_root)"
-
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
-  local droid_bin="$ubuntu_root/usr/local/bin/droid"
-
+  local droid_bin="$(_droid_detect_ubuntu_root)/usr/local/bin/droid"
   if [ ! -f "$droid_bin" ]; then
     log_error "Droid Factory binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_droid_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_droid_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
     return 1
   fi
 
@@ -248,7 +276,6 @@ _install_droid_proot_impl() {
   fi
   sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/droid"
   chmod +x "$PREFIX/bin/droid"
-
   return 0
 }
 

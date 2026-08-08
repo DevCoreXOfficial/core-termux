@@ -165,18 +165,27 @@ _install_amp_native() {
 }
 
 _install_amp_proot_glibc() {
-  loading "Installing AMP Code CLI (native + proot)" _install_amp_proot_glibc_impl
+  _amp_install_deps_native || return 1
+  loading "Installing proot" _amp_install_proot_pkg || return 1
+  _download_amp_binary || return 1
+  loading "Creating proot wrapper" _amp_create_proot_wrapper || return 1
+
+  printf 'proot-glibc' >"$AMP_DATA_DIR/.install-method"
+  log_success "AMP Code CLI installed with glibc + proot"
+  return 0
 }
 
-_install_amp_proot_glibc_impl() {
-  _amp_install_deps_native || return 1
-
+_amp_install_proot_pkg() {
   if ! command -v proot &>/dev/null; then
-    yes | pkg install proot &>>"$LOG_FILE"
+    if ! yes | pkg install proot &>>"$LOG_FILE"; then
+      log_error "Failed to install proot"
+      return 1
+    fi
   fi
+  return 0
+}
 
-  _download_amp_binary || return 1
-
+_amp_create_proot_wrapper() {
   local wrapper_src="$CORE_PATH/tools/ai/ampcode/bin/amp.proot"
   if [ ! -f "$wrapper_src" ]; then
     log_error "Wrapper template not found at $wrapper_src"
@@ -184,31 +193,49 @@ _install_amp_proot_glibc_impl() {
   fi
   sed "s|__DATA_DIR__|$AMP_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/amp"
   chmod +x "$PREFIX/bin/amp"
-
-  printf 'proot-glibc' >"$AMP_DATA_DIR/.install-method"
-  log_success "AMP Code CLI installed with glibc + proot"
   return 0
 }
 
 _install_amp_proot() {
-  loading "Installing AMP Code CLI (proot-distro)" _install_amp_proot_impl
-}
-
-_install_amp_proot_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
+  loading "Installing proot-distro" _amp_install_proot_distro || return 1
+  loading "Installing Ubuntu container" _amp_install_ubuntu || return 1
+  loading "Installing dependencies (Ubuntu)" _amp_ubuntu_deps || return 1
+  loading "Downloading AMP Code CLI (Ubuntu)" _amp_ubuntu_install_bin || return 1
+  loading "Creating wrapper" _amp_create_ubuntu_wrapper || return 1
+
+  log_success "AMP Code CLI installed (proot-distro)"
+  return 0
+}
+
+_amp_install_proot_distro() {
   if ! command -v proot-distro &>/dev/null; then
-    yes | pkg install proot-distro &>>"$LOG_FILE"
+    if ! yes | pkg install proot-distro &>>"$LOG_FILE"; then
+      log_error "Failed to install proot-distro"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_amp_install_ubuntu() {
   if [ ! -d "$(_amp_detect_ubuntu_root)" ]; then
-    proot-distro install ubuntu:24.04 &>>"$LOG_FILE"
+    if ! proot-distro install ubuntu:24.04 &>>"$LOG_FILE"; then
+      log_error "Failed to install Ubuntu container"
+      return 1
+    fi
   fi
+  return 0
+}
 
+_amp_ubuntu_deps() {
   _amp_proot_ubuntu /bin/bash -c \
     'apt-get update && apt-get upgrade -y && apt-get install -y curl ca-certificates' \
     &>>"$LOG_FILE"
+}
 
+_amp_ubuntu_install_bin() {
   local latest_version
   latest_version=$(_get_latest_amp_version_silent)
   if [ -z "$latest_version" ]; then
@@ -228,18 +255,19 @@ _install_amp_proot_impl() {
     rm -rf /tmp/amp-install
   " &>>"$LOG_FILE"
 
-  local ubuntu_root
-  ubuntu_root="$(_amp_detect_ubuntu_root)"
-
-  if [ -z "$ubuntu_root" ]; then
-    log_error "Ubuntu rootfs not found"
-    return 1
-  fi
-
-  local amp_bin="$ubuntu_root/usr/local/bin/amp"
-
+  local amp_bin="$(_amp_detect_ubuntu_root)/usr/local/bin/amp"
   if [ ! -f "$amp_bin" ]; then
     log_error "AMP Code CLI binary not found after install"
+    return 1
+  fi
+  return 0
+}
+
+_amp_create_ubuntu_wrapper() {
+  local ubuntu_root
+  ubuntu_root="$(_amp_detect_ubuntu_root)"
+  if [ -z "$ubuntu_root" ]; then
+    log_error "Ubuntu rootfs not found"
     return 1
   fi
 
@@ -250,7 +278,6 @@ _install_amp_proot_impl() {
   fi
   sed "s|__UBUNTU_ROOTFS__|$ubuntu_root|g" "$wrapper_src" >"$PREFIX/bin/amp"
   chmod +x "$PREFIX/bin/amp"
-
   return 0
 }
 
