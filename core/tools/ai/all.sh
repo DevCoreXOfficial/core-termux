@@ -16,6 +16,7 @@ AI_TOOLS=(
   "opencode"
   "qoder"
   "kilocode-cli"
+  "goose"
   "keelcode"
   "cursor-cli"
   "kimchi"
@@ -51,6 +52,7 @@ source "$(dirname "$BASH_SOURCE")/codex/install.sh"
 source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
 source "$(dirname "$BASH_SOURCE")/qoder/install.sh"
 source "$(dirname "$BASH_SOURCE")/kilocode-cli/install.sh"
+source "$(dirname "$BASH_SOURCE")/goose/install.sh"
 source "$(dirname "$BASH_SOURCE")/keelcode/install.sh"
 source "$(dirname "$BASH_SOURCE")/cursor-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/kimchi/install.sh"
@@ -122,6 +124,10 @@ install_all_ai_tools() {
       ;;
     kilocode-cli)
       loading "Installing Kilo Code CLI" install_kilocode_cli
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    goose)
+      loading "Installing Goose CLI" install_goose
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     keelcode)
@@ -268,6 +274,10 @@ uninstall_all_ai_tools() {
       uninstall_kilocode_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    goose)
+      uninstall_goose
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     keelcode)
       uninstall_keelcode
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -398,6 +408,9 @@ update_all_ai_tools() {
     kilocode-cli)
       update_kilocode_cli
       ;;
+    goose)
+      update_goose
+      ;;
     keelcode)
       update_keelcode
       ;;
@@ -517,6 +530,10 @@ reinstall_all_ai_tools() {
       ;;
     kilocode-cli)
       reinstall_kilocode_cli
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    goose)
+      reinstall_goose
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     keelcode)

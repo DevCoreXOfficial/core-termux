@@ -152,6 +152,7 @@ _list_ai() {
   table_row "Cline CLI" "--cline" "cline" "$(_check_cmd "cline")"
   table_row "AMP Code CLI" "--ampcode" "amp" "$(_check_cmd "amp")"
   table_row "Droid Factory" "--droid-factory" "droid" "$(_check_cmd "droid")"
+  table_row "Goose" "--goose" "goose" "$(_check_cmd "goose")"
   table_end
 
   echo
