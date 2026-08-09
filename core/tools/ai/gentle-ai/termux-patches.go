@@ -121,7 +121,7 @@ func patchDetectGo(src string) (string, error) {
 		tab(1) + `case "android":` + "\n" +
 		tab(2) + `profile.PackageManager = "pkg"` + "\n" +
 		tab(2) + `profile.Supported = true` + "\n" +
-		tab(2) + `distro := detectLinuxDistro(linuxOSRelease)` + "\n" +
+		tab(2) + `distro := osReleaseID(linuxOSRelease)` + "\n" +
 		tab(2) + `if distro != LinuxDistroUnknown {` + "\n" +
 		tab(3) + `profile.LinuxDistro = distro` + "\n" +
 		tab(2) + `}` + "\n" +
@@ -193,21 +193,38 @@ func patchDownloadGo(src string) (string, error) {
 // 4. internal/tui/model.go
 // ---------------------------------------------------------------------------
 
+// browserURLSwitch builds the windows/default URL-opening switch fragment found
+// in internal/tui/model.go, at the given switch-indent depth (n tabs).
+// tuiOpenBrowserFn uses depth 1, openBrowserCmd uses depth 2. withAndroid
+// inserts a termux-open-url case before the default.
+func browserURLSwitch(depth int, withAndroid bool) string {
+	s := tab(depth) + `case "windows":` + "\n" +
+		tab(depth+1) + `cmd = execCommandFn("rundll32", "url.dll,FileProtocolHandler", url)` + "\n"
+	if withAndroid {
+		s += tab(depth) + `case "android":` + "\n" +
+			tab(depth+1) + `cmd = execCommandFn("termux-open-url", url)` + "\n"
+	}
+	s += tab(depth) + `default:` + "\n" +
+		tab(depth+1) + `cmd = execCommandFn("xdg-open", url)`
+	return s
+}
+
 func patchModelGo(src string) (string, error) {
-	// openBrowserCmd: use termux-open-url on android.
-	old1 := "" +
-		tab(2) + `case "windows":` + "\n" +
-		tab(3) + `cmd = execCommandFn("rundll32", "url.dll,FileProtocolHandler", url)` + "\n" +
-		tab(2) + `default:` + "\n" +
-		tab(3) + `cmd = execCommandFn("xdg-open", url)`
-	new1 := "" +
-		tab(2) + `case "windows":` + "\n" +
-		tab(3) + `cmd = execCommandFn("rundll32", "url.dll,FileProtocolHandler", url)` + "\n" +
-		tab(2) + `case "android":` + "\n" +
-		tab(3) + `cmd = execCommandFn("termux-open-url", url)` + "\n" +
-		tab(2) + `default:` + "\n" +
-		tab(3) + `cmd = execCommandFn("xdg-open", url)`
-	return assertReplace(src, old1, new1, "openBrowserCmd android case")
+	var err error
+
+	// 4a. openBrowserCmd (2-tab switch): use termux-open-url on android.
+	src, err = assertReplace(src, browserURLSwitch(2, false), browserURLSwitch(2, true), "openBrowserCmd android case")
+	if err != nil {
+		return src, err
+	}
+
+	// 4b. tuiOpenBrowserFn (1-tab switch): use termux-open-url on android.
+	src, err = assertReplace(src, browserURLSwitch(1, false), browserURLSwitch(1, true), "tuiOpenBrowserFn android case")
+	if err != nil {
+		return src, err
+	}
+
+	return src, nil
 }
 
 // ---------------------------------------------------------------------------

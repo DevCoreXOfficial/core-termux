@@ -14,7 +14,7 @@ Gentle-AI is an ecosystem configurator for AI coding agents. It provides persist
 
 ## Dependencies
 
-- golang (1.23+), git, curl
+- golang (1.25+), git, curl
 
 ## Install
 

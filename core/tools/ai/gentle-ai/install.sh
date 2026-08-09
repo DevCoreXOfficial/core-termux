@@ -147,7 +147,16 @@ _compile() {
 }
 
 _compile_impl() {
-  if ! command -v gcc &>/dev/null && ! command -v clang &>/dev/null; then
+  local current_goos
+  current_goos=$(go env GOOS 2>/dev/null || echo "linux")
+
+  if [ "$current_goos" = "android" ]; then
+    # On Android/Termux a CGO-enabled build is linked against the Android NDK,
+    # not Termux's clang/gcc, so external linking fails even when a C compiler
+    # is present. gentle-ai is pure Go (no cgo imports), so disabling cgo is
+    # safe and yields a self-contained native binary.
+    export CGO_ENABLED=0
+  elif ! command -v gcc &>/dev/null && ! command -v clang &>/dev/null; then
     export CGO_ENABLED=0
   fi
 
