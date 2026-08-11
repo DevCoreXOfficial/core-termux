@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.22.3-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.23.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -124,6 +124,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **OpenCode** | `--opencode` | Open-source agent that helps you write code in your terminal |
 | **Qoder** | `--qoder` | A terminal-native AI coding partner—and an agent engine you can build on |
 | **KiloCode CLI** | `--kilocode-cli` | The open source coding agent for building with AI in VS Code, JetBrains, or the CLI |
+| **Cactus Needle** | `--cactus-needle` | 26M function-call model for tool-call generation — inference and finetuning from the terminal |
 | **KeelCode** | `--keelcode` | Hosted coding agent for your terminal — inspect a project, edit files, run commands, and verify its work |
 | **Kimchi** | `--kimchi` | Terminal coding agent powered by Kimchi's multi-model orchestration |
 | **MiMoCode** | `--mimocode` | Xiaomi's AI coding agent — fast, local, and open-source |
@@ -161,7 +162,7 @@ core --version
 
 **Output:**
 ```
-4.22.3
+4.23.0
 ```
 
 ---
@@ -1086,7 +1087,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.22.3 (current: 4.22.2)
+⚠ New version available: 4.23.0 (current: 4.22.3)
 
 ➜ Run: core update core to update
 ```

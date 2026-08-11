@@ -1,0 +1,24 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# needle wrapper - termux-glibc python + proot syscall emulation
+unset LD_PRELOAD
+# HF engine download uses the Xet backend, broken under Termux glibc
+# ("Reqwest error: builder error"); fall back to classic HTTP.
+export HF_HUB_DISABLE_XET=1
+
+GLIBC_LIB="/data/data/com.termux/files/usr/glibc/lib"
+GLIBC_PYTHON="/data/data/com.termux/files/usr/glibc/bin/python"
+GLIBC_NEEDLE="/data/data/com.termux/files/usr/glibc/bin/needle"
+
+if [ ! -f "$GLIBC_PYTHON" ] || [ ! -x "$GLIBC_NEEDLE" ]; then
+  echo "Error: termux-glibc or Cactus Needle not found" >&2
+  echo "Run: pkg install glibc python-glibc python-pip-glibc" >&2
+  exit 1
+fi
+
+# proot with host rootfs for syscall translation
+# Note: no -- separator, pass args directly after interpreter
+exec proot -r / \
+  -b /dev:/dev -b /proc:/proc -b /sys:/sys \
+  -b "$GLIBC_LIB:/lib" \
+  -b "$PREFIX/bin:/bin" \
+  "$GLIBC_PYTHON" "$GLIBC_NEEDLE" "$@"

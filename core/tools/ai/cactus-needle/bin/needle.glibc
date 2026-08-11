@@ -1,0 +1,18 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# needle wrapper - termux-glibc python environment
+unset LD_PRELOAD
+# HF engine download uses the Xet backend, broken under Termux glibc
+# ("Reqwest error: builder error"); fall back to classic HTTP.
+export HF_HUB_DISABLE_XET=1
+
+GLIBC_RUNNER="/data/data/com.termux/files/usr/bin/glibc-runner"
+GLIBC_PYTHON="/data/data/com.termux/files/usr/glibc/bin/python"
+GLIBC_NEEDLE="/data/data/com.termux/files/usr/glibc/bin/needle"
+
+if [ ! -x "$GLIBC_RUNNER" ] || [ ! -x "$GLIBC_NEEDLE" ]; then
+  echo "Error: termux-glibc or Cactus Needle not found" >&2
+  echo "Run: pkg install glibc python-glibc python-pip-glibc" >&2
+  exit 1
+fi
+
+exec "$GLIBC_RUNNER" -s "$GLIBC_NEEDLE" "$@"

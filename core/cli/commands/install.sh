@@ -171,6 +171,10 @@ _install_specific_tools() {
         install_kilocode_cli
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      cactus-needle)
+        install_cactus_needle
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       keelcode)
         install_keelcode
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
