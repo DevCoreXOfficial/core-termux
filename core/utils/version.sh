@@ -99,7 +99,21 @@ _get_remote_npm_version() {
 
 _get_remote_pip_version() {
   local pkg="$1"
-  _spin_capture "Checking PyPI" bash -c "pip index versions '$pkg' 2>/dev/null | head -1 | awk '{print \$2}' | tr -d '()'"
+  local version=""
+
+  # Prefer the host pip (fast), but fall back to the PyPI JSON API when it
+  # cannot resolve the package — e.g. packages whose `requires-python` is
+  # excluded by the bionic Python (cactus-compute pins <3.14 while the host
+  # pip runs on Python 3.14) or when the host pip is unavailable.
+  if command -v pip &>/dev/null; then
+    version=$(_spin_capture "Checking PyPI" bash -c "pip index versions '$pkg' 2>/dev/null | head -1 | awk '{print \$2}' | tr -d '()'")
+  fi
+
+  if [ -z "$version" ]; then
+    version=$(_spin_capture "Checking PyPI" bash -c "curl -fsSL 'https://pypi.org/pypi/$pkg/json' 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin)[\"info\"][\"version\"])' 2>/dev/null")
+  fi
+
+  echo "$version"
 }
 
 _get_remote_github_version() {
