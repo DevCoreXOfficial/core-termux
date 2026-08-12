@@ -1,0 +1,31 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# cactus wrapper - termux-glibc python environment
+unset LD_PRELOAD
+# HF model downloads use the Xet backend, broken under Termux glibc
+# ("Reqwest error: builder error"); fall back to classic HTTP.
+export HF_HUB_DISABLE_XET=1
+
+GLIBC_RUNNER="/data/data/com.termux/files/usr/bin/glibc-runner"
+GLIBC_PYTHON="/data/data/com.termux/files/usr/glibc/bin/python"
+GLIBC_CACTUS="/data/data/com.termux/files/usr/glibc/bin/cactus"
+CACTUS_LAUNCHER="/data/data/com.termux/files/usr/libexec/cactus.launcher.py"
+
+if [ ! -x "$GLIBC_PYTHON" ] || [ ! -x "$GLIBC_CACTUS" ]; then
+  echo "Error: termux-glibc or Cactus Engine CLI not found" >&2
+  echo "Run: pkg install glibc python-glibc python-pip-glibc" >&2
+  exit 1
+fi
+
+if [ ! -f "$CACTUS_LAUNCHER" ]; then
+  echo "Error: cactus launcher not found at $CACTUS_LAUNCHER" >&2
+  echo "Re-run: core install ai --cactus" >&2
+  exit 1
+fi
+
+# NOTE: run through the glibc Python + our launcher instead of
+# `glibc-runner -s`: glibc-runner -s re-splits its args, so quoted values
+# like `--prompt "Hello there"` arrive as separate tokens and argparse
+# rejects the extras. A direct exec preserves argv exactly as the shell
+# quoted it. The launcher patches bundle validation for sentencepiece
+# bundles that upstream publishes without tokenizer.json.
+exec "$GLIBC_PYTHON" "$CACTUS_LAUNCHER" "$@"

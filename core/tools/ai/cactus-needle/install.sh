@@ -70,7 +70,7 @@ _cactus_install_deps_native_impl() {
 }
 
 _cactus_install_pip_glibc() {
-  log_tip "This downloads large native dependencies (jaxlib, scipy) into the glibc Python environment"
+  log_info "This downloads large native dependencies (jaxlib, scipy) into the glibc Python environment"
   loading "Installing Cactus Needle (pip)" _cactus_install_pip_glibc_impl "$@"
 }
 

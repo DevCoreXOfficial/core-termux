@@ -176,6 +176,10 @@ _update_specific_tools() {
         update_cactus_needle
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      cactus)
+        update_cactus_cli
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       keelcode)
         update_keelcode
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac

@@ -17,6 +17,7 @@ AI_TOOLS=(
   "qoder"
   "kilocode-cli"
   "cactus-needle"
+  "cactus"
   "goose"
   "keelcode"
   "cursor-cli"
@@ -54,6 +55,7 @@ source "$(dirname "$BASH_SOURCE")/opencode/install.sh"
 source "$(dirname "$BASH_SOURCE")/qoder/install.sh"
 source "$(dirname "$BASH_SOURCE")/kilocode-cli/install.sh"
 source "$(dirname "$BASH_SOURCE")/cactus-needle/install.sh"
+source "$(dirname "$BASH_SOURCE")/cactus/install.sh"
 source "$(dirname "$BASH_SOURCE")/goose/install.sh"
 source "$(dirname "$BASH_SOURCE")/keelcode/install.sh"
 source "$(dirname "$BASH_SOURCE")/cursor-cli/install.sh"
@@ -130,6 +132,10 @@ install_all_ai_tools() {
       ;;
     cactus-needle)
       loading "Installing Cactus Needle" install_cactus_needle
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    cactus)
+      loading "Installing Cactus Engine CLI" install_cactus_cli
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     goose)
@@ -284,6 +290,10 @@ uninstall_all_ai_tools() {
       uninstall_cactus_needle
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    cactus)
+      uninstall_cactus_cli
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     goose)
       uninstall_goose
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
@@ -421,6 +431,9 @@ update_all_ai_tools() {
     cactus-needle)
       update_cactus_needle
       ;;
+    cactus)
+      update_cactus_cli
+      ;;
     goose)
       update_goose
       ;;
@@ -547,6 +560,10 @@ reinstall_all_ai_tools() {
       ;;
     cactus-needle)
       reinstall_cactus_needle
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    cactus)
+      reinstall_cactus_cli
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     goose)

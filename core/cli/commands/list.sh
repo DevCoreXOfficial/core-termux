@@ -131,6 +131,7 @@ _list_ai() {
   table_row "Qoder CLI" "--qoder" "qodercli" "$(_check_cmd "qodercli")"
   table_row "KiloCode CLI" "--kilocode-cli" "kilo" "$(_check_cmd "kilo")"
   table_row "Cactus Needle" "--cactus-needle" "needle" "$(_check_cmd "needle")"
+  table_row "Cactus Engine CLI" "--cactus" "cactus" "$(_check_cmd "cactus")"
   table_row "KeelCode" "--keelcode" "keelcode" "$(_check_cmd "keelcode")"
   table_row "Cursor CLI" "--cursor-cli" "cursor" "$(_check_cmd "cursor")"
   table_row "Kimchi" "--kimchi" "kimchi" "$(_check_cmd "kimchi")"

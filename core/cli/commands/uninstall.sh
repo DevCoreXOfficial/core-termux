@@ -174,6 +174,10 @@ _uninstall_specific_tools() {
         uninstall_cactus_needle
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      cactus)
+        uninstall_cactus_cli
+        case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       keelcode)
         uninstall_keelcode
         case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
