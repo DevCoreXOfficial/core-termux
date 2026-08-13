@@ -147,6 +147,8 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **AMP Code CLI** | `--ampcode` | AMP — coding agent by Sourcegraph for the terminal |
 | **Cursor CLI** | `--cursor-cli` | Deliver code with agents directly from your terminal |
 | **Droid Factory** | `--droid-factory` | Factory's AI coding agent — droid CLI for the terminal |
+| **Hugging Face CLI** | `--hugging-face` | Official Hugging Face Hub CLI — download, upload, and manage models, datasets, Spaces, buckets, and Jobs |
+| **Cactus Compute** | `--cactus` | Cactus Engine CLI — hybrid edge-cloud AI inference engine for mobile, wearable, and edge devices (cactus-compute) |
 
 ---
 

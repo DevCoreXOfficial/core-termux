@@ -58,6 +58,7 @@ install_ai() {
   list_item "Cline CLI ${GRAY}(${D_GREEN}cline${GRAY})"
   list_item "Droid Factory ${GRAY}(${D_GREEN}droid${GRAY})"
   list_item "AMP Code CLI ${GRAY}(${D_GREEN}amp${GRAY})"
+  list_item "Hugging Face CLI ${GRAY}(${D_GREEN}hf${GRAY})"
   echo
 }
 
@@ -152,6 +153,7 @@ reinstall_ai() {
   list_item "Cline CLI"
   list_item "AMP Code CLI"
   list_item "Droid Factory"
+  list_item "Hugging Face CLI"
   echo
 }
 

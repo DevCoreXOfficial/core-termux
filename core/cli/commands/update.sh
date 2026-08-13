@@ -268,6 +268,10 @@ _update_specific_tools() {
         update_droid_factory
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      hugging-face)
+        update_hugging_face
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       goose)
         update_goose
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac

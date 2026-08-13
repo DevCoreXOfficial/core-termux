@@ -41,6 +41,7 @@ AI_TOOLS=(
   "supercode"
   "cline"
   "ampcode"
+  "hugging-face"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -79,6 +80,7 @@ source "$(dirname "$BASH_SOURCE")/openspec/install.sh"
 source "$(dirname "$BASH_SOURCE")/supercode/install.sh"
 source "$(dirname "$BASH_SOURCE")/cline/install.sh"
 source "$(dirname "$BASH_SOURCE")/ampcode/install.sh"
+source "$(dirname "$BASH_SOURCE")/hugging-face/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
@@ -228,6 +230,10 @@ install_all_ai_tools() {
       ;;
     ampcode)
       loading "Installing AMP Code CLI" install_amp_code_cli
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    hugging-face)
+      loading "Installing Hugging Face CLI" install_hugging_face
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     esac
@@ -386,6 +392,10 @@ uninstall_all_ai_tools() {
       uninstall_amp_code_cli
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    hugging-face)
+      uninstall_hugging_face
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -502,6 +512,9 @@ update_all_ai_tools() {
       ;;
     ampcode)
       update_amp_code_cli
+      ;;
+    hugging-face)
+      update_hugging_face
       ;;
     esac
   done
@@ -656,6 +669,10 @@ reinstall_all_ai_tools() {
       ;;
     ampcode)
       reinstall_amp_code_cli
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    hugging-face)
+      reinstall_hugging_face
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

@@ -260,6 +260,10 @@ _reinstall_specific_tools() {
         reinstall_droid_factory
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
         ;;
+      hugging-face)
+        reinstall_hugging_face
+        case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+        ;;
       goose)
         reinstall_goose
         case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac

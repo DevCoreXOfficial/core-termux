@@ -100,7 +100,7 @@ CORE_TIPS=(
 	"Install Command Code: ${D_CYAN}core install ai --command-code${NC}"
 	"Install Freebuff: ${D_CYAN}core install ai --freebuff${NC}"
 	"Install Kimchi: ${D_CYAN}core install ai --kimchi${NC}"
-	"Install Kilo Code CLI: ${D_CYAN}core install ai --kilocode-cli${NC}"
+	"Install KiloCode CLI: ${D_CYAN}core install ai --kilocode-cli${NC}"
 	"Install KeelCode: ${D_CYAN}core install ai --keelcode${NC}"
 	"Install Context7: ${D_CYAN}core install ai --ctx7${NC}"
 	"Install OpenSpec: ${D_CYAN}core install ai --openspec${NC}"
@@ -110,6 +110,9 @@ CORE_TIPS=(
 	"Install Oh-My-Pi: ${D_CYAN}core install ai --oh-my-pi${NC}"
 	"Install SuperCode CLI: ${D_CYAN}core install ai --supercode${NC}"
 	"Install Droid Factory: ${D_CYAN}core install ai --droid-factory${NC}"
+	"Install Hugging Face CLI: ${D_CYAN}core install ai --hugging-face${NC}"
+	"Install Cactus Engine CLI: ${D_CYAN}core install ai --cactus${NC}"
+	"Install Cactus Needle: ${D_CYAN}core install ai --cactus-needle${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"

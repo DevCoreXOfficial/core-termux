@@ -267,6 +267,10 @@ _install_specific_tools() {
         install_droid_factory
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
         ;;
+      hugging-face)
+        install_hugging_face
+        case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+        ;;
       goose)
         install_goose
         case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
