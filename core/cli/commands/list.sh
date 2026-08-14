@@ -156,6 +156,7 @@ _list_ai() {
   table_row "Droid Factory" "--droid-factory" "droid" "$(_check_cmd "droid")"
   table_row "Hugging Face CLI" "--hugging-face" "hf" "$(_check_cmd "hf")"
   table_row "Goose" "--goose" "goose" "$(_check_cmd "goose")"
+  table_row "Walkie" "--walkie" "walkie" "$(_check_cmd "walkie")"
   table_end
 
   echo

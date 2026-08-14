@@ -113,6 +113,7 @@ CORE_TIPS=(
 	"Install Hugging Face CLI: ${D_CYAN}core install ai --hugging-face${NC}"
 	"Install Cactus Engine CLI: ${D_CYAN}core install ai --cactus${NC}"
 	"Install Cactus Needle: ${D_CYAN}core install ai --cactus-needle${NC}"
+	"Install Walkie — P2P chat for AI agents: ${D_CYAN}core install ai --walkie${NC}"
 
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"

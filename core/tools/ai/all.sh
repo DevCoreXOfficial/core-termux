@@ -42,6 +42,7 @@ AI_TOOLS=(
   "cline"
   "ampcode"
   "hugging-face"
+  "walkie"
 )
 
 source "$(dirname "$BASH_SOURCE")/qwen-code/install.sh"
@@ -81,6 +82,7 @@ source "$(dirname "$BASH_SOURCE")/supercode/install.sh"
 source "$(dirname "$BASH_SOURCE")/cline/install.sh"
 source "$(dirname "$BASH_SOURCE")/ampcode/install.sh"
 source "$(dirname "$BASH_SOURCE")/hugging-face/install.sh"
+source "$(dirname "$BASH_SOURCE")/walkie/install.sh"
 
 install_all_ai_tools() {
   local installed_count=0
@@ -234,6 +236,10 @@ install_all_ai_tools() {
       ;;
     hugging-face)
       loading "Installing Hugging Face CLI" install_hugging_face
+      case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
+      ;;
+    walkie)
+      loading "Installing Walkie" install_walkie
       case $? in 0) ((installed_count++));; 1) ((failed_count++));; esac
       ;;
     esac
@@ -396,6 +402,10 @@ uninstall_all_ai_tools() {
       uninstall_hugging_face
       case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
       ;;
+    walkie)
+      uninstall_walkie
+      case $? in 0) ((uninstalled_count++));; 1) ((failed_count++));; esac
+      ;;
     esac
   done
 
@@ -515,6 +525,9 @@ update_all_ai_tools() {
       ;;
     hugging-face)
       update_hugging_face
+      ;;
+    walkie)
+      update_walkie
       ;;
     esac
   done
@@ -673,6 +686,10 @@ reinstall_all_ai_tools() {
       ;;
     hugging-face)
       reinstall_hugging_face
+      case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
+      ;;
+    walkie)
+      reinstall_walkie
       case $? in 0) ((reinstalled_count++));; 1) ((failed_count++));; esac
       ;;
     esac

@@ -1,0 +1,29 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# walkie - P2P communication CLI for AI agents
+# Launcher script - executes walkie from local or global npm install
+
+set -Eeuo pipefail
+
+NODE="/data/data/com.termux/files/usr/bin/node"
+PREFIX="/data/data/com.termux/files/usr"
+
+# Local install (default): ~/.local/share/core-termux-data/walkie
+LOCAL_JS="${HOME}/.local/share/core-termux-data/walkie/node_modules/walkie-sh/bin/walkie.js"
+# Global install (fallback/forced): ${PREFIX}/lib/node_modules
+GLOBAL_JS="${PREFIX}/lib/node_modules/walkie-sh/bin/walkie.js"
+
+if [[ -x "${LOCAL_JS}" ]]; then
+  exec "${NODE}" "${LOCAL_JS}" "$@"
+fi
+
+if [[ -x "${GLOBAL_JS}" ]]; then
+  exec "${NODE}" "${GLOBAL_JS}" "$@"
+fi
+
+# Fallback: binary directly in PATH (e.g. manual npm install -g)
+if command -v walkie &>/dev/null; then
+  exec walkie "$@"
+fi
+
+echo -en "\e[31mE:\e[0m walkie not found. Run 'core reinstall ai --walkie' to reinstall."
+exit 1

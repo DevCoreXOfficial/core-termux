@@ -59,6 +59,7 @@ install_ai() {
   list_item "Droid Factory ${GRAY}(${D_GREEN}droid${GRAY})"
   list_item "AMP Code CLI ${GRAY}(${D_GREEN}amp${GRAY})"
   list_item "Hugging Face CLI ${GRAY}(${D_GREEN}hf${GRAY})"
+  list_item "Walkie ${GRAY}(${D_GREEN}walkie${GRAY})"
   echo
 }
 

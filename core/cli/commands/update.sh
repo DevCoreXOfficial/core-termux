@@ -276,6 +276,10 @@ _update_specific_tools() {
         update_goose
         case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
         ;;
+      walkie)
+        update_walkie
+        case $? in 0) ((updated_count++));; 1) ((failed_count++));; esac
+        ;;
       *)
         log_warn "Unknown AI tool: --$tool"
         ;;

@@ -149,6 +149,7 @@ core install ai --opencode --ollama  # Install only OpenCode and Ollama
 | **Droid Factory** | `--droid-factory` | Factory's AI coding agent — droid CLI for the terminal |
 | **Hugging Face CLI** | `--hugging-face` | Official Hugging Face Hub CLI — download, upload, and manage models, datasets, Spaces, buckets, and Jobs |
 | **Cactus Compute** | `--cactus` | Cactus Engine CLI — hybrid edge-cloud AI inference engine for mobile, wearable, and edge devices (cactus-compute) |
+| **Walkie** | `--walkie` | P2P communication CLI for AI agents — encrypted serverless mesh so agents and humans can chat |
 
 ---
 
