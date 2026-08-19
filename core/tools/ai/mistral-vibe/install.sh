@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -73,6 +74,7 @@ install_mistral_vibe() {
 }
 
 uninstall_mistral_vibe() {
+  _walkie_remove_wrapper vibe
   if ! command -v vibe &>/dev/null; then
     log_info "Mistral Vibe is not installed"
     return 2

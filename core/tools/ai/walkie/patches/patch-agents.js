@@ -43,6 +43,7 @@ const RUN_GENERIC = `function runGeneric(cli, prompt, sessionId, model, extraArg
   // '{prompt}' is replaced inline with the message; if absent, the prompt is
   // appended as a positional argument (fallback for any unknown CLI).
   const REGISTRY = {
+    core: ['agent', 'run', '-p', '{prompt}', '-y'],
     agy: ['-p', '{prompt}'],
     vibe: ['-p', '{prompt}', '--output', 'text'],
     opencode: ['run', '{prompt}'],

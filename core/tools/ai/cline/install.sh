@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CLINE_DATA_DIR="$HOME/.local/share/core-termux-data/cline"
@@ -277,6 +278,7 @@ install_cline() {
 }
 
 uninstall_cline() {
+  _walkie_remove_wrapper cline
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/cline" ]; then

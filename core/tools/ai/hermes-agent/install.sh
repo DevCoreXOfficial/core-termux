@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -143,6 +144,7 @@ install_hermes_agent() {
 }
 
 uninstall_hermes_agent() {
+  _walkie_remove_wrapper hermes hermes-agent
   if ! command -v hermes &>/dev/null; then
     log_info "Hermes Agent is not installed"
     return 2

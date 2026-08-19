@@ -3,6 +3,7 @@ import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -63,6 +64,7 @@ install_pi() {
 }
 
 uninstall_pi() {
+  _walkie_remove_wrapper pi
   if ! command -v pi &>/dev/null; then
     log_info "Pi Coding Agent is not installed"
     return 2

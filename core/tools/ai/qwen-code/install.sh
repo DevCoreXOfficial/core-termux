@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -64,6 +65,7 @@ install_qwen_code() {
 }
 
 uninstall_qwen_code() {
+  _walkie_remove_wrapper qwen qwen-code
   if ! command -v qwen &>/dev/null; then
     log_info "Qwen Code is not installed"
     return 2

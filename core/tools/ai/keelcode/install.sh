@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 KEELCODE_DATA_DIR="$HOME/.local/share/core-termux-data/keelcode"
@@ -313,6 +314,7 @@ install_keelcode() {
 }
 
 uninstall_keelcode() {
+  _walkie_remove_wrapper keelcode
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/keelcode" ]; then

@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
@@ -279,6 +280,7 @@ install_opencode() {
 }
 
 uninstall_opencode() {
+  _walkie_remove_wrapper opencode
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/opencode" ]; then

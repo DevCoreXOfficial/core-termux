@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 KIMCHI_DATA_DIR="$HOME/.local/share/core-termux-data/kimchi"
@@ -298,6 +299,7 @@ install_kimchi() {
 }
 
 uninstall_kimchi() {
+  _walkie_remove_wrapper kimchi
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/kimchi" ]; then

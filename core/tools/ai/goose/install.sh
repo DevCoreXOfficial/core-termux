@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 GOOSE_DATA_DIR="$HOME/.local/share/core-termux-data/goose"
@@ -295,6 +296,7 @@ install_goose() {
 }
 
 uninstall_goose() {
+  _walkie_remove_wrapper goose
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/goose" ]; then

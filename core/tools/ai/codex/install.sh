@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -61,6 +62,7 @@ install_codex() {
 }
 
 uninstall_codex() {
+	_walkie_remove_wrapper codex
 	if ! command -v codex &>/dev/null; then
 		log_info "Codex CLI is not installed"
 		return 2

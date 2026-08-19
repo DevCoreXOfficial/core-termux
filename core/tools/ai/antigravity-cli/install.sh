@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 AGY_DATA_DIR="$HOME/.local/share/core-termux-data/antigravity-cli"
@@ -417,6 +418,7 @@ install_antigravity_cli() {
 }
 
 uninstall_antigravity_cli() {
+  _walkie_remove_wrapper agy
   log_info "Uninstalling Antigravity CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

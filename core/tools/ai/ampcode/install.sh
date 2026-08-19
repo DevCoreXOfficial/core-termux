@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 AMP_DATA_DIR="$HOME/.local/share/core-termux-data/ampcode"
@@ -308,6 +309,7 @@ install_amp_code_cli() {
 }
 
 uninstall_amp_code_cli() {
+  _walkie_remove_wrapper amp
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/amp" ]; then

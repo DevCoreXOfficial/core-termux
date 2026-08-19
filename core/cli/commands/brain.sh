@@ -214,6 +214,17 @@ brain_help() {
 	printf "    ${D_CYAN}core brain skill${D_NC}             # Create a skill from memories\n"
 	printf "    ${D_CYAN}core brain sync${D_NC}              # Sync with GitHub\n"
 	echo
+	separator_section "Non-interactive flags (AI agent mode)"
+	echo
+	printf "    ${D_CYAN}core brain save --title \"T\" --content \"C\" [--category c] [--tags \"a, b\"]${D_NC}\n"
+	printf "    ${D_CYAN}core brain search \"query\" --full${D_NC}\n"
+	printf "    ${D_CYAN}core brain edit <slug> --content \"new text\"${D_NC}\n"
+	printf "    ${D_CYAN}core brain delete <slug> --yes${D_NC}\n"
+	printf "    ${D_CYAN}core brain graph --json${D_NC}\n"
+	printf "    ${D_CYAN}core brain skill --all --name <name> [--global]${D_NC}\n"
+	echo
+	list_item "These skip all prompts — used by ${D_CYAN}core agent${D_NC}, scripts and the REPL shell mode"
+	echo
 }
 
 # ── Init ────────────────────────────────────────────────────
@@ -292,12 +303,28 @@ brain_init() {
 brain_save() {
 	_brain_ensure || return 1
 
+	# ── Non-interactive flags (used by the AI agent) ──
+	local title="" content="" category="" tags_input=""
+	local flags=0
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--title) title="$2"; flags=1; shift 2 ;;
+		--content) content="$2"; flags=1; shift 2 ;;
+		--category) category="$2"; flags=1; shift 2 ;;
+		--tags) tags_input="$2"; flags=1; shift 2 ;;
+		--yes) flags=1; shift ;;
+		*) shift ;;
+		esac
+	done
+
 	separator
 	box "Save a New Memory"
 	separator
 	echo
 
-	read_input "Title" title
+	if [[ -z "$title" ]]; then
+		read_input "Title" title
+	fi
 	if [[ -z "$title" ]]; then
 		log_error "Title cannot be empty"
 		separator
@@ -310,42 +337,54 @@ brain_save() {
 	date_prefix=$(date +%Y-%m-%d)
 
 	# ── Categories ──
-	local categories
-	categories=$(find "$BRAIN_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".git" -exec basename {} \; 2>/dev/null | sort)
-	echo
-	if [[ -n "$categories" ]]; then
-		log_info "Existing categories:"
-		echo
-		while IFS= read -r cat; do
-			printf "    ${D_GREEN}•${D_NC} ${D_CYAN}%s${D_NC}\n" "$cat"
-		done <<<"$categories"
-		echo
-	fi
-	read_input "Category" category
 	if [[ -z "$category" ]]; then
-		category="general"
+		if (( flags == 1 )); then
+			category="general"
+		else
+			local categories
+			categories=$(find "$BRAIN_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".git" -exec basename {} \; 2>/dev/null | sort)
+			echo
+			if [[ -n "$categories" ]]; then
+				log_info "Existing categories:"
+				echo
+				while IFS= read -r cat; do
+					printf "    ${D_GREEN}•${D_NC} ${D_CYAN}%s${D_NC}\n" "$cat"
+				done <<<"$categories"
+				echo
+			fi
+			read_input "Category" category
+			[[ -z "$category" ]] && category="general"
+		fi
 	fi
 
 	# ── Tags ──
-	read_input "Tags (comma separated)" tags_input
+	if [[ -z "$tags_input" ]] && (( flags != 1 )); then
+		read_input "Tags (comma separated)" tags_input
+	fi
 	tags_input="${tags_input:-}"
 	local tags_formatted
 	tags_formatted=$(echo "$tags_input" | sed 's/, */, /g' | sed 's/^, \|, $//g')
 
-	# ── Content via neovim ──
-	local tmpfile
-	tmpfile=$(_brain_editor "$title")
-	if [[ -z "$tmpfile" ]]; then
-		log_error "Content cannot be empty"
+	# ── Content ──
+	if (( flags == 1 )) && [[ -z "$content" ]]; then
+		log_error "Missing --content for non-interactive save"
+		separator
 		return 1
 	fi
-	local content
-	content=$(cat "$tmpfile")
-	rm -f "$tmpfile"
+	local tmpfile
+	if [[ -z "$content" ]]; then
+		tmpfile=$(_brain_editor "$title")
+		if [[ -z "$tmpfile" ]]; then
+			log_error "Content cannot be empty"
+			return 1
+		fi
+		content=$(cat "$tmpfile")
+		rm -f "$tmpfile"
+	fi
 
 	# ── Suggest relations ──
 	local -a related_slugs=()
-	if [[ -n "$tags_formatted" ]]; then
+	if [[ "$flags" != "1" ]] && [[ -n "$tags_formatted" ]]; then
 		local IFS=','
 		for tag in $tags_formatted; do
 			tag=$(echo "$tag" | xargs)
@@ -414,7 +453,7 @@ brain_save() {
 	echo
 	log_success "Memory saved to ${D_CYAN}$category/${date_prefix}_${slug}.md${D_NC}"
 
-	if command -v bat &>/dev/null; then
+	if [[ "$flags" != "1" ]] && command -v bat &>/dev/null; then
 		read_confirm "Preview with bat?" preview
 		if [[ "$preview" == "y" ]]; then
 			bat "$filepath"
@@ -429,7 +468,18 @@ brain_save() {
 brain_search() {
 	_brain_ensure || return 1
 
-	local query="$*"
+	# ── --full: non-interactive, print the whole matched memories ──
+	local full=0
+	local -a args=()
+	local a
+	for a in "$@"; do
+		if [[ "$a" == "--full" ]]; then
+			full=1
+		else
+			args+=("$a")
+		fi
+	done
+	local query="${args[*]}"
 	if [[ -z "$query" ]]; then
 		read_input "Search query" query
 	fi
@@ -454,6 +504,28 @@ brain_search() {
 
 	if [[ ${#results[@]} -eq 0 ]]; then
 		log_warn "No results for: $query"
+		return 0
+	fi
+
+	# ── --full: print every matching memory (title + full content) ──
+	if (( full )); then
+		local -a shown=()
+		local result f seen2 s rel title2
+		for result in "${results[@]}"; do
+			f=$(echo "$result" | cut -d'|' -f1)
+			seen2=false
+			for s in "${shown[@]}"; do
+				[[ "$s" == "$f" ]] && seen2=true && break
+			done
+			$seen2 && continue
+			shown+=("$f")
+			rel="${f#$BRAIN_DIR/}"
+			title2=$(_brain_title "$f")
+			echo
+			echo "===== $rel ($title2) ====="
+			cat "$f"
+			echo
+		done
 		return 0
 	fi
 
@@ -694,6 +766,10 @@ brain_show() {
 brain_graph() {
 	_brain_ensure || return 1
 
+	# ── --json: machine-readable graph for the AI agent ──
+	local json=0
+	[[ "$1" == "--json" ]] && json=1
+
 	echo
 	separator_section "Knowledge Graph"
 	echo
@@ -704,7 +780,33 @@ brain_graph() {
 	done < <(find "$BRAIN_DIR" -name "*.md" ! -name "README.md" 2>/dev/null | sort)
 
 	if [[ ${#files[@]} -eq 0 ]]; then
+		if (( json )); then
+			echo '{"memories":[]}'
+		fi
 		list_item "No memories yet"
+		return 0
+	fi
+
+	if (( json )); then
+		local -a nodes=()
+		local f
+		for f in "${files[@]}"; do
+			local jtitle jslug jcat jtags jrel
+			jtitle=$(_brain_title "$f")
+			jslug=$(basename "$f" .md)
+			jcat=$(basename "$(dirname "$f")")
+			jtags=$(grep "^tags:" "$f" 2>/dev/null | sed 's/^tags: \[//;s/\]//')
+			jrel=$(grep "^related:" "$f" 2>/dev/null | sed 's/^related: \[//;s/\]//')
+			nodes+=("$(jq -nc \
+				--arg s "$jslug" --arg t "$jtitle" --arg c "$jcat" \
+				--arg tg "$jtags" --arg r "$jrel" \
+				'{slug:$s, title:$t, category:$c, tags:(if $tg=="" then [] else ($tg | split(", ")) end), related:(if $r=="" then [] else ($r | split(", ")) end)}' 2>/dev/null)")
+		done
+		local json_list=""
+		if [[ ${#nodes[@]} -gt 0 ]]; then
+			json_list=$(IFS=,; echo "${nodes[*]}")
+		fi
+		jq -nc --argjson nodes "[$json_list]" '{memories:$nodes}'
 		return 0
 	fi
 
@@ -820,10 +922,55 @@ brain_sync() {
 
 # ── Skill ───────────────────────────────────────────────────
 
+# Expands the given selected files with their related memories.
+# Fills the global BRAIN_SKILL_EXPANDED array.
+_brain_expand_selected() {
+	BRAIN_SKILL_EXPANDED=()
+	local -a seen=()
+	local f slug dup s related r rf rdup
+	for f in "$@"; do
+		slug=$(basename "$f" .md)
+		dup=false
+		for s in "${seen[@]}"; do
+			[[ "$s" == "$slug" ]] && dup=true && break
+		done
+		$dup && continue
+		seen+=("$slug")
+		BRAIN_SKILL_EXPANDED+=("$f")
+
+		related=$(grep "^related:" "$f" 2>/dev/null | sed 's/related: \[//;s/\]//')
+		if [[ -n "$related" ]]; then
+			local IFS=','
+			for r in $related; do
+				r=$(echo "$r" | xargs)
+				[[ -z "$r" ]] && continue
+				rdup=false
+				for s in "${seen[@]}"; do
+					[[ "$s" == "$r" ]] && rdup=true && break
+				done
+				$rdup && continue
+				seen+=("$r")
+				rf=$(find "$BRAIN_DIR" -name "${r}.md" 2>/dev/null | head -1)
+				[[ -n "$rf" ]] && BRAIN_SKILL_EXPANDED+=("$rf")
+			done
+			IFS=$' \t\n'
+		fi
+	done
+}
+
 brain_skill() {
 	_brain_ensure || return 1
 
-	local skill_name base_dir
+	# ── Non-interactive flags (AI agent mode) ──
+	local skill_name="" base_dir="" all=0
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--name) skill_name="$2"; shift 2 ;;
+		--all) all=1; shift ;;
+		--global) base_dir="$HOME/.agents/skills"; shift ;;
+		*) shift ;;
+		esac
+	done
 
 	# ── Collect all memories ──
 	local -a all_files=()
@@ -844,98 +991,75 @@ brain_skill() {
 	fi
 
 	# ── Pick memories (multi-select) ──
-	while true; do
-		echo
-		separator
-		box "Create Skill from Memories"
-		separator
-		echo
+	local -a selected=() expanded=()
+	if (( all )); then
+		selected=("${all_files[@]}")
+	else
+		while true; do
+			echo
+			separator
+			box "Create Skill from Memories"
+			separator
+			echo
 
-		local idx=0
-		for f in "${all_files[@]}"; do
-			local t
-			t=$(_brain_title "$f")
-			printf "    ${D_GREEN}%2d.${D_NC} %s\n" $((idx + 1)) "$t"
-			((idx++))
-		done
-
-		echo
-		log_info "Select memories to include in the skill"
-		read_input "Numbers (comma-separated), 'all', or empty to cancel" pick
-
-		if [[ -z "$pick" ]]; then
-			return 0
-		fi
-
-		local -a selected=()
-
-		if [[ "$pick" == "all" ]]; then
-			for ((i = 0; i < ${#all_files[@]}; i++)); do
-				selected+=("${all_files[$i]}")
+			local idx=0
+			for f in "${all_files[@]}"; do
+				local t
+				t=$(_brain_title "$f")
+				printf "    ${D_GREEN}%2d.${D_NC} %s\n" $((idx + 1)) "$t"
+				((idx++))
 			done
-		else
-			local IFS=','
-			for num in $pick; do
-				num=$(echo "$num" | xargs)
-				if [[ "$num" =~ ^[0-9]+$ ]] && ((num >= 1 && num <= ${#all_files[@]})); then
-					selected+=("${all_files[$((num - 1))]}")
-				fi
-			done
-			IFS=$' \t\n'
-		fi
 
-		# ── Expand relations ──
-		local -a expanded=()
-		local -a seen=()
-		for f in "${selected[@]}"; do
-			local slug
-			slug=$(basename "$f" .md)
-			# Avoid duplicates
-			local dup=false
-			for s in "${seen[@]}"; do
-				[[ "$s" == "$slug" ]] && dup=true && break
-			done
-			$dup && continue
-			seen+=("$slug")
-			expanded+=("$f")
+			echo
+			log_info "Select memories to include in the skill"
+			read_input "Numbers (comma-separated), 'all', or empty to cancel" pick
 
-			# Add related memories
-			local related
-			related=$(grep "^related:" "$f" 2>/dev/null | sed 's/related: \[//;s/\]//')
-			if [[ -n "$related" ]]; then
+			if [[ -z "$pick" ]]; then
+				return 0
+			fi
+
+			selected=()
+			if [[ "$pick" == "all" ]]; then
+				for ((i = 0; i < ${#all_files[@]}; i++)); do
+					selected+=("${all_files[$i]}")
+				done
+			else
 				local IFS=','
-				for r in $related; do
-					r=$(echo "$r" | xargs)
-					[[ -z "$r" ]] && continue
-					# Check dup
-					local rdup=false
-					for s in "${seen[@]}"; do
-						[[ "$s" == "$r" ]] && rdup=true && break
-					done
-					$rdup && continue
-					seen+=("$r")
-					local rf
-					rf=$(find "$BRAIN_DIR" -name "${r}.md" 2>/dev/null | head -1)
-					[[ -n "$rf" ]] && expanded+=("$rf")
+				for num in $pick; do
+					num=$(echo "$num" | xargs)
+					if [[ "$num" =~ ^[0-9]+$ ]] && ((num >= 1 && num <= ${#all_files[@]})); then
+						selected+=("${all_files[$((num - 1))]}")
+					fi
 				done
 				IFS=$' \t\n'
 			fi
-		done
 
-		echo
-		log_info "Skill will include ${#expanded[@]} memories:"
-		for f in "${expanded[@]}"; do
-			local et
-			et=$(_brain_title "$f")
-			echo -e "    ${D_GREEN}•${D_NC} $et"
+			_brain_expand_selected "${selected[@]}"
+			expanded=("${BRAIN_SKILL_EXPANDED[@]}")
+
+			echo
+			log_info "Skill will include ${#expanded[@]} memories:"
+			for f in "${expanded[@]}"; do
+				local et
+				et=$(_brain_title "$f")
+				echo -e "    ${D_GREEN}•${D_NC} $et"
+			done
+			echo
+			read_confirm "Proceed?" confirm
+			[[ "$confirm" == "y" ]] && break
 		done
-		echo
-		read_confirm "Proceed?" confirm
-		[[ "$confirm" == "y" ]] && break
-	done
+	fi
+
+	# ── Expand relations (--all path) ──
+	if (( all )); then
+		_brain_expand_selected "${selected[@]}"
+		expanded=("${BRAIN_SKILL_EXPANDED[@]}")
+	fi
 
 	# ── Skill name ──
-	read_input "Skill name (kebab-case, e.g. termux-setup)" skill_name
+	if [[ -z "$skill_name" ]]; then
+		read_input "Skill name (kebab-case, e.g. termux-setup)" skill_name
+	fi
 	skill_name=$(echo "$skill_name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+|-+$//g')
 	if [[ -z "$skill_name" ]]; then
 		log_error "Skill name cannot be empty"
@@ -944,21 +1068,27 @@ brain_skill() {
 	fi
 
 	# ── Global or local ──
-	echo
-	log_info "Where do you want to install the skill?"
-	read_confirm "Install globally (~/.agents/skills/)?" scope
-	if [[ "$scope" == "y" ]]; then
-		base_dir="$HOME/.agents/skills"
-	else
-		base_dir=".agents/skills"
+	if [[ -z "$base_dir" ]]; then
+		echo
+		log_info "Where do you want to install the skill?"
+		read_confirm "Install globally (~/.agents/skills/)?" scope
+		if [[ "$scope" == "y" ]]; then
+			base_dir="$HOME/.agents/skills"
+		else
+			base_dir=".agents/skills"
+		fi
 	fi
 
 	local skill_dir="$base_dir/$skill_name"
 	if [[ -d "$skill_dir" ]]; then
-		log_warn "Skill already exists: $skill_dir"
-		read_confirm "Overwrite?" confirm
-		[[ "$confirm" != "y" ]] && return 0
-		rm -rf "$skill_dir"
+		if (( all )); then
+			rm -rf "$skill_dir"
+		else
+			log_warn "Skill already exists: $skill_dir"
+			read_confirm "Overwrite?" confirm
+			[[ "$confirm" != "y" ]] && return 0
+			rm -rf "$skill_dir"
+		fi
 	fi
 
 	mkdir -p "$skill_dir/memories"
@@ -1053,7 +1183,14 @@ brain_skill() {
 brain_edit() {
 	_brain_ensure || return 1
 
-	local slug="$1"
+	# ── flags: --content rewrites the body non-interactively ──
+	local slug="" content=""
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--content) content="$2"; shift 2 ;;
+		*) [[ -z "$slug" ]] && slug="$1"; shift ;;
+		esac
+	done
 	local file=""
 
 	if [[ -n "$slug" ]]; then
@@ -1070,6 +1207,25 @@ brain_edit() {
 	fi
 
 	if [[ -z "$file" ]]; then
+		return 0
+	fi
+
+	# ── Non-interactive body replacement ──
+	if [[ -n "$content" ]]; then
+		local fm_end
+		fm_end=$(awk '/^---$/ {++n} n==2 {print NR; exit}' "$file")
+		if [[ -n "$fm_end" ]]; then
+			{
+				head -n "$fm_end" "$file"
+				echo
+				echo "$content"
+			} >"$file.new"
+			mv "$file.new" "$file"
+		else
+			echo "$content" >>"$file"
+		fi
+		log_success "Memory updated: ${D_CYAN}$(_brain_title "$file")${D_NC}"
+		echo
 		return 0
 	fi
 
@@ -1105,7 +1261,14 @@ brain_edit() {
 brain_delete() {
 	_brain_ensure || return 1
 
-	local slug="$1"
+	# ── flags: --yes skips the confirmation (AI agent mode) ──
+	local slug="" yes=0
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--yes) yes=1; shift ;;
+		*) [[ -z "$slug" ]] && slug="$1"; shift ;;
+		esac
+	done
 	local file=""
 
 	if [[ -n "$slug" ]]; then
@@ -1127,12 +1290,14 @@ brain_delete() {
 
 	local title
 	title=$(_brain_title "$file")
-	echo
-	log_warn "Delete memory: ${D_CYAN}$title${D_NC}?"
-	read_confirm "This cannot be undone" confirm
-	if [[ "$confirm" != "y" ]]; then
-		log_info "Cancelled"
-		return 0
+	if [[ "$yes" != "1" ]]; then
+		echo
+		log_warn "Delete memory: ${D_CYAN}$title${D_NC}?"
+		read_confirm "This cannot be undone" confirm
+		if [[ "$confirm" != "y" ]]; then
+			log_info "Cancelled"
+			return 0
+		fi
 	fi
 
 	# Remove relations from related files
@@ -1238,7 +1403,7 @@ brain_main() {
 		brain_init
 		;;
 	save)
-		brain_save
+		brain_save "$@"
 		;;
 	search)
 		brain_search "$@"
@@ -1262,10 +1427,10 @@ brain_main() {
 		brain_show "$@"
 		;;
 	graph | map)
-		brain_graph
+		brain_graph "$@"
 		;;
 	skill | skills)
-		brain_skill
+		brain_skill "$@"
 		;;
 	sync)
 		brain_sync

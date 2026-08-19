@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/version"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -63,6 +64,7 @@ install_minimax_cli() {
 }
 
 uninstall_minimax_cli() {
+  _walkie_remove_wrapper minimax mmx
   if ! command -v mmx &>/dev/null; then
     log_success "MiniMax CLI is not installed"
     return 2

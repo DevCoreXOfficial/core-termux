@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -46,6 +47,7 @@ install_supercode() {
 }
 
 uninstall_supercode() {
+  _walkie_remove_wrapper supercode
   if ! command -v supercode &>/dev/null; then
     log_info "SuperCode is not installed"
     return 2

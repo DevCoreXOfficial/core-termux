@@ -37,6 +37,7 @@ core_help() {
   separator_section "Available Commands"
   echo
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "--version" "Show current version"
+  printf "    ${D_CYAN}%-12s${D_NC} %s\n" "agent" "AI assistant & task agent"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "brain" "Second brain — save and search memories"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "env" "Manage environment variables"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "install" "Install modules and packages"

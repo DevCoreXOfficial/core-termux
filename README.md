@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.26.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.27.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -69,6 +69,7 @@ core
 | Command | Description |
 |---------|-------------|
 | [`core --version`](#core---version) | Show current version |
+| [`core agent`](#core-agent) | Local AI assistant & task agent |
 | [`core brain`](#core-brain) | Second brain — save and search memories |
 | [`core env`](#core-env) | Manage environment variables |
 | [`core install`](#core-install) | Install specific modules |
@@ -165,8 +166,59 @@ core --version
 
 **Output:**
 ```
-4.26.0
+4.27.0
 ```
+
+---
+
+### `core agent`
+
+Local AI assistant and task agent backed by an OpenAI-compatible endpoint (default: `gemma-4-e2b-it-cq4` served by Cactus Engine on `http://127.0.0.1:8000/v1`). `ask` answers questions with colored markdown; `run` is a full agent that writes files and runs commands on your machine. If the model server is down, the agent starts `cactus` in the background (logs → `~/.cache/core-termux/core-agent.log`) and stops it when you leave the interactive shell.
+
+```bash
+core agent ask -p "Explain rsync"                     # One-shot question
+core agent run -p "create a backup script"            # One-shot task (files + commands)
+core agent ask                                        # Interactive chat shell
+core agent run                                        # Interactive agent shell
+core agent status                                     # Endpoint/model status
+core agent config                                     # Show or edit saved settings
+```
+
+**Options (ask & run):**
+
+| Option | Description |
+|--------|-------------|
+| `-p, --prompt <text>` | Task/question (omit for the interactive shell) |
+| `-m, --model <name>` | Model id (default: `gemma-4-e2b-it-cq4`) |
+| `-u, --endpoint <url>` | OpenAI-compatible endpoint (default: `http://127.0.0.1:8000/v1`) |
+| `-t, --temperature <n>` | Sampling temperature (default: `0.3`) |
+| `--max-tokens <n>` | Max output tokens (default: `2048`) |
+| `-w, --workspace <dir>` | Agent working dir (run mode, default: `$PWD`) |
+| `-n, --max-iterations <n>` | Agent loop limit (default: `12`) |
+| `-y, --yes` | Auto-approve commands (skip y/N prompt) |
+
+**Files & commands:**
+
+- Type `@name` in a message to attach a file's contents (live fzf picker while typing)
+- Start a message with `!` for shell mode (e.g. `!git status`) — the output is added to the agent's context
+- Commands from the model run only after your `y/N` confirmation (`-y` auto-approves)
+- Press `ESC ESC` at any prompt to cancel the agent
+- The interactive REPL remembers the conversation and shows `[context % · elapsed]` after each answer/task
+- Dictate your prompt with `/voice` (Termux:API)
+
+**Interactive slash commands:** `/help`, `/model <name>`, `/endpoint <url>`, `/temp <n>`, `/max <n>`, `/workspace <dir>`, `/voice`, `/clear`, `/history`, `/status`, `/exit`
+
+**Example session:**
+
+```bash
+$ core agent ask
+
+    you ▸ explain git rebase vs merge
+
+    git rebase rewrites the history of your current branch...
+```
+
+> **Tip:** `core agent` also runs as a walkie agent — `walkie agent <channel> --cli core`.
 
 ---
 
@@ -1090,7 +1142,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.26.0 (current: 4.25.0)
+⚠ New version available: 4.27.0 (current: 4.26.0)
 
 ➜ Run: core update core to update
 ```

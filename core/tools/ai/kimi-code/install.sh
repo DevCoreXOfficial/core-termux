@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -64,6 +65,7 @@ install_kimi_code() {
 }
 
 uninstall_kimi_code() {
+  _walkie_remove_wrapper kimi kimi-code
   if ! command -v kimi &>/dev/null; then
     log_success "Kimi Code is not installed"
     return 2

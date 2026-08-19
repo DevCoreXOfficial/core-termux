@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 KILOCODE_DATA_DIR="$HOME/.local/share/core-termux-data/kilocode"
@@ -299,6 +300,7 @@ install_kilocode_cli() {
 }
 
 uninstall_kilocode_cli() {
+  _walkie_remove_wrapper kilo kilocode
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/kilocode" ]; then

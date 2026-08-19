@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -63,6 +64,7 @@ install_openclaude() {
 }
 
 uninstall_openclaude() {
+  _walkie_remove_wrapper openclaude
   if ! command -v openclaude &>/dev/null; then
     log_info "OpenClaude is not installed"
     return 2

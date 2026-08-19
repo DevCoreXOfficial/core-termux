@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 MIMOCODE_DATA_DIR="$HOME/.local/share/core-termux-data/mimocode"
@@ -277,6 +278,7 @@ install_mimocode() {
 }
 
 uninstall_mimocode() {
+  _walkie_remove_wrapper mimo mimocode
   log_info "Uninstalling mimocode..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

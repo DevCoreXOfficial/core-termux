@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 QODER_DATA_DIR="$HOME/.local/share/core-termux-data/qoder"
@@ -322,6 +323,7 @@ install_qoder() {
 }
 
 uninstall_qoder() {
+  _walkie_remove_wrapper qodercli
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if [ ! -f "$PREFIX/bin/qodercli" ]; then

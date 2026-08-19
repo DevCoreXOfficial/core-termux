@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -69,6 +70,7 @@ install_openclaw() {
 }
 
 uninstall_openclaw() {
+  _walkie_remove_wrapper openclaw
   if ! command -v openclaw &>/dev/null; then
     log_info "OpenClaw is not installed"
     return 2

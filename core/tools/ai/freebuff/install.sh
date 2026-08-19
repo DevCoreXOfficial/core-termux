@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 FREEBUFF_DATA_DIR="$HOME/.local/share/core-termux-data/freebuff"
@@ -294,6 +295,7 @@ install_freebuff() {
 }
 
 uninstall_freebuff() {
+  _walkie_remove_wrapper freebuff
   log_info "Uninstalling Freebuff..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

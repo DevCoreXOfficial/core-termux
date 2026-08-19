@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/version"
 import "@/utils/uninstall"
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 
@@ -64,6 +65,7 @@ install_gemini_cli() {
 }
 
 uninstall_gemini_cli() {
+  _walkie_remove_wrapper gemini
   if ! command -v gemini &>/dev/null; then
     log_info "Gemini CLI is not installed"
     return 2

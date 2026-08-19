@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 CLAUDE_DATA_DIR="$HOME/.local/share/core-termux-data/claude"
@@ -274,6 +275,7 @@ install_claude_code() {
 }
 
 uninstall_claude_code() {
+  _walkie_remove_wrapper claude
   log_info "Uninstalling Claude Code..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -5,6 +5,7 @@ import "@/utils/version"
 import "@/utils/uninstall"
 
 import "@/tools/lang/bun/install"
+import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 COMMAND_CODE_DATA_DIR="$HOME/.local/share/core-termux-data/command-code"
@@ -84,6 +85,7 @@ install_command_code() {
 }
 
 uninstall_command_code() {
+  _walkie_remove_wrapper command-code
   if ! command -v command-code &>/dev/null; then
     log_info "Command Code is not installed"
     return 2

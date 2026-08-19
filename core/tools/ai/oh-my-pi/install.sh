@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/utils/walkie"
 
 : "${CORE_CACHE:=$HOME/.cache/core-termux}"
 : "${CORE_PATH:=$HOME/core-termux/core}"
@@ -317,6 +318,7 @@ _omp_is_proot() {
 }
 
 uninstall_oh_my_pi() {
+  _walkie_remove_wrapper omp
   mkdir -p "$(dirname "$LOG_FILE")"
 
   if ! _omp_is_proot_glibc && ! _omp_is_native && ! _omp_is_proot; then
