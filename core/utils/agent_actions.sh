@@ -21,11 +21,12 @@ import "@/utils/colors"
 
 AGENT_CONFIRM_COMMANDS="${AGENT_CONFIRM_COMMANDS:-1}"
 AGENT_YES=0
-# smart file attachment: files up to AGENT_ATTACH_SMALL lines are attached
-# fully; larger files only their first AGENT_ATTACH_HEAD lines plus the total
-# line count, so the model reads the rest in parts (sed/grep command blocks).
-AGENT_ATTACH_SMALL="${AGENT_ATTACH_SMALL:-100}"
-AGENT_ATTACH_HEAD="${AGENT_ATTACH_HEAD:-60}"
+# PLAN mode (read-only): ## File: blocks are ignored and write commands are
+# blocked; only read-only commands run. Toggle with --plan/--build or the
+# REPL slash commands /plan and /build.
+AGENT_PLAN_MODE=0
+# File attachment: a user's `@file` reference attaches the file's FULL
+# content, so the agent already has everything and never needs to re-read it.
 
 # ------------------------------------------------------------
 # agent_tools_available — comma list of tools actually installed,
@@ -51,36 +52,52 @@ agent_tools_available() {
 # ------------------------------------------------------------
 agent_system_prompt() {
 	local workspace="$1"
-	local tools
+	local tools mode_name mode_rules sys
 	tools=$(agent_tools_available)
+	if (( AGENT_PLAN_MODE )); then
+		mode_name="PLAN (read-only)"
+		mode_rules=$(cat <<'MODE_RULES_PLAN'
+- The host will NOT write any ## File: block you emit and will BLOCK every write command (rm, mv, cp, mkdir, touch, chmod, chown, redirections like > and >>, tee, git add/commit/push, package installs, ...). Only read-only commands are executed (ls, find, cat, sed -n, grep, rg, head, tail, stat, wc, git status/log/diff, ...).
+- Goal: explore and analyze, then PROPOSE a concrete plan — the files to create or edit with their full proposed content, and the commands to run. Do not try to apply anything.
+- When you are done analyzing, write the plan as your final summary with NO file or command blocks. The user switches to BUILD mode (type /build) so you can apply it.
+MODE_RULES_PLAN
+)
+	else
+		mode_name="BUILD (full access)"
+		mode_rules=$(cat <<'MODE_RULES_BUILD'
+- You may create and edit files with ## File: blocks and run shell commands (the host asks for confirmation before each command).
+- Read a file before overwriting it; never write blindly.
+MODE_RULES_BUILD
+)
+	fi
 
-	sed -e "s|{WORKSPACE}|$workspace|g" \
+	sys=$(sed -e "s|{WORKSPACE}|$workspace|g" \
 		-e "s|{HOME}|$HOME|g" \
 		-e "s|{PWD}|$PWD|g" \
-		-e "s|{ATTACH_SMALL}|$AGENT_ATTACH_SMALL|g" \
-		-e "s|{ATTACH_HEAD}|$AGENT_ATTACH_HEAD|g" \
 		-e "s|{TOOLS}|$tools|g" <<'AGENT_SYSTEM_PROMPT'
-You are an autonomous CLI agent. Your job is to complete the user's task on this real machine. You NEVER execute anything yourself: you only write markdown, and the host (bash) parses that markdown and performs the file writes and shell commands you describe.
+You are an autonomous CLI agent that completes the user's task on this real machine. You NEVER execute anything yourself: you only write markdown, and the host (bash) parses it and performs the file writes and shell commands you describe.
 
-## LANGUAGE (important)
-- Reply in the SAME LANGUAGE the user used in their latest message (Spanish in -> Spanish out, English in -> English out, etc.).
-- Code, commands, file names, paths and technical identifiers always stay in English.
+## LANGUAGE
+Reply in the SAME LANGUAGE the user used in their latest message (Spanish in -> Spanish out, English in -> English out). Code, commands, file names and paths always stay in English.
 
 ## ENVIRONMENT FACTS (trust these, never invent paths)
 - OS: Termux (Android), Linux-like environment, bash shell.
-- Real home directory: {HOME}
-- Current working directory: {PWD}
+- Real home: {HOME} • Current working directory: {PWD}
 - Your workspace (create everything here unless told otherwise): {WORKSPACE}
 - Installed tools you can use: {TOOLS}
-- Use ONLY real absolute paths, or paths RELATIVE to the workspace. Never guess a path exists; inspect first with a command block when unsure.
+- Use ONLY real absolute paths or paths RELATIVE to the workspace. Never guess a path exists; inspect first with a command block when unsure.
+
+## CURRENT MODE
+- Mode: {MODE_NAME}
+{MODE_RULES}
 
 ## HOW TO CREATE OR EDIT FILES (bash writes them for you)
-For every file you want, write a heading `## File: <path>` (or `### <path>`) IMMEDIATELY followed by ONE fenced code block containing the ENTIRE final content. bash creates parent directories and writes the block verbatim. Rules:
-- Put ALL the files you want in a single response, one heading+block pair per file. The host creates every one of them.
-- Never use "..." or "// rest of the code" placeholders — the content must be complete and final.
-- If a file already exists and you must change it, either include the full new content (overwrites) or read it first with a command block and describe exactly what changes.
-- Never re-emit a file just to "show" it (e.g. a file the user attached with @ or one that already exists unchanged). `## File:` blocks are ONLY for files you are actually creating or modifying; a block that would write identical content over an existing file is skipped silently by the host.
-- NEVER write a `## File:` block for a file the user attached with `action="no-read"` (or any file whose content you have not actually been shown). The host IGNORES such blocks — the file is never created or overwritten — and you waste an iteration.
+For every file you want, write a heading `## File: <path>` (or `### <path>`) IMMEDIATELY followed by ONE fenced code block with the ENTIRE final content. bash creates parent directories and writes the block verbatim. Rules:
+- Put ALL the files you want in a single response, one heading+block pair per file.
+- Never use "..." or "// rest of the code" placeholders — content must be complete and final.
+- If a file already exists and you must change it, include the full new content (overwrites) or read it first and describe exactly what changes.
+- Never re-emit a file just to "show" it. `## File:` blocks are ONLY for files you are actually creating or modifying; a block that would write identical content over an existing file is skipped silently.
+- NEVER write a `## File:` block for a file attached with `action="no-read"` — the host IGNORES such blocks.
 
 Example:
 ## File: index.html
@@ -91,33 +108,37 @@ Example:
 ```
 
 ## HOW TO RUN SHELL COMMANDS (bash asks the user first)
-To run commands, put them in a fenced block tagged ```bash, ```sh or ```shell, or on a line starting with `$ `. The host shows the user the command and asks for permission (y/N) before running it — so explain what each command does and why it is needed. Rules:
-- RUN COMMANDS DIRECTLY. For simple operations — deleting a file or directory, git status, listing files, reading a file, checking versions — just emit the command (e.g. `$ rm -rf isolated`, `$ git status`). Do NOT create a .sh script file for anything that fits in a single command.
-- To delete, move, rename, copy or run a file, ALWAYS use a command block (```bash or `$ `). NEVER put the command inside a `## File:` block — a `## File:` block only creates/edits file content, it never runs anything.
-- Only write a script file when the task genuinely needs one: a reusable script, loops/conditionals/variables, or several commands the user will want to re-run later. Then run it with a command block (e.g. `$ bash my_script.sh`).
+Put commands in a fenced block tagged ```bash, ```sh or ```shell, or on a line starting with `$ `. The host shows the user the command and asks for permission (y/N) before running it. Rules:
+- CRITICAL — NEVER put a `## File:` heading in front of a command: the host would WRITE that block verbatim as the file's content instead of running it, overwriting the file. Use a bare ```bash / ```sh block or a `$ ` line with NO `File:` heading before it.
+- RUN COMMANDS DIRECTLY. For simple operations — deleting files, git status, listing/reading files, checking versions — just emit the command (e.g. `$ rm -rf foo`, `$ git status`). Do NOT create a .sh script for anything that fits in a single command.
+- To delete, move, rename, copy or run a file, ALWAYS use a command block. NEVER put the command inside a `## File:` block — it only creates/edits file content, it never runs anything.
+- Only write a script file when the task genuinely needs one (reusable script, loops/variables, commands the user will re-run). Then run it with `$ bash my_script.sh`.
 - Batch related commands into a single block (one confirmation per block).
-- Commands run with bash -c inside the workspace, 60s timeout. stdout/stderr are returned to you inside <command_result> blocks.
-- Prefer installed tools (jq, rg, sed/awk, git...). Never invent flags; check with --help first if unsure.
+- Commands run with bash -c inside the workspace, 60s timeout. stdout/stderr come back to you inside <command_result> blocks. State does not persist between blocks — persist data in files.
 - Do NOT use sudo (Termux has no sudo). Do not install packages unless the user explicitly asked.
-- Keep commands deterministic and idempotent where possible. Each <command_result> comes back as a fresh message; state does not persist between blocks — persist data in files.
 
 ## WORKFLOW
+0. Explore before acting when needed: if a task involves files or a layout you are unsure about, inspect first with read-only commands (`$ ls -la`, `$ find . -maxdepth 3 -type f`). Never guess a path or content exists; read it first.
 1. Plan briefly in prose (headings/lists are fine).
-2. Emit the file blocks and command blocks the task needs — prefer DIRECT command blocks over script files unless the task really needs a reusable script.
+2. Emit the file blocks and command blocks the task needs — prefer DIRECT command blocks over script files.
 3. After your commands run, the host sends you their <command_result> output. Verify, fix mistakes, then continue or finish.
 4. When the task is complete, write a final summary WITHOUT any file or command blocks: what you created/changed, which commands should run next, and how to use the result.
 
 ## ATTACHED FILES
-If the user's message contains <attached_file path="...">...</attached_file> blocks, those hold the real contents of files the user wants you to work with. Read them carefully before acting.
-- The `lines` attribute is the file's total line count. Files up to {ATTACH_SMALL} lines are attached fully; larger files only their first {ATTACH_HEAD} lines (see `partial="first-..."`). If you need the rest, read it in parts with command blocks, e.g. `$ sed -n '120,240p' <path>` or `$ grep -n 'pattern' <path>`. Never assume you have seen a file you only read partially.
-- A block with `action="no-read"` carries no content — the task did not require reading the file. Only read it (via a command block) if you actually need it. Such files are WRITE-PROTECTED: a `## File:` block you emit for one of them is ignored by the host.
+Files the user attaches with @ are included in full above. Read them and act on the task. A block with `action="no-read"` carries no content and is WRITE-PROTECTED — never emit a `## File:` block for it.
 
 ## SHELL COMMAND CONTEXT
-The conversation may contain <shell_command> blocks: shell commands the user ran directly from the REPL (e.g. `!git status`) together with their real output. Treat them as current, accurate context about the state of the machine.
+The conversation may contain <shell_command> blocks: shell commands the user ran directly from the REPL (e.g. `!git status`) with their real output. Treat them as current, accurate state of the machine.
 
 ## COMPACTED SUMMARY
-If the conversation contains <compacted_summary>...</compacted_summary> blocks, they are condensed summaries of earlier turns (the host compacts when the context is near full). Treat them as ground truth for everything that happened before them — follow the thread they preserve: the original goal, files created/edited, commands run and the current state. Do not ask the user to repeat information that is in the summary.
+If the conversation contains <compacted_summary>...</compacted_summary> blocks, they are condensed summaries of earlier turns (the host compacts when the context is near full). Treat them as ground truth for everything before them — follow the thread: the original goal, files created/edited, commands run and the current state. Do not ask the user to repeat what is in the summary.
 AGENT_SYSTEM_PROMPT
+)
+	# bash expansion for the multi-line placeholders (sed cannot hold
+	# literal newlines in a replacement); the rest is single-line.
+	sys=${sys//\{MODE_NAME\}/$mode_name}
+	sys=${sys//\{MODE_RULES\}/$mode_rules}
+	printf '%s' "$sys"
 }
 
 # ------------------------------------------------------------
@@ -202,6 +223,44 @@ _agent_is_no_read() {
 }
 
 # ------------------------------------------------------------
+# _agent_block_is_command <content> <path> — return 0 when a
+# fenced block that follows a `## File:` heading is really a
+# SHELL COMMAND (the model's command-in-File slip) instead of
+# file content. Signals: shell-prompt `$ ` lines, or a short
+# bare command under a file whose extension is not shell-like
+# (a .tsx/.py/.js/... file is never legitimately written from a
+# bash block). A shebang or a shell-script extension keeps the
+# block as file content (a real script).
+# ------------------------------------------------------------
+_agent_block_is_command() {
+	local buf="$1" path="$2"
+	# an empty block is a file (e.g. creating an empty file)
+	[[ -z "$buf" ]] && return 1
+	# shell-prompt markers are the strongest signal
+	if [[ "$(_agent_strip_shell_prompt "$buf")" != "$buf" ]]; then
+		return 0
+	fi
+	# a shebang means "this is a script file", not a command
+	local first
+	first=$(printf '%s\n' "$buf" | grep -m1 -v '^[[:space:]]*$')
+	if [[ "$first" == \#!* ]]; then
+		return 1
+	fi
+	# shell-script-ish target paths stay files
+	local base ext
+	base=$(basename "$path")
+	ext="${base##*.}"
+	case "$ext" in
+	sh | bash | zsh | fish | ksh | ash | dash) return 1 ;;
+	esac
+	# otherwise a short block is a command, a longer one a script
+	local n
+	n=$(printf '%s\n' "$buf" | grep -cv '^[[:space:]]*$')
+	(( n <= 3 )) && return 0
+	return 1
+}
+
+# ------------------------------------------------------------
 # agent_parse_response <text> — walk the model's markdown and
 # split it into files and commands. Writes:
 #   files_manifest.txt : n<TAB>path<TAB>lang      (+ action_file_n)
@@ -249,12 +308,14 @@ agent_parse_response() {
 				buf+="$cl"$'\n'
 			done
 			if [[ -n "$pending" ]]; then
-				# The model sometimes (wrongly) puts a shell COMMAND in a
-				# `## File:` block for a write-protected no-read file
-				# (e.g. `File: index.js` + bash block with `rm index.js`).
-				# Writing it is forbidden anyway, so reinterpret it as a
-				# command block instead of silently dropping the action.
-				if [[ "$lang" =~ ^(bash|sh|shell|zsh|console)$ ]] && _agent_is_no_read "$pending"; then
+				# The model sometimes (wrongly) puts a shell COMMAND under a
+				# `## File:` heading (e.g. `### File: page.tsx` + a bash block
+				# with `$ sed -n ...` when it meant to READ the file). Writing
+				# it would overwrite a real file with command text, so whenever
+				# the block really is a command — write-protected no-read file,
+				# or `_agent_block_is_command` (shell-prompt markers / non-shell
+				# extension) — reinterpret it as a command block instead.
+				if [[ "$lang" =~ ^(bash|sh|shell|zsh|console)$ ]] && { _agent_is_no_read "$pending" || _agent_block_is_command "$buf" "$pending"; }; then
 					local stripped
 					stripped=$(_agent_strip_shell_prompt "$buf")
 					if [[ "$stripped" != \#!* ]]; then
@@ -379,18 +440,65 @@ _agent_exec_to_file() {
 }
 
 # ------------------------------------------------------------
+# _agent_cmd_is_write <cmd> — return 0 when a command (or command
+# chain) can modify the machine. Used to enforce PLAN (read-only)
+# mode. Heuristic: file redirections plus a blocklist of mutating
+# commands; safe read-only commands (ls, cat, sed -n, grep, git
+# status/log/diff, ...) are not matched.
+# ------------------------------------------------------------
+_agent_cmd_is_write() {
+	local cmd="$1"
+	# file redirections (2>&1 / >= are not redirections to a file)
+	if printf '%s\n' "$cmd" | grep -qE '(^|[;&|[:space:]])(>|>>)[^=&]'; then
+		return 0
+	fi
+	# blocklist of commands that write to disk / change state
+	printf '%s\n' "$cmd" | grep -qiE '(^|[;&|[:space:]])(rm|rmdir|unlink|mv|cp|mkdir|touch|ln|chmod|chown|chgrp|install|truncate|tee|dd|mkfs|mount|umount|tar|gzip|gunzip|bzip2|xz|zstd|curl|wget|python3|node|npm|bun|yarn|pnpm|cargo|go |rustc|git (add|commit|push|pull|merge|rebase|reset|checkout|switch|restore|clean|stash|tag|clone|init|rm|mv)|pkg (install|uninstall|upgrade|reinstall|update)|apt( |-)|apt-get|dpkg|yum|dnf|pacman|brew|pip|pip3|uv|conda|mysql|psql|sqlite3|redis-cli|kill|pkill|killall|service|systemctl|halt|reboot|shutdown|sudo|doas|su)[[:space:]]' && return 0
+	return 1
+}
+
+# ------------------------------------------------------------
+# _agent_cmd_is_read_inspection <cmd> — return 0 when <cmd> is a
+# read-only inspection command (cat/sed/head/tail/ls/find/grep/...
+# or a read-only git subcommand). Used to skip re-running an
+# identical read within the same task: its output is still in the
+# conversation, so re-running it would only waste time and tokens.
+# ------------------------------------------------------------
+_agent_cmd_is_read_inspection() {
+	local cmd="$1" first
+	first=$(printf '%s\n' "$cmd" | sed 's/^[[:space:]]*//' | cut -d' ' -f1)
+	case "$first" in
+	cat | sed | awk | head | tail | ls | find | grep | rg | wc | stat | file | diff | sort | uniq | cut | tr | tree | du | df | which | type | echo | printf | jq | wget | curl)
+		return 0
+		;;
+	git)
+		case " $cmd " in
+		*" status "* | *" log "* | *" diff "* | *" show "* | *" branch "* | *" remote "* | *" ls-files "* | *" ls "* | *" grep "* | *" rev-parse "* | *" stash list "* | *" tag "*)
+			return 0
+			;;
+		*) return 1 ;;
+		esac
+		;;
+	*) return 1 ;;
+	esac
+}
+
+# ------------------------------------------------------------
 # agent_execute_commands — run every command block from the last
 # parse, asking for y/N confirmation first (unless -y or
 # confirm_commands off). Writes <command_result> blocks into
 # command_results.txt for the follow-up LLM round.
 # Answering 'n' (or pressing ESC ESC) sets AGENT_ABORT=1 and stops
 # the agent, so control returns to the `you ▸` prompt.
+# In PLAN (read-only) mode, write commands are blocked without
+# running and read-only commands run without asking.
 # ------------------------------------------------------------
 agent_execute_commands() {
-	local d cm n lang cmd out code
+	local d cm n lang cmd out code ran_file
 	d=$(agent_md_dir)
 	cm="$d/actions_cmds_manifest.txt"
 	local results_file="$d/command_results.txt"
+	ran_file="$d/ran_commands.txt"
 	: >"$results_file"
 
 	while IFS=$'\t' read -r n lang <&3; do
@@ -399,8 +507,39 @@ agent_execute_commands() {
 		echo
 		printf '    %s$%s %s\n' "$D_GREEN" "$NC" "$cmd"
 
+		# skip re-running an identical read-only inspection command within
+		# this task — its output is still in the conversation. Breaks the
+		# "read the file again and again" loop.
+		if _agent_cmd_is_read_inspection "$cmd" && grep -qxF "$cmd" "$ran_file" 2>/dev/null; then
+			printf '    %s↳ already read earlier — output still in context, skipping%s\n' "$D_GRAY" "$NC"
+			{
+				printf '<command_result tool="run_command" ok="true">\n'
+				printf '<command>%s</command>\n' "$cmd"
+				printf '<status>already executed earlier in this task — re-run skipped; use the earlier output or read a different region</status>\n'
+				printf '</command_result>\n'
+			} >>"$results_file"
+			continue
+		fi
+
+		# PLAN (read-only) mode: write commands are blocked, read-only
+		# commands run without asking (they cannot harm anything).
+		local write=0
+		_agent_cmd_is_write "$cmd" && write=1
+		if (( AGENT_PLAN_MODE && write )); then
+			printf '    %s↳ blocked — PLAN mode is read-only (not executed)%s\n' "$D_YELLOW" "$NC"
+			{
+				printf '<command_result tool="run_command" ok="false">\n'
+				printf '<command>%s</command>\n' "$cmd"
+				printf '<status>blocked in PLAN mode (read-only) — not executed</status>\n'
+				printf '</command_result>\n'
+			} >>"$results_file"
+			continue
+		fi
+
 		local run=0
-		if [[ "$AGENT_CONFIRM_COMMANDS" == "1" && "$AGENT_YES" != "1" ]]; then
+		if (( AGENT_PLAN_MODE )); then
+			run=1
+		elif [[ "$AGENT_CONFIRM_COMMANDS" == "1" && "$AGENT_YES" != "1" ]]; then
 			if [[ -t 0 ]]; then
 				local _ans
 				if agent_confirm "Run this command?" _ans; then
@@ -455,6 +594,11 @@ agent_execute_commands() {
 			printf '<output>\n%s\n</output>\n' "$out"
 			printf '</command_result>\n'
 		} >>"$results_file"
+		# remember read-only inspections that ran, so the host can skip
+		# identical re-reads later in the same task
+		if _agent_cmd_is_read_inspection "$cmd"; then
+			printf '%s\n' "$cmd" >>"$ran_file"
+		fi
 	done 3<"$cm"
 }
 
@@ -815,10 +959,8 @@ agent_line_no_read() {
 # ------------------------------------------------------------
 # agent_attach_file <path> <attf> <want_read> — decide how much of
 # a file to attach to the agent's context:
-#   want_read=0 → reference only (action="no-read", no content)
-#   small file  → full content
-#   large file  → first AGENT_ATTACH_HEAD lines + total line count;
-#                 the model reads the rest in parts with sed/grep
+#   want_read=0 → reference only (action="no-read", no content, write-protected)
+#   want_read=1 → FULL content attached, so the agent never needs to re-read it
 # ------------------------------------------------------------
 agent_attach_file() {
 	local path="$1" attf="$2" want_read="$3" lines
@@ -829,23 +971,11 @@ agent_attach_file() {
 		realpath -m "$path" >>"$(agent_md_dir)/no_read_paths.txt" 2>/dev/null
 		return 0
 	fi
-	if (( lines <= AGENT_ATTACH_SMALL )); then
-		{
-			printf '<attached_file path="%s" lines="%s">\n' "$path" "$lines"
-			cat "$path"
-			printf '\n</attached_file>\n'
-		} >>"$attf"
-	else
-		local from to
-		from=$((AGENT_ATTACH_HEAD + 1))
-		to=$((AGENT_ATTACH_HEAD * 2))
-		{
-			printf '<attached_file path="%s" lines="%s" partial="first-%s">\n' "$path" "$lines" "$AGENT_ATTACH_HEAD"
-			head -n "$AGENT_ATTACH_HEAD" "$path"
-			printf '\n</attached_file>\n'
-			printf '<attach_note path="%s">Only the first %s of %s lines are attached. Read the rest in parts with command blocks, e.g. `$ sed -n "%s,%sp" %s` or `$ grep -n "pattern" %s`.\n</attach_note>\n' "$path" "$AGENT_ATTACH_HEAD" "$lines" "$from" "$to" "$path" "$path"
-		} >>"$attf"
-	fi
+	{
+		printf '<attached_file path="%s" lines="%s">\n' "$path" "$lines"
+		cat "$path"
+		printf '\n</attached_file>\n'
+	} >>"$attf"
 }
 
 # ------------------------------------------------------------

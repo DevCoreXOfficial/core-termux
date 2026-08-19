@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/DevCoreXOfficial/core-termux">
-    <img src="https://img.shields.io/badge/version-4.27.0-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
+    <img src="https://img.shields.io/badge/version-4.27.1-0078D4?style=for-the-badge&logo=appveyor" alt="Version">
   </a>
   <a href="https://github.com/DevCoreXOfficial/core-termux/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-0078D4?style=for-the-badge&logo=bookstack" alt="License">
@@ -166,7 +166,7 @@ core --version
 
 **Output:**
 ```
-4.27.0
+4.27.1
 ```
 
 ---
@@ -196,6 +196,8 @@ core agent config                                     # Show or edit saved setti
 | `-w, --workspace <dir>` | Agent working dir (run mode, default: `$PWD`) |
 | `-n, --max-iterations <n>` | Agent loop limit (default: `12`) |
 | `-y, --yes` | Auto-approve commands (skip y/N prompt) |
+| `--plan` | Plan mode (read-only): no file writes, write commands blocked |
+| `--build` | Build mode (default): files and commands applied |
 
 **Files & commands:**
 
@@ -206,7 +208,11 @@ core agent config                                     # Show or edit saved setti
 - The interactive REPL remembers the conversation and shows `[context % · elapsed]` after each answer/task
 - Dictate your prompt with `/voice` (Termux:API)
 
-**Interactive slash commands:** `/help`, `/model <name>`, `/endpoint <url>`, `/temp <n>`, `/max <n>`, `/workspace <dir>`, `/voice`, `/clear`, `/history`, `/status`, `/exit`
+**Interactive slash commands:** `/help`, `/model <name>`, `/endpoint <url>`, `/temp <n>`, `/max <n>`, `/workspace <dir>`, `/plan`, `/build`, `/voice`, `/clear`, `/history`, `/status`, `/exit`
+
+**Plan vs Build mode:** in **Plan mode** (`--plan` or `/plan`) the agent is read-only — `## File:` blocks are ignored, write commands (rm, mv, mkdir, redirections, git commit, package installs...) are blocked, and only read-only commands (ls, cat, sed -n, grep, git status...) run. Use it to explore and get a concrete plan before touching anything, then switch to **Build mode** (`/build`) to apply it.
+
+**Reading files:** a file attached with `@` is passed to the agent with its FULL content, so the agent already has it in context and doesn't need to re-read it. A `## File:` heading never precedes a command: a command-in-File slip is reinterpreted as a command instead of overwriting your file.
 
 **Example session:**
 
@@ -1142,7 +1148,7 @@ $ core
 
 ── Update Available ─────────────────────────────────
 
-⚠ New version available: 4.27.0 (current: 4.26.0)
+⚠ New version available: 4.27.1 (current: 4.27.0)
 
 ➜ Run: core update core to update
 ```

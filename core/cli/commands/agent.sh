@@ -47,6 +47,8 @@ agent_help() {
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-w, --workspace <dir>" "Agent working dir (run mode, default: \$PWD)"
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-n, --max-iterations <n>" "Agent loop limit (default: $AGENT_MAX_ITERATIONS)"
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-y, --yes" "Auto-approve commands (skip y/N prompt)"
+	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--plan" "Plan mode (read-only): no file writes, write commands blocked"
+	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--build" "Build mode (default): files and commands applied"
 	echo
 	separator_section "Files & commands"
 	echo
@@ -70,6 +72,8 @@ agent_help() {
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/clear" "Reset conversation"
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/history" "Show conversation history"
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/status" "Show current settings"
+	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
+	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/exit" "Leave the interactive shell"
 	echo
 	separator_section "Examples"
@@ -124,6 +128,7 @@ agent_status_line() {
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Temp" "$NC" "$AGENT_TEMPERATURE"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Max tokens" "$NC" "$AGENT_MAX_TOKENS"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Context" "$NC" "$AGENT_CONTEXT_WINDOW tokens"
+	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Mode" "$NC" "$([[ $AGENT_PLAN_MODE == 1 ]] && echo 'PLAN (read-only)' || echo 'BUILD (full access)')"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Workspace" "$NC" "$AGENT_WORKSPACE"
 }
 
@@ -224,6 +229,8 @@ agent_repl_help() {
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/clear" "Reset conversation"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/history" "Show conversation history"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/status" "Show current settings"
+	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
+	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/exit" "Leave the interactive shell"
 	echo
 }
@@ -259,6 +266,8 @@ agent_parse_args() {
 		-n=* | --max-iterations=*) AGENT_MAX_ITERATIONS="${arg#*=}" ;;
 		--max-tokens=*) AGENT_MAX_TOKENS="${arg#*=}" ;;
 		-p | --prompt | -m | --model | -u | --endpoint | -t | --temperature | -w | --workspace | -n | --max-iterations | --max-tokens) prev="$arg" ;;
+		--plan) AGENT_PLAN_MODE=1 ;;
+		--build) AGENT_PLAN_MODE=0 ;;
 		-y | --yes) AGENT_YES=1 ;;
 		-h | --help) AGENT_SHOW_HELP=1 ;;
 		-*) log_warn "Unknown option: $arg" ;;
@@ -335,6 +344,21 @@ agent_repl_handle() {
 	/status)
 		echo
 		agent_status_line
+		echo
+		return 0
+		;;
+	/plan)
+		AGENT_PLAN_MODE=1
+		echo
+		log_success "Mode → ${D_CYAN}PLAN (read-only)${D_NC} — file blocks and write commands will be ignored"
+		list_item "Next task will only run read-only commands and produce a plan"
+		echo
+		return 0
+		;;
+	/build)
+		AGENT_PLAN_MODE=0
+		echo
+		log_success "Mode → ${D_CYAN}BUILD (full access)${D_NC} — files and commands will be applied"
 		echo
 		return 0
 		;;
@@ -572,7 +596,7 @@ agent_run_repl() {
 	clear
 
 	agent_banner
-	separator_section "Core Agent — Run (agent mode)"
+	separator_section "Core Agent — Run ($([[ $AGENT_PLAN_MODE == 1 ]] && echo 'PLAN · read-only' || echo 'BUILD mode'))"
 	echo
 	agent_status_line
 	echo
@@ -642,6 +666,8 @@ agent_run_loop() {
 	AGENT_ACTIONS_WORKSPACE="$AGENT_WORKSPACE"
 	AGENT_ABORT=0
 	agent_timer_start
+	# fresh read-dedup registry per task
+	: >"$(agent_md_dir)/ran_commands.txt"
 
 	local iter=0 step=0 resp outfile parsed nfiles ncmds results rfile _ems
 	while (( iter < AGENT_MAX_ITERATIONS )); do
@@ -679,7 +705,17 @@ agent_run_loop() {
 
 		AGENT_FILES_WRITTEN=0
 		if (( nfiles > 0 )); then
-			agent_apply_files
+			if (( AGENT_PLAN_MODE )); then
+				# PLAN mode: never write; just tell the model what was skipped
+				echo
+				separator_section "Plan mode — files skipped"
+				printf '    %s↳ %s ## File: block(s) NOT written (read-only mode)%s\n' "$D_GRAY" "$nfiles" "$NC"
+				AGENT_FILES_WRITTEN=0
+			else
+				agent_apply_files
+				# file writes invalidate earlier reads: allow re-reading to verify
+				(( AGENT_FILES_WRITTEN > 0 )) && : >"$(agent_md_dir)/ran_commands.txt"
+			fi
 		fi
 
 		results=""
@@ -696,10 +732,21 @@ agent_run_loop() {
 
 		if [[ -n "$results" ]]; then
 			history=$(agent_history_add "$history" user "$results")
-		elif (( AGENT_FILES_WRITTEN > 0 )); then
-			history=$(agent_history_add "$history" user "<system>Files were created or updated. Verify them with a command block if needed, then write your final summary (markdown) with no file or command blocks.</system>")
-		else
-			history=$(agent_history_add "$history" user "<system>No files were written and no commands ran (any file blocks the response contained targeted write-protected no-read files, or were identical to files already on disk, and were skipped). If the task needs a shell action (delete/move/rename/run/...), you MUST emit it as a \`$ \` or \`\`\`bash command block — a \`## File:\` block never runs anything and is ignored for write-protected files. Then finish with a short summary.</system>")
+		fi
+
+		if (( AGENT_PLAN_MODE )); then
+			# plan mode: keep the model from trying to apply changes
+			if (( nfiles > 0 )); then
+				history=$(agent_history_add "$history" user "<system>PLAN mode is active (read-only): your ## File: blocks were NOT written and write commands were blocked. Only read-only commands ran. Now present your plan (files to create or edit with their proposed content, commands to run). Do NOT emit more file blocks or write commands until the user switches to BUILD mode (type /build).</system>")
+			elif [[ -z "$results" ]]; then
+				history=$(agent_history_add "$history" user "<system>PLAN mode is active (read-only). Keep inspecting with read-only command blocks if needed; when ready, write your analysis and plan as a final summary with NO file or command blocks.</system>")
+			fi
+		elif [[ -z "$results" ]]; then
+			if (( AGENT_FILES_WRITTEN > 0 )); then
+				history=$(agent_history_add "$history" user "<system>Files were created or updated. Verify them with a command block if needed, then write your final summary (markdown) with no file or command blocks.</system>")
+			else
+				history=$(agent_history_add "$history" user "<system>No files were written and no commands ran (any file blocks the response contained targeted write-protected no-read files, or were identical to files already on disk, and were skipped). If the task needs a shell action (delete/move/rename/run/...), you MUST emit it as a \`$ \` or \`\`\`bash command block — a \`## File:\` block never runs anything and is ignored for write-protected files. Then finish with a short summary.</system>")
+			fi
 		fi
 
 		history=$(agent_history_manage "$history" "$AGENT_CONTEXT_WINDOW")
