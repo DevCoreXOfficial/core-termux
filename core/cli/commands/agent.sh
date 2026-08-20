@@ -128,7 +128,8 @@ agent_status_line() {
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Temp" "$NC" "$AGENT_TEMPERATURE"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Max tokens" "$NC" "$AGENT_MAX_TOKENS"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Context" "$NC" "$AGENT_CONTEXT_WINDOW tokens"
-	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Mode" "$NC" "$([[ $AGENT_PLAN_MODE == 1 ]] && echo 'PLAN (read-only)' || echo 'BUILD (full access)')"
+	# PLAN/BUILD modes are a run-mode concept; hide them in ask
+	[[ "$AGENT_REPL_MODE" != "ask" ]] && printf '    %b%-10s%b : %s\n' "$D_CYAN" "Mode" "$NC" "$([[ $AGENT_PLAN_MODE == 1 ]] && echo 'PLAN (read-only)' || echo 'BUILD (full access)')"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Workspace" "$NC" "$AGENT_WORKSPACE"
 }
 
@@ -218,6 +219,7 @@ agent_config_cmd() {
 # Slash-command help
 # ------------------------------------------------------------
 agent_repl_help() {
+	local mode="${1:-$AGENT_REPL_MODE}"
 	separator_section "Slash commands"
 	echo
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/model <name>" "Switch model"
@@ -229,8 +231,10 @@ agent_repl_help() {
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/clear" "Reset conversation"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/history" "Show conversation history"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/status" "Show current settings"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
+	if [[ "$mode" != "ask" ]]; then
+		printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
+		printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
+	fi
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/exit" "Leave the interactive shell"
 	echo
 }
@@ -286,6 +290,63 @@ agent_show_answer() {
 }
 
 # ------------------------------------------------------------
+# agent_strip_meta_blocks <text> — remove <compacted_summary>
+# blocks that the model sometimes echoes back into its answer.
+# ------------------------------------------------------------
+agent_strip_meta_blocks() {
+	local text="$1"
+	printf '%s' "$text" | sed -e 's/<compacted_summary>.*<\/compacted_summary>//g' \
+		-e '/<compacted_summary>/,/<\/compacted_summary>/d'
+}
+
+# ------------------------------------------------------------
+# agent_clean_output <text> — post-process a model answer with
+# pure bash so the system prompts stay short: drop echoed
+# <compacted_summary> blocks and translate the LaTeX math the
+# model loves to emit ($\rightarrow$, \Rightarrow, ...) into
+# unicode arrows so they render instead of showing as raw text.
+# ------------------------------------------------------------
+agent_clean_output() {
+	local text="$1"
+	text=$(agent_strip_meta_blocks "$text")
+	text=$(printf '%s' "$text" | sed \
+		-e 's/\$\\rightarrow\$/→/g' \
+		-e 's/\$\\Rightarrow\$/⇒/g' \
+		-e 's/\$\\leftarrow\$/←/g' \
+		-e 's/\$\\Leftarrow\$/⇐/g' \
+		-e 's/\$\\to\$/→/g' \
+		-e 's/\$\\leftarrow\$/←/g' \
+		-e 's/\\rightarrow/→/g' \
+		-e 's/\\Rightarrow/⇒/g' \
+		-e 's/\\leftarrow/←/g' \
+		-e 's/\\Leftarrow/⇐/g' \
+		-e 's/\\to\b/→/g')
+	printf '%s' "$text"
+}
+
+# ------------------------------------------------------------
+# agent_response_has_summary <text> — true if the model's answer
+# already ends with a substantial prose summary AFTER its last
+# action (file/command) block. Lets the run loop finish in one
+# iteration when the model did the work AND wrote the summary,
+# instead of forcing a redundant "final summary" iteration.
+# ------------------------------------------------------------
+agent_response_has_summary() {
+	local text="$1"
+	local trail prose
+	trail=$(printf '%s\n' "$text" | awk '
+		BEGIN { in_fence=0; last=0 }
+		/^[[:space:]]*```/ { in_fence = !in_fence; last=NR; next }
+		!in_fence && /^[[:space:]]*\$[[:space:]]/ { last=NR; next }
+		{ a[NR]=$0 }
+		END { for (i=last+1; i<=NR; i++) print a[i] }
+	')
+	prose=$(printf '%s\n' "$trail" | sed '/^[[:space:]]*#/d' | tr '\n' ' ')
+	prose=$(printf '%s\n' "$prose" | sed -E 's/[[:space:]]+/ /g; s/^[[:space:]]*//; s/[[:space:]]*$//')
+	[[ "${#prose}" -ge 40 ]]
+}
+
+# ------------------------------------------------------------
 # agent_ask_once <prompt> — single-shot assistant answer
 # ------------------------------------------------------------
 agent_ask_once() {
@@ -305,7 +366,7 @@ agent_ask_once() {
 	outfile=$(agent_md_dir)/ask_stream.txt
 	AGENT_ABORT=0
 	if agent_exec_loading "Asking ${D_CYAN}$AGENT_MODEL${D_NC}…" agent_chat_text_to "$history" "$outfile"; then
-		resp=$(cat "$outfile")
+		resp=$(agent_clean_output "$(cat "$outfile")")
 		echo
 		if [[ -z "$resp" ]]; then
 			log_warn "Empty response from the model"
@@ -326,9 +387,10 @@ agent_ask_once() {
 # ------------------------------------------------------------
 agent_repl_handle() {
 	local line="$1"
+	local mode="${2:-$AGENT_REPL_MODE}"
 	case "$line" in
 	/help | help)
-		agent_repl_help
+		agent_repl_help "$mode"
 		return 0
 		;;
 	/exit | /quit | /q | exit | quit)
@@ -347,18 +409,23 @@ agent_repl_handle() {
 		echo
 		return 0
 		;;
-	/plan)
-		AGENT_PLAN_MODE=1
-		echo
-		log_success "Mode → ${D_CYAN}PLAN (read-only)${D_NC} — file blocks and write commands will be ignored"
-		list_item "Next task will only run read-only commands and produce a plan"
-		echo
-		return 0
-		;;
-	/build)
-		AGENT_PLAN_MODE=0
-		echo
-		log_success "Mode → ${D_CYAN}BUILD (full access)${D_NC} — files and commands will be applied"
+	/plan | /build)
+		if [[ "$mode" == "ask" ]]; then
+			echo
+			log_warn "Plan/Build modes only exist in ${D_CYAN}core agent run${D_NC} — ask is a plain chat"
+			echo
+			return 0
+		fi
+		if [[ "$line" == "/plan" ]]; then
+			AGENT_PLAN_MODE=1
+			echo
+			log_success "Mode → ${D_CYAN}PLAN (read-only)${D_NC} — file blocks and write commands will be ignored"
+			list_item "Next task will only run read-only commands and produce a plan"
+		else
+			AGENT_PLAN_MODE=0
+			echo
+			log_success "Mode → ${D_CYAN}BUILD (full access)${D_NC} — files and commands will be applied"
+		fi
 		echo
 		return 0
 		;;
@@ -469,6 +536,7 @@ agent_ask() {
 agent_ask_repl() {
 	AGENT_REPL_HISTORY=$(agent_history_new)
 	AGENT_REPL_STEPS=0
+	AGENT_REPL_MODE=ask
 
 	# traps must exist before the server starts, so Ctrl+C during the
 	# startup wait also stops a server we just launched
@@ -499,7 +567,7 @@ agent_ask_repl() {
 		line="$AGENT_REPL_LINE"
 		[[ -z "$line" ]] && continue
 
-		agent_repl_handle "$line"
+		agent_repl_handle "$line" "$AGENT_REPL_MODE"
 		local hc=$?
 		if (( hc == 1 )); then
 			break
@@ -526,7 +594,7 @@ agent_ask_repl() {
 		AGENT_ABORT=0
 		if agent_exec_loading "Asking ${D_CYAN}$AGENT_MODEL${D_NC}…" agent_chat_text_to "$AGENT_REPL_HISTORY" "$outfile"; then
 			_ems=$(agent_timer_ms)
-			resp=$(cat "$outfile")
+			resp=$(agent_clean_output "$(cat "$outfile")")
 			echo
 			if [[ -n "$resp" ]]; then
 				agent_show_answer "$resp"
@@ -583,6 +651,7 @@ agent_run() {
 agent_run_repl() {
 	AGENT_REPL_HISTORY=$(agent_history_new)
 	AGENT_REPL_STEPS=0
+	AGENT_REPL_MODE=run
 
 	# traps must exist before the server starts, so Ctrl+C during the
 	# startup wait also stops a server we just launched
@@ -613,7 +682,7 @@ agent_run_repl() {
 		line="$AGENT_REPL_LINE"
 		[[ -z "$line" ]] && continue
 
-		agent_repl_handle "$line"
+		agent_repl_handle "$line" "$AGENT_REPL_MODE"
 		local hc=$?
 		if (( hc == 1 )); then
 			break
@@ -676,7 +745,7 @@ agent_run_loop() {
 
 		outfile=$(agent_md_dir)/run_stream.txt
 		if agent_exec_loading "  model reasoning…" agent_chat_text_to "$history" "$outfile"; then
-			resp=$(cat "$outfile")
+			resp=$(agent_clean_output "$(cat "$outfile")")
 		elif (( AGENT_ABORT )); then
 			break
 		else
@@ -728,6 +797,14 @@ agent_run_loop() {
 			fi
 			rfile="$(agent_md_dir)/command_results.txt"
 			[[ -s "$rfile" ]] && results=$(cat "$rfile")
+		fi
+
+		# The model already wrote its final summary in this response and
+		# there is no command output left to fold in — the task is done.
+		# Only files were written (or nothing at all), so forcing another
+		# iteration just to repeat the summary would be wasteful.
+		if (( ! AGENT_PLAN_MODE )) && [[ -z "$results" ]] && agent_response_has_summary "$resp"; then
+			break
 		fi
 
 		if [[ -n "$results" ]]; then

@@ -109,6 +109,7 @@ Example:
 
 ## HOW TO RUN SHELL COMMANDS (bash asks the user first)
 Put commands in a fenced block tagged ```bash, ```sh or ```shell, or on a line starting with `$ `. The host shows the user the command and asks for permission (y/N) before running it. Rules:
+- COMMAND PROTOCOL — Any command you want the host to run MUST start a line with `$ ` (e.g. `$ rm notes.txt`) or be a bare ```bash / ```sh block. The host captures every marked command, shows it with a y/N prompt, and runs approved ones. You NEVER execute anything yourself: if you did not emit the command, the host did not run it — never claim an action was performed without emitting the `$ ` command that performs it.
 - CRITICAL — NEVER put a `## File:` heading in front of a command: the host would WRITE that block verbatim as the file's content instead of running it, overwriting the file. Use a bare ```bash / ```sh block or a `$ ` line with NO `File:` heading before it.
 - RUN COMMANDS DIRECTLY. For simple operations — deleting files, git status, listing/reading files, checking versions — just emit the command (e.g. `$ rm -rf foo`, `$ git status`). Do NOT create a .sh script for anything that fits in a single command.
 - To delete, move, rename, copy or run a file, ALWAYS use a command block. NEVER put the command inside a `## File:` block — it only creates/edits file content, it never runs anything.

@@ -115,6 +115,19 @@ CORE_TIPS=(
 	"Install Cactus Needle: ${D_CYAN}core install ai --cactus-needle${NC}"
 	"Install Walkie — P2P chat for AI agents: ${D_CYAN}core install ai --walkie${NC}"
 
+	# ── Agent ────────────────────────────────────────────────
+	"Ask your local AI: ${D_CYAN}core agent ask -p \"Explain rsync\"${NC}"
+	"One-shot task agent: ${D_CYAN}core agent run -p \"create a backup script\"${NC}"
+	"Chat interactively: ${D_CYAN}core agent ask${NC} or ${D_CYAN}core agent run${NC}"
+	"Attach a file to the prompt: type ${D_CYAN}@name${NC} in a message"
+	"Run shell from the REPL: start with ${D_CYAN}!${NC} e.g. ${D_CYAN}!git status${NC}"
+	"Auto-approve agent commands: ${D_CYAN}core agent run -p \"...\" -y${NC}"
+	"Plan before touching files: ${D_CYAN}core agent run --plan${NC}"
+	"Agent commands run only after your ${D_CYAN}y/N${NC} approval"
+	"Switch modes in run: ${D_CYAN}/plan${NC} (read-only) and ${D_CYAN}/build${NC}"
+	"Dictate with your voice: type ${D_CYAN}/voice${NC} in the agent REPL"
+	"Check agent status: ${D_CYAN}core agent status${NC}"
+
 	# ── Editor ───────────────────────────────────────────────
 	"Install Neovim + NvChad: ${D_CYAN}core install editor${NC}"
 	"Install just Neovim: ${D_CYAN}core install editor --neovim${NC}"
