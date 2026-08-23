@@ -91,9 +91,9 @@ search_main() {
   while IFS= read -r sorted; do
     IFS='|' read -r tool display installed <<<"$sorted"
     if [[ "$installed" == "installed" ]]; then
-      table_row "$display" "$tool" "${GREEN}installed${NC}"
+      table_row "$display" "$tool" "${D_GREEN}installed${NC}"
     else
-      table_row "$display" "$tool" "${RED}not installed${NC}"
+      table_row "$display" "$tool" "${D_RED}not installed${NC}"
     fi
   done < <(printf '%s\n' "${rows[@]}" | sort -t'|' -k2)
 

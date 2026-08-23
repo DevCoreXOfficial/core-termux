@@ -2,7 +2,7 @@
 # Platform: Termux / Android.
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
 source "$CORE_PATH/utils/bootstrap.sh"
-CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # this platform folder
 import "@/utils/env"
 import "@/utils/log"
 

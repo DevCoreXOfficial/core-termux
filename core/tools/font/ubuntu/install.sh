@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Platform: Ubuntu Linux / Ubuntu (WSL).
-CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # this platform folder
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"

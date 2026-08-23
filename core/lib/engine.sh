@@ -160,16 +160,15 @@ engine_install() {
   LOG_FILE="$CORE_CACHE/install_$name.log"
   engine_ensure_deps "$dir" "$name" || return 1
 
-  loading "Installing $display" _engine_run "$script" install
+  # Run the platform installer directly: it owns its own UX (menus,
+  # loadings, messages) exactly like the original installers did.
+  _engine_run "$script" install
   rc=$?
 
   case $rc in
-    0)
-      registry_record "$name"
-      log_success "$display installed"
-      ;;
-    2) log_info "$display is already installed" ;;
-    *) log_error "Failed to install $display (see $LOG_FILE)" ;;
+    0) registry_record "$name" ;;
+    2) : ;; # tool reported "already installed" itself
+    *) log_error "$display: installer exited with $rc (log: $LOG_FILE)" ;;
   esac
   return $rc
 }
@@ -201,7 +200,6 @@ engine_uninstall() {
   fi
 
   if [[ $rc -eq 0 ]]; then
-    log_success "$display uninstalled"
     registry_remove "$name"
 
     # Orphan dependency cleanup — ask only for truly exclusive deps.
