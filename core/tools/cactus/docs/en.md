@@ -104,6 +104,10 @@ core update cactus
 - First-run model downloads land in the standard HF cache under `~/.cache/huggingface/`
 - Data directory: `~/.local/share/core-data/cactus-cli/`
 
+### Installation method (v5)
+
+Native on-device build from the official `cactus-compute/cactus` v2.0.1 source: cmake + ARM NEON kernels produce `libcactus_engine.so`, then `run`/`transcribe` binaries are built and cleaned with `termux-elf-cleaner` (fixes Bionic TLS alignment). **No glibc and no proot involved.** Includes upstream-compat patches: `requires-python` relaxed for Python 3.14 and bundle validation accepting SentencePiece tokenizers (`tokenizer.model`). Optional `convert` stack (transformers 5.5.4) installed best-effort.
+
 ## How to use it?
 
 ```bash

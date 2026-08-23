@@ -128,6 +128,10 @@ core update hugging-face
 
 Uninstalling asks whether to also remove the cache/config directories. Updating re-runs the official installer, which always upgrades to the latest version.
 
+### Installation method (v5)
+
+Global pip install of `huggingface_hub` **without venv**. Installed with `--no-deps` because `hf-xet` (hard dep on aarch64) has no Termux wheel and hangs on Rust builds; its real pure-python deps are installed explicitly. Xet transfers are disabled via `$PREFIX/etc/profile.d/huggingface.sh` (`HF_HUB_DISABLE_XET=1`) so Xet-hosted repos download over classic HTTP.
+
 ## How to use it?
 
 ```bash

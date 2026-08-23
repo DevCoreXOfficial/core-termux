@@ -6,11 +6,53 @@
   ],
   "check_cmd": "cactus",
   "homepage": "https://cactuscompute.com",
-  "description": "A hybrid edge-cloud AI engine for mobiles, wearables, smart home and robots \u2014 quantization, kernels, runtime and inferen",
+  "description": "Hybrid edge-cloud AI engine - native on-device build (no glibc required)",
   "tags": [
     "ai",
     "llm",
     "mobile",
     "inference"
+  ],
+  "dependencies": [
+    {
+      "name": "python",
+      "check": "python",
+      "pkg": {
+        "termux": "python",
+        "ubuntu": "python3"
+      }
+    },
+    {
+      "name": "pip",
+      "check": "pip",
+      "pkg": {
+        "termux": "python-pip",
+        "ubuntu": "python3-pip"
+      }
+    },
+    {
+      "name": "git",
+      "check": "git",
+      "pkg": {
+        "termux": "git",
+        "ubuntu": "git"
+      }
+    },
+    {
+      "name": "cmake",
+      "check": "cmake",
+      "pkg": {
+        "termux": "cmake",
+        "ubuntu": "cmake"
+      }
+    },
+    {
+      "name": "rust",
+      "check": "cargo",
+      "pkg": {
+        "termux": "rust",
+        "ubuntu": "rustc cargo"
+      }
+    }
   ]
 }

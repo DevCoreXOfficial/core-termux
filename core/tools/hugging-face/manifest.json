@@ -8,11 +8,29 @@
   ],
   "check_cmd": "hf",
   "homepage": "https://huggingface.co/docs/huggingface_hub",
-  "description": "The official Hugging Face Hub CLI \u2014 download, upload, and manage models, datasets, Spaces, buckets, repos, papers, colle",
+  "description": "Official Hugging Face Hub CLI - global pip install, no venv, no glibc",
   "tags": [
     "ai",
     "models",
     "datasets",
     "ml"
+  ],
+  "dependencies": [
+    {
+      "name": "python",
+      "check": "python",
+      "pkg": {
+        "termux": "python",
+        "ubuntu": "python3"
+      }
+    },
+    {
+      "name": "pip",
+      "check": "pip",
+      "pkg": {
+        "termux": "python-pip",
+        "ubuntu": "python3-pip"
+      }
+    }
   ]
 }
