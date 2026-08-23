@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Uses official installation methods.
-CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # this platform folder
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Verbs: install | uninstall | update | reinstall | version-local | version-remote
+CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
-import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
+
 _impl_install() {
   curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | $CORE_SUDO dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
   $CORE_SUDO chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
@@ -18,27 +19,29 @@ _impl_install() {
 }
 
 _impl_uninstall() {
-  $CORE_SUDO rm -f /etc/apt/sources.list.d/github-cli.list && pm_remove gh
+  $CORE_SUDO rm -f /etc/apt/sources.list.d/github-cli.list
+  pm_remove gh
 }
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq && $CORE_SUDO apt-get install -y gh
 }
 
-case "${1:-install}" in
-  install)
-    _impl_install
-    ;;
-  reinstall)
-    _impl_uninstall >/dev/null 2>&1 || true
-    _impl_install
-    ;;
-  uninstall)
-    _impl_uninstall
-    ;;
-  update)
-    _impl_update
-    ;;
+_impl_vlocal() {
+  gh --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+}
+
+_impl_vremote() {
+  curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d v
+}
+
+case "${1:-}" in
+  install)    _impl_install ;;
+  uninstall)  _impl_uninstall ;;
+  update)     _impl_update ;;
+  reinstall)  _impl_uninstall ; _impl_install ;;
+  version-local)  _impl_vlocal ;;
+  version-remote) _impl_vremote ;;
   *)
     exit 0
     ;;

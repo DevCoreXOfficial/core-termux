@@ -29,6 +29,7 @@ case "${1:-install}" in
   uninstall)
     _impl_uninstall
     ;;
+  update) _impl_install ;;
   *)
     exit 0
     ;;

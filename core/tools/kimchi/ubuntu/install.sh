@@ -1,57 +1,65 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Uses official installation methods.
-CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # this platform folder
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Verbs: install | uninstall | update | reinstall | version-local | version-remote
+CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
-import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
-# Download an asset from the latest GitHub release of $repo.
-# $1 repo, $2 asset-name regex (arch suffix appended automatically).
-_gh_download() {
-  local repo="$1" pattern="$2" out="$3"
-  local arch alt arch_alt asset url
+
+# Download the newest matching asset from the latest GitHub release.
+_gh_fetch() {
+  local arch alt re asset
   case "$(uname -m)" in
     x86_64) arch="x86_64"; alt="amd64" ;;
     aarch64) arch="aarch64"; alt="arm64" ;;
     *) arch="$(uname -m)"; alt="" ;;
   esac
-  local re="${pattern}(${arch}|${alt})"
-  asset=$(curl -fsSL "https://api.github.com/repos/${repo}/releases/latest" \
+  re="kimchi_linux_(${arch}|${alt})"
+  asset=$(curl -fsSL "https://api.github.com/repos/getkimchi/kimchi/releases/latest" \
     | jq -r --arg re "$re" '.assets[].name | select(test($re))' | head -1)
-  [ -z "$asset" ] && return 1
-  url="https://github.com/${repo}/releases/latest/download/${asset}"
-  curl -fsSL "$url" -o "$out" &>>"$LOG_FILE"
+  [[ -z "$asset" ]] && return 1
+  curl -fsSL "https://github.com/getkimchi/kimchi/releases/latest/download/${asset}" -o "/tmp/kimchi.dl" &>>"$LOG_FILE"
 }
+
+
 _impl_install() {
   mkdir -p "$HOME/.local/bin"
-  _gh_download "getkimchi/kimchi" "kimchi_linux_" "/tmp/kimchi.tar.gz" && tar -xzf "/tmp/kimchi.tar.gz" -C /tmp &>>"$LOG_FILE"
-  BIN=$(find /tmp -maxdepth 2 -type f -name kimchi | head -1)
-  [ -z "$BIN" ] && { log_error "binary not found after extraction"; return 1; }
-  mv "$BIN" "$HOME/.local/bin/kimchi" && chmod +x "$HOME/.local/bin/kimchi"
-  rm -f "/tmp/kimchi.tar.gz"
+  _gh_fetch || { log_error "No matching release asset found"; exit 1; }
+  tar -xzf /tmp/kimchi.dl -C /tmp && BIN=$(find /tmp -maxdepth 2 -type f -name kimchi | head -1) && [ -n "$BIN" ] && mv "$BIN" "$HOME/.local/bin/kimchi"
+  chmod +x "$HOME/.local/bin/kimchi"
 }
 
 _impl_uninstall() {
   rm -f "$HOME/.local/bin/kimchi"
 }
 
-case "${1:-install}" in
-  install)
-    _impl_install
-    ;;
-  reinstall)
-    _impl_uninstall >/dev/null 2>&1 || true
-    _impl_install
-    ;;
-  uninstall)
-    _impl_uninstall
-    ;;
+_impl_update() {
+  _gh_fetch || { log_error "No matching release asset"; exit 1; }
+  tar -xzf /tmp/kimchi.dl -C /tmp && BIN=$(find /tmp -maxdepth 2 -type f -name kimchi | head -1) && [ -n "$BIN" ] && mv "$BIN" "$HOME/.local/bin/kimchi"
+  chmod +x "$HOME/.local/bin/kimchi"
+}
+
+_impl_vlocal() {
+  "$HOME/.local/bin/kimchi" --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+}
+
+_impl_vremote() {
+  curl -fsSL https://api.github.com/repos/getkimchi/kimchi/releases/latest | grep '"tag_name"' | cut -d'"' -f4
+}
+
+case "${1:-}" in
+  install)    _impl_install ;;
+  uninstall)  _impl_uninstall ;;
+  update)     _impl_update ;;
+  reinstall)  _impl_uninstall ; _impl_install ;;
+  version-local)  _impl_vlocal ;;
+  version-remote) _impl_vremote ;;
   *)
     exit 0
     ;;

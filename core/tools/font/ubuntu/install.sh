@@ -23,6 +23,19 @@ case "${1:-install}" in
     log_success "Meslo Nerd Font installed (~/.local/share/fonts)"
     log_info "Select it in your terminal emulator settings"
     ;;
+  update)
+    mkdir -p "$FONT_DIR" "$(dirname "$LOG_FILE")"
+    FONT_SRC="$(dirname "$CORE_PATH")/assets/fonts/font.ttf"
+    if [[ ! -f "$FONT_SRC" ]]; then
+      log_error "Font file not found: $FONT_SRC"
+      exit 1
+    fi
+    cp "$FONT_SRC" "$FONT_DIR/MesloNerdFont.ttf"
+    command -v fc-cache >/dev/null 2>&1 || pm_install fontconfig
+    fc-cache -f "$FONT_DIR" &>>"$LOG_FILE"
+    log_success "Meslo Nerd Font installed (~/.local/share/fonts)"
+    log_info "Select it in your terminal emulator settings"
+    ;;
   uninstall)
     rm -f "$FONT_DIR/MesloNerdFont.ttf"
     command -v fc-cache >/dev/null 2>&1 && fc-cache -f "$FONT_DIR" &>/dev/null
