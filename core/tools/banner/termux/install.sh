@@ -61,7 +61,7 @@ _install_banner_impl() {
 		return 1
 	fi
 
-	if grep -qF "$CORE_BANNER_MARKER" "$shell_config" 2>/dev/null; then
+	if grep -qE -F -e "$CORE_BANNER_MARKER" -e "# ===== Core-Termux Banner =====" "$shell_config" 2>/dev/null; then
 		log_info "Core Banner already installed"
 		return 0
 	fi
@@ -110,7 +110,7 @@ EOF
 }
 
 install_banner() {
-	if grep -qF "$CORE_BANNER_MARKER" "$(_detect_shell_config)" 2>/dev/null; then
+	if grep -qE -F -e "$CORE_BANNER_MARKER" -e "# ===== Core-Termux Banner =====" "$(_detect_shell_config)" 2>/dev/null; then
 		log_info "Core Banner already installed"
 		return 0
 	fi
@@ -128,7 +128,7 @@ _uninstall_banner_impl() {
 		return 1
 	fi
 
-	if ! grep -qF "$CORE_BANNER_MARKER" "$shell_config" 2>/dev/null; then
+	if ! grep -qE -F -e "$CORE_BANNER_MARKER" -e "# ===== Core-Termux Banner =====" "$shell_config" 2>/dev/null; then
 		log_warn "Core Banner not installed"
 		return 0
 	fi
@@ -155,7 +155,7 @@ _uninstall_banner_impl() {
 }
 
 uninstall_banner() {
-	if ! grep -qF "$CORE_BANNER_MARKER" "$(_detect_shell_config)" 2>/dev/null; then
+	if ! grep -qE -F -e "$CORE_BANNER_MARKER" -e "# ===== Core-Termux Banner =====" "$(_detect_shell_config)" 2>/dev/null; then
 		log_warn "Core Banner not installed"
 		return 0
 	fi

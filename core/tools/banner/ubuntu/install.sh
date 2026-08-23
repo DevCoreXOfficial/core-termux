@@ -27,7 +27,7 @@ case "${1:-install}" in
     BANNER_SCRIPT="$CORE_PATH/utils/banner.sh"
     [[ -f "$BANNER_SCRIPT" ]] || { log_error "Banner script not found"; exit 1; }
 
-    grep -qF "$MARKER" "$RC" && { log_info "Core Banner already installed"; exit 0; }
+    grep -qE -F -e "$MARKER" -e '# ===== Core-Termux Banner =====' "$RC" && { log_info "Core Banner already installed"; exit 0; }
     mkdir -p "$(dirname "$LOG_FILE")"
 
     # Insert before p10k instant prompt (if present) to avoid its warning.
@@ -60,7 +60,7 @@ EOF
     BANNER_SCRIPT="$CORE_PATH/utils/banner.sh"
     [[ -f "$BANNER_SCRIPT" ]] || { log_error "Banner script not found"; exit 1; }
 
-    grep -qF "$MARKER" "$RC" && { log_info "Core Banner already installed"; exit 0; }
+    grep -qE -F -e "$MARKER" -e '# ===== Core-Termux Banner =====' "$RC" && { log_info "Core Banner already installed"; exit 0; }
     mkdir -p "$(dirname "$LOG_FILE")"
 
     # Insert before p10k instant prompt (if present) to avoid its warning.
@@ -87,8 +87,8 @@ EOF
   uninstall)
     RC="$(_detect_shell_config)"
     [[ -z "$RC" ]] && exit 0
-    if grep -qF "$MARKER" "$RC"; then
-      sed -i "/^$MARKER\$/d; /^source \"\$CORE_PATH\/utils\/banner.sh\"\$/d; /^source \"\/.*\/utils\/banner.sh\"\$/d" "$RC"
+    if grep -qE -F -e "$MARKER" -e '# ===== Core-Termux Banner =====' "$RC"; then
+      sed -i "/^$MARKER\$/d; /# ===== Core-Termux Banner =====/d; /utils\/banner.sh/d; /^source \"\$CORE_PATH\/utils\/banner.sh\"\$/d; /^source \"\/.*\/utils\/banner.sh\"\$/d" "$RC"
       log_success "Core Banner removed"
     else
       log_info "Core Banner not configured"

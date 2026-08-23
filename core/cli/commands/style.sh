@@ -2,7 +2,15 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/lib/platform"
 import "@/lib/engine"
+
+core_detect_platform
+
+# Markers accepted as "applied" — includes the legacy Core-Termux ones so
+# v4 installations are recognized without re-applying.
+BANNER_MARKERS=("# ===== Core Banner =====" "# ===== Core-Termux Banner =====")
+CURSOR_RC_MARKER="# ===== Core Cursor ====="
 
 # Tools that configure the environment instead of installing software.
 STYLE_TOOLS=(font banner cursor-color extra-keys)
@@ -16,11 +24,22 @@ style_is_applied() {
       ;;
     banner)
       local rc="$HOME/.zshrc"; [[ -f "$rc" ]] || rc="$HOME/.bashrc"
-      [[ -f "$rc" ]] && grep -q "# ===== Core Banner =====" "$rc"
+      [[ -f "$rc" ]] || return 1
+      local m
+      for m in "${BANNER_MARKERS[@]}"; do
+        grep -qF "$m" "$rc" && return 0
+      done
+      return 1
       ;;
     cursor-color)
+      # Termux: colors.properties written by the v4/v5 installer.
+      if [[ -f "$HOME/.termux/colors.properties" ]] &&
+         grep -qi "^cursor=" "$HOME/.termux/colors.properties"; then
+        return 0
+      fi
+      # Ubuntu/WSL: OSC marker in the rc file.
       local rc="$HOME/.zshrc"; [[ -f "$rc" ]] || rc="$HOME/.bashrc"
-      [[ -f "$rc" ]] && grep -q "# ===== Core Cursor =====" "$rc"
+      [[ -f "$rc" ]] && grep -qF "$CURSOR_RC_MARKER" "$rc"
       ;;
     extra-keys)
       [[ -f "$HOME/.termux/termux.properties" ]] &&
