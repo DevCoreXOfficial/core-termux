@@ -103,9 +103,10 @@ install_packages() {
 }
 
 bootstrap_dependencies() {
+  # Essentials: Core cannot run without these.
   local needed=()
   local dep
-  for dep in git curl jq unzip tput glow bat; do
+  for dep in git curl jq unzip tput; do
     if [[ "$dep" == tput ]]; then
       command -v tput &>/dev/null || needed+=("ncurses-utils")
     elif ! command -v "$dep" &>/dev/null; then
@@ -118,16 +119,37 @@ bootstrap_dependencies() {
     exit 1
   fi
 
+  local pkg
   for dep in "${needed[@]}"; do
-    log_info "Installing $dep..."
+    pkg="$dep"
+    [[ "$dep" == "ncurses-utils" && "$PKG_MGR" == "apt" ]] && pkg="ncurses-bin"
+    log_info "Installing $pkg..."
     progress_bar 0 10
-    install_packages "$dep"
+    install_packages "$pkg"
     progress_bar 10 10
     echo
-    log_ok "$dep installed"
+    log_ok "$pkg installed"
   done
 
-  # glow/bat are optional viewers
+  # Optional docs viewers: nice-to-have, never fatal.
+  # 'glow' is NOT in the default Ubuntu repositories - only try when present.
+  local viewer alt
+  for viewer in glow bat; do
+    command -v "$viewer" &>/dev/null && continue
+    case "$PKG_MGR" in
+      pkg)
+        yes | pkg install -y "$viewer" &>/dev/null || true
+        ;;
+      apt)
+        apt-cache show "$viewer" >/dev/null 2>&1 || continue
+        $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y "$viewer" &>/dev/null || true
+        ;;
+    esac
+    command -v "$viewer" &>/dev/null \
+      && log_ok "$viewer installed (optional)" \
+      || log_info "Optional viewer '$viewer' skipped (docs will render as plain text)"
+  done
+
   return 0
 }
 
