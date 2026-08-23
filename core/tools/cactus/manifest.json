@@ -2,7 +2,9 @@
   "name": "cactus",
   "display": "Cactus Engine CLI",
   "platforms": [
-    "termux"
+    "termux",
+    "ubuntu",
+    "wsl"
   ],
   "check_cmd": "cactus",
   "homepage": "https://cactuscompute.com",
