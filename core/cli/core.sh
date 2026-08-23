@@ -14,6 +14,17 @@ core_main() {
     return
   fi
 
+  # Short aliases for everyday commands.
+  local -A ALIASES=(
+    [i]=install
+    [un]=uninstall
+    [up]=update
+    [ri]=reinstall
+    [s]=search
+    [st]=style
+  )
+  [[ -n "${ALIASES[$cmd]:-}" ]] && cmd="${ALIASES[$cmd]}"
+
   local command_file="$CORE_PATH/cli/commands/$cmd.sh"
 
   # check if the command exists
@@ -74,6 +85,7 @@ printf "    ${D_CYAN}%-12s${D_NC} %s\n" "voice" "Speech-to-agent via microphone 
   echo
   separator_section "Help"
   echo
+  list_item "Aliases: ${D_CYAN}i${D_NC}=install · ${D_CYAN}un${D_NC}=uninstall · ${D_CYAN}up${D_NC}=update · ${D_CYAN}ri${D_NC}=reinstall · ${D_CYAN}s${D_NC}=search · ${D_CYAN}st${D_NC}=style"
   list_item "Run ${D_CYAN}core <command>${D_NC} for command-specific help"
   list_item "Example: ${D_CYAN}core pg${D_NC}, ${D_CYAN}core init${D_NC}"
   list_item "Docs: ${D_CYAN}core open${D_NC} — ${D_BLUE}devcorex-web.vercel.app/"

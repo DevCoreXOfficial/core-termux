@@ -157,14 +157,28 @@ engine_install() {
   LOG_FILE="$CORE_CACHE/install_$name.log"
   engine_ensure_deps "$dir" "$name" || return 1
 
-  # Run the platform installer directly: it owns its own UX (menus,
-  # loadings, messages) exactly like the original installers did.
-  _engine_run "$script" install
-  rc=$?
+  # Termux installers own their full UX (menus, loadings). Generated Linux
+  # installers are quiet, so the engine provides feedback there.
+  if [[ "$CORE_ENV" == "termux" ]]; then
+    _engine_run "$script" install
+    rc=$?
+  else
+    mkdir -p "$HOME/.local/bin"
+    export PATH="$HOME/.local/bin:$PATH"
+    loading "Installing $display" _engine_run "$script" install
+    rc=$?
+  fi
 
   case $rc in
-    0) registry_record "$name" ;;
-    2) : ;; # tool reported "already installed" itself
+    0)
+      registry_record "$name"
+      if ! manifest_is_installed "$dir"; then
+        log_warn "$display finished but its binary was not found on PATH"
+        list_item "Open a NEW terminal (or run: hash -r) and retry."
+        list_item "Tool binaries live in: \$HOME/.local/bin"
+      fi
+      ;;
+    2) : ;;
     *) log_error "$display: installer exited with $rc (log: $LOG_FILE)" ;;
   esac
   return $rc
@@ -196,13 +210,19 @@ engine_uninstall() {
     rc=0
   fi
 
+  local recorded
+  recorded="$(registry_deps_installed_by_core "$name")"
+
   if [[ $rc -eq 0 ]]; then
     registry_remove "$name"
 
     # Orphan dependency cleanup — ask only for truly exclusive deps.
     # Loop input uses fd 3 so interactive prompts keep stdin free.
+    local BASE_PROTECTED=" git curl wget jq unzip bat lsd fzf glow python pip nodejs npm ripgrep make cmake clang rust go tar "
     while IFS='|' read -r -u 3 dep check pkg_t pkg_a; do
       [[ -z "$dep" ]] && continue
+      [[ "$BASE_PROTECTED" == *" $dep "* ]] && continue
+      grep -qx "$dep" <<<"$recorded" || continue
       pkg="$(_deps_pkg_for_platform "$pkg_t" "$pkg_a")"
       [[ -z "$pkg" ]] && continue
       echo

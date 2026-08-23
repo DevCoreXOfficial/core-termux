@@ -13,14 +13,19 @@ LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
   curl -fsSL https://opencode.ai/install | bash &>>"$LOG_FILE"
+# Official script installs to ~/.opencode/bin — expose it on PATH.
+[ -f "$HOME/.opencode/bin/opencode" ] && ln -sf "$HOME/.opencode/bin/opencode" "$HOME/.local/bin/opencode"
 }
 
 _impl_uninstall() {
-  rm -rf "$HOME/.opencode" "$HOME/.local/bin/opencode"
+  rm -rf "$HOME/.opencode"
+rm -f "$HOME/.local/bin/opencode" "$HOME/.local/bin/opencode"
 }
 
 _impl_update() {
   curl -fsSL https://opencode.ai/install | bash &>>"$LOG_FILE"
+# Official script installs to ~/.opencode/bin — expose it on PATH.
+[ -f "$HOME/.opencode/bin/opencode" ] && ln -sf "$HOME/.opencode/bin/opencode" "$HOME/.local/bin/opencode"
 }
 
 case "${1:-}" in

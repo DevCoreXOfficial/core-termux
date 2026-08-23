@@ -174,12 +174,23 @@ link_binary() {
     mkdir -p "$HOME/.local/bin"
     ln -sf "$target" "$HOME/.local/bin/core"
     case ":$PATH:" in
-      *":$HOME/.local/bin:"*) ;;
-      *)
-        log_info "Add ~/.local/bin to your PATH:"
-        echo -e "      ${P_DIM}echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.bashrc${P_NC}"
-        ;;
+      *":$HOME/.local/bin:"*) return 0 ;;
     esac
+
+    # Add automatically to the user's shell config + inform.
+    local rc="$HOME/.bashrc"
+    [[ -f "$HOME/.zshrc" && ! -f "$HOME/.bashrc" ]] && rc="$HOME/.zshrc"
+
+    if ! grep -qs 'HOME/.local/bin' "$rc"; then
+      printf '\n# Added by Core installer\nexport PATH="$HOME/.local/bin:$PATH"\n' >>"$rc"
+      log_ok "Added ~/.local/bin to your PATH ($rc)"
+      echo -e "      ${P_DIM}Run: source $rc   (or open a new terminal)${P_NC}"
+    else
+      log_ok "~/.local/bin already configured in $rc — open a new terminal"
+    fi
+
+    # Available in THIS session too, so core/tools work immediately.
+    export PATH="$HOME/.local/bin:$PATH"
   fi
 }
 
