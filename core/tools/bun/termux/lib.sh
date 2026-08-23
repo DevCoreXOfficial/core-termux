@@ -272,3 +272,38 @@ _get_bun_remote_version_silent() {
   curl -fsSL "https://api.github.com/repos/oven-sh/bun/releases/latest" 2>/dev/null |
     grep '"tag_name":' | sed -E 's/.*"bun-v([^"]+)".*/\1/'
 }
+
+# Package install helpers shared across npm-based tools.
+_ensure_npm() {
+  if command -v npm &>/dev/null; then
+    return 0
+  fi
+  log_info "Installing Node.js/npm for fallback package installation..."
+  if ! yes | pkg install nodejs-lts &>>"$LOG_FILE"; then
+    log_error "Failed to install Node.js/npm"
+    return 1
+  fi
+  return 0
+}
+
+_install_pkg_fallback() {
+  local pkg="$1"
+  local extra_flags="${2:-}"
+
+  # Try bun first (fast path)
+  if bun install -g $extra_flags "$pkg" &>>"$LOG_FILE"; then
+    return 0
+  fi
+
+  log_warn "bun install failed for '${pkg}', falling back to npm..."
+  _ensure_npm || return 1
+
+  if npm install -g $extra_flags "$pkg" &>>"$LOG_FILE"; then
+    log_info "Installed '${pkg}' via npm (fallback)"
+    return 0
+  fi
+
+  log_error "Failed to install '${pkg}' via both bun and npm"
+  return 1
+}
+
