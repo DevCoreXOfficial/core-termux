@@ -33,13 +33,21 @@ if [[ "$ASSUME_YES" != "--yes" ]]; then
 fi
 
 CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+if [[ "$CURRENT_BRANCH" != "$BRANCH" ]]; then
+  # Work on the beta branch so main never receives commits directly.
+  git checkout -B "$BRANCH"
+fi
 
 git add -A
-git commit -m "v5.0.0: Core multiplatform (Termux/Android, Ubuntu Linux, Ubuntu WSL)" ||
+git commit -m "${COMMIT_MSG:-chore(beta): snapshot}" ||
   echo "Nothing to commit."
 
 # 4. Push the beta branch (main stays untouched).
 git push -u origin "$BRANCH"
+
+if [[ -n "$CURRENT_BRANCH" && "$CURRENT_BRANCH" != "$BRANCH" ]] && git show-ref --verify --quiet "refs/heads/$CURRENT_BRANCH"; then
+  git checkout "$CURRENT_BRANCH"
+fi
 
 echo
 echo "✔ Beta published."
