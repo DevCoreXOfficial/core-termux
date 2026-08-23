@@ -14,5 +14,6 @@
     "theme",
     "color",
     "cursor"
-  ]
+  ],
+  "style": true
 }

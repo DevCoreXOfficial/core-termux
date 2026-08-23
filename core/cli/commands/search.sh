@@ -48,6 +48,8 @@ search_main() {
 
   for tool_dir in "$CORE_PATH/tools/"*/; do
     [[ -f "$tool_dir/manifest.json" ]] || continue
+    # Style tools live under `core style`, not the tool catalog.
+    [[ "$(manifest_field "$tool_dir" '.style // false')" == "true" ]] && continue
     tool="$(basename "$tool_dir")"
     display="$(manifest_display "$tool_dir")"
     if manifest_is_installed "$tool_dir"; then

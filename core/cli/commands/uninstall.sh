@@ -40,6 +40,12 @@ uninstall_main() {
   for name in "${names[@]}"; do
     dir="$(manifest_tool_dir "$name")"
 
+    if [[ -n "$dir" && "$(manifest_field "$dir" '.style // false')" == "true" ]]; then
+      log_warn "'$name' is a style — remove it with: ${D_CYAN}core style -r $name${D_NC}"
+      ((unknown_count++))
+      continue
+    fi
+
     if [[ -z "$dir" ]]; then
       log_warn "Unknown tool: $name (run 'core search' to see everything)"
       ((unknown_count++))

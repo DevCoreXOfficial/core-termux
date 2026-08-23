@@ -12,5 +12,6 @@
     "terminal",
     "theme",
     "startup"
-  ]
+  ],
+  "style": true
 }

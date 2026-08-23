@@ -12,5 +12,6 @@
     "terminal",
     "nerd-font",
     "typography"
-  ]
+  ],
+  "style": true
 }

@@ -104,6 +104,7 @@ rm -rf ~/.core                                                       # optional 
 | [`core update`](#core-update) | Update tools or framework |
 | [`core uninstall`](#core-uninstall) | Remove tools, with orphan dependency cleanup |
 | [`core reinstall`](#core-reinstall) | Uninstall + reinstall tools |
+| [`core style`](#appearance--core-style) | Terminal look & feel: font, banner, cursor |
 | [`core voice`](#core-voice) | Speech-to-agent via microphone (Termux) |
 | [`core open`](#core-open) | Open documentation in browser |
 | [`core pg`](#core-pg) | PostgreSQL database manager |
@@ -542,9 +543,19 @@ OpenCode, Claude Code, Gemini CLI, Qwen Code, Codex, KiloCode CLI, Cursor CLI, G
 
 `zsh` — ZSH + Oh My Zsh + powerlevel10k + zsh-defer, zsh-autosuggestions, zsh-syntax-highlighting, zsh-history-substring-search, zsh-completions, fzf-tab, zsh-you-should-use, zsh-autopair and zsh-better-npm-completion. Also sets `lsd`/`bat` aliases, zoxide, Go environment variables and persistent sessions (new terminals restore your last directory).
 
-### Appearance
+### Appearance — `core style`
 
-`font` (Meslo Nerd Font), `banner` (ASCII banner on new sessions) and `cursor-color` work on all three platforms. `extra-keys` is Termux-only.
+Environment tweaks live in their own command: apply or remove anytime.
+
+```bash
+core style                  # table with applied status
+core style font             # Meslo Nerd Font
+core style banner           # ASCII banner on new sessions
+core style cursor-color     # green terminal cursor
+core style -r font          # remove
+```
+
+`font`, `banner` and `cursor-color` work on all three platforms; `extra-keys` is Termux-only. These are configuration, not packages — nothing to update.
 
 ---
 

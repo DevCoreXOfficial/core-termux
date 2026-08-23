@@ -52,7 +52,8 @@ core_help() {
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "list" "List available tools"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "pg" "PostgreSQL database manager"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "init" "Configure existing projects"
-  printf "    ${D_CYAN}%-12s${D_NC} %s\n" "voice" "Speech-to-agent via microphone"
+  printf "    ${D_CYAN}%-12s${D_NC} %s\n" "style" "Terminal look & feel (font, banner, cursor)"
+printf "    ${D_CYAN}%-12s${D_NC} %s\n" "voice" "Speech-to-agent via microphone (Termux)"
   echo
   separator_section "Quick Start"
   echo
