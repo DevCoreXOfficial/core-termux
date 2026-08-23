@@ -11,7 +11,7 @@ readonly P_DIM='\e[38;5;244m'
 readonly P_OK='\e[38;5;42m'
 readonly P_FAIL='\e[1;31m'
 
-REPO="${CORE_REPO:-https://github.com/DevCoreXOfficial/core}"
+REPO="${CORE_REPO:-https://github.com/DevCoreXOfficial/core-termux}"
 BRANCH="${CORE_BRANCH:-main}"
 INSTALL_DIR="${CORE_INSTALL_DIR:-$HOME/.core}"
 

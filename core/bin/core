@@ -38,7 +38,7 @@ if ! core_platform_supported; then
 fi
 
 # ===== CHECK UPDATES =====
-CORE_REMOTE_VERSION_URL="https://raw.githubusercontent.com/DevCoreXOfficial/core/main/core/utils/env.sh"
+CORE_REMOTE_VERSION_URL="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/core/utils/env.sh"
 
 check_for_updates() {
   local version_file="$CORE_CACHE/last_version_check"
