@@ -7,7 +7,7 @@ LOG_FILE="$CORE_CACHE/init_project.log"
 
 init_help() {
 	echo
-	box "Core Project Initializer"
+	box_large "Core Project Initializer"
 	echo
 	log_info "Usage: core init <template>"
 	echo
@@ -129,7 +129,7 @@ _detect_next_version() {
 # ===== NEXT.JS =====
 configure_next() {
 	separator
-	box "Configuring Next.js Project"
+	box_large "Configuring Next.js Project"
 	separator
 	echo
 
@@ -407,7 +407,7 @@ section_title() {
 # ===== REACT + VITE =====
 configure_react() {
 	separator
-	box "Configuring React + Vite Project"
+	box_large "Configuring React + Vite Project"
 	separator
 	echo
 
@@ -569,7 +569,7 @@ EOF
 # ===== EXPRESS.JS =====
 configure_express() {
 	separator
-	box "Configuring Express.js Project"
+	box_large "Configuring Express.js Project"
 	separator
 	echo
 
@@ -1002,7 +1002,7 @@ PRODRTEOF
 # ===== NESTJS =====
 configure_nest() {
 	separator
-	box "Configuring NestJS Project"
+	box_large "Configuring NestJS Project"
 	separator
 	echo
 

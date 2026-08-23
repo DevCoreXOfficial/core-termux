@@ -25,7 +25,7 @@ open_main() {
 
   if [[ $# -eq 0 ]]; then
     echo
-    box "Core Open"
+    box_large "Core Open"
     echo
     log_info "Usage: core open <target>"
     echo

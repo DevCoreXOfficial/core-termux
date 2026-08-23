@@ -30,7 +30,8 @@ core_main() {
 
 core_help() {
   echo
-  box "◈ CORE v${CORE_VERSION} ◈"
+  box_large "◈ CORE v${CORE_VERSION} ◈"
+  echo
   log_info "${D_CYAN}One CLI — Your environment. Everywhere.${D_NC}"
   echo
   log_info "Platform: $(core_platform_label) ${D_NC}(${D_GREEN}$CORE_PLATFORM${D_NC})"
@@ -65,8 +66,8 @@ printf "    ${D_CYAN}%-12s${D_NC} %s\n" "voice" "Speech-to-agent via microphone 
   echo
   log_info "Every tool installs individually and is found by name:"
   echo
-  list_item "${D_CYAN}core search${D_NC}              all tools with install status"
-  list_item "${D_CYAN}core search <text>${D_NC}       filter — e.g. ${D_CYAN}core search cloud${D_NC}, ${D_CYAN}core search js${D_NC}"
+  list_item "${D_CYAN}core search${D_NC}            all tools with install status"
+  list_item "${D_CYAN}core search <text>${D_NC}     filter — e.g. ${D_CYAN}core search cloud${D_NC}, ${D_CYAN}core search js${D_NC}"
   list_item "${D_CYAN}core install neovim${D_NC}    editor + NvChad in one shot"
   list_item "${D_CYAN}core install zsh${D_NC}       shell + Oh My Zsh + plugins in one shot"
   echo

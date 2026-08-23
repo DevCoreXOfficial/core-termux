@@ -63,7 +63,7 @@ _show_doc_for_tool() {
 show_main() {
   if [[ $# -eq 0 ]]; then
     echo
-    box "Core Show / About"
+    box_large "Core Show / About"
     echo
     log_info "Usage: core show <tool>"
     log_info "Usage: core show <tool>:es        (Spanish documentation)"

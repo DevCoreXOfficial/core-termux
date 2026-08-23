@@ -12,7 +12,7 @@ PG_USER="postgres"
 # Mostrar ayuda
 pg_help() {
 	echo
-	box "Core PostgreSQL Manager"
+	box_large "Core PostgreSQL Manager"
 	echo
 	log_info "Usage: core pg <command> [options]"
 	echo
@@ -76,7 +76,7 @@ check_pg_initialized() {
 # Inicializar PostgreSQL
 pg_init() {
 	separator
-	box "Initializing PostgreSQL"
+	box_large "Initializing PostgreSQL"
 	separator
 	echo
 
@@ -119,7 +119,7 @@ _pg_init_db() {
 # Iniciar PostgreSQL
 pg_start() {
 	separator
-	box "Starting PostgreSQL"
+	box_large "Starting PostgreSQL"
 	separator
 	echo
 
@@ -169,7 +169,7 @@ _pg_start_server() {
 # Detener PostgreSQL
 pg_stop() {
 	separator
-	box "Stopping PostgreSQL"
+	box_large "Stopping PostgreSQL"
 	separator
 	echo
 
@@ -214,7 +214,7 @@ _pg_stop_server() {
 # Reiniciar PostgreSQL
 pg_restart() {
 	separator
-	box "Restarting PostgreSQL"
+	box_large "Restarting PostgreSQL"
 	separator
 	echo
 
@@ -235,7 +235,7 @@ pg_restart() {
 # Estado de PostgreSQL
 pg_status() {
 	separator
-	box "PostgreSQL Status"
+	box_large "PostgreSQL Status"
 	separator
 	echo
 
@@ -349,7 +349,7 @@ pg_drop() {
 # Listar bases de datos
 pg_list() {
 	separator
-	box "PostgreSQL Databases"
+	box_large "PostgreSQL Databases"
 	separator
 	echo
 
@@ -429,21 +429,21 @@ _pg_ubuntu_service() {
 }
 
 pg_ubuntu_start() {
-  separator; box "Starting PostgreSQL"; separator; echo
+  separator; box_large "Starting PostgreSQL"; separator; echo
   loading "Starting PostgreSQL service" _pg_ubuntu_service start &&
     log_success "PostgreSQL started" || { log_error "Failed to start (log: $PG_LOG)"; return 1; }
   echo
 }
 
 pg_ubuntu_stop() {
-  separator; box "Stopping PostgreSQL"; separator; echo
+  separator; box_large "Stopping PostgreSQL"; separator; echo
   loading "Stopping PostgreSQL service" _pg_ubuntu_service stop &&
     log_success "PostgreSQL stopped" || { log_error "Failed to stop"; return 1; }
   echo
 }
 
 pg_ubuntu_restart() {
-  separator; box "Restarting PostgreSQL"; separator; echo
+  separator; box_large "Restarting PostgreSQL"; separator; echo
   loading "Restarting PostgreSQL service" _pg_ubuntu_service restart &&
     log_success "PostgreSQL restarted" || { log_error "Failed to restart"; return 1; }
   echo
@@ -460,7 +460,7 @@ pg_ubuntu_status() {
 }
 
 pg_ubuntu_init() {
-  separator; box "Initializing PostgreSQL"; separator; echo
+  separator; box_large "Initializing PostgreSQL"; separator; echo
   if command -v pg_lsclusters &>/dev/null && pg_lsclusters | grep -q online; then
     log_success "PostgreSQL cluster already initialized and online"
     pg_lsclusters

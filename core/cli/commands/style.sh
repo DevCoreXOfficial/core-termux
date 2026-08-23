@@ -69,7 +69,7 @@ style_main() {
   case "$action" in
     help | list)
       echo
-      box "Core Style"
+      box_large "Core Style"
       echo
       log_info "Configure your terminal environment — apply or remove anytime."
       echo

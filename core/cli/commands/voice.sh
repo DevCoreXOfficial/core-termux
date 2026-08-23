@@ -5,7 +5,7 @@ import "@/utils/colors"
 
 voice_help() {
 	echo
-	box "CORE VOICE — Speech-to-Agent"
+	box_large "CORE VOICE — Speech-to-Agent"
 	echo
 	log_info "Capture voice from the microphone, review it in nvim, copy to clipboard, and launch an AI agent."
 	echo

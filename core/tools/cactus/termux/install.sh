@@ -180,7 +180,7 @@ install_cactus() {
   fi
 
   separator
-  box "Installing Cactus Engine (native build)"
+  box_large "Installing Cactus Engine (native build)"
   separator
   echo
   log_info "C++20 / ARM NEON native build — expect ~15 minutes on device."

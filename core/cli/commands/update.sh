@@ -8,7 +8,7 @@ update_main() {
 
   if [[ $# -eq 0 ]]; then
     echo
-    box "Core Update"
+    box_large "Core Update"
     echo
     log_info "Usage: core update <tool>"
     log_info "Usage: core update core                (update the framework itself)"
@@ -25,7 +25,7 @@ update_main() {
   # Framework self-update.
   if [[ "$target" == "core" ]]; then
     separator
-    box "Updating Core"
+    box_large "Updating Core"
     separator
     echo
     if [[ -d "$CORE_PATH/.git" ]]; then

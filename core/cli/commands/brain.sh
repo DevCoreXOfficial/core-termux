@@ -179,7 +179,7 @@ _brain_editor() {
 
 brain_help() {
 	echo
-	box "Core Brain — Your Second Brain"
+	box_large "Core Brain — Your Second Brain"
 	echo
 	log_info "Usage: core brain <subcommand> [options]"
 	echo
@@ -231,7 +231,7 @@ brain_help() {
 
 brain_init() {
 	separator
-	box "Initialize Core Brain"
+	box_large "Initialize Core Brain"
 	separator
 	echo
 
@@ -318,7 +318,7 @@ brain_save() {
 	done
 
 	separator
-	box "Save a New Memory"
+	box_large "Save a New Memory"
 	separator
 	echo
 
@@ -488,7 +488,7 @@ brain_search() {
 	fi
 
 	separator
-	box "Search: $query"
+	box_large "Search: $query"
 	separator
 	echo
 
@@ -599,7 +599,7 @@ brain_ls() {
 	local filter="$*"
 
 	separator
-	box "Your Memories"
+	box_large "Your Memories"
 	separator
 	echo
 
@@ -668,7 +668,7 @@ brain_relate() {
 
 	if [[ -z "$slug_a" ]] || [[ -z "$slug_b" ]]; then
 		separator
-		box "Relate Memories"
+		box_large "Relate Memories"
 		separator
 		echo
 		log_info "Pick the first memory:"
@@ -856,7 +856,7 @@ brain_sync() {
 	_brain_ensure || return 1
 
 	separator
-	box "Sync Brain"
+	box_large "Sync Brain"
 	separator
 	echo
 
@@ -981,7 +981,7 @@ brain_skill() {
 	if [[ ${#all_files[@]} -eq 0 ]]; then
 		echo
 		separator
-		box "Create Skill from Memories"
+		box_large "Create Skill from Memories"
 		separator
 		echo
 		list_item "No memories yet"
@@ -998,7 +998,7 @@ brain_skill() {
 		while true; do
 			echo
 			separator
-			box "Create Skill from Memories"
+			box_large "Create Skill from Memories"
 			separator
 			echo
 
@@ -1325,7 +1325,7 @@ brain_delete() {
 
 brain_reset() {
 	separator
-	box "Reset Brain"
+	box_large "Reset Brain"
 	separator
 	echo
 

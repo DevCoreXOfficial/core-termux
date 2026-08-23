@@ -29,7 +29,7 @@ _env_valid_key() {
 # ── Help ────────────────────────────────────────────────────
 env_help() {
 	echo
-	box "Environment Variables Manager"
+	box_large "Environment Variables Manager"
 	echo
 	log_info "Usage: core env [options]"
 	echo
@@ -53,7 +53,7 @@ env_set() {
 	rc_file=$(_env_rc_file)
 
 	separator
-	box "Set Environment Variable"
+	box_large "Set Environment Variable"
 	separator
 	echo
 
@@ -107,7 +107,7 @@ env_unset() {
 
 	if [[ ${#keys[@]} -eq 0 ]]; then
 		separator
-		box "Remove Environment Variable"
+		box_large "Remove Environment Variable"
 		separator
 		echo
 		log_warn "No environment variables found in $(basename "$rc_file")"
@@ -117,7 +117,7 @@ env_unset() {
 	fi
 
 	separator
-	box "Remove Environment Variable"
+	box_large "Remove Environment Variable"
 	separator
 	echo
 	log_info "Current variables in $(basename "$rc_file"):"
@@ -169,7 +169,7 @@ env_ls() {
 	rc_file=$(_env_rc_file)
 
 	separator
-	box "Environment Variables"
+	box_large "Environment Variables"
 	separator
 	echo
 	log_info "File: $(basename "$rc_file")"

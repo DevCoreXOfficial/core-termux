@@ -8,7 +8,7 @@ install_main() {
 
   if [[ $# -eq 0 ]]; then
     echo
-    box "Core Install"
+    box_large "Core Install"
     echo
     log_info "Usage: core install <tool>"
     log_info "Usage: core install <tool1> <tool2> ..."

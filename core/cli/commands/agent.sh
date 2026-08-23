@@ -26,7 +26,7 @@ import "@/utils/agent_markdown"
 # ------------------------------------------------------------
 agent_help() {
 	echo
-	box "Core Agent — Local AI Assistant & Task Agent"
+	box_large "Core Agent — Local AI Assistant & Task Agent"
 	echo
 	log_info "Usage: core agent <ask|run|config> [options]"
 	echo
@@ -360,7 +360,7 @@ agent_ask_once() {
 	history=$(agent_history_add "$history" user "$prompt")
 
 	echo
-	box "Ask"
+	box_large "Ask"
 	echo
 
 	outfile=$(agent_md_dir)/ask_stream.txt

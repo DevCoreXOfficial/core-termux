@@ -22,7 +22,7 @@ search_main() {
   # Bare invocation: show the search help.
   if [[ ${#args[@]} -eq 0 && $all -eq 0 ]]; then
     echo
-    box "Core Search"
+    box_large "Core Search"
     echo
     log_info "Usage: core search <text>     filter tools by keyword"
     log_info "Usage: core search --all      list every tool with status"
@@ -80,9 +80,9 @@ search_main() {
 
   echo
   if [[ $all -eq 1 ]]; then
-    box "Core Tools — ${#rows[@]}"
+    box_large "Core Tools — ${#rows[@]}"
   else
-    box "Core Search — '${query}' (${#rows[@]})"
+    box_large "Core Search — '${query}' (${#rows[@]})"
   fi
   echo
 

@@ -8,7 +8,7 @@ reinstall_main() {
 
   if [[ $# -eq 0 ]]; then
     echo
-    box "Core Reinstall"
+    box_large "Core Reinstall"
     echo
     log_info "Usage: core reinstall <tool> [<tool2> ...]"
     echo
