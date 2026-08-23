@@ -1,0 +1,27 @@
+{
+  "name": "ngrok",
+  "display": "ngrok",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "ngrok",
+  "homepage": "https://ngrok.com",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Secure tunnel to expose local servers to the internet",
+  "tags": [
+    "tunnel",
+    "localhost",
+    "expose"
+  ]
+}

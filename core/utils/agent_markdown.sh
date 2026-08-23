@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 # ============================================================
 # agent_markdown.sh — Markdown renderer for the agent TUI.

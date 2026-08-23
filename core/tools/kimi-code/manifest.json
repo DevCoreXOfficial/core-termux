@@ -1,0 +1,16 @@
+{
+  "name": "kimi-code",
+  "display": "Kimi Code",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "kimi",
+  "description": "Kimi Code CLI \u2014 The Starting Point for Next-Gen Agents",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

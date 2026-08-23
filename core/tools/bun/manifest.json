@@ -1,0 +1,18 @@
+{
+  "name": "bun",
+  "display": "Bun",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "bun",
+  "homepage": "https://bun.sh",
+  "description": "JavaScript runtime, bundler, test runner, and package manager (all-in-one toolkit)",
+  "tags": [
+    "language",
+    "runtime",
+    "javascript",
+    "typescript"
+  ]
+}

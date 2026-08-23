@@ -1,0 +1,16 @@
+{
+  "name": "supercode",
+  "display": "SuperCode CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "supercode",
+  "description": "The open source SWE agent \u2014 AI-powered coding assistant with multi-model support",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

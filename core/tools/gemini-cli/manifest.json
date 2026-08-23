@@ -1,0 +1,35 @@
+{
+  "name": "gemini-cli",
+  "display": "Gemini CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "gemini",
+  "homepage": "https://google-gemini.github.io/gemini-cli/",
+  "dependencies": [
+    {
+      "name": "git",
+      "check": "git",
+      "pkg": {
+        "termux": "git",
+        "ubuntu": "git"
+      }
+    },
+    {
+      "name": "ripgrep",
+      "check": "rg",
+      "pkg": {
+        "termux": "ripgrep",
+        "ubuntu": "ripgrep"
+      }
+    }
+  ],
+  "description": "Google's AI assistant with Gemini",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "claude-code",
+  "display": "Claude Code",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "claude",
+  "homepage": "https://claude.com/claude-code",
+  "dependencies": [
+    {
+      "name": "git",
+      "check": "git",
+      "pkg": {
+        "termux": "git",
+        "ubuntu": "git"
+      }
+    },
+    {
+      "name": "ripgrep",
+      "check": "rg",
+      "pkg": {
+        "termux": "ripgrep",
+        "ubuntu": "ripgrep"
+      }
+    },
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Anthropic's CLI tool with Claude AI",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

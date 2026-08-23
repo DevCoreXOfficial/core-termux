@@ -1,0 +1,17 @@
+{
+  "name": "lsd",
+  "display": "LSD",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "lsd",
+  "homepage": "https://github.com/lsd-rs/lsd",
+  "description": "Modern ls replacement with icons and colors",
+  "tags": [
+    "ls",
+    "files",
+    "icons"
+  ]
+}

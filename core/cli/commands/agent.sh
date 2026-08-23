@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 # ============================================================
 # core agent — AI assistant (ask) & bash-backed task agent (run)
@@ -58,7 +58,7 @@ agent_help() {
 	list_item "Press ${D_CYAN}ESC ESC${D_NC} at any prompt to cancel the agent"
 	list_item "The interactive REPL remembers the conversation and shows ${D_CYAN}[context % · elapsed]${D_NC} after each answer/task"
 	list_item "Dictate your prompt with ${D_CYAN}/voice${D_NC} (Termux:API)"
-	list_item "If the model server is down, the agent starts ${D_CYAN}cactus${D_NC} in the background (logs → ${D_CYAN}~/.cache/core-termux/core-agent.log${D_NC}) and stops it when you leave (${D_CYAN}/exit${D_NC} or ${D_CYAN}Ctrl+C${D_NC})"
+	list_item "If the model server is down, the agent starts ${D_CYAN}cactus${D_NC} in the background (logs → ${D_CYAN}~/.cache/core/core-agent.log${D_NC}) and stops it when you leave (${D_CYAN}/exit${D_NC} or ${D_CYAN}Ctrl+C${D_NC})"
 	echo
 	separator_section "Interactive slash commands"
 	echo

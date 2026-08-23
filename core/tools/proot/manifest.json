@@ -1,0 +1,17 @@
+{
+  "name": "proot",
+  "display": "proot",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "proot",
+  "homepage": "https://proot-me.github.io",
+  "description": "Chroot alternative for user-space sandboxing",
+  "tags": [
+    "container",
+    "chroot",
+    "termux"
+  ]
+}

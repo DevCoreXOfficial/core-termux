@@ -1,0 +1,16 @@
+{
+  "name": "cactus",
+  "display": "Cactus Engine CLI",
+  "platforms": [
+    "termux"
+  ],
+  "check_cmd": "cactus",
+  "homepage": "https://cactuscompute.com",
+  "description": "A hybrid edge-cloud AI engine for mobiles, wearables, smart home and robots \u2014 quantization, kernels, runtime and inferen",
+  "tags": [
+    "ai",
+    "llm",
+    "mobile",
+    "inference"
+  ]
+}

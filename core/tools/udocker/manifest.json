@@ -1,0 +1,17 @@
+{
+  "name": "udocker",
+  "display": "udocker",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "udocker",
+  "homepage": "https://indigo-dc.github.io/udocker/",
+  "description": "Run Docker containers without root privileges",
+  "tags": [
+    "containers",
+    "docker",
+    "rootless"
+  ]
+}

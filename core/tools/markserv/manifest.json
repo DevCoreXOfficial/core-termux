@@ -1,0 +1,26 @@
+{
+  "name": "markserv",
+  "display": "Markserv",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "markserv",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Markdown live-preview server",
+  "tags": [
+    "markdown",
+    "preview",
+    "server"
+  ]
+}

@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 # ============================================================
 # agent_llm.sh — config + OpenAI-compatible chat calls for
@@ -38,7 +38,7 @@ agent_config_load() {
 	AGENT_MAX_ITERATIONS="${AGENT_MAX_ITERATIONS:-12}"
 	# the agent ALWAYS starts in the directory you run it from — the
 	# workspace is never loaded from the persisted config (a stale
-	# saved path used to pin the agent to $HOME/core-termux). Override
+	# saved path used to pin the agent to $HOME/.core). Override
 	# it per session with `-w/--workspace` or `/workspace`.
 	AGENT_WORKSPACE="$PWD"
 	AGENT_CONFIRM_COMMANDS="${AGENT_CONFIRM_COMMANDS:-1}"

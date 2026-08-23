@@ -1,8 +1,11 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
+
+# Core - multiplatform entrypoint.
+# #!/usr/bin/env bash works on Termux, Ubuntu Linux and Ubuntu (WSL).
 
 SOURCE="${BASH_SOURCE[0]}"
 
-# resolver symlink si existe
+# resolve symlink if present
 while [ -L "$SOURCE" ]; do
   DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
   SOURCE="$(readlink "$SOURCE")"
@@ -11,53 +14,69 @@ done
 
 BIN_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
 
-# root del proyecto
+# project root
 CORE_PATH="$(cd "$BIN_DIR/.." && pwd)"
+export CORE_PATH
 
-# cargar bootstrap
+# load bootstrap
 source "$CORE_PATH/utils/bootstrap.sh"
 
-# cargar entorno
+# load environment
 import "@/utils/env"
+export CORE_PATH CORE_CONFIG CORE_CACHE CORE_DATA CORE_VERSION
+
+# ===== PLATFORM DETECTION =====
+import "@/lib/platform"
+core_detect_platform
+
+if ! core_platform_supported; then
+  echo
+  echo "  core: unsupported environment detected ($(core_platform_label))."
+  echo "  Supported platforms: Termux/Android, Ubuntu Linux, Ubuntu (WSL)."
+  echo
+  exit 1
+fi
 
 # ===== CHECK UPDATES =====
+CORE_REMOTE_VERSION_URL="https://raw.githubusercontent.com/DevCoreXOfficial/core/main/core/utils/env.sh"
+
 check_for_updates() {
   local version_file="$CORE_CACHE/last_version_check"
   local current_time=$(date +%s)
-  local check_interval=86400  # 24 hours in seconds
+  local check_interval=86400 # 24 hours in seconds
   local last_check=0
 
-  # Read last check
   if [[ -f "$version_file" ]]; then
     last_check=$(cat "$version_file" 2>/dev/null | head -1)
   fi
 
-  # Check if 24 hours have passed
-  if (( current_time - last_check < check_interval )); then
+  if ((current_time - last_check < check_interval)); then
     return 0
   fi
 
-  # Save current timestamp
   mkdir -p "$CORE_CACHE"
-  echo "$current_time" > "$version_file"
+  echo "$current_time" >"$version_file"
 
-  # Check updates in background (do not block)
   (
-    local remote_version=$(curl -fsSL "https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/core/utils/env.sh" 2>/dev/null | grep "CORE_VERSION=" | cut -d'"' -f2)
+    local remote_version
+    remote_version=$(curl -fsSL "$CORE_REMOTE_VERSION_URL" 2>/dev/null | grep "CORE_VERSION=" | cut -d'"' -f2)
     local local_version="$CORE_VERSION"
 
+    # Notify only when the remote version is NEWER than the local one.
     if [[ -n "$remote_version" ]] && [[ "$remote_version" != "$local_version" ]]; then
-      echo "$remote_version" > "$CORE_CACHE/new_version"
+      local highest
+      highest=$(printf '%s\n%s\n' "$local_version" "$remote_version" | sort -V | tail -1)
+      [[ "$highest" == "$remote_version" ]] && echo "$remote_version" >"$CORE_CACHE/new_version"
     fi
   ) &>/dev/null &
 }
 
-# Show update notification
 show_update_notification() {
   local new_version_file="$CORE_CACHE/new_version"
 
   if [[ -f "$new_version_file" ]]; then
-    local new_version=$(cat "$new_version_file")
+    local new_version
+    new_version=$(cat "$new_version_file")
     echo
     separator_section "Update Available"
     echo
@@ -68,14 +87,12 @@ show_update_notification() {
   fi
 }
 
-# Check updates (only if not an update command)
 if [[ "$1" != "update" ]] && [[ "$1" != "uninstall" ]] && [[ "$1" != "reinstall" ]]; then
   check_for_updates
-  
-  # Import logs for the notification
+
   import "@/utils/log"
   import "@/utils/colors"
-  
+
   show_update_notification
 fi
 

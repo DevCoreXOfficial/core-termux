@@ -1,0 +1,26 @@
+{
+  "name": "live-server",
+  "display": "Live Server",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "live-server",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Development server with live reload capability",
+  "tags": [
+    "dev-server",
+    "frontend",
+    "reload"
+  ]
+}

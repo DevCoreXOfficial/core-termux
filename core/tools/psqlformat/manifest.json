@@ -1,0 +1,27 @@
+{
+  "name": "psqlformat",
+  "display": "pgFormatter",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "psqlformat",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "PostgreSQL query formatter",
+  "tags": [
+    "db",
+    "sql",
+    "format",
+    "postgres"
+  ]
+}

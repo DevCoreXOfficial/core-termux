@@ -1,0 +1,35 @@
+{
+  "name": "qwen-code",
+  "display": "Qwen Code",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "qwen",
+  "homepage": "https://qwenlm.github.io/qwen-code-docs/",
+  "dependencies": [
+    {
+      "name": "git",
+      "check": "git",
+      "pkg": {
+        "termux": "git",
+        "ubuntu": "git"
+      }
+    },
+    {
+      "name": "ripgrep",
+      "check": "rg",
+      "pkg": {
+        "termux": "ripgrep",
+        "ubuntu": "ripgrep"
+      }
+    }
+  ],
+  "description": "Alibaba's AI coding assistant",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

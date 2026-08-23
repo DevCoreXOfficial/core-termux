@@ -1,0 +1,27 @@
+{
+  "name": "walkie",
+  "display": "Walkie",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "walkie",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "P2P communication CLI for AI agents \u2014 let your coding agents talk to each other and to you over encrypted peer-to-peer c",
+  "tags": [
+    "ai",
+    "p2p",
+    "communication",
+    "mesh"
+  ]
+}

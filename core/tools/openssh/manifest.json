@@ -1,0 +1,17 @@
+{
+  "name": "openssh",
+  "display": "OpenSSH",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "ssh",
+  "homepage": "https://www.openssh.com",
+  "description": "SSH server and client for secure remote access",
+  "tags": [
+    "ssh",
+    "remote",
+    "scp"
+  ]
+}

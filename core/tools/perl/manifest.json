@@ -1,0 +1,16 @@
+{
+  "name": "perl",
+  "display": "Perl",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "perl",
+  "homepage": "https://www.perl.org",
+  "description": "Highly capable, feature-rich programming language",
+  "tags": [
+    "language",
+    "runtime"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "bat",
+  "display": "Bat",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "batcat",
+  "homepage": "https://github.com/sharkdp/bat",
+  "description": "Modern cat replacement with syntax highlighting",
+  "tags": [
+    "cat",
+    "syntax",
+    "paging"
+  ]
+}

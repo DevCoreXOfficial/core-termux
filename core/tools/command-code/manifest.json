@@ -1,0 +1,16 @@
+{
+  "name": "command-code",
+  "display": "Command Code",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "cmdc",
+  "description": "The coding agent that learns your coding taste.",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

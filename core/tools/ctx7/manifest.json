@@ -1,0 +1,27 @@
+{
+  "name": "ctx7",
+  "display": "Context7",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "ctx7",
+  "homepage": "https://context7.com",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Up-to-date documentation for AI coding agents",
+  "tags": [
+    "ai",
+    "docs",
+    "mcp"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "tmate",
+  "display": "tmate",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "tmate",
+  "homepage": "https://tmate.io",
+  "description": "Instant terminal sharing for pair programming",
+  "tags": [
+    "remote",
+    "sharing",
+    "pairing"
+  ]
+}

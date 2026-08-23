@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+# Platform: Termux / Android (requires the Termux bash path at runtime via wrappers).
+[[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
+source "$CORE_PATH/utils/bootstrap.sh"
+import "@/utils/env"
+
+
+import "@/utils/log"
+import "@/utils/version"
+import "@/utils/uninstall"
+import "@/tools/lang/bun/install"
+import "@/utils/walkie"
+
+LOG_FILE="$CORE_CACHE/install_ai.log"
+
+_qwen_code_dependencies() {
+  loading "Installing dependencies" _qwen_code_dependencies_impl
+}
+
+_qwen_code_dependencies_impl() {
+  declare -A DEPS=(
+    ["git"]="git"
+    ["ripgrep"]="rg"
+  )
+
+  local pkg_name bin_name
+  for pkg_name in "${!DEPS[@]}"; do
+    bin_name="${DEPS[$pkg_name]}"
+    if ! command -v "$bin_name" &>/dev/null; then
+      if ! yes | pkg install "$pkg_name" &>>"$LOG_FILE"; then
+        log_error "Failed to install $pkg_name"
+        return 1
+      fi
+    fi
+  done
+
+  _ensure_bun || return 1
+
+  return 0
+}
+
+_install_qwen_code_bun() {
+  loading "Installing Qwen Code" _install_qwen_code_bun_impl
+}
+
+_install_qwen_code_bun_impl() {
+  if ! _install_pkg_fallback "@qwen-code/qwen-code"; then
+    log_error "Failed to install Qwen Code"
+    return 1
+  fi
+
+  return 0
+}
+
+install_qwen_code() {
+  if command -v qwen &>/dev/null; then
+    log_info "Qwen Code is already installed"
+    return 2
+  fi
+
+  log_info "Installing Qwen Code..."
+
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  _qwen_code_dependencies || return 1
+  _install_qwen_code_bun || return 1
+
+  log_success "Qwen Code installed successfully"
+  return 0
+}
+
+uninstall_qwen_code() {
+  _walkie_remove_wrapper qwen qwen-code
+  if ! command -v qwen &>/dev/null; then
+    log_info "Qwen Code is not installed"
+    return 2
+  fi
+
+  confirm_remove_configs "Qwen Code" \
+    "$HOME/.qwen"
+
+  log_info "Uninstalling Qwen Code..."
+  mkdir -p "$(dirname "$LOG_FILE")"
+
+  loading "Removing Qwen Code" _uninstall_qwen_code_impl
+
+  log_success "Qwen Code uninstalled"
+  return 0
+}
+
+_uninstall_qwen_code_impl() {
+  _uninstall_pkg_fallback "@qwen-code/qwen-code"
+  return 0
+}
+
+update_qwen_code() {
+  _check_update_needed "Qwen Code" "$(_get_installed_version qwen)" "$(_get_remote_npm_version @qwen-code/qwen-code)" _update_qwen_code
+}
+
+_update_qwen_code() {
+  loading "Updating Qwen Code" _update_qwen_code_impl
+}
+
+_update_qwen_code_impl() {
+  if ! _install_pkg_fallback "@qwen-code/qwen-code@latest"; then
+    log_error "Failed to update Qwen Code"
+    return 1
+  fi
+  return 0
+}
+
+reinstall_qwen_code() {
+  uninstall_qwen_code
+  install_qwen_code
+}
+
+# ===== verb dispatcher (called by the Core engine) =====
+if [[ "${1:-}" == "install" ]]; then install_qwen_code; fi
+if [[ "${1:-}" == "uninstall" ]]; then uninstall_qwen_code; fi
+if [[ "${1:-}" == "update" ]]; then update_qwen_code; fi
+if [[ "${1:-}" == "reinstall" ]]; then reinstall_qwen_code; fi

@@ -1,0 +1,15 @@
+{
+  "name": "hermes-agent",
+  "display": "Hermes Agent",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "hermes",
+  "description": "The self-improving AI agent built by Nous Research",
+  "tags": [
+    "ai",
+    "agent"
+  ]
+}

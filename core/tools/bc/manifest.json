@@ -1,0 +1,15 @@
+{
+  "name": "bc",
+  "display": "bc",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "bc",
+  "description": "Arbitrary precision calculator language",
+  "tags": [
+    "calculator",
+    "math"
+  ]
+}

@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 BANNER_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 BANNER_FILE="$(cd "$BANNER_SCRIPT_DIR/../.." && pwd)/assets/banner/devcorex.txt"
@@ -22,7 +22,8 @@ fi
 if [[ -n "$BANNER_VERSION" ]]; then
 	printf "\n"
 	printf " ${GRAY}DevCoreX ${NC}Software Development Community${NC}\n"
-	printf "     ${NC}Welcome to${GRAY} Core-Termux ${DGREEN}v%s${NC}\n" "$BANNER_VERSION"
+	printf "     ${NC}Welcome to${GRAY} Core ${DGREEN}v%s${NC}\n" "$BANNER_VERSION"
+	printf "  ${D_CYAN}One CLI — Your environment. Everywhere.${NC}\n"
 	printf "        ${NC}Run ${DGREEN}core${NC} to get started${NC}\n"
 fi
 
@@ -30,7 +31,7 @@ fi
 
 CORE_TIPS=(
 	# ── Framework ─────────────────────────────────────────────
-	"Keep Core-Termux updated: ${D_CYAN}core update core${NC}"
+	"Keep Core updated: ${D_CYAN}core update core${NC}"
 	"Check your version: ${D_CYAN}core --version${NC}"
 	"Enable debug logs: ${D_CYAN}export CORE_DEBUG=1${NC}"
 	"Shell remembers your last directory — open Termux where you left off"
@@ -40,7 +41,7 @@ CORE_TIPS=(
 	# ── Install / Update / Uninstall ─────────────────────────
 	"Install everything at once: ${D_CYAN}core install lang db dev npm${NC}"
 	"Install only what you need: ${D_CYAN}core install ai --opencode --ollama${NC}"
-	"See what's installed: ${D_CYAN}core list ai${NC} or ${D_CYAN}core list dev${NC}"
+	"See what's installed: ${D_CYAN}core search ai${NC} or ${D_CYAN}core search dev${NC}"
 	"Read tool docs: ${D_CYAN}core show ai --opencode${NC}"
 	"Update a specific tool: ${D_CYAN}core update ai --opencode${NC}"
 	"Update all AI tools: ${D_CYAN}core update ai${NC}"
@@ -48,7 +49,7 @@ CORE_TIPS=(
 	"Update ZSH plugins: ${D_CYAN}core update shell${NC}"
 	"Reinstall from scratch: ${D_CYAN}core reinstall shell${NC}"
 	"Reinstall specific tools: ${D_CYAN}core reinstall ai --opencode --ollama${NC}"
-	"Remove a module: ${D_CYAN}core uninstall npm${NC}"
+	"Remove a tool: ${D_CYAN}core uninstall <tool>${NC}"
 	"Remove specific tool: ${D_CYAN}core uninstall ai --ollama${NC}"
 	"Open tool docs in browser: ${D_CYAN}core open ai${NC}"
 
@@ -96,17 +97,17 @@ CORE_TIPS=(
 	"Install Engram memory: ${D_CYAN}core install ai --engram${NC}"
 	"Install CodeGraph: ${D_CYAN}core install ai --codegraph${NC}"
 	"Install GGA code review: ${D_CYAN}core install ai --gga${NC}"
-	"Install MiniMax CLI: ${D_CYAN}core install ai --minimax-cli${NC}"
+	"Install MiniMax CLI: ${D_CYAN}core install ai --minimax${NC}"
 	"Install Command Code: ${D_CYAN}core install ai --command-code${NC}"
 	"Install Freebuff: ${D_CYAN}core install ai --freebuff${NC}"
 	"Install Kimchi: ${D_CYAN}core install ai --kimchi${NC}"
-	"Install KiloCode CLI: ${D_CYAN}core install ai --kilocode-cli${NC}"
+	"Install KiloCode CLI: ${D_CYAN}core install ai --kilocode${NC}"
 	"Install KeelCode: ${D_CYAN}core install ai --keelcode${NC}"
 	"Install Context7: ${D_CYAN}core install ai --ctx7${NC}"
 	"Install OpenSpec: ${D_CYAN}core install ai --openspec${NC}"
 	"Install Cline CLI: ${D_CYAN}core install ai --cline${NC}"
 	"Install AMP Code CLI: ${D_CYAN}core install ai --ampcode${NC}"
-	"Install Cursor CLI: ${D_CYAN}core install ai --cursor-cli${NC}"
+	"Install Cursor CLI: ${D_CYAN}core install ai --cursor${NC}"
 	"Install Oh-My-Pi: ${D_CYAN}core install ai --oh-my-pi${NC}"
 	"Install SuperCode CLI: ${D_CYAN}core install ai --supercode${NC}"
 	"Install Droid Factory: ${D_CYAN}core install ai --droid-factory${NC}"
@@ -219,7 +220,7 @@ CORE_TIPS=(
 	"Init a NestJS project: ${D_CYAN}cd backend && core init nest${NC}"
 )
 
-_tip_index_file="${XDG_CACHE_HOME:-$HOME/.cache}/core-termux/.last_tip_index"
+_tip_index_file="${XDG_CACHE_HOME:-$HOME/.cache}/core/.last_tip_index"
 
 if [[ ${#CORE_TIPS[@]} -gt 0 ]]; then
 	last_index=-1

@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -116,7 +116,7 @@ _fix_pnpm_dev_engines() {
 }
 
 _check_turbopack_toolchain() {
-	[[ -x "$HOME/.local/share/core-termux-data/node-glibc/bin/node" ]] && return 0
+	[[ -x "$HOME/.local/share/core-data/node-glibc/bin/node" ]] && return 0
 	return 1
 }
 

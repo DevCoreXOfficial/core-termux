@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -256,7 +256,7 @@ brain_init() {
 
 	local gh_user
 	gh_user=$(gh api user --jq '.login' 2>/dev/null)
-	local repo_name="core-termux-brain"
+	local repo_name="core-brain"
 
 	if gh repo view "$gh_user/$repo_name" &>/dev/null; then
 		log_info "Found existing brain repo: ${D_CYAN}$gh_user/$repo_name${D_NC}"

@@ -1,0 +1,16 @@
+{
+  "name": "superfile",
+  "display": "SuperFile",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "spf",
+  "homepage": "https://superfile.dev",
+  "description": "Terminal file manager with TUI, themes, and hotkeys",
+  "tags": [
+    "file-manager",
+    "tui"
+  ]
+}

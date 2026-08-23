@@ -1,0 +1,27 @@
+{
+  "name": "codex",
+  "display": "Codex CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "codex",
+  "homepage": "https://developers.openai.com/codex/",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Codex CLI is a coding agent from OpenAI that runs locally on your computer",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

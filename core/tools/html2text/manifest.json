@@ -1,0 +1,15 @@
+{
+  "name": "html2text",
+  "display": "html2text",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "html2text",
+  "description": "Convert HTML documents to plain text",
+  "tags": [
+    "html",
+    "conversion"
+  ]
+}

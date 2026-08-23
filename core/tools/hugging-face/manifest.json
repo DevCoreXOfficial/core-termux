@@ -1,0 +1,18 @@
+{
+  "name": "hugging-face",
+  "display": "Hugging Face CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "hf",
+  "homepage": "https://huggingface.co/docs/huggingface_hub",
+  "description": "The official Hugging Face Hub CLI \u2014 download, upload, and manage models, datasets, Spaces, buckets, repos, papers, colle",
+  "tags": [
+    "ai",
+    "models",
+    "datasets",
+    "ml"
+  ]
+}

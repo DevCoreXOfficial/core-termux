@@ -1,0 +1,27 @@
+{
+  "name": "cline",
+  "display": "Cline CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "cline",
+  "homepage": "https://cline.bot",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "The open source coding agent in your IDE and terminal.",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

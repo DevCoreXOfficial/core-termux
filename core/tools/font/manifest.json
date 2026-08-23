@@ -1,0 +1,16 @@
+{
+  "name": "font",
+  "display": "Meslo Nerd Font",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "",
+  "description": "Meslo Nerd Font for your terminal",
+  "tags": [
+    "terminal",
+    "nerd-font",
+    "typography"
+  ]
+}

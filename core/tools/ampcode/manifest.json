@@ -1,0 +1,17 @@
+{
+  "name": "ampcode",
+  "display": "AMP Code CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "amp",
+  "homepage": "https://ampcode.com",
+  "description": "Amp is the frontier agent, for people who want the most out of an agent, rather than keeping their old ways.",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

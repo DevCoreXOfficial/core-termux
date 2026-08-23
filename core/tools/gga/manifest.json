@@ -1,0 +1,15 @@
+{
+  "name": "gga",
+  "display": "Gentleman Guardian Angel",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "gga",
+  "description": "Provider-agnostic AI code review on every commit",
+  "tags": [
+    "ai",
+    "code-review"
+  ]
+}

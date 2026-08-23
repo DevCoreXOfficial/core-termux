@@ -1,0 +1,16 @@
+{
+  "name": "banner",
+  "display": "Banner",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "",
+  "description": "Customize Termux with Core Banner",
+  "tags": [
+    "terminal",
+    "theme",
+    "startup"
+  ]
+}

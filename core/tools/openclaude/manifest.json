@@ -1,0 +1,16 @@
+{
+  "name": "openclaude",
+  "display": "OpenClaude",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "openclaude",
+  "description": "Open source Claude Code alternative",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "python",
+  "display": "Python",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "python3",
+  "homepage": "https://www.python.org",
+  "description": "High-level, general-purpose programming language",
+  "tags": [
+    "language",
+    "runtime"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "ncu",
+  "display": "npm-check-updates",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "ncu",
+  "homepage": "https://github.com/raineorshine/npm-check-updates",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Find and update outdated npm dependencies",
+  "tags": [
+    "updates",
+    "npm",
+    "dependencies"
+  ]
+}

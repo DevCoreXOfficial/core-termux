@@ -1,0 +1,17 @@
+{
+  "name": "goose",
+  "display": "Goose CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "goose",
+  "homepage": "https://block.github.io/goose/",
+  "description": "An open source AI agent that supercharges your workflow with one tool: plan, build, test, and iterate on tasks in a loca",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

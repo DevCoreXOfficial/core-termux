@@ -1,0 +1,17 @@
+{
+  "name": "postgresql",
+  "display": "PostgreSQL",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "psql",
+  "homepage": "https://www.postgresql.org",
+  "description": "Advanced open-source relational database",
+  "tags": [
+    "db",
+    "sql",
+    "server"
+  ]
+}

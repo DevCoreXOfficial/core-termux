@@ -1,74 +1,57 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/lib/platform"
 
-OPEN_BASE_URL="https://devcorex-web.vercel.app"
+CORE_DOCS_URL="https://devcorex-web.vercel.app/core"
 
-open_main() {
-	if [[ $# -eq 0 ]]; then
-		open_help
-		return
-	fi
-
-	local target="$1"
-	local url=""
-
-	case "$target" in
-	devcorex)
-		url="$OPEN_BASE_URL"
-		;;
-	core | help)
-		url="$OPEN_BASE_URL/core-termux"
-		;;
-	lang | db | ai | editor | dev | npm | shell | ui | auto)
-		url="$OPEN_BASE_URL/core-termux/$target"
-		;;
-	--help | -h)
-		open_help
-		return
-		;;
-	*)
-		log_error "Unknown target: $target"
-		echo
-		open_help
-		return 1
-		;;
-	esac
-
-	if ! command -v termux-open-url &>/dev/null; then
-		log_error "termux-open-url not found. Are you running in Termux?"
-		return 1
-	fi
-
-	termux-open-url "$url"
-	log_success "Opening: ${D_CYAN}$url${NC}"
+open_url() {
+  local url="$1"
+  if command -v xdg-open &>/dev/null; then
+    xdg-open "$url" &>/dev/null &
+  elif command -v termux-open-url &>/dev/null; then
+    termux-open-url "$url"
+  elif command -v wslview &>/dev/null; then
+    wslview "$url" &>/dev/null
+  else
+    log_warn "No browser opener found. Open manually:"
+    list_item "$url"
+    return 1
+  fi
 }
 
-open_help() {
-	echo
-	box "Core Open"
-	echo
-	log_info "Usage: core open <target>"
-	echo
-	log_info "Open official documentation in browser"
-	echo
-	separator_section "Targets"
-	echo
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "core" "Core-Termux documentation"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "devcorex" "DevCoreX website"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "lang" "Language modules"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "db" "Database modules"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "ai" "AI tools"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "editor" "Code editor"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "dev" "Dev tools"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "npm" "Node.js tools"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "shell" "ZSH shell"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "ui" "Termux UI"
-	printf "    ${D_GREEN}%-14s${D_NC} ${D_DIM}%s${D_NC}\n" "auto" "Automation tools"
-	echo
-	separator_section "Website"
-	echo
-	list_item "${D_BLUE}$OPEN_BASE_URL${NC}"
-	echo
+open_main() {
+
+  if [[ $# -eq 0 ]]; then
+    echo
+    box "Core Open"
+    echo
+    log_info "Usage: core open <target>"
+    echo
+    log_info "Open official documentation in browser:"
+    echo
+    list_item "${D_CYAN}core open${D_NC}                Core documentation"
+    list_item "${D_CYAN}core open devcorex${D_NC}       DevCoreX website"
+    list_item "${D_CYAN}core open devcorex${D_NC}"
+    echo
+    return
+  fi
+
+  local target="$1"
+
+  case "$target" in
+  core)
+    open_url "$CORE_DOCS_URL"
+    log_info "Opening Core documentation..."
+    ;;
+  devcorex)
+    open_url "https://devcorex-web.vercel.app/"
+    log_info "Opening DevCoreX website..."
+    ;;
+  *)
+    log_warn "Unknown target: $target"
+    echo "Run 'core open' to see available targets"
+    ;;
+  esac
 }

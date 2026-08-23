@@ -1,0 +1,27 @@
+{
+  "name": "localtunnel",
+  "display": "Localtunnel",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "lt",
+  "homepage": "https://theboroer.github.io/localtunnel-www/",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Expose localhost to the internet securely",
+  "tags": [
+    "tunnel",
+    "localhost",
+    "expose"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "n8n",
+  "display": "n8n",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "n8n",
+  "homepage": "https://n8n.io",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Workflow automation platform - connect apps, APIs and services",
+  "tags": [
+    "automation",
+    "workflows",
+    "integration",
+    "self-hosted"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "opencode",
+  "display": "OpenCode",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "opencode",
+  "homepage": "https://opencode.ai",
+  "dependencies": [
+    {
+      "name": "git",
+      "check": "git",
+      "pkg": {
+        "termux": "git",
+        "ubuntu": "git"
+      }
+    },
+    {
+      "name": "ripgrep",
+      "check": "rg",
+      "pkg": {
+        "termux": "ripgrep",
+        "ubuntu": "ripgrep"
+      }
+    },
+    {
+      "name": "jq",
+      "check": "jq",
+      "pkg": {
+        "termux": "jq",
+        "ubuntu": "jq"
+      }
+    },
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Open-source agent that helps you write code in your terminal",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

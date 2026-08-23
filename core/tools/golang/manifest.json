@@ -1,0 +1,16 @@
+{
+  "name": "golang",
+  "display": "Go",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "go",
+  "homepage": "https://go.dev",
+  "description": "Statically typed, compiled programming language by Google",
+  "tags": [
+    "language",
+    "runtime"
+  ]
+}

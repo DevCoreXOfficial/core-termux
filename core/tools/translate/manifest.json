@@ -1,0 +1,16 @@
+{
+  "name": "translate",
+  "display": "Translate Shell",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "trans",
+  "homepage": "https://www.soimort.org/translate-shell/",
+  "description": "Command-line translator powered by Google Translate",
+  "tags": [
+    "translation",
+    "languages"
+  ]
+}

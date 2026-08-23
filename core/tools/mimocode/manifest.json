@@ -1,0 +1,16 @@
+{
+  "name": "mimocode",
+  "display": "MiMoCode",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "mimo",
+  "description": "Xiaomi's AI coding agent \u2014 fast, local, and open-source",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

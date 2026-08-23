@@ -1,0 +1,16 @@
+{
+  "name": "gentle-ai",
+  "display": "Gentle AI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "gentle-ai",
+  "description": "Ecosystem, Frameworks, Workflows for AI coding agents",
+  "tags": [
+    "ai",
+    "agents",
+    "ecosystem"
+  ]
+}

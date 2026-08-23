@@ -1,0 +1,16 @@
+{
+  "name": "php",
+  "display": "PHP",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "php",
+  "homepage": "https://www.php.net",
+  "description": "Popular general-purpose scripting language for web development",
+  "tags": [
+    "language",
+    "runtime"
+  ]
+}

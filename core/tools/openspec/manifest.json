@@ -1,0 +1,26 @@
+{
+  "name": "openspec",
+  "display": "OpenSpec",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "openspec",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Spec-Driven Development framework for AI coding assistants",
+  "tags": [
+    "ai",
+    "spec-driven",
+    "development"
+  ]
+}

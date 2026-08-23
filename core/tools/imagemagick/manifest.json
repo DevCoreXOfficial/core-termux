@@ -1,0 +1,17 @@
+{
+  "name": "imagemagick",
+  "display": "ImageMagick",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "magick",
+  "homepage": "https://imagemagick.org",
+  "description": "Image manipulation and conversion suite",
+  "tags": [
+    "images",
+    "convert",
+    "edit"
+  ]
+}

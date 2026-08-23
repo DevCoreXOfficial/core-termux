@@ -1,0 +1,16 @@
+{
+  "name": "freebuff",
+  "display": "Freebuff",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "freebuff",
+  "description": "A 100% free coding agent, right from your terminal",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

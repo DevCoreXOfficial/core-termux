@@ -1,0 +1,17 @@
+{
+  "name": "cloudflared",
+  "display": "cloudflared",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "cloudflared",
+  "homepage": "https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/",
+  "description": "Cloudflare Tunnel client for secure connections",
+  "tags": [
+    "tunnel",
+    "dns",
+    "cloudflare"
+  ]
+}

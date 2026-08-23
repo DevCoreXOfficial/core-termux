@@ -1,0 +1,17 @@
+{
+  "name": "qoder",
+  "display": "Qoder",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "qodercli",
+  "homepage": "https://qoder.com",
+  "description": "A terminal-native AI coding partner\u2014and an agent engine you can build on.",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

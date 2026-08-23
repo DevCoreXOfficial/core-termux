@@ -1,0 +1,28 @@
+{
+  "name": "nestjs",
+  "display": "NestJS CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "nest",
+  "homepage": "https://docs.nestjs.com",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Progressive Node.js framework for building efficient, reliable applications",
+  "tags": [
+    "framework",
+    "backend",
+    "nodejs",
+    "api"
+  ]
+}

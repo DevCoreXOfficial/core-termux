@@ -1,0 +1,18 @@
+{
+  "name": "neovim",
+  "display": "Neovim + NvChad",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "nvim",
+  "homepage": "https://neovim.io",
+  "description": "Fast, extensible code editor bundled with the NvChad configuration",
+  "tags": [
+    "editor",
+    "nvim",
+    "nvchad",
+    "lsp"
+  ]
+}

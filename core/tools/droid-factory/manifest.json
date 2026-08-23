@@ -1,0 +1,17 @@
+{
+  "name": "droid-factory",
+  "display": "Droid Factory",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "droid",
+  "homepage": "https://factory.ai",
+  "description": "AI coding agent by Factory (Factory CLI)",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

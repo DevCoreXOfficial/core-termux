@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 # ============================================================
 # walkie.sh — shared helpers for the walkie P2P agent

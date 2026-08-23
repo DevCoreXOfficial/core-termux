@@ -1,0 +1,16 @@
+{
+  "name": "jq",
+  "display": "jq",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "jq",
+  "homepage": "https://jqlang.github.io/jq/",
+  "description": "Lightweight and flexible command-line JSON processor",
+  "tags": [
+    "json",
+    "parser"
+  ]
+}

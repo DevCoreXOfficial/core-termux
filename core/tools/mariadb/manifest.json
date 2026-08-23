@@ -1,0 +1,18 @@
+{
+  "name": "mariadb",
+  "display": "MariaDB",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "mariadb",
+  "homepage": "https://mariadb.org",
+  "description": "Community-developed fork of MySQL relational database",
+  "tags": [
+    "db",
+    "sql",
+    "mysql",
+    "server"
+  ]
+}

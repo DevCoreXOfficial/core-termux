@@ -1,0 +1,17 @@
+{
+  "name": "redis",
+  "display": "Redis",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "redis-server",
+  "homepage": "https://redis.io",
+  "description": "In-memory data structure store used as database, cache, and message broker",
+  "tags": [
+    "db",
+    "cache",
+    "nosql"
+  ]
+}

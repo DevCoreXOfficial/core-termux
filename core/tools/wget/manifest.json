@@ -1,0 +1,16 @@
+{
+  "name": "wget",
+  "display": "Wget",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "wget",
+  "homepage": "https://www.gnu.org/software/wget/",
+  "description": "Network downloader for retrieving files from the web",
+  "tags": [
+    "download",
+    "http"
+  ]
+}

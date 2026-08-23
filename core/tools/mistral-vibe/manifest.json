@@ -1,0 +1,17 @@
+{
+  "name": "mistral-vibe",
+  "display": "Mistral Vibe",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "vibe",
+  "homepage": "https://mistral.ai",
+  "description": "Command-line coding assistant powered by Mistral's models",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

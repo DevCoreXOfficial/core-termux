@@ -1,0 +1,17 @@
+{
+  "name": "shfmt",
+  "display": "shfmt",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "shfmt",
+  "homepage": "https://github.com/mvdan/sh",
+  "description": "Shell script formatter with POSIX and Bash support",
+  "tags": [
+    "format",
+    "shell",
+    "bash"
+  ]
+}

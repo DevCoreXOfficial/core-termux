@@ -1,0 +1,16 @@
+{
+  "name": "kimchi",
+  "display": "Kimchi",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "kimchi",
+  "description": "Terminal coding agent powered by Kimchi's multi-model orchestration",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

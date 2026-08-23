@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 # ============================================================
 # agent_actions.sh — markdown-driven actions for `core agent run`.
@@ -1101,7 +1101,7 @@ agent_voice_capture() {
 # ------------------------------------------------------------
 # Model server lifecycle — when the REPL starts and the endpoint
 # is unreachable, start `cactus serve` in the background with its
-# logs redirected to ~/.cache/core-termux/core-agent.log, and stop
+# logs redirected to ~/.cache/core/core-agent.log, and stop
 # it automatically when the REPL ends (/exit, ESC ESC, Ctrl+C).
 # Only a server WE started is stopped — a manually-started one is
 # left alone.

@@ -1,0 +1,23 @@
+{
+  "name": "kilocode",
+  "display": "KiloCode CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "kilo",
+  "homepage": "https://kilocode.ai",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "The open source coding agent for building with AI in VS Code, JetBrains, or the CLI",
+  "tags": []
+}

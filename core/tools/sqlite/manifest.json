@@ -1,0 +1,17 @@
+{
+  "name": "sqlite",
+  "display": "SQLite",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "sqlite3",
+  "homepage": "https://www.sqlite.org",
+  "description": "Self-contained, serverless, zero-configuration SQL database engine",
+  "tags": [
+    "db",
+    "sql",
+    "embedded"
+  ]
+}

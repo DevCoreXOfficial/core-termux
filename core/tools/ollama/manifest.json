@@ -1,0 +1,17 @@
+{
+  "name": "ollama",
+  "display": "Ollama",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "ollama",
+  "homepage": "https://ollama.com",
+  "description": "Run open-source LLMs locally on Termux",
+  "tags": [
+    "ai",
+    "llm",
+    "local"
+  ]
+}

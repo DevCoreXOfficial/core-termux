@@ -1,0 +1,16 @@
+{
+  "name": "rust",
+  "display": "Rust",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "cargo",
+  "homepage": "https://www.rust-lang.org",
+  "description": "Systems programming language with memory safety guarantees",
+  "tags": [
+    "language",
+    "runtime"
+  ]
+}

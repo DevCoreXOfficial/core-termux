@@ -1,0 +1,27 @@
+{
+  "name": "prettier",
+  "display": "Prettier",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "prettier",
+  "homepage": "https://prettier.io",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Opinionated code formatter supporting multiple languages",
+  "tags": [
+    "formatter",
+    "javascript",
+    "code-style"
+  ]
+}

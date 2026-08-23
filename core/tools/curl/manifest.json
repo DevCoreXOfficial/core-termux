@@ -1,0 +1,17 @@
+{
+  "name": "curl",
+  "display": "curl",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "curl",
+  "homepage": "https://curl.se",
+  "description": "Command-line tool for transferring data with URLs",
+  "tags": [
+    "http",
+    "transfer",
+    "api"
+  ]
+}

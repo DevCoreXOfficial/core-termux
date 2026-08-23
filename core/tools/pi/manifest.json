@@ -1,0 +1,16 @@
+{
+  "name": "pi",
+  "display": "Pi Coding Agent",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "pi",
+  "description": "Minimal terminal coding harness \u2014 adapt Pi to your workflows",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

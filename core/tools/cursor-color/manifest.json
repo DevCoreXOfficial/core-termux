@@ -1,0 +1,12 @@
+{
+  "name": "cursor-color",
+  "display": "Cursor Color",
+  "category": "appearance",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "",
+  "description": "Set your terminal cursor color (green by default)"
+}

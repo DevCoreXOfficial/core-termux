@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 import "@/utils/log"
 import "@/utils/colors"
@@ -18,7 +18,7 @@ voice_help() {
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "codex" "codex \"prompt\""
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "gemini-cli" "gemini -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "hermes-agent" "hermes chat -q \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "kilocode-cli" "kilo run \"prompt\""
+	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "kilocode" "kilo run \"prompt\""
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "kimi-code" "kimi -p \"prompt\""
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "mimocode" "mimo run \"prompt\""
 	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "mistral-vibe" "vibe --prompt \"prompt\""
@@ -141,7 +141,7 @@ voice_main() {
 	hermes-agent)
 		hermes chat -q "$prompt"
 		;;
-	kilocode-cli)
+	kilocode)
 		kilo run "$prompt"
 		;;
 	kimi-code)
@@ -170,7 +170,7 @@ voice_main() {
 		echo
 		log_info "Supported agents:"
 		echo "  opencode, qoder, claude-code, codex, gemini-cli, hermes-agent,"
-		echo "  kilocode-cli, kimi-code, mimocode, mistral-vibe, openclaude, pi, qwen-code"
+		echo "  kilocode, kimi-code, mimocode, mistral-vibe, openclaude, pi, qwen-code"
 		separator
 		exit 1
 		;;

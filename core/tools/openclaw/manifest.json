@@ -1,0 +1,15 @@
+{
+  "name": "openclaw",
+  "display": "OpenClaw",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "openclaw",
+  "description": "Personal AI Assistant",
+  "tags": [
+    "ai",
+    "assistant"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "fzf",
+  "display": "fzf",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "fzf",
+  "homepage": "https://github.com/junegunn/fzf",
+  "description": "General-purpose command-line fuzzy finder",
+  "tags": [
+    "fuzzy",
+    "finder",
+    "search"
+  ]
+}

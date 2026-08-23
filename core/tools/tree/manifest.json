@@ -1,0 +1,15 @@
+{
+  "name": "tree",
+  "display": "tree",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "tree",
+  "description": "Recursive directory listing in a tree-like format",
+  "tags": [
+    "files",
+    "listing"
+  ]
+}

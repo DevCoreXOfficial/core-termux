@@ -1,0 +1,12 @@
+{
+  "name": "minimax",
+  "display": "MiniMax CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "mmx",
+  "description": "Generate text, images, video, speech, and music from the terminal",
+  "tags": []
+}

@@ -1,0 +1,15 @@
+{
+  "name": "turbopack",
+  "display": "Turbopack (glibc)",
+  "platforms": [
+    "termux"
+  ],
+  "check_cmd": "next-turbopack",
+  "homepage": "https://nextjs.org",
+  "description": "Run Next.js with Turbopack on Termux (Android aarch64).",
+  "tags": [
+    "bundler",
+    "nextjs",
+    "termux"
+  ]
+}

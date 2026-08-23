@@ -1,0 +1,28 @@
+{
+  "name": "vercel",
+  "display": "Vercel CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "vercel",
+  "homepage": "https://vercel.com/docs/cli",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Deploy frontend applications and serverless functions",
+  "tags": [
+    "cloud",
+    "deploy",
+    "hosting",
+    "serverless"
+  ]
+}

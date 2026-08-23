@@ -1,0 +1,26 @@
+{
+  "name": "codegraph",
+  "display": "CodeGraph",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "codegraph",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Analyzes your codebase structure and dependencies to improve navigation",
+  "tags": [
+    "ai",
+    "code-analysis",
+    "graph"
+  ]
+}

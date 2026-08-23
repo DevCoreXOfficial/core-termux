@@ -1,0 +1,17 @@
+{
+  "name": "mongodb",
+  "display": "MongoDB",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "mongosh",
+  "homepage": "https://www.mongodb.com",
+  "description": "NoSQL document database for modern applications",
+  "tags": [
+    "db",
+    "nosql",
+    "documents"
+  ]
+}

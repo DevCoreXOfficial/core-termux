@@ -1,0 +1,16 @@
+{
+  "name": "antigravity",
+  "display": "Antigravity CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "agy",
+  "description": "Lightweight, terminal-first surface for Antigravity agents",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

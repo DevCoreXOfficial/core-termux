@@ -1,0 +1,16 @@
+{
+  "name": "oh-my-pi",
+  "display": "Oh-My-Pi",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "omp",
+  "description": "Enhanced AI coding agent \u2014 improved version of Pi, built as a standalone binary with `bun build --compile`.",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

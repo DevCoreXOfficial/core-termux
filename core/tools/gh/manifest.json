@@ -1,0 +1,17 @@
+{
+  "name": "gh",
+  "display": "GitHub CLI",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "gh",
+  "homepage": "https://cli.github.com",
+  "description": "Official GitHub command-line tool for managing repositories, PRs, and issues",
+  "tags": [
+    "git",
+    "github",
+    "cli"
+  ]
+}

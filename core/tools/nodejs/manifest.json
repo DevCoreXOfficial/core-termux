@@ -1,0 +1,17 @@
+{
+  "name": "nodejs",
+  "display": "Node.js LTS",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "node",
+  "homepage": "https://nodejs.org",
+  "description": "JavaScript runtime environment (Long Term Support version)",
+  "tags": [
+    "language",
+    "runtime",
+    "javascript"
+  ]
+}

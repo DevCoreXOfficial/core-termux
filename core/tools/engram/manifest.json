@@ -1,0 +1,16 @@
+{
+  "name": "engram",
+  "display": "Engram",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "engram",
+  "description": "Persistent memory system for AI coding agents",
+  "tags": [
+    "ai",
+    "memory",
+    "agents"
+  ]
+}

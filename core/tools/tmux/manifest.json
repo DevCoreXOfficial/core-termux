@@ -1,0 +1,17 @@
+{
+  "name": "tmux",
+  "display": "tmux",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "tmux",
+  "homepage": "https://github.com/tmux/tmux",
+  "description": "Terminal multiplexer for managing multiple sessions",
+  "tags": [
+    "terminal",
+    "multiplexer",
+    "sessions"
+  ]
+}

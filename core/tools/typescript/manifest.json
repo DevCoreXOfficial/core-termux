@@ -1,0 +1,27 @@
+{
+  "name": "typescript",
+  "display": "TypeScript",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "tsc",
+  "homepage": "https://www.typescriptlang.org",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    }
+  ],
+  "description": "Typed superset of JavaScript that compiles to plain JavaScript",
+  "tags": [
+    "language",
+    "javascript",
+    "compiler"
+  ]
+}

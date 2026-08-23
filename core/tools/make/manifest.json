@@ -1,0 +1,15 @@
+{
+  "name": "make",
+  "display": "Make",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "make",
+  "description": "Build automation tool for managing compilation and dependencies",
+  "tags": [
+    "build",
+    "compilation"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "keelcode",
+  "display": "KeelCode",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "keelcode",
+  "description": "The hosted coding agent for your terminal \u2014 inspect a project, edit files, run commands, search the web, use MCP servers",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}

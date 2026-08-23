@@ -1,0 +1,15 @@
+{
+  "name": "ncurses",
+  "display": "ncurses-utils",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "tput",
+  "description": "Terminal UI manipulation utilities",
+  "tags": [
+    "tput",
+    "terminal"
+  ]
+}

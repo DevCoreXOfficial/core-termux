@@ -1,0 +1,13 @@
+{
+  "name": "extra-keys",
+  "display": "Extra Keys",
+  "platforms": [
+    "termux"
+  ],
+  "check_cmd": "",
+  "description": "Additional keyboard rows for Termux with navigation keys",
+  "tags": [
+    "termux",
+    "keyboard"
+  ]
+}
