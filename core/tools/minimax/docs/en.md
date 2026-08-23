@@ -28,19 +28,19 @@ MiniMax CLI lets you generate text, images, video, speech, and music from any ag
 ### Install
 
 ```bash
-core install ai --minimax
+core install minimax
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --minimax
+core uninstall minimax
 ```
 
 ### Update
 
 ```bash
-core update ai --minimax
+core update minimax
 ```
 
 ### Notes

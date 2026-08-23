@@ -22,7 +22,7 @@ The official Hugging Face Hub CLI — download, upload, and manage models, datas
 ### Install via core
 
 ```bash
-core install ai --hugging-face
+core install hugging-face
 ```
 
 Under the hood this runs the official installer:
@@ -33,7 +33,7 @@ curl -LsSf https://hf.co/cli/install.sh | bash
 
 The installer is idempotent and always installs/upgrades to the **latest** version. It builds a Python venv at `~/.hf-cli`, symlinks the `hf` binary into `~/.local/bin/hf`, and automatically installs the `hf-cli` AI-agent skill (for Claude and other agent frameworks).
 
-> **Note:** during a manual install you can pass `--exclude-skill` to skip installing the AI-agent skill.
+> **Note:** during a manual install you can pass `exclude-skill` to skip installing the AI-agent skill.
 
 ### Authentication
 
@@ -46,7 +46,7 @@ hf auth list     # list all stored access tokens
 hf auth switch   # switch between access tokens
 ```
 
-The `HF_TOKEN` environment variable is the recommended way to authenticate for scripting (over `--token`):
+The `HF_TOKEN` environment variable is the recommended way to authenticate for scripting (over `token`):
 
 ```bash
 export HF_TOKEN=hf_...
@@ -122,8 +122,8 @@ hf update
 ### Uninstall / Update
 
 ```bash
-core uninstall ai --hugging-face
-core update ai --hugging-face
+core uninstall hugging-face
+core update hugging-face
 ```
 
 Uninstalling asks whether to also remove the cache/config directories. Updating re-runs the official installer, which always upgrades to the latest version.

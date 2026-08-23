@@ -29,19 +29,19 @@ Qwen Code CLI is an AI-powered coding assistant developed by Alibaba Cloud. It p
 ### Install
 
 ```bash
-core install ai --qwen-code
+core install qwen-code
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --qwen-code
+core uninstall qwen-code
 ```
 
 ### Update
 
 ```bash
-core update ai --qwen-code
+core update qwen-code
 ```
 
 ### Notes

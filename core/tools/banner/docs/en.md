@@ -25,19 +25,19 @@ Configure a custom banner for Termux using Core. This package allows you to set 
 ### Install
 
 ```bash
-core install ui --banner
+core install banner
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ui --banner
+core uninstall banner
 ```
 
 ### Update
 
 ```bash
-core update ui --banner
+core update banner
 ```
 
 ### Notes

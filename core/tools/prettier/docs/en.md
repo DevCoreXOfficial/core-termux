@@ -27,19 +27,19 @@ Prettier is an opinionated code formatter that supports many languages including
 ### Install
 
 ```bash
-core install npm --prettier
+core install prettier
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --prettier
+core uninstall prettier
 ```
 
 ### Update
 
 ```bash
-core update npm --prettier
+core update prettier
 ```
 
 ### Notes

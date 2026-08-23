@@ -27,19 +27,19 @@ TypeScript adds optional static typing, classes, and modules to JavaScript, enab
 ### Install
 
 ```bash
-core install npm --typescript
+core install typescript
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --typescript
+core uninstall typescript
 ```
 
 ### Update
 
 ```bash
-core update npm --typescript
+core update typescript
 ```
 
 ### Notes

@@ -27,19 +27,19 @@ Python is a high-level, interpreted programming language known for its readabili
 ### Install
 
 ```bash
-core install lang --python
+core install python
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall lang --python
+core uninstall python
 ```
 
 ### Update
 
 ```bash
-core update lang --python
+core update python
 ```
 
 ### Notes

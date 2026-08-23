@@ -27,19 +27,19 @@ OpenSSH provides both SSH client (`ssh`) and server (`sshd`) for encrypted remot
 ### Install
 
 ```bash
-core install dev --openssh
+core install openssh
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --openssh
+core uninstall openssh
 ```
 
 ### Update
 
 ```bash
-core update dev --openssh
+core update openssh
 ```
 
 ### Notes

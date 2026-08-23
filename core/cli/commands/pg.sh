@@ -2,6 +2,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/lib/platform"
 
 # Variables de PostgreSQL
 PG_DATA="$PREFIX/var/lib/postgresql"
@@ -403,10 +404,127 @@ _detect_pg_data() {
 	return 1
 }
 
+# ---------------------------------------------------------------------------
+# Ubuntu / WSL implementations — PostgreSQL runs as a system service.
+# ---------------------------------------------------------------------------
+
+_pg_sys_super() {
+  if [[ "$(id -u)" -eq 0 ]]; then
+    "$@"
+  elif command -v sudo &>/dev/null; then
+    sudo -u postgres "$@"
+  else
+    log_error "Need root or sudo to manage PostgreSQL as the postgres user"
+    return 1
+  fi
+}
+
+_pg_ubuntu_service() {
+  local action="$1"
+  if command -v systemctl &>/dev/null; then
+    $CORE_SUDO systemctl "$action" postgresql &>>"$PG_LOG"
+  else
+    $CORE_SUDO service postgresql "$action" &>>"$PG_LOG"
+  fi
+}
+
+pg_ubuntu_start() {
+  separator; box "Starting PostgreSQL"; separator; echo
+  loading "Starting PostgreSQL service" _pg_ubuntu_service start &&
+    log_success "PostgreSQL started" || { log_error "Failed to start (log: $PG_LOG)"; return 1; }
+  echo
+}
+
+pg_ubuntu_stop() {
+  separator; box "Stopping PostgreSQL"; separator; echo
+  loading "Stopping PostgreSQL service" _pg_ubuntu_service stop &&
+    log_success "PostgreSQL stopped" || { log_error "Failed to stop"; return 1; }
+  echo
+}
+
+pg_ubuntu_restart() {
+  separator; box "Restarting PostgreSQL"; separator; echo
+  loading "Restarting PostgreSQL service" _pg_ubuntu_service restart &&
+    log_success "PostgreSQL restarted" || { log_error "Failed to restart"; return 1; }
+  echo
+}
+
+pg_ubuntu_status() {
+  if command -v systemctl &>/dev/null; then
+    $CORE_SUDO systemctl is-active --quiet postgresql \
+      && log_success "PostgreSQL is running" \
+      || log_warn "PostgreSQL is not running"
+  else
+    $CORE_SUDO service postgresql status
+  fi
+}
+
+pg_ubuntu_init() {
+  separator; box "Initializing PostgreSQL"; separator; echo
+  if command -v pg_lsclusters &>/dev/null && pg_lsclusters | grep -q online; then
+    log_success "PostgreSQL cluster already initialized and online"
+    pg_lsclusters
+    return 0
+  fi
+  command -v psql >/dev/null 2>&1 || { pm_install postgresql || return 1; }
+  log_info "Cluster created automatically by apt on install."
+  log_info "Set the postgres password with:"
+  list_item "${D_CYAN}$_pg_sudo_user psql -c \"ALTER USER postgres PASSWORD '...';\"${D_NC}"
+  echo
+}
+
+_pg_sudo_user() {
+  if [[ "$(id -u)" -eq 0 ]]; then runuser -u postgres -- psql
+  else sudo -u postgres psql; fi
+}
+
+pg_ubuntu_create() {
+  local db="$1"
+  [[ -z "$db" ]] && { log_error "Usage: core pg create <name>"; return 1; }
+  _pg_sys_super createdb "$db" && log_success "Database '$db' created"
+}
+
+pg_ubuntu_drop() {
+  local db="$1"
+  [[ -z "$db" ]] && { log_error "Usage: core pg drop <name>"; return 1; }
+  _pg_sys_super dropdb "$db" && log_success "Database '$db' dropped"
+}
+
+pg_ubuntu_list() {
+  _pg_sys_super psql -lqt | cut -d'|' -f1 | grep -w ':' | sed 's/ //g'
+}
+
+pg_ubuntu_shell() {
+  _pg_sys_super psql
+}
+
 # Main function
 pg_main() {
 	local cmd="$1"
 	shift || true
+
+	core_detect_platform
+
+	if [[ "$CORE_ENV" != "termux" ]]; then
+		case "$cmd" in
+		start) pg_ubuntu_start ;;
+		stop) pg_ubuntu_stop ;;
+		restart) pg_ubuntu_restart ;;
+		status) pg_ubuntu_status ;;
+		init) pg_ubuntu_init ;;
+		create) pg_ubuntu_create "$2" ;;
+		drop) pg_ubuntu_drop "$2" ;;
+		list | ls) pg_ubuntu_list ;;
+		shell | psql) pg_ubuntu_shell ;;
+		"") pg_help ;;
+		*)
+			log_error "Unknown command: $cmd"
+			pg_help
+			exit 1
+			;;
+		esac
+		return
+	fi
 
 	case "$cmd" in
 	start)

@@ -26,19 +26,19 @@ HTML2Text is a command-line tool that converts HTML documents into plain text. I
 ### Install
 
 ```bash
-core install dev --html2text
+core install html2text
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --html2text
+core uninstall html2text
 ```
 
 ### Update
 
 ```bash
-core update dev --html2text
+core update html2text
 ```
 
 ### Notes

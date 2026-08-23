@@ -26,19 +26,19 @@ PSQL Format is a SQL formatter specifically designed for PostgreSQL queries. It 
 ### Install
 
 ```bash
-core install npm --psqlformat
+core install psqlformat
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --psqlformat
+core uninstall psqlformat
 ```
 
 ### Update
 
 ```bash
-core update npm --psqlformat
+core update psqlformat
 ```
 
 ### Notes

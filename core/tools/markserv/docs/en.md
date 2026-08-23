@@ -26,19 +26,19 @@ Markserv is a live-preview server for Markdown files. It renders Markdown as HTM
 ### Install
 
 ```bash
-core install npm --markserv
+core install markserv
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --markserv
+core uninstall markserv
 ```
 
 ### Update
 
 ```bash
-core update npm --markserv
+core update markserv
 ```
 
 ### Notes

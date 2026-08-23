@@ -29,7 +29,7 @@ Work with Qoder around your codebase from the terminal.Turn ideas into working s
 ### Install
 
 ```bash
-core install ai --qoder
+core install qoder
 ```
 
 You will be prompted to choose:
@@ -41,13 +41,13 @@ You will be prompted to choose:
 ### Uninstall
 
 ```bash
-core uninstall ai --qoder
+core uninstall qoder
 ```
 
 ### Update
 
 ```bash
-core update ai --qoder
+core update qoder
 ```
 
 ### Notes

@@ -26,19 +26,19 @@ MiMo Code is Xiaomi's AI coding agent — fast, local, and open-source. It provi
 ### Install
 
 ```bash
-core install ai --mimocode
+core install mimocode
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --mimocode
+core uninstall mimocode
 ```
 
 ### Update
 
 ```bash
-core update ai --mimocode
+core update mimocode
 ```
 
 ### Notes

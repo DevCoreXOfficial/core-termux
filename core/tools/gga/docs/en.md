@@ -29,19 +29,19 @@ Clones the upstream repo and applies Termux patches for Android support (`$PREFI
 ### Install
 
 ```bash
-core install ai --gga
+core install gga
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --gga
+core uninstall gga
 ```
 
 ### Update
 
 ```bash
-core update ai --gga
+core update gga
 ```
 
 ### Notes
@@ -50,7 +50,7 @@ core update ai --gga
 - Binary installed to `$PREFIX/bin/gga`
 - Libraries installed to `$PREFIX/share/gga/lib/`
 - Clones upstream repo, applies Termux patches, then runs `install.sh` / `uninstall.sh`
-- Repository is updated via `git pull` + reapply patches on `core update ai --gga`
+- Repository is updated via `git pull` + reapply patches on `core update gga`
 - Requires the gga repo to be present at runtime only during install/update (can be safely removed afterward)
 
 ## How to use it?

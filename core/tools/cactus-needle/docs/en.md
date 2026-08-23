@@ -55,7 +55,7 @@ needle generate-data --tools my_tools.json --num-samples 500 --output data.jsonl
 needle build checkpoints/needle2.pkl --lora checkpoints/needle_lora.pkl --out my_needle.cact --bits 2
 ```
 
-In **zsh**, always single-quote the `--tools` JSON: `[...]` is a glob pattern and zsh will throw `no matches found: [name:set_timer]` if it is unquoted.
+In **zsh**, always single-quote the `tools` JSON: `[...]` is a glob pattern and zsh will throw `no matches found: [name:set_timer]` if it is unquoted.
 
 #### Python API
 
@@ -90,7 +90,7 @@ The fine-tuning data format is JSONL: `{"query": ..., "tools": [...], "answers":
 Cactus Needle is Python/JAX-based, and its core native dependencies — `jaxlib`, `scipy`, `sentencepiece` — publish only glibc (manylinux) wheels. Termux's native Android (bionic) Python rejects manylinux wheels, so a plain native Termux install is impossible (`No matching distribution found for jaxlib`). This installer adapts the **runtime libraries**, not the tool: it installs the official glibc wheels into a glibc-resident Python instead of trying to compile anything.
 
 ```bash
-core install ai --cactus-needle
+core install cactus-needle
 ```
 
 You will be prompted to choose:
@@ -110,13 +110,13 @@ You will be prompted to choose:
   huggingface_hub then falls back to classic HTTP. Export it (`export HF_HUB_DISABLE_XET=1`) if HF downloads keep failing.
 - Native Termux (bionic) is not offered: `jaxlib` has no Android/bionic wheel.
 - Installing downloads large native dependencies (`jaxlib`, `scipy`) into the glibc Python environment (~500 MB).
-- The `needle` CLI has **no `--version` flag** — updates compare the installed PyPI version against PyPI via `importlib.metadata`.
+- The `needle` CLI has **no `version` flag** — updates compare the installed PyPI version against PyPI via `importlib.metadata`.
 
 ### Uninstall / Update
 
 ```bash
-core uninstall ai --cactus-needle
-core update ai --cactus-needle
+core uninstall cactus-needle
+core update cactus-needle
 ```
 
 ### Notes

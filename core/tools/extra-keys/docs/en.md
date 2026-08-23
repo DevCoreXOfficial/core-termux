@@ -25,19 +25,19 @@ Adds two extra keyboard rows to the Termux terminal with useful keys for coding:
 ### Install
 
 ```bash
-core install ui --extra-keys
+core install extra-keys
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ui --extra-keys
+core uninstall extra-keys
 ```
 
 ### Update
 
 ```bash
-core update ui --extra-keys
+core update extra-keys
 ```
 
 ### Notes

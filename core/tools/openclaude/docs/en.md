@@ -28,19 +28,19 @@ OpenClaude is an open source Claude Code alternative. It provides a CLI interfac
 ### Install
 
 ```bash
-core install ai --openclaude
+core install openclaude
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --openclaude
+core uninstall openclaude
 ```
 
 ### Update
 
 ```bash
-core update ai --openclaude
+core update openclaude
 ```
 
 ### Notes

@@ -34,19 +34,19 @@ Key features:
 ### Install
 
 ```bash
-core install ai --openspec
+core install openspec
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --openspec
+core uninstall openspec
 ```
 
 ### Update
 
 ```bash
-core update ai --openspec
+core update openspec
 ```
 
 ### Usage

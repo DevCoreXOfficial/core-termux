@@ -26,19 +26,19 @@ Live Server is a simple development HTTP server with live reload capability. It 
 ### Install
 
 ```bash
-core install npm --live-server
+core install live-server
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --live-server
+core uninstall live-server
 ```
 
 ### Update
 
 ```bash
-core update npm --live-server
+core update live-server
 ```
 
 ### Notes

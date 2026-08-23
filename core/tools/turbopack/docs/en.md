@@ -12,7 +12,7 @@ Run Next.js with Turbopack on Termux (Android aarch64).
 ### Install
 
 ```bash
-core install npm --turbopack
+core install turbopack
 ```
 
 Installs:
@@ -50,7 +50,7 @@ common dependencies, and sets up a modular folder structure.
 ### Uninstall
 
 ```bash
-core uninstall npm --turbopack
+core uninstall turbopack
 ```
 
 ## How to use it?

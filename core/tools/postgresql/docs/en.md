@@ -28,19 +28,19 @@ PostgreSQL is a powerful, open-source object-relational database system with ove
 ### Install
 
 ```bash
-core install db --postgresql
+core install postgresql
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall db --postgresql
+core uninstall postgresql
 ```
 
 ### Update
 
 ```bash
-core update db --postgresql
+core update postgresql
 ```
 
 ### Notes

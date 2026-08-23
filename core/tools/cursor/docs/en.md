@@ -29,7 +29,7 @@ Cursor CLI (cursor-agent) is an AI-powered coding agent from Cursor that operate
 ### Install
 
 ```bash
-core install ai --cursor
+core install cursor
 ```
 
 You will be prompted to choose:
@@ -41,13 +41,13 @@ You will be prompted to choose:
 ### Uninstall
 
 ```bash
-core uninstall ai --cursor
+core uninstall cursor
 ```
 
 ### Update
 
 ```bash
-core update ai --cursor
+core update cursor
 ```
 
 ### Notes

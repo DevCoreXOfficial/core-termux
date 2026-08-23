@@ -19,5 +19,9 @@
     }
   ],
   "description": "The open source coding agent for building with AI in VS Code, JetBrains, or the CLI",
-  "tags": []
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
 }

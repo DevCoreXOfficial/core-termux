@@ -26,19 +26,19 @@ Tree is a recursive directory listing command that produces a depth-indented lis
 ### Install
 
 ```bash
-core install dev --tree
+core install tree
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --tree
+core uninstall tree
 ```
 
 ### Update
 
 ```bash
-core update dev --tree
+core update tree
 ```
 
 ### Notes

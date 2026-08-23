@@ -8,5 +8,8 @@
   ],
   "check_cmd": "mmx",
   "description": "Generate text, images, video, speech, and music from the terminal",
-  "tags": []
+  "tags": [
+    "ai",
+    "multimodal"
+  ]
 }

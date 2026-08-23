@@ -27,19 +27,19 @@ Clang is a C, C++, and Objective-C compiler which aims to deliver amazingly fast
 ### Install
 
 ```bash
-core install lang --clang
+core install clang
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall lang --clang
+core uninstall clang
 ```
 
 ### Update
 
 ```bash
-core update lang --clang
+core update clang
 ```
 
 ### Notes

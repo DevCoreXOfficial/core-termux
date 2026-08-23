@@ -27,19 +27,19 @@ PHP is a popular general-purpose scripting language that is especially suited to
 ### Install
 
 ```bash
-core install lang --php
+core install php
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall lang --php
+core uninstall php
 ```
 
 ### Update
 
 ```bash
-core update lang --php
+core update php
 ```
 
 ### Notes

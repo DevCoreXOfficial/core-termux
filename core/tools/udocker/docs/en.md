@@ -27,19 +27,19 @@ Udocker is a tool that allows you to execute Docker containers in user space wit
 ### Install
 
 ```bash
-core install dev --udocker
+core install udocker
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --udocker
+core uninstall udocker
 ```
 
 ### Update
 
 ```bash
-core update dev --udocker
+core update udocker
 ```
 
 ### Notes

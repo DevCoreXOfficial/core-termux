@@ -40,12 +40,20 @@ voice_help() {
 	separator_section "Requirements"
 	echo
 	list_item "Termux:API package: ${D_CYAN}pkg install termux-api${D_NC}"
-	list_item "Neovim for editing: ${D_CYAN}core install editor${D_NC}"
+	list_item "Neovim for editing: ${D_CYAN}core install neovim${D_NC}"
 	list_item "Termux:API app: ${D_BLUE}devcorex-web.vercel.app/termux/api${D_NC}"
 	echo
 }
 
 voice_main() {
+	import "@/lib/platform"
+	core_detect_platform
+	if [[ "$CORE_ENV" != "termux" ]]; then
+		log_warn "core voice requires the Termux:API app (Termux/Android only)"
+		list_item "On Ubuntu/WSL, dictate into ${D_CYAN}core agent${D_NC} directly or type your prompt."
+		return 1
+	fi
+
 	local agent="$1"
 
 	if [[ -z "$agent" ]] || [[ "$agent" == "--help" ]] || [[ "$agent" == "-h" ]]; then
@@ -64,7 +72,7 @@ voice_main() {
 
 	if ! command -v nvim &>/dev/null; then
 		log_error "Neovim (nvim) is not installed"
-		list_item "Install the editor: ${D_CYAN}core install editor${NC}"
+		list_item "Install the editor: ${D_CYAN}core install neovim${NC}"
 		separator
 		exit 1
 	fi

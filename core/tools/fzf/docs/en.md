@@ -27,19 +27,19 @@ fzf is a general-purpose command-line fuzzy finder. It is an interactive filter 
 ### Install
 
 ```bash
-core install dev --fzf
+core install fzf
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --fzf
+core uninstall fzf
 ```
 
 ### Update
 
 ```bash
-core update dev --fzf
+core update fzf
 ```
 
 ### Notes

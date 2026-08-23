@@ -27,19 +27,19 @@ Tmate is a fork of tmux that allows you to share your terminal session instantly
 ### Install
 
 ```bash
-core install dev --tmate
+core install tmate
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --tmate
+core uninstall tmate
 ```
 
 ### Update
 
 ```bash
-core update dev --tmate
+core update tmate
 ```
 
 ### Notes

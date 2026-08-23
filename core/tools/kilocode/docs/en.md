@@ -29,7 +29,7 @@ Kilo Code is an AI coding agent that meets you everywhere you work: VS Code, Jet
 ### Install
 
 ```bash
-core install ai --kilocode
+core install kilocode
 ```
 
 You will be prompted to choose:
@@ -41,13 +41,13 @@ You will be prompted to choose:
 ### Uninstall
 
 ```bash
-core uninstall ai --kilocode
+core uninstall kilocode
 ```
 
 ### Update
 
 ```bash
-core update ai --kilocode
+core update kilocode
 ```
 
 ### Notes

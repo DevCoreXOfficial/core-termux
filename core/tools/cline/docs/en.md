@@ -20,7 +20,7 @@ Autonomous coding agent as an SDK, IDE extension, or CLI assistant. Run Cline in
 ### Installation
 
 ```bash
-core install ai --cline
+core install cline
 ```
 
 ### Usage
@@ -33,11 +33,11 @@ cline --help
 
 | Command             | Description                              |
 |---------------------|------------------------------------------|
-| `core install ai --cline`   | Install Cline CLI                        |
-| `core uninstall ai --cline` | Uninstall Cline CLI                      |
-| `core update ai --cline`    | Update Cline CLI to latest version       |
-| `core reinstall ai --cline` | Reinstall Cline CLI                      |
-| `core show ai --cline`      | Show this help                           |
+| `core install cline`   | Install Cline CLI                        |
+| `core uninstall cline` | Uninstall Cline CLI                      |
+| `core update cline`    | Update Cline CLI to latest version       |
+| `core reinstall cline` | Reinstall Cline CLI                      |
+| `core show cline`      | Show this help                           |
 
 ### Installation Methods
 

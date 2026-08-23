@@ -29,19 +29,19 @@ Codex CLI is a coding agent from OpenAI that runs locally on your computer. It p
 ### Install
 
 ```bash
-core install ai --codex
+core install codex
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --codex
+core uninstall codex
 ```
 
 ### Update
 
 ```bash
-core update ai --codex
+core update codex
 ```
 
 ### Notes

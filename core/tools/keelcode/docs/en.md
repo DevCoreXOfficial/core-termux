@@ -28,7 +28,7 @@ KeelCode is a hosted coding agent for your terminal. It can inspect a project, e
 ### Install
 
 ```bash
-core install ai --keelcode
+core install keelcode
 ```
 
 You will be prompted to choose:
@@ -40,13 +40,13 @@ You will be prompted to choose:
 ### Uninstall
 
 ```bash
-core uninstall ai --keelcode
+core uninstall keelcode
 ```
 
 ### Update
 
 ```bash
-core update ai --keelcode
+core update keelcode
 ```
 
 ### Usage

@@ -38,19 +38,19 @@ Key features:
 ### Install
 
 ```bash
-core install ai --supercode
+core install supercode
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --supercode
+core uninstall supercode
 ```
 
 ### Update
 
 ```bash
-core update ai --supercode
+core update supercode
 ```
 
 ### Usage

@@ -27,19 +27,19 @@ MariaDB is a community-developed, commercially supported fork of the MySQL relat
 ### Install
 
 ```bash
-core install db --mariadb
+core install mariadb
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall db --mariadb
+core uninstall mariadb
 ```
 
 ### Update
 
 ```bash
-core update db --mariadb
+core update mariadb
 ```
 
 ### Notes

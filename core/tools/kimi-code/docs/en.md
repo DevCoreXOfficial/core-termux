@@ -28,19 +28,19 @@ Kimi Code CLI is an AI coding agent that runs in your terminal — it can read a
 ### Install
 
 ```bash
-core install ai --kimi-code
+core install kimi-code
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --kimi-code
+core uninstall kimi-code
 ```
 
 ### Update
 
 ```bash
-core update ai --kimi-code
+core update kimi-code
 ```
 
 ### Notes

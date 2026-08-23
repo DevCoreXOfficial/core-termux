@@ -27,19 +27,19 @@ Vercel CLI allows you to deploy frontend applications and serverless functions t
 ### Install
 
 ```bash
-core install npm --vercel
+core install vercel
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --vercel
+core uninstall vercel
 ```
 
 ### Update
 
 ```bash
-core update npm --vercel
+core update vercel
 ```
 
 ### Notes

@@ -27,25 +27,25 @@ npm-check-updates (ncu) upgrades your package.json dependencies to the latest ve
 ### Install
 
 ```bash
-core install npm --ncu
+core install ncu
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --ncu
+core uninstall ncu
 ```
 
 ### Update
 
 ```bash
-core update npm --ncu
+core update ncu
 ```
 
 ### Notes
 
 - Command: `ncu`
-- Supports interactive mode with `--interactive`
+- Supports interactive mode with `interactive`
 - Can upgrade global packages with `-g` flag
 
 ## How to use it?

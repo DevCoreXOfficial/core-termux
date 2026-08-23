@@ -27,19 +27,19 @@ Tmux is a terminal multiplexer that allows you to run multiple terminal sessions
 ### Install
 
 ```bash
-core install dev --tmux
+core install tmux
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --tmux
+core uninstall tmux
 ```
 
 ### Update
 
 ```bash
-core update dev --tmux
+core update tmux
 ```
 
 ### Notes

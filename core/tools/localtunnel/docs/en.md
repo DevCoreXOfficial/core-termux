@@ -27,19 +27,19 @@ Localtunnel exposes your local development server to the internet with a public 
 ### Install
 
 ```bash
-core install npm --localtunnel
+core install localtunnel
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall npm --localtunnel
+core uninstall localtunnel
 ```
 
 ### Update
 
 ```bash
-core update npm --localtunnel
+core update localtunnel
 ```
 
 ### Notes

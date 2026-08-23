@@ -35,19 +35,19 @@ Key features:
 ### Install
 
 ```bash
-core install ai --ctx7
+core install ctx7
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --ctx7
+core uninstall ctx7
 ```
 
 ### Update
 
 ```bash
-core update ai --ctx7
+core update ctx7
 ```
 
 ### Usage

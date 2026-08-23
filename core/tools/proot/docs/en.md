@@ -27,19 +27,19 @@ PRoot is a user-space implementation of chroot, mount --bind, and binfmt_misc. I
 ### Install
 
 ```bash
-core install dev --proot
+core install proot
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --proot
+core uninstall proot
 ```
 
 ### Update
 
 ```bash
-core update dev --proot
+core update proot
 ```
 
 ### Notes

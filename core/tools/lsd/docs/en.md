@@ -27,26 +27,26 @@ LSD (LSDeluxe) is a modern replacement for the `ls` command written in Rust. It 
 ### Install
 
 ```bash
-core install dev --lsd
+core install lsd
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --lsd
+core uninstall lsd
 ```
 
 ### Update
 
 ```bash
-core update dev --lsd
+core update lsd
 ```
 
 ### Notes
 
 - Command: `lsd`
 - Shows file type icons
-- Supports tree view with `--tree`
+- Supports tree view with `tree`
 - Colorized output by default
 
 ## How to use it?

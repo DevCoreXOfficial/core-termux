@@ -27,19 +27,19 @@ GNU Wget is a free utility for non-interactive download of files from the Web. I
 ### Install
 
 ```bash
-core install dev --wget
+core install wget
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --wget
+core uninstall wget
 ```
 
 ### Update
 
 ```bash
-core update dev --wget
+core update wget
 ```
 
 ### Notes

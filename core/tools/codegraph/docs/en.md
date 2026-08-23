@@ -26,19 +26,19 @@ CodeGraph analyzes your codebase structure and dependencies to improve navigatio
 ### Install
 
 ```bash
-core install ai --codegraph
+core install codegraph
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --codegraph
+core uninstall codegraph
 ```
 
 ### Update
 
 ```bash
-core update ai --codegraph
+core update codegraph
 ```
 
 ### Notes

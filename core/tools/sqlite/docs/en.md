@@ -27,19 +27,19 @@ SQLite is a C-language library that implements a small, fast, self-contained, hi
 ### Install
 
 ```bash
-core install db --sqlite
+core install sqlite
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall db --sqlite
+core uninstall sqlite
 ```
 
 ### Update
 
 ```bash
-core update db --sqlite
+core update sqlite
 ```
 
 ### Notes

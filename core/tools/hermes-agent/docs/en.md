@@ -35,19 +35,19 @@ The self-improving AI agent built by Nous Research. It's the only agent with a b
 ## Install
 
 ```bash
-core install ai --hermes-agent
+core install hermes-agent
 ```
 
 ## Uninstall
 
 ```bash
-core uninstall ai --hermes-agent
+core uninstall hermes-agent
 ```
 
 ## Update
 
 ```bash
-core update ai --hermes-agent
+core update hermes-agent
 ```
 
 ## Notes

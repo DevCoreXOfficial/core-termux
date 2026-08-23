@@ -1080,7 +1080,7 @@ agent_prepare_prompt() {
 agent_voice_capture() {
 	AGENT_VOICE_TEXT=""
 	if ! command -v termux-dialog &>/dev/null; then
-		log_warn "Termux:API is not installed"
+		log_warn "Termux:API is not installed (voice capture is Termux-only)"
 		list_item "Install the package: ${D_CYAN}pkg install termux-api${NC}"
 		list_item "Install the app from: https://devcorex-web.vercel.app/termux/api"
 		return 1

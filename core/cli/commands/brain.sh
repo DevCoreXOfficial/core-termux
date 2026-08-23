@@ -1058,7 +1058,7 @@ brain_skill() {
 
 	# ── Skill name ──
 	if [[ -z "$skill_name" ]]; then
-		read_input "Skill name (kebab-case, e.g. termux-setup)" skill_name
+		read_input "Skill name (kebab-case, e.g. react-hooks)" skill_name
 	fi
 	skill_name=$(echo "$skill_name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+|-+$//g')
 	if [[ -z "$skill_name" ]]; then

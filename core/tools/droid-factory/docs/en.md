@@ -29,7 +29,7 @@ Droid Factory (Factory CLI) is an AI coding agent from Factory that operates dir
 ### Install
 
 ```bash
-core install ai --droid-factory
+core install droid-factory
 ```
 
 You will be prompted to choose:
@@ -41,13 +41,13 @@ You will be prompted to choose:
 ### Uninstall
 
 ```bash
-core uninstall ai --droid-factory
+core uninstall droid-factory
 ```
 
 ### Update
 
 ```bash
-core update ai --droid-factory
+core update droid-factory
 ```
 
 ### Notes

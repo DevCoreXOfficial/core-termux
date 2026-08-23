@@ -27,19 +27,19 @@ ImageMagick is a free, open-source software suite for displaying, converting, an
 ### Install
 
 ```bash
-core install dev --imagemagick
+core install imagemagick
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --imagemagick
+core uninstall imagemagick
 ```
 
 ### Update
 
 ```bash
-core update dev --imagemagick
+core update imagemagick
 ```
 
 ### Notes

@@ -30,7 +30,7 @@ Goose is an open-source AI agent (originally built by Block) that automates comp
 ### Install
 
 ```bash
-core install ai --goose
+core install goose
 ```
 
 You will be prompted to choose:
@@ -42,13 +42,13 @@ You will be prompted to choose:
 ### Uninstall
 
 ```bash
-core uninstall ai --goose
+core uninstall goose
 ```
 
 ### Update
 
 ```bash
-core update ai --goose
+core update goose
 ```
 
 ### Notes

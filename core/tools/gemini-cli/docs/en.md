@@ -29,19 +29,19 @@ Gemini CLI is Google's official command-line interface for interacting with the 
 ### Install
 
 ```bash
-core install ai --gemini-cli
+core install gemini-cli
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --gemini-cli
+core uninstall gemini-cli
 ```
 
 ### Update
 
 ```bash
-core update ai --gemini-cli
+core update gemini-cli
 ```
 
 ### Notes

@@ -27,19 +27,19 @@ Redis is an open-source (BSD-licensed), in-memory data structure store, used as 
 ### Install
 
 ```bash
-core install db --redis
+core install redis
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall db --redis
+core uninstall redis
 ```
 
 ### Update
 
 ```bash
-core update db --redis
+core update redis
 ```
 
 ### Notes

@@ -8,5 +8,11 @@
     "wsl"
   ],
   "check_cmd": "",
-  "description": "Set your terminal cursor color (green by default)"
+  "description": "Set your terminal cursor color (green by default)",
+  "tags": [
+    "terminal",
+    "theme",
+    "color",
+    "cursor"
+  ]
 }

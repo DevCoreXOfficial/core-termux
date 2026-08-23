@@ -29,7 +29,7 @@ Freebuff is the free coding agent: a free CLI coding agent and Freebuff Web, the
 ### Install
 
 ```bash
-core install ai --freebuff
+core install freebuff
 ```
 
 You will be prompted to choose:
@@ -41,13 +41,13 @@ You will be prompted to choose:
 ### Uninstall
 
 ```bash
-core uninstall ai --freebuff
+core uninstall freebuff
 ```
 
 ### Update
 
 ```bash
-core update ai --freebuff
+core update freebuff
 ```
 
 ### Notes

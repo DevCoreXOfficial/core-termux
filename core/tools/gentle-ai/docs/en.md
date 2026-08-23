@@ -25,19 +25,19 @@ Gentle-AI is an ecosystem configurator for AI coding agents. It provides persist
 ### Install
 
 ```bash
-core install ai --gentle-ai
+core install gentle-ai
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --gentle-ai
+core uninstall gentle-ai
 ```
 
 ### Update
 
 ```bash
-core update ai --gentle-ai
+core update gentle-ai
 ```
 
 ### Notes

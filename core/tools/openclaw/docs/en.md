@@ -29,19 +29,19 @@ OpenClaw is a Personal AI Assistant. It provides a unified interface for interac
 ### Install
 
 ```bash
-core install ai --openclaw
+core install openclaw
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --openclaw
+core uninstall openclaw
 ```
 
 ### Update
 
 ```bash
-core update ai --openclaw
+core update openclaw
 ```
 
 ### Notes

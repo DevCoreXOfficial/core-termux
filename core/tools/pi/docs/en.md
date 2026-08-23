@@ -28,26 +28,26 @@ Pi is a minimal terminal coding harness. Adapt Pi to your workflows, not the oth
 ### Install
 
 ```bash
-core install ai --pi
+core install pi
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --pi
+core uninstall pi
 ```
 
 ### Update
 
 ```bash
-core update ai --pi
+core update pi
 ```
 
 ### Notes
 
 - Installed as a global npm package: `@earendil-works/pi-coding-agent`
 - Command: `pi`
-- Uses `--ignore-scripts` flag for Android compatibility
+- Uses `ignore-scripts` flag for Android compatibility
 - Requires Node.js LTS (installed automatically if missing)
 
 ## How to use it?

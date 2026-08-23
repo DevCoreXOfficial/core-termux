@@ -27,19 +27,19 @@ Neovim is a hyper-extensible, modern fork of Vim. It provides a powerful editing
 ### Install
 
 ```bash
-core install editor --neovim
+core install neovim
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall editor --neovim
+core uninstall neovim
 ```
 
 ### Update
 
 ```bash
-core update editor --neovim
+core update neovim
 ```
 
 ### Notes
@@ -84,19 +84,19 @@ NvChad is a modern Neovim configuration that provides a complete IDE-like experi
 ## Install
 
 ```bash
-core install editor --nvchad
+core install nvchad
 ```
 
 ## Uninstall
 
 ```bash
-core uninstall editor --nvchad
+core uninstall nvchad
 ```
 
 ## Update
 
 ```bash
-core update editor --nvchad
+core update nvchad
 ```
 
 ## Notes

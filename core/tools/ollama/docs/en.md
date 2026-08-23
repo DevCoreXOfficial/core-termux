@@ -27,19 +27,19 @@ Ollama allows you to run open-source LLMs locally on Termux. It supports a wide 
 ### Install
 
 ```bash
-core install ai --ollama
+core install ollama
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall ai --ollama
+core uninstall ollama
 ```
 
 ### Update
 
 ```bash
-core update ai --ollama
+core update ollama
 ```
 
 ### Notes

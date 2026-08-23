@@ -27,19 +27,19 @@ Bat is a modern replacement for the `cat` command written in Rust. It provides s
 ### Install
 
 ```bash
-core install dev --bat
+core install bat
 ```
 
 ### Uninstall
 
 ```bash
-core uninstall dev --bat
+core uninstall bat
 ```
 
 ### Update
 
 ```bash
-core update dev --bat
+core update bat
 ```
 
 ### Notes
