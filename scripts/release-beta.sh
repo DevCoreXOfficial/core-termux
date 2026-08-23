@@ -50,6 +50,7 @@ if [[ -n "$CURRENT_BRANCH" && "$CURRENT_BRANCH" != "$BRANCH" ]] && git show-ref 
 fi
 
 echo
+ORIGIN_URL="$(git remote get-url origin | sed -E 's#(git@github.com:|https://github.com/)##; s#\.git$##')"
 echo "✔ Beta published."
-echo "  main        : still $CURRENT_BRANCH (untouched)"
-echo "  Testers run : curl -fsSL https://raw.githubusercontent.com/DevCoreXOfficial/core/$BRANCH/install.sh | CORE_BRANCH=$BRANCH bash"
+echo "  main        : untouched"
+echo "  Testers run : curl -fsSL https://raw.githubusercontent.com/${ORIGIN_URL}/${BRANCH}/install.sh | CORE_BRANCH=${BRANCH} bash"
