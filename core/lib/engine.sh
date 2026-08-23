@@ -125,12 +125,9 @@ engine_resolve() {
   echo "$dir"
 }
 
-# engine_check_installed <tool-dir> : 0 when the tool binary is present.
+# engine_check_installed <tool-dir> : 0 when any declared binary is present.
 engine_check_installed() {
-  local check
-  check="$(manifest_check_cmd "$1")"
-  [[ -z "$check" ]] && return 1
-  command -v "$check" &>/dev/null
+  manifest_is_installed "$1"
 }
 
 # engine_install <tool-name>

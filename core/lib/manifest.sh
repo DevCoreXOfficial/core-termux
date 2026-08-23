@@ -44,6 +44,26 @@ manifest_description() { manifest_field "$1" '.description // .summary // ""'; }
 manifest_homepage() { manifest_field "$1" '.homepage // ""'; }
 manifest_check_cmd() { manifest_field "$1" '.check_cmd // ""'; }
 
+# manifest_check_list <tool-dir> : prints every accepted binary (one per line).
+# Accepts both forms:
+#   "check_cmd": "sqlite3"
+#   "check_cmd": ["mongosh", "mongod"]
+# A tool is considered installed when ANY of them is present on PATH.
+manifest_check_list() {
+  jq -r 'if (.check_cmd | type) == "array" then .check_cmd[] else .check_cmd end' \
+    "$1/manifest.json" 2>/dev/null | grep -v '^$'
+}
+
+# manifest_is_installed <tool-dir> : 0 when any check binary is present.
+manifest_is_installed() {
+  local bin
+  while IFS= read -r bin; do
+    [[ -z "$bin" ]] && continue
+    command -v "$bin" &>/dev/null && return 0
+  done < <(manifest_check_list "$1")
+  return 1
+}
+
 # manifest_supports_platform <tool-dir> : 0 when current platform is declared.
 manifest_supports_platform() {
   local dir="$1"

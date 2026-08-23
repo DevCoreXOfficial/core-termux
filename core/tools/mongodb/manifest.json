@@ -6,7 +6,11 @@
     "ubuntu",
     "wsl"
   ],
-  "check_cmd": "mongosh",
+  "check_cmd": [
+    "mongosh",
+    "mongod",
+    "mongo"
+  ],
   "homepage": "https://www.mongodb.com",
   "description": "NoSQL document database for modern applications",
   "tags": [

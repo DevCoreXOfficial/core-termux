@@ -6,7 +6,10 @@
     "ubuntu",
     "wsl"
   ],
-  "check_cmd": "magick",
+  "check_cmd": [
+    "magick",
+    "convert"
+  ],
   "homepage": "https://imagemagick.org",
   "description": "Image manipulation and conversion suite",
   "tags": [

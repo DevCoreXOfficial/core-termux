@@ -6,7 +6,10 @@
     "ubuntu",
     "wsl"
   ],
-  "check_cmd": "batcat",
+  "check_cmd": [
+    "bat",
+    "batcat"
+  ],
   "homepage": "https://github.com/sharkdp/bat",
   "description": "Modern cat replacement with syntax highlighting",
   "tags": [

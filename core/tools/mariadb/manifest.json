@@ -6,7 +6,10 @@
     "ubuntu",
     "wsl"
   ],
-  "check_cmd": "mariadb",
+  "check_cmd": [
+    "mariadb",
+    "mysql"
+  ],
   "homepage": "https://mariadb.org",
   "description": "Community-developed fork of MySQL relational database",
   "tags": [

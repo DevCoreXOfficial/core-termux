@@ -50,8 +50,7 @@ search_main() {
     [[ -f "$tool_dir/manifest.json" ]] || continue
     tool="$(basename "$tool_dir")"
     display="$(manifest_display "$tool_dir")"
-    check="$(manifest_check_cmd "$tool_dir")"
-    if [[ -n "$check" ]] && command -v "$check" &>/dev/null; then
+    if manifest_is_installed "$tool_dir"; then
       installed="installed"
     elif registry_is_installed "$tool"; then
       installed="installed"
