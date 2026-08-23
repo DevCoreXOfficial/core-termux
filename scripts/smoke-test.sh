@@ -50,8 +50,8 @@ done < <(find "$(dirname "$0")/../core/tools" -name "manifest.json")
 # 3. Every tool has termux.sh + docs/en.md.
 MISSING=0
 while IFS= read -r d; do
-  [[ -f "$d/install/termux.sh" ]] || {
-    echo "  ✖ missing termux.sh: $d"
+  [[ -f "$d/termux/install.sh" ]] || {
+    echo "  ✖ missing termux/install.sh: $d"
     MISSING=1
   }
   [[ -f "$d/docs/en.md" ]] || {
@@ -72,10 +72,13 @@ check "--version prints 5.x" bash "$CORE/bin/core" --version
 check "help renders" bash "$CORE/bin/core"
 
 OUT=$(bash "$CORE/bin/core" search sql 2>&1 | sed 's/\x1b\[[0-9;]*m//g')
-[[ "$OUT" == *"sqlite"* ]] && ok "search filter works" || bad "search filter output"
+[[ "$OUT" == *"SQLite"* && "$OUT" == *"Tool"* ]] && ok "search filter works (Name|Tool|Status)" || bad "search filter output"
+
+OUT=$(bash "$CORE/bin/core" search --all 2>&1 | sed 's/\x1b\[[0-9;]*m//g')
+[[ "$OUT" == *"PostgreSQL"* && "$OUT" == *"OpenCode"* ]] && ok "search --all lists everything" || bad "search --all output"
 
 OUT=$(bash "$CORE/bin/core" search 2>&1 | sed 's/\x1b\[[0-9;]*m//g')
-[[ "$OUT" == *"postgresql"* && "$OUT" == *"opencode"* ]] && ok "search shows all tools" || bad "search all output"
+[[ "$OUT" == *"Usage: core search"* ]] && ok "bare search shows help" || bad "bare search help"
 
 OUT=$(bash "$CORE/bin/core" list 2>&1)
 [[ "$OUT" == *"Command not found"* || "$OUT" != *"sqlite"* ]] && ok "list removed in favor of search" || bad "list still present"
@@ -85,6 +88,11 @@ OUT=$(bash "$CORE/bin/core" show opencode 2>&1)
 echo "$OUT" | grep -q "OpenCode (opencode)" && ok "show renders doc" || bad "show output"
 grep -q "Package Information" "$CORE/tools/opencode/docs/en.md" &&
   ok "doc structure present on disk" || bad "doc structure missing"
+
+grep -rq 'import "@/tools/' "$CORE/tools" && bad "broken cross-tool imports remain" ||
+  ok "no broken cross-tool imports"
+! grep -rqE '\$CORE_PATH/tools/(ai|lang|npm)/' "$CORE/tools" &&
+  ok "no stale v4 paths in installers" || bad "stale v4 paths remain"
 
 OUT=$(bash "$CORE/bin/core" about opencode 2>&1)
 echo "$OUT" | grep -q "OpenCode (opencode)" && ok "about alias works" || bad "about output"

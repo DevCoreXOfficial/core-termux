@@ -137,8 +137,9 @@ Tools live flat — nothing to memorize:
 
 | Command | Description |
 |---------|-------------|
-| `core search` | Every tool with its install status |
-| `core search <text>` | Filter by name, description or tags (`core search db`, `core search ai`, `core search tunnel`, `core search js`) |
+| `core search` | Help for this command |
+| `core search --all` | Every tool with colored install status |
+| `core search <text>` | Filter by name, description or tags (`core search tunnel`, `core search js`) |
 | `core show <tool>` | Documentation for one tool |
 | `core show <tool>:es` | Spanish documentation when available |
 
@@ -184,13 +185,14 @@ Documentation quality comes first: docs are written from official sources before
     ├── utils/                 # log, colors, banner, version, agent...
     └── tools/
         └── <tool>/             # flat — no categories
-            ├── manifest.json  # metadata, platforms, dependencies
+            ├── manifest.json  # metadata, platforms, tags
             ├── docs/
             │   ├── en.md      # default language
             │   └── es.md      # optional translation
-            └── install/
-                ├── termux.sh  # Termux/Android implementation
-                └── ubuntu.sh  # Ubuntu Linux + WSL implementation
+            ├── termux/        # Termux/Android: installer + its assets
+            │   └── install.sh
+            └── ubuntu/        # Ubuntu Linux + WSL: installer + its assets
+                └── install.sh
 ```
 
 ### Separation of concepts
@@ -222,7 +224,8 @@ Adding a new tool = create its directory + manifest + platform installers. No ce
 1. Resolve the tool by name (scan the flat tools/ directory).
 2. Check platform support declared in the manifest.
 3. Ensure dependencies (shared ones are installed once).
-4. Execute `install/$CORE_PLATFORM.sh` as an isolated process.
+4. Execute the platform installer as an isolated process
+   (`termux/install.sh` on Android, `ubuntu/install.sh` on Ubuntu/WSL).
 5. Register the installation.
 
 Uninstall mirrors the flow and then analyzes dependencies: a dependency is offered for removal **only when no other installed tool uses it**. Shared dependencies are never removed automatically.

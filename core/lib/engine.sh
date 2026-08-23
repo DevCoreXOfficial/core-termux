@@ -81,19 +81,24 @@ engine_ensure_deps() {
 # Script resolution
 # ---------------------------------------------------------------------------
 
+# engine_platform_dir : subfolder holding the current platform's installer.
+#   termux            -> termux/
+#   ubuntu | wsl      -> ubuntu/  (WSL uses the Ubuntu installers)
+#   future distros    -> add a mapping here + their folder per tool
+engine_platform_dir() {
+  case "$CORE_PLATFORM" in
+    termux) echo "termux" ;;
+    *) echo "ubuntu" ;;
+  esac
+}
+
 engine_script_for() {
   local dir="$1"
-  local candidates=(
-    "$dir/install/$CORE_PLATFORM.sh"
-    "$dir/install/linux.sh"
-  )
-  local candidate
-  for candidate in "${candidates[@]}"; do
-    [[ -f "$candidate" ]] && {
-      echo "$candidate"
-      return 0
-    }
-  done
+  local script="$dir/$(engine_platform_dir)/install.sh"
+  [[ -f "$script" ]] && {
+    echo "$script"
+    return 0
+  }
   return 1
 }
 

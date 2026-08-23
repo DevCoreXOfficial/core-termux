@@ -5,17 +5,51 @@ import "@/utils/colors"
 import "@/lib/manifest"
 import "@/lib/registry"
 
-# core search            -> every tool with install status
-# core search <text>     -> filter by substring on tool name / description
+# core search              -> help for this command
+# core search --all | -a   -> every tool with install status
+# core search <text>       -> filter by name / description / tags
 search_main() {
-  local query="${*,,}"
+  local -a args=()
+  local arg all=0
+
+  for arg in "$@"; do
+    case "$arg" in
+      --all | -a) all=1 ;;
+      *) args+=("$arg") ;;
+    esac
+  done
+
+  # Bare invocation: show the search help.
+  if [[ ${#args[@]} -eq 0 && $all -eq 0 ]]; then
+    echo
+    box "Core Search"
+    echo
+    log_info "Usage: core search <text>     filter tools by keyword"
+    log_info "Usage: core search --all      list every tool with status"
+    echo
+    log_info "Searches match tool names, descriptions and tags:"
+    echo
+    list_item "${D_CYAN}core search tunnel${D_NC}     ngrok, cloudflared, localtunnel..."
+    list_item "${D_CYAN}core search ai${D_NC}         AI agents & coding assistants"
+    list_item "${D_CYAN}core search js${D_NC}         JavaScript/TypeScript ecosystem"
+    echo
+    list_item "Install: ${D_CYAN}core install <tool>${D_NC}   Docs: ${D_CYAN}core show <tool>${D_NC}"
+    echo
+    return
+  fi
+
+  local query=""
+  if [[ $all -eq 0 ]]; then
+    query="${*,,}"
+  fi
 
   local -a rows=()
-  local tool_dir tool check installed desc
+  local tool_dir tool display check installed desc tags
 
   for tool_dir in "$CORE_PATH/tools/"*/; do
     [[ -f "$tool_dir/manifest.json" ]] || continue
     tool="$(basename "$tool_dir")"
+    display="$(manifest_display "$tool_dir")"
     check="$(manifest_check_cmd "$tool_dir")"
     if [[ -n "$check" ]] && command -v "$check" &>/dev/null; then
       installed="installed"
@@ -27,41 +61,44 @@ search_main() {
 
     if [[ -n "$query" ]]; then
       desc="$(manifest_description "$tool_dir")"
-      local tags
       tags="$(manifest_field "$tool_dir" '.tags // [] | join(" ")' "")"
-      local hay="${tool,,} ${desc,,} ${tags,,}"
+      local hay="${tool,,} ${display,,} ${desc,,} ${tags,,}"
       if [[ "$hay" != *"$query"* ]]; then
         continue
       fi
     fi
 
-    rows+=("${tool}|${installed}")
+    rows+=("${tool}|${display}|${installed}")
   done
 
   if [[ ${#rows[@]} -eq 0 ]]; then
     log_warn "No tools match '${query}'"
-    list_item "Run ${D_CYAN}core search${D_NC} to see everything"
+    list_item "Run ${D_CYAN}core search --all${D_NC} to see everything"
     return 1
   fi
 
   echo
-  if [[ -n "$query" ]]; then
-    box "Core Search — matching '${query}' (${#rows[@]})"
+  if [[ $all -eq 1 ]]; then
+    box "Core Tools — ${#rows[@]}"
   else
-    box "Core Search — ${#rows[@]} tools"
+    box "Core Search — '${query}' (${#rows[@]})"
   fi
   echo
 
-  table_start "Tool" "Install Command" "Status"
+  table_start "Name" "Tool" "Status"
 
-  local row sorted
+  local sorted
   while IFS= read -r sorted; do
-    IFS='|' read -r tool installed <<<"$sorted"
-    table_row "$tool" "core install $tool" "$installed"
-  done < <(printf '%s\n' "${rows[@]}" | sort)
+    IFS='|' read -r tool display installed <<<"$sorted"
+    if [[ "$installed" == "installed" ]]; then
+      table_row "$display" "$tool" "${GREEN}installed${NC}"
+    else
+      table_row "$display" "$tool" "${RED}not installed${NC}"
+    fi
+  done < <(printf '%s\n' "${rows[@]}" | sort -t'|' -k2)
 
   table_end
   echo
-  list_item "Install: ${D_CYAN}core install <tool>${D_NC}   Docs: ${D_CYAN}core show <tool>${D_NC} or ${D_CYAN}core about <tool>${D_NC}"
+  list_item "Install: ${D_CYAN}core install <tool>${D_NC}   Docs: ${D_CYAN}core show <tool>${D_NC}"
   echo
 }
