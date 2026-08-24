@@ -109,7 +109,7 @@ case "${1:-install}" in
     log_success "ZSH environment ready — restart your shell or run: exec zsh"
     ;;
   uninstall)
-    confirm_remove_configs "ZSH plugins" "$ZSH_PLUGINS_DIR" >/dev/null 2>&1 || true
+    confirm_remove_configs "ZSH plugins" "$ZSH_PLUGINS_DIR" || true
     rm -rf "$ZSH_PLUGINS_DIR"
     $CORE_SUDO rm -rf "$OH_MY_ZSH_DIR"
     log_success "ZSH environment removed (.zshrc lines kept)"

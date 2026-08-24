@@ -16,7 +16,7 @@ install_main() {
     log_info "Every tool installs individually and is located by name:"
     echo
     list_item "${D_CYAN}core install opencode${D_NC}"
-    list_item "${D_CYAN}core install neovim${D_NC}            editor + NvChad in one shot"
+    list_item "${D_CYAN}core install nvchad${D_NC}            editor + NvChad in one shot"
     list_item "${D_CYAN}core install zsh${D_NC}               shell + Oh My Zsh + 10 plugins"
     echo
     log_info "Discover tools by keyword (name, description or tags):"

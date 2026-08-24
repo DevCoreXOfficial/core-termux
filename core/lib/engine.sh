@@ -159,6 +159,12 @@ engine_install() {
 
   # Termux installers own their full UX (menus, loadings). Generated Linux
   # installers are quiet, so the engine provides feedback there.
+  # Snapshot shell configs to detect installer-side modifications
+  # (PATH exports etc.). Child processes cannot alter the parent shell,
+  # so we detect the change and tell the user exactly what to run.
+  local rc_snapshot_before rc_snapshot_after
+  rc_snapshot_before=$(cat "$HOME/.zshrc" "$HOME/.bashrc" 2>/dev/null | cksum)
+
   if [[ "$CORE_ENV" == "termux" ]]; then
     _engine_run "$script" install
     rc=$?
@@ -180,6 +186,15 @@ engine_install() {
   case $rc in
     0)
       registry_record "$name"
+
+      rc_snapshot_after=$(cat "$HOME/.zshrc" "$HOME/.bashrc" 2>/dev/null | cksum)
+      if [[ "$rc_snapshot_after" != "$rc_snapshot_before" ]]; then
+        local rc_file="$HOME/.zshrc"
+        [[ -f "$HOME/.zshrc" ]] || rc_file="$HOME/.bashrc"
+        log_info "$display updated your shell config ($rc_file)"
+        list_item "Apply now: ${D_CYAN}source $rc_file${D_NC}   or open a new terminal."
+      fi
+
       if ! manifest_is_installed "$dir"; then
         log_warn "$display finished but its binary was not found on PATH"
         list_item "Open a NEW terminal (or run: hash -r) and retry."
@@ -212,12 +227,23 @@ engine_uninstall() {
   script="$(engine_script_for "$dir")"
   if [[ -n "$script" ]]; then
     LOG_FILE="$CORE_CACHE/install_$name.log"
-    _engine_run "$script" uninstall
-    rc=$?
+
+    if [[ "$CORE_ENV" == "termux" ]]; then
+      _engine_run "$script" uninstall
+      rc=$?
+    else
+      loading "Removing $display" _engine_run "$script" uninstall
+      rc=$?
+    fi
     # Some upstream uninstallers exit non-zero even when they succeed;
     # absence of the binary is the ground truth.
-    if [[ $rc -ne 0 ]] && ! manifest_is_installed "$dir" && [[ "$CORE_ENV" != "termux" ]]; then
-      rc=0
+    if [[ "$CORE_ENV" != "termux" ]] && manifest_is_installed "$dir"; then
+      log_warn "Binary still present - removing it directly"
+      while IFS= read -r b; do
+        [[ -z "$b" ]] && continue
+        command -v "$b" >/dev/null 2>&1 && rm -f "$(command -v "$b")"
+      done < <(manifest_check_list "$dir")
+      ! manifest_is_installed "$dir" && rc=0
     fi
   else
     rc=0
@@ -275,6 +301,10 @@ engine_update() {
   }
 
   LOG_FILE="$CORE_CACHE/install_$name.log"
+  if [[ "$CORE_ENV" != "termux" ]]; then
+    mkdir -p "$HOME/.local/bin"
+    export PATH="$HOME/.local/bin:$PATH"
+  fi
 
   # Version flow: local -> remote -> compare -> suggest.
   local local_ver remote_ver
@@ -284,7 +314,11 @@ engine_update() {
   if [[ -z "$local_ver" || -z "$remote_ver" ]]; then
     local answer
     read_confirm_default "Could not compare versions. Update $display anyway?" "y" answer
-    [[ "$answer" == "y" ]] && _engine_run "$script" update
+    if [[ "$CORE_ENV" == "termux" ]]; then
+      [[ "$answer" == "y" ]] && _engine_run "$script" update
+    else
+      [[ "$answer" == "y" ]] && loading "Updating $display" _engine_run "$script" update
+    fi
     return $?
   fi
 
@@ -297,7 +331,11 @@ engine_update() {
   local answer
   read_confirm_default "Update $display to v$remote_ver?" "y" answer
   if [[ "$answer" == "y" ]]; then
-    _engine_run "$script" update
+    if [[ "$CORE_ENV" == "termux" ]]; then
+      _engine_run "$script" update
+    else
+      loading "Updating $display" _engine_run "$script" update
+    fi
   else
     log_info "Skipped $display"
   fi

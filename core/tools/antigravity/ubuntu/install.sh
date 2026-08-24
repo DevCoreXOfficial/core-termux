@@ -20,7 +20,10 @@ _impl_install() {
 }
 
 _impl_uninstall() {
-  log_info "Nothing to clean beyond the binary itself"
+  log_info "Removing Antigravity..."
+  rm -f "$HOME/.local/bin/agy" "$HOME/bin/agy" 2>/dev/null
+  rm -rf "$HOME/.antigravity" 2>/dev/null
+  command -v "agy" >/dev/null 2>&1 && rm -f "$(command -v agy)"
 }
 
 _impl_update() {

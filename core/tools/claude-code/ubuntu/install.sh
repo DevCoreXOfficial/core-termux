@@ -20,17 +20,28 @@ _impl_install() {
 }
 
 _impl_uninstall() {
-  log_info "Nothing to clean beyond the binary itself"
+  log_info "Removing binaries..."
+  command -v "claude" >/dev/null 2>&1 && rm -f "$(command -v claude)"
 }
 
 _impl_update() {
   curl -fsSL https://claude.ai/install.sh | bash &>>"$LOG_FILE"
 }
 
+_impl_vlocal() {
+  command -v claude >/dev/null 2>&1 && claude --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+}
+
+_impl_vremote() {
+  curl -fsSL https://api.github.com/repos/anthropics/claude-code/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
+}
+
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
   update)     _impl_update ;;
+  version-local)  _impl_vlocal ;;
+  version-remote) _impl_vremote ;;
   reinstall)  _impl_install ;;
   *)
     exit 0

@@ -20,7 +20,8 @@ _impl_install() {
 }
 
 _impl_uninstall() {
-  log_info "Nothing to clean beyond the binary itself"
+  log_info "Removing binaries..."
+  command -v "gentle-ai" >/dev/null 2>&1 && rm -f "$(command -v gentle-ai)"
 }
 
 _impl_update() {

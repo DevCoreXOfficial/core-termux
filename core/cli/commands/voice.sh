@@ -40,7 +40,7 @@ voice_help() {
 	separator_section "Requirements"
 	echo
 	list_item "Termux:API package: ${D_CYAN}pkg install termux-api${D_NC}"
-	list_item "Neovim for editing: ${D_CYAN}core install neovim${D_NC}"
+	list_item "Neovim for editing: ${D_CYAN}core install nvchad${D_NC}"
 	list_item "Termux:API app: ${D_BLUE}devcorex-web.vercel.app/termux/api${D_NC}"
 	echo
 }
@@ -72,7 +72,7 @@ voice_main() {
 
 	if ! command -v nvim &>/dev/null; then
 		log_error "Neovim (nvim) is not installed"
-		list_item "Install the editor: ${D_CYAN}core install neovim${NC}"
+		list_item "Install the editor: ${D_CYAN}core install nvchad${NC}"
 		separator
 		exit 1
 	fi
