@@ -110,6 +110,14 @@ rm -rf ~/.core                                                       # optional 
 | [`core pg`](#core-pg) | PostgreSQL database manager |
 | [`core init`](#core-init) | Configure existing projects |
 
+**Short aliases:** `i`=install · `un`=uninstall · `up`=update · `ri`=reinstall · `s`=search · `st`=style
+
+```bash
+core i opencode          # same as: core install opencode
+core s tunnel            # same as: core search tunnel
+core st font             # same as: core style font
+```
+
 ---
 
 ## Detailed Commands
@@ -251,6 +259,20 @@ Uninstall + install from scratch.
 ```bash
 core reinstall <tool>
 ```
+
+---
+
+### `core style`
+
+Apply or remove terminal environment tweaks anytime (see [Appearance](#appearance--core-style)):
+
+```bash
+core style                  # table with applied status
+core style font             # apply
+core style -r font          # remove
+```
+
+These are configuration, not packages — there is nothing to update.
 
 ---
 
@@ -719,7 +741,7 @@ core                          # dashboard + help
 core search                   # search help
 core search --all             # all tools + colored status
 core search tunnel            # filter by keyword
-core install nodejs           # individual install
+core i nodejs                 # individual install (alias)
 core install oh-my-zsh              # full shell environment in one command
 core show opencode            # docs (EN)
 core show opencode:es         # docs (ES)

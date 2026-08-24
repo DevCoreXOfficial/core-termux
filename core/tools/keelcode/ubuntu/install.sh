@@ -11,22 +11,30 @@ core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
+# Global installs can hit a root-owned npm prefix (distro nodejs).
+_npm_g() {
+  npm "$@" &>>"$LOG_FILE" || {
+    log_warn "npm failed without privileges - retrying with sudo"
+    $CORE_SUDO npm "$@" &>>"$LOG_FILE"
+  }
+}
+
 _impl_require_npm() {
   command -v npm >/dev/null 2>&1 || { log_error "Node.js/npm required. Run: core install nodejs"; exit 1; }
 }
 
 _impl_install() {
   _impl_require_npm
-  npm install -g @keelcode-ai/keelcode &>>"$LOG_FILE"
+  _npm_g install -g @keelcode-ai/keelcode &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
-  npm uninstall -g @keelcode-ai/keelcode &>>"$LOG_FILE" || true
+  _npm_g uninstall -g @keelcode-ai/keelcode &>>"$LOG_FILE" || true
 }
 
 _impl_update() {
   _impl_require_npm
-  npm install -g @keelcode-ai/keelcode@latest &>>"$LOG_FILE"
+  _npm_g install -g @keelcode-ai/keelcode@latest &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

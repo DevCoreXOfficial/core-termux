@@ -167,6 +167,14 @@ engine_install() {
     export PATH="$HOME/.local/bin:$PATH"
     loading "Installing $display" _engine_run "$script" install
     rc=$?
+
+    # Official installers sometimes exit non-zero on non-critical errors
+    # (telemetry, logging init, optional steps). Trust the binary over the
+    # exit code before declaring failure.
+    if [[ $rc -ne 0 ]] && manifest_is_installed "$dir"; then
+      log_warn "$display installer exited with $rc but the tool is present - OK"
+      rc=0
+    fi
   fi
 
   case $rc in
@@ -206,6 +214,11 @@ engine_uninstall() {
     LOG_FILE="$CORE_CACHE/install_$name.log"
     _engine_run "$script" uninstall
     rc=$?
+    # Some upstream uninstallers exit non-zero even when they succeed;
+    # absence of the binary is the ground truth.
+    if [[ $rc -ne 0 ]] && ! manifest_is_installed "$dir" && [[ "$CORE_ENV" != "termux" ]]; then
+      rc=0
+    fi
   else
     rc=0
   fi
