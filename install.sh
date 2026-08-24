@@ -10,6 +10,7 @@ readonly P_PRIMARY='\e[38;5;39m'
 readonly P_DIM='\e[38;5;244m'
 readonly P_OK='\e[38;5;42m'
 readonly P_FAIL='\e[1;31m'
+readonly P_WARN='\e[1;33m'
 
 REPO="${CORE_REPO:-https://github.com/DevCoreXOfficial/core-termux}"
 BRANCH="${CORE_BRANCH:-main}"
@@ -46,6 +47,7 @@ log_step() {
 
 log_ok() { echo -e "  ${P_OK}✔${P_NC}  $1"; }
 log_fail() { echo -e "  ${P_FAIL}✖${P_NC}  $1" >&2; }
+log_warn() { echo -e "  ${P_WARN}⚠${P_NC}  $1"; }
 log_info() { echo -e "  ${P_BORDER}→${P_NC}  $1"; }
 
 separator() {
