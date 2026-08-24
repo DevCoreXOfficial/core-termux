@@ -81,11 +81,11 @@ reinstall_neovim() {
 if [[ "${1:-}" == "install" ]]; then
   install_neovim || exit $?
   LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  bash "$LIB_DIR/lib-nvchad.sh" install || log_warn "NvChad setup failed (see log)"
+  bash "$LIB_DIR/lib-nvchad.sh" deploy || log_warn "NvChad setup failed (see log)"
 fi
 if [[ "${1:-}" == "uninstall" ]]; then
   LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  bash "$LIB_DIR/lib-nvchad.sh" uninstall >/dev/null 2>&1 || true
+  bash "$LIB_DIR/lib-nvchad.sh" remove_config >/dev/null 2>&1 || true
   uninstall_neovim
 fi
 if [[ "${1:-}" == "update" ]]; then update_neovim; fi

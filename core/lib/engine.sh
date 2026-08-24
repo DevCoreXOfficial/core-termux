@@ -171,6 +171,13 @@ engine_install() {
   else
     mkdir -p "$HOME/.local/bin"
     export PATH="$HOME/.local/bin:$PATH"
+    # Persist the binary dir once (pip --user, go install, script installers).
+    local rc_file="$HOME/.bashrc"
+    [[ -f "$HOME/.zshrc" && ! -f "$HOME/.bashrc" ]] && rc_file="$HOME/.zshrc"
+    if ! grep -qs 'HOME/.local/bin' "$rc_file"; then
+      printf '\n# Added by Core\nexport PATH="$HOME/.local/bin:$PATH"\n' >>"$rc_file"
+      log_ok "Added ~/.local/bin to your PATH ($rc_file)"
+    fi
     loading "Installing $display" _engine_run "$script" install
     rc=$?
 
@@ -247,6 +254,36 @@ engine_uninstall() {
     fi
   else
     rc=0
+  fi
+
+  # Generic configuration cleanup (Ubuntu/WSL): tools follow the
+  # ~/.tool / ~/.config/tool / ~/.cache/tool / ~/.local/share/tool
+  # conventions - offer removal when anything exists.
+  if [[ "$CORE_ENV" != "termux" && $rc -eq 0 ]]; then
+    local found=()
+    local cand
+    for cand in "$HOME/.$name" "$HOME/.config/$name" "$HOME/.cache/$name" "$HOME/.local/share/$name"; do
+      [[ -e "$cand" ]] && found+=("$cand")
+    done
+    if [[ ${#found[@]} -gt 0 ]]; then
+      echo
+      log_info "Configuration folders found for $display:"
+      local f
+      for f in "${found[@]}"; do
+        list_item "$f"
+      done
+      local answer
+      read_confirm_default "Delete these configuration files?" "n" answer
+      if [[ "$answer" == "y" ]]; then
+        for f in "${found[@]}"; do
+          rm -rf "$f"
+        done
+        log_success "Configuration files removed"
+      else
+        log_info "Keeping configuration files"
+      fi
+      echo
+    fi
   fi
 
   local recorded

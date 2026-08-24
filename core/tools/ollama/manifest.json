@@ -13,5 +13,15 @@
     "ai",
     "llm",
     "local"
+  ],
+  "dependencies": [
+    {
+      "name": "zstd",
+      "check": "zstd",
+      "pkg": {
+        "termux": "zstd",
+        "ubuntu": "zstd"
+      }
+    }
   ]
 }
