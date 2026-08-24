@@ -1,56 +1,40 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL).
-# Needle is a 26M-parameter tool-calling MODEL executed through the Cactus
-# engine (`cactus run Cactus-Compute/needle`). On Ubuntu there is no separate
-# binary to install: this installer ensures Cactus is present, downloads the
-# model and provides a `needle` convenience wrapper.
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation method.
+# Verbs: install | uninstall | update | reinstall | version-local | version-remote
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/lib/platform"
+import "@/lib/engine"
+core_detect_platform
 
-LOG_FILE="${LOG_FILE:-$CORE_CACHE/install_cactus.log}"
-NEEDLE_BIN="$HOME/.local/bin/needle"
+LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
-  if ! command -v cactus >/dev/null 2>&1; then
-    log_error "Cactus Engine is required. Run first:"
-    list_item "${D_CYAN}core install cactus${D_NC}"
-    return 1
-  fi
-
+  command -v pip3 >/dev/null 2>&1 || pm_install python3-pip
   mkdir -p "$HOME/.local/bin"
-  cat >"${NEEDLE_BIN}" <<'EOF'
-#!/usr/bin/env bash
-# Needle (26M tool-calling model) via the Cactus engine.
-exec cactus run Cactus-Compute/needle "$@"
-EOF
-  chmod +x "${NEEDLE_BIN}"
-
-  loading "Downloading Needle model" bash -c "cactus download Cactus-Compute/needle &>>'${LOG_FILE}'" ||
-    log_warn "Model download failed — it will be fetched on first run"
-
-  log_success "Needle ready (wrapper at ${NEEDLE_BIN})"
-  echo
-  list_item "needle --tools my_tools.json     ${GRAY}OpenAI function-calling format${D_NC}"
-  echo
+  pip3 install --user cactus-needle &>>"$LOG_FILE"
+  export PATH="$HOME/.local/bin:$PATH"
 }
 
 _impl_uninstall() {
-  rm -f "${NEEDLE_BIN}"
-  local answer
-  read_confirm_default "Also delete the downloaded Needle model?" "n" answer
-  if [[ "${answer}" == "y" ]] && command -v cactus >/dev/null 2>&1; then
-    cactus clean >/dev/null 2>&1 || true
-  fi
-  log_success "Needle removed"
+  pip3 uninstall -y cactus-needle &>>"$LOG_FILE" || true
 }
 
-case "${1:-install}" in
-  install) _impl_install ;;
-  uninstall) _impl_uninstall ;;
-  update) _impl_install ;;
-  reinstall) _impl_uninstall ; _impl_install ;;
-  *) exit 0 ;;
+_impl_update() {
+  pip3 install --user --upgrade cactus-needle &>>"$LOG_FILE"
+}
+
+case "${1:-}" in
+  install)    _impl_install ;;
+  uninstall)  _impl_uninstall ;;
+  update)     _impl_update ;;
+  reinstall)  _impl_uninstall >/dev/null 2>&1 || true ; _impl_install ;;
+  version-local)  _impl_vlocal ;;
+  version-remote) _impl_vremote ;;
+  *)
+    exit 0
+    ;;
 esac

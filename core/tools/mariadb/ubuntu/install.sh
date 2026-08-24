@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation method.
 # Verbs: install | uninstall | update | reinstall | version-local | version-remote
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
@@ -7,29 +7,31 @@ source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
+import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
-  pm_install mariadb-server
+  mkdir -p "$HOME/.local/bin"
+  pm_install mysql-server
 }
 
 _impl_uninstall() {
-  pm_remove mariadb-server
+  pm_remove mysql-server
 }
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-server
+  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
 }
 
 _impl_vlocal() {
-  dpkg -s mariadb-server 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  dpkg -s mysql-server 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
 }
 
 _impl_vremote() {
-  apt-cache policy mariadb-server 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  apt-cache policy mysql-server 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
 }
 
 case "${1:-}" in

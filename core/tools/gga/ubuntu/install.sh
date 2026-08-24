@@ -10,14 +10,14 @@ core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 _impl_install() {
-  DEST="$HOME/.local/share/core-data/gga"
+  DEST="$HOME/.local/share/core-data/gentleman-guardian-angel"
   mkdir -p "$DEST"
   git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git "$DEST" 2>/dev/null || (cd "$DEST" && git pull --ff-only) &>>"$LOG_FILE"
   (cd "$DEST" && bash ./install.sh </dev/null) &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
-  DEST="$HOME/.local/share/core-data/gga"
+  DEST="$HOME/.local/share/core-data/gentleman-guardian-angel"
   [ -f "$DEST/uninstall.sh" ] && (cd "$DEST" && bash ./uninstall.sh </dev/null) &>>"$LOG_FILE"
   rm -rf "$DEST"
 }

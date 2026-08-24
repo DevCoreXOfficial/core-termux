@@ -131,24 +131,48 @@ bootstrap_dependencies() {
     log_ok "$pkg installed"
   done
 
-  # Optional docs viewers: nice-to-have, never fatal.
-  # 'glow' is NOT in the default Ubuntu repositories - only try when present.
-  local viewer alt
-  for viewer in glow bat; do
-    command -v "$viewer" &>/dev/null && continue
+  # Docs viewers are REQUIRED by Core's help/docs experience.
+  # Refresh apt lists first so availability checks below are accurate.
+  [[ "$PKG_MGR" == "apt" ]] && $SUDO apt-get update -qq &>/dev/null
+
+  # --- bat (binary is 'batcat' on Debian/Ubuntu - expose it as 'bat') ---
+  if ! command -v bat &>/dev/null && ! command -v batcat &>/dev/null; then
+    log_info "Installing bat..."
+    progress_bar 0 10
+    install_packages bat
+    progress_bar 10 10
+    echo
+  fi
+  if command -v batcat &>/dev/null && ! command -v bat &>/dev/null; then
+    ln -sf "$(command -v batcat)" "$HOME/.local/bin/bat"
+    export PATH="$HOME/.local/bin:$PATH"
+  fi
+  if command -v bat >/dev/null || command -v batcat >/dev/null; then
+    log_ok "bat ready"
+  else
+    log_fail "bat could not be installed"
+  fi
+
+  # --- glow (Charm official repository) ---
+  if ! command -v glow &>/dev/null; then
+    log_info "Installing glow..."
     case "$PKG_MGR" in
       pkg)
-        yes | pkg install -y "$viewer" &>/dev/null || true
+        yes | pkg install -y glow &>/dev/null || true
         ;;
       apt)
-        apt-cache show "$viewer" >/dev/null 2>&1 || continue
-        $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y "$viewer" &>/dev/null || true
+        $SUDO mkdir -p /etc/apt/keyrings && \
+          curl -fsSL https://repo.charm.sh/apt/gpg.key | $SUDO gpg --dearmor -o /etc/apt/keyrings/charm.gpg 2>/dev/null || true
+        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * main" | \
+          $SUDO tee /etc/apt/sources.list.d/charm.list >/dev/null 2>&1 || true
+        $SUDO apt-get update -qq &>/dev/null
+        $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y glow &>/dev/null || true
         ;;
     esac
-    command -v "$viewer" &>/dev/null \
-      && log_ok "$viewer installed (optional)" \
-      || log_info "Optional viewer '$viewer' skipped (docs will render as plain text)"
-  done
+    command -v glow &>/dev/null \
+      && log_ok "glow installed" \
+      || log_warn "glow unavailable (docs render as plain text)"
+  fi
 
   return 0
 }

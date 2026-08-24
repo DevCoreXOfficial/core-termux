@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation method.
 # Verbs: install | uninstall | update | reinstall | version-local | version-remote
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
@@ -7,6 +7,7 @@ source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
+import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
@@ -17,6 +18,7 @@ _impl_require_npm() {
 
 _impl_install() {
   _impl_require_npm
+  mkdir -p "$HOME/.local/bin"
   npm install -g @nestjs/cli &>>"$LOG_FILE"
 }
 
@@ -30,11 +32,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  npm ls -g @nestjs/cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  npm ls -g cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
 }
 
 _impl_vremote() {
-  npm view @nestjs/cli version 2>/dev/null | head -1
+  npm view cli version 2>/dev/null | head -1
 }
 
 case "${1:-}" in

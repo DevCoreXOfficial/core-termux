@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation method.
 # Verbs: install | uninstall | update | reinstall | version-local | version-remote
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
@@ -7,34 +7,31 @@ source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
+import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
-_impl_require_npm() {
-  command -v npm >/dev/null 2>&1 || { log_error "Node.js/npm required. Run: core install nodejs"; exit 1; }
-}
-
 _impl_install() {
-  _impl_require_npm
-  npm install -g pgFormatter &>>"$LOG_FILE"
+  mkdir -p "$HOME/.local/bin"
+  pm_install pgformatter
 }
 
 _impl_uninstall() {
-  npm uninstall -g pgFormatter &>>"$LOG_FILE" || true
+  pm_remove pgformatter
 }
 
 _impl_update() {
-  _impl_require_npm
-  npm install -g pgFormatter@latest &>>"$LOG_FILE"
+  $CORE_SUDO apt-get update -qq
+  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y pgformatter
 }
 
 _impl_vlocal() {
-  npm ls -g pgFormatter --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  dpkg -s pgformatter 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
 }
 
 _impl_vremote() {
-  npm view pgFormatter version 2>/dev/null | head -1
+  apt-cache policy pgformatter 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
 }
 
 case "${1:-}" in

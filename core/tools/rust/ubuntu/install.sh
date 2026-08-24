@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation method.
 # Verbs: install | uninstall | update | reinstall | version-local | version-remote
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
@@ -7,28 +7,40 @@ source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
+import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
-  curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal &>>"$LOG_FILE"
-  export PATH="$HOME/.cargo/bin:$PATH"
+  mkdir -p "$HOME/.local/bin"
+  pm_install build-essential curl && curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh && source "$HOME/.cargo/env"
 }
 
 _impl_uninstall() {
-  "$HOME/.cargo/bin/rustup" self uninstall -y &>>"$LOG_FILE" || rm -rf ~/.cargo ~/.rustup
+  pm_remove build-essential
 }
 
 _impl_update() {
-  rustup update &>>"$LOG_FILE" || "$HOME/.cargo/bin/rustup" update &>>"$LOG_FILE"
+  $CORE_SUDO apt-get update -qq
+  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential curl && curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh && source "$HOME/.cargo/env"
+}
+
+_impl_vlocal() {
+  dpkg -s build-essential 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+}
+
+_impl_vremote() {
+  apt-cache policy build-essential 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
 }
 
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
   update)     _impl_update ;;
-  reinstall)  _impl_uninstall ; sleep 1 ; _impl_install ;;
+  reinstall)  _impl_uninstall >/dev/null 2>&1 || true ; _impl_install ;;
+  version-local)  _impl_vlocal ;;
+  version-remote) _impl_vremote ;;
   *)
     exit 0
     ;;

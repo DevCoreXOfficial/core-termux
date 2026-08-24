@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation method.
 # Verbs: install | uninstall | update | reinstall | version-local | version-remote
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
@@ -7,12 +7,14 @@ source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
+import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
-  pm_install python3 python3-pip python3-venv
+  mkdir -p "$HOME/.local/bin"
+  pm_install python3
 }
 
 _impl_uninstall() {
@@ -21,7 +23,7 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-pip python3-venv
+  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y python3
 }
 
 _impl_vlocal() {

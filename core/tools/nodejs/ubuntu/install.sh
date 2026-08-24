@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation methods.
+# Platform: Ubuntu Linux / Ubuntu (WSL). Official installation method.
 # Verbs: install | uninstall | update | reinstall | version-local | version-remote
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
@@ -7,37 +7,38 @@ source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/lib/platform"
+import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
-  curl -fsSL https://deb.nodesource.com/setup_lts.x | $CORE_SUDO -E bash - &>>"$LOG_FILE"
-  pm_install nodejs
-  $CORE_SUDO corepack enable || true
+  mkdir -p "$HOME/.local/bin"
+  pm_install curl && curl -fsSL https://nodesource.com | sudo -E bash - && sudo apt install -y nodejs
 }
 
 _impl_uninstall() {
-  $CORE_SUDO apt-get purge -y nodejs libnode* 2>/dev/null || $CORE_SUDO apt-get purge -y nodejs
+  pm_remove curl
 }
 
 _impl_update() {
-  $CORE_SUDO apt-get update -qq && $CORE_SUDO apt-get install -y nodejs
+  $CORE_SUDO apt-get update -qq
+  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y curl && curl -fsSL https://nodesource.com | sudo -E bash - && sudo apt install -y nodejs
 }
 
 _impl_vlocal() {
-  node --version 2>/dev/null | tr -d v
+  dpkg -s curl 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
 }
 
 _impl_vremote() {
-  curl -fsSL https://deb.nodesource.com/setup_lts.x 2>/dev/null | grep -oE "v[0-9]+\.[0-9]+\.[0-9]+" | tail -1 | tr -d v
+  apt-cache policy curl 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
 }
 
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
   update)     _impl_update ;;
-  reinstall)  _impl_uninstall ; _impl_install ;;
+  reinstall)  _impl_uninstall >/dev/null 2>&1 || true ; _impl_install ;;
   version-local)  _impl_vlocal ;;
   version-remote) _impl_vremote ;;
   *)

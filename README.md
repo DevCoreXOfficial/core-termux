@@ -171,8 +171,8 @@ core install <tool1> <tool2> ...
 ```bash
 core install opencode            # single tool
 core install gh jq fzf           # several at once
-core install neovim              # Neovim + NvChad configured in one shot
-core install zsh                 # ZSH + Oh My Zsh + 10 plugins in one shot
+core install nvchad              # Neovim + NvChad configured in one shot
+core install oh-my-zsh                 # ZSH + Oh My Zsh + 10 plugins in one shot
 ```
 
 Some Termux installers offer **interactive installation methods** (e.g. OpenCode offers native glibc, glibc+proot, or proot-distro). The menu appears during installation — pick the one that suits your device.
@@ -423,7 +423,7 @@ core voice !                  # Alias for 'text'
 **Requirements (Termux):**
 - Termux:API package: `pkg install termux-api`
 - Termux:API app installed on Android
-- Neovim for editing: `core install neovim`
+- Neovim for editing: `core install nvchad`
 
 **Supported agents:**
 
@@ -537,11 +537,11 @@ OpenCode, Claude Code, Gemini CLI, Qwen Code, Codex, KiloCode CLI, Cursor CLI, G
 
 ### Editor bundle
 
-`neovim` — installs Neovim plus the NvChad-based configuration in one shot: LSP, autocomplete, syntax highlighting, file explorer, GitHub Copilot and CodeCompanion preconfigured.
+`nvchad` — installs Neovim plus the NvChad-based configuration (vendored inside Core, no external repo) in one shot: LSP, autocomplete, syntax highlighting, file explorer, GitHub Copilot and CodeCompanion preconfigured.
 
 ### Shell bundle
 
-`zsh` — ZSH + Oh My Zsh + powerlevel10k + zsh-defer, zsh-autosuggestions, zsh-syntax-highlighting, zsh-history-substring-search, zsh-completions, fzf-tab, zsh-you-should-use, zsh-autopair and zsh-better-npm-completion. Also sets `lsd`/`bat` aliases, zoxide, Go environment variables and persistent sessions (new terminals restore your last directory).
+`oh-my-zsh` — ZSH + Oh My Zsh + powerlevel10k + zsh-defer, zsh-autosuggestions, zsh-syntax-highlighting, zsh-history-substring-search, zsh-completions, fzf-tab, zsh-you-should-use, zsh-autopair and zsh-better-npm-completion. Also sets `lsd`/`bat` aliases, zoxide, Go environment variables and persistent sessions (new terminals restore your last directory).
 
 ### Appearance — `core style`
 
@@ -720,7 +720,7 @@ core search                   # search help
 core search --all             # all tools + colored status
 core search tunnel            # filter by keyword
 core install nodejs           # individual install
-core install zsh              # full shell environment in one command
+core install oh-my-zsh              # full shell environment in one command
 core show opencode            # docs (EN)
 core show opencode:es         # docs (ES)
 core update core              # update the framework

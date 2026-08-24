@@ -54,13 +54,20 @@ manifest_check_list() {
     "$1/manifest.json" 2>/dev/null | grep -v '^$'
 }
 
-# manifest_is_installed <tool-dir> : 0 when any check binary is present.
+# manifest_is_installed <tool-dir> : 0 when the tool is present.
+# Priority: custom check.sh (for config-bundles like nvchad / oh-my-zsh),
+# then any declared binary.
 manifest_is_installed() {
+  local dir="$1"
+  if [[ -x "$dir/check.sh" ]]; then
+    bash "$dir/check.sh" &>/dev/null && return 0
+    return 1
+  fi
   local bin
   while IFS= read -r bin; do
     [[ -z "$bin" ]] && continue
     command -v "$bin" &>/dev/null && return 0
-  done < <(manifest_check_list "$1")
+  done < <(manifest_check_list "$dir")
   return 1
 }
 

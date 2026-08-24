@@ -2,9 +2,7 @@
   "name": "udocker",
   "display": "udocker",
   "platforms": [
-    "termux",
-    "ubuntu",
-    "wsl"
+    "termux"
   ],
   "check_cmd": "udocker",
   "homepage": "https://indigo-dc.github.io/udocker/",

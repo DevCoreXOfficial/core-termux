@@ -2,9 +2,7 @@
   "name": "proot",
   "display": "proot",
   "platforms": [
-    "termux",
-    "ubuntu",
-    "wsl"
+    "termux"
   ],
   "check_cmd": "proot",
   "homepage": "https://proot-me.github.io",
