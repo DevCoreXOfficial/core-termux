@@ -8,6 +8,7 @@ CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_editors.log"
 NVIM_DIR="$HOME/.config/nvim"
@@ -55,7 +56,7 @@ install_nvchad() {
 }
 
 uninstall_nvchad() {
-  confirm_remove_configs "NvChad config" \
+  confirm_remove_configs "NvChad" \
     "$HOME/.config/nvim" \
     "$HOME/.local/share/nvim" \
     "$HOME/.cache/nvim" \

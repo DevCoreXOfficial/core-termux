@@ -5,6 +5,7 @@ source "$CORE_PATH/utils/bootstrap.sh"
 CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # this platform folder
 import "@/utils/env"
 import "@/utils/log"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_shell.log"
 ZSH_PLUGINS_DIR="$HOME/.zsh-plugins"

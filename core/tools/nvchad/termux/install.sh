@@ -62,7 +62,7 @@ install_nvchad() {
 }
 
 uninstall_nvchad() {
-  confirm_remove_configs "NvChad config" \
+  confirm_remove_configs "NvChad" \
     "$HOME/.config/nvim" \
     "$HOME/.local/share/nvim" \
     "$HOME/.cache/nvim" \

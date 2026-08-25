@@ -12,6 +12,7 @@ CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/utils/uninstall"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
 HF_PROFILE_D="${PREFIX}/etc/profile.d/huggingface.sh"

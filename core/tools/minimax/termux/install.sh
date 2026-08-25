@@ -7,6 +7,7 @@ import "@/utils/env"
 
 
 import "@/utils/log"
+import "@/utils/uninstall"
 import "@/utils/version"
 source "$CORE_PATH/tools/bun/termux/lib.sh"
 import "@/utils/walkie"
