@@ -20,7 +20,10 @@ _npm_g() {
 }
 
 _impl_require_npm() {
-  command -v npm >/dev/null 2>&1 || { log_error "Node.js/npm required. Run: core install nodejs"; exit 1; }
+  # Shared Node.js LTS installer (NodeSource on Ubuntu/WSL).
+  source "$CORE_PATH/lib/nodejs.sh"
+  ensure_nodejs_lts
+  command -v npm >/dev/null 2>&1 || { log_error "npm still unavailable after Node.js install"; exit 1; }
 }
 
 _impl_install() {

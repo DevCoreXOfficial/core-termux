@@ -25,6 +25,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
+import "@/lib/nodejs"
 
 # ---------------------------------------------------------------------------
 # Dependency handling
@@ -61,6 +62,17 @@ engine_ensure_deps() {
     if _dep_present "$check"; then
       continue
     fi
+    # Node.js has a dedicated cross-platform installer (NodeSource LTS on
+    # Ubuntu, nodejs-lts + corepack on Termux) instead of the distro package.
+    if [[ "$dep" == "nodejs" ]]; then
+      loading "Installing dependency: Node.js LTS" ensure_nodejs_lts || {
+        log_error "Failed to install dependency Node.js LTS"
+        return 1
+      }
+      installed_by_core+=("$dep")
+      continue
+    fi
+
     pkg="$(_deps_pkg_for_platform "$pkg_t" "$pkg_a")"
     if [[ -z "$pkg" ]]; then
       log_warn "Dependency '$dep' missing and no package mapping for $CORE_PKG_MGR"

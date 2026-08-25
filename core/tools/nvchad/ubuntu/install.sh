@@ -16,7 +16,7 @@ core_detect_platform
 LOG_FILE="$CORE_CACHE/install_editors.log"
 NVIM_DIR="$HOME/.config/nvim"
 
-NVCHAD_PKGS=(git nodejs npm lua-language-server ripgrep stylua tree-sitter curl wget)
+NVCHAD_PKGS=(git npm lua-language-server ripgrep stylua tree-sitter curl wget)
 # Neovim >= 0.10 is required (config uses vim.uv); distro packages ship 0.9.x,
 # so we install the official upstream build instead of the apt one.
 
@@ -83,6 +83,7 @@ _install_deps() {
 _install_deps_impl() {
   _ensure_nvim_recent || return 1
   export PATH="$HOME/.local/bin:$PATH"
+  source "$CORE_PATH/lib/nodejs.sh"; ensure_nodejs_lts
   pm_install "${NVCHAD_PKGS[@]}" build-essential
   command -v prettier >/dev/null 2>&1 || _npm_g install -g prettier
 }

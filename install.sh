@@ -134,6 +134,43 @@ bootstrap_dependencies() {
     log_ok "$pkg installed"
   done
 
+  # --- Node.js LTS (required: many Core tools are npm-based) ---
+  # Termux: pkg nodejs-lts works great (+ corepack). Ubuntu/WSL: the distro
+  # package is years behind (e.g. v18), so we FORCE the official NodeSource
+  # LTS build, replacing whatever distro node is present.
+  if [[ "$PLATFORM" == "termux" ]]; then
+    if ! command -v node &>/dev/null; then
+      log_info "Installing Node.js LTS..."
+      progress_bar 0 10
+      yes | pkg install -y nodejs-lts &>/dev/null
+      progress_bar 10 10
+      echo
+      command -v corepack &>/dev/null && corepack enable &>/dev/null || true
+      log_ok "Node.js $(node --version) installed (corepack enabled)"
+    else
+      log_ok "Node.js already present ($(node --version))"
+    fi
+  else
+    log_info "Installing Node.js LTS (NodeSource - replaces outdated distro node)..."
+    progress_bar 0 10
+    {
+      # Remove conflicting distro packages first (NodeSource requirement).
+      $SUDO DEBIAN_FRONTEND=noninteractive apt-get remove -y \
+        nodejs libnode* 2>/dev/null || true
+      $SUDO apt-get autoremove -y &>/dev/null || true
+      curl -fsSL https://deb.nodesource.com/setup_lts.x | $SUDO -E bash -
+      $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
+    } &>>"$LOG_FILE" || true
+    progress_bar 10 10
+    echo
+    if command -v node &>/dev/null; then
+      log_ok "Node.js $(node --version) + npm $(npm --version) ready (LTS)"
+    else
+      log_fail "Node.js could not be installed - last output:"
+      tail -5 "$LOG_FILE" 2>/dev/null | sed 's/^/      /' >&2
+    fi
+  fi
+
   # Docs viewers are REQUIRED by Core's help/docs experience.
   # Refresh apt lists first so availability checks below are accurate.
   [[ "$PKG_MGR" == "apt" ]] && $SUDO apt-get update -qq &>/dev/null
