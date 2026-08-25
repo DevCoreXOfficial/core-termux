@@ -177,7 +177,9 @@ engine_install() {
     rc=$?
   else
     mkdir -p "$HOME/.local/bin"
-    export PATH="$HOME/.local/bin:$PATH"
+    # Pre-load every directory official installers commonly use, so
+    # freshly-installed binaries resolve inside THIS session too.
+    export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
     # Persist the binary dir once (pip --user, go install, script installers).
     local rc_file="$HOME/.bashrc"
     [[ -f "$HOME/.zshrc" && ! -f "$HOME/.bashrc" ]] && rc_file="$HOME/.zshrc"
@@ -195,15 +197,39 @@ engine_install() {
     # Official installers sometimes exit non-zero on non-critical errors
     # (telemetry, logging init, optional steps). Trust the binary over the
     # exit code before declaring failure.
-    if [[ $rc -ne 0 ]] && manifest_is_installed "$dir"; then
-      log_warn "$display installer exited with $rc but the tool is present - OK"
-      rc=0
+    if [[ $rc -ne 0 && "$CORE_ENV" != "termux" ]]; then
+      _engine_link_new_bins
+      if manifest_is_installed "$dir"; then
+        log_warn "$display installer exited with $rc but the tool is present - OK"
+        registry_record "$name"
+        rc=0
+      fi
     fi
   fi
+
+  # Link newly-installed binaries that landed in non-PATH directories.
+  _engine_link_new_bins() {
+    local hit=0 b d
+    while IFS= read -r b; do
+      [[ -z "$b" ]] && continue
+      command -v "$b" >/dev/null 2>&1 && continue
+      for d in "$HOME/.opencode/bin" "$HOME/.bun/bin" "$HOME/.cargo/bin" \
+               "$HOME/go/bin" "$HOME/.factory/bin" "$HOME/.antigravity/bin" \
+               "$HOME/bin" "$HOME/.local/bin"; do
+        if [[ -x "$d/$b" ]]; then
+          ln -sf "$d/$b" "$HOME/.local/bin/$b"
+          hit=1
+          break
+        fi
+      done
+    done < <(manifest_check_list "$dir")
+    [[ $hit -eq 1 ]] && log_ok "Binary linked into ~/.local/bin"
+  }
 
   case $rc in
     0)
       registry_record "$name"
+      [[ "$CORE_ENV" != "termux" ]] && _engine_link_new_bins
 
       rc_snapshot_after=$(cat "$HOME/.zshrc" "$HOME/.bashrc" 2>/dev/null | cksum)
       if [[ "$rc_snapshot_after" != "$rc_snapshot_before" ]]; then
@@ -368,7 +394,9 @@ engine_update() {
   LOG_FILE="$CORE_CACHE/install_$name.log"
   if [[ "$CORE_ENV" != "termux" ]]; then
     mkdir -p "$HOME/.local/bin"
-    export PATH="$HOME/.local/bin:$PATH"
+    # Pre-load every directory official installers commonly use, so
+    # freshly-installed binaries resolve inside THIS session too.
+    export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
   fi
 
   # Version flow: local -> remote -> compare -> suggest.
