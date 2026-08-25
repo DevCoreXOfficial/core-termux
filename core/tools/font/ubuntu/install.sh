@@ -5,6 +5,9 @@ CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # this platform f
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/lib/platform"
+
+core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install_appearance.log}"
 FONT_DIR="$HOME/.local/share/fonts"

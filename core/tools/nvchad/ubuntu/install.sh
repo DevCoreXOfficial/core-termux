@@ -9,6 +9,9 @@ source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
 import "@/utils/uninstall"
+import "@/lib/platform"
+
+core_detect_platform
 
 LOG_FILE="$CORE_CACHE/install_editors.log"
 NVIM_DIR="$HOME/.config/nvim"
