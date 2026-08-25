@@ -187,7 +187,8 @@ bootstrap_dependencies() {
             *) arch="$(uname -m)" ;;
           esac
           url=$(curl -fsSL https://api.github.com/repos/charmbracelet/glow/releases/latest \
-                  | jq -r --arg a "$arch" '.assets[].browser_download_url | select(test("glow_.*_" + $a + "\\.deb$"))' | head -1)
+        | jq -r '.assets[].browser_download_url' \
+        | grep -E "glow_.*_${arch}\.deb$" | head -1)
           if [[ -n "$url" ]]; then
             curl -fsSL "$url" -o /tmp/glow.deb && $SUDO dpkg -i /tmp/glow.deb &>>"$LOG_FILE" || true
             rm -f /tmp/glow.deb
