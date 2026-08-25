@@ -15,6 +15,7 @@ readonly P_WARN='\e[1;33m'
 REPO="${CORE_REPO:-https://github.com/DevCoreXOfficial/core-termux}"
 BRANCH="${CORE_BRANCH:-main}"
 INSTALL_DIR="${CORE_INSTALL_DIR:-$HOME/.core}"
+LOG_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/core/installer.log"
 
 TOTAL_STEPS=4
 CURRENT_STEP=0
@@ -163,12 +164,16 @@ bootstrap_dependencies() {
         yes | pkg install -y glow &>/dev/null || true
         ;;
       apt)
-        $SUDO mkdir -p /etc/apt/keyrings && \
-          curl -fsSL https://repo.charm.sh/apt/gpg.key | $SUDO gpg --dearmor -o /etc/apt/keyrings/charm.gpg 2>/dev/null || true
-        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * main" | \
-          $SUDO tee /etc/apt/sources.list.d/charm.list >/dev/null 2>&1 || true
-        $SUDO apt-get update -qq &>/dev/null
-        $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y glow &>/dev/null || true
+        {
+          $SUDO mkdir -p /etc/apt/keyrings
+          curl -fsSL https://repo.charm.sh/apt/gpg.key \
+            | $SUDO gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * main" \
+            | $SUDO tee /etc/apt/sources.list.d/charm.list >/dev/null
+          $SUDO apt-get update -qq
+          $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y glow
+        } &>>"$LOG_FILE" 2>/dev/null || \
+          log_warn "Charm repo step failed (network or signing) - continuing"
         ;;
     esac
     command -v glow &>/dev/null \
@@ -204,8 +209,13 @@ link_binary() {
     esac
 
     # Add automatically to the user's shell config + inform.
-    local rc="$HOME/.bashrc"
-    [[ -f "$HOME/.zshrc" && ! -f "$HOME/.bashrc" ]] && rc="$HOME/.zshrc"
+    # Respect the user's actual login shell, not mere file existence.
+    local rc
+    case "${SHELL:-}" in
+      *zsh*)  rc="$HOME/.zshrc" ;;
+      *bash*|"") rc="$HOME/.bashrc" ;;
+      *) rc="$HOME/.bashrc"; [[ -f "$HOME/.zshrc" ]] && rc="$HOME/.zshrc" ;;
+    esac
 
     if ! grep -qs 'HOME/.local/bin' "$rc"; then
       printf '\n# Added by Core installer\nexport PATH="$HOME/.local/bin:$PATH"\n' >>"$rc"

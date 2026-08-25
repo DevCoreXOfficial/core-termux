@@ -67,10 +67,21 @@ _impl_install_plugins() {
   done
 }
 
+# Remove previous Core-managed lines so canonical ones are written fresh
+# (migrates legacy v4 entries like the Dracula cat alias).
+_purge_managed_lines() {
+  local rc="$HOME/.zshrc"
+  [[ -f "$rc" ]] || return 0
+  local tmp="${rc}.core_tmp.$$"
+  grep -vE 'alias cat="bat|alias ls="lsd|zoxide init zsh|# Core binaries' \
+    "$rc" >"$tmp" && mv "$tmp" "$rc"
+}
+
 _impl_wire_zshrc() {
+  _purge_managed_lines
   add_to_zshrc 'export PATH="$HOME/.local/bin:$PATH"  # Core binaries'
   add_to_zshrc 'alias ls="lsd"'
-  add_to_zshrc 'alias cat="bat --paging=never"'
+  add_to_zshrc 'alias cat="bat --style=plain --numbers=false --paging=never"'
   add_to_zshrc 'eval "$(zoxide init zsh)"'
   add_to_zshrc 'export PATH=$PATH:$HOME/go/bin'
 

@@ -181,8 +181,12 @@ engine_install() {
     # freshly-installed binaries resolve inside THIS session too.
     export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
     # Persist the binary dir once (pip --user, go install, script installers).
-    local rc_file="$HOME/.bashrc"
-    [[ -f "$HOME/.zshrc" && ! -f "$HOME/.bashrc" ]] && rc_file="$HOME/.zshrc"
+    # Respect the user's actual login shell.
+    local rc_file
+    case "${SHELL:-}" in
+      *zsh*)  rc_file="$HOME/.zshrc" ;;
+      *)      rc_file="$HOME/.bashrc" ;;
+    esac
     if ! grep -qs 'HOME/.local/bin' "$rc_file"; then
       printf '\n# Added by Core\nexport PATH="$HOME/.local/bin:$PATH"\n' >>"$rc_file"
       log_ok "Added ~/.local/bin to your PATH ($rc_file)"
