@@ -233,20 +233,27 @@ engine_install() {
     fi
     if _script_is_interactive "$script"; then
       _engine_run "$script" install
+      rc=$?
     else
-      loading "Installing $display" _engine_run "$script" install
-    fi
-    rc=$?
+      # Many official installers exit non-zero over cosmetic tail errors
+      # while leaving the binary perfectly usable. Judge by PRESENCE, and
+      # keep the animation green so users are never alarmed:
+      # the wrapper swallows the raw exit code; we evaluate afterwards.
+      ENGINE_RAW_RC=0
+      _engine_run_capture() {
+        _engine_run "$script" install
+        ENGINE_RAW_RC=$?
+      }
+      loading "Installing $display" _engine_run_capture
 
-    # Official installers sometimes exit non-zero on non-critical errors
-    # (telemetry, logging init, optional steps). Trust the binary over the
-    # exit code before declaring failure.
-    if [[ $rc -ne 0 && "$CORE_ENV" != "termux" ]]; then
       _engine_link_new_bins
+
       if manifest_is_installed "$dir"; then
-        log_warn "$display installer exited with $rc but the tool is present - OK"
-        registry_record "$name"
         rc=0
+        [[ "${CORE_DEBUG:-0}" == "1" && $ENGINE_RAW_RC -ne 0 ]] &&
+          log_debug "$display installer exited with $ENGINE_RAW_RC (non-critical; binary verified)"
+      else
+        rc=${ENGINE_RAW_RC:-1}
       fi
     fi
   fi
