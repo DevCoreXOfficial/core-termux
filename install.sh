@@ -164,21 +164,43 @@ bootstrap_dependencies() {
         yes | pkg install -y glow &>/dev/null || true
         ;;
       apt)
+        # gnupg is missing on minimal WSL images; the keyring step needs it.
+        command -v gpg &>/dev/null || $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg ca-certificates
+
+        # Official Charm repository (suite/component: '* *').
         {
           $SUDO mkdir -p /etc/apt/keyrings
           curl -fsSL https://repo.charm.sh/apt/gpg.key \
             | $SUDO gpg --dearmor -o /etc/apt/keyrings/charm.gpg
-          echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * main" \
+          echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" \
             | $SUDO tee /etc/apt/sources.list.d/charm.list >/dev/null
           $SUDO apt-get update -qq
           $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y glow
-        } &>>"$LOG_FILE" 2>/dev/null || \
-          log_warn "Charm repo step failed (network or signing) - continuing"
+        } &>>"$LOG_FILE" || true
+
+        # Fallback: official .deb straight from GitHub releases.
+        if ! command -v glow &>/dev/null; then
+          local arch deb url
+          case "$(uname -m)" in
+            x86_64) arch="amd64" ;;
+            aarch64) arch="arm64" ;;
+            *) arch="$(uname -m)" ;;
+          esac
+          url=$(curl -fsSL https://api.github.com/repos/charmbracelet/glow/releases/latest \
+                  | jq -r --arg a "$arch" '.assets[].browser_download_url | select(test("glow_.*_" + $a + "\\.deb$"))' | head -1)
+          if [[ -n "$url" ]]; then
+            curl -fsSL "$url" -o /tmp/glow.deb && $SUDO dpkg -i /tmp/glow.deb &>>"$LOG_FILE" || true
+            rm -f /tmp/glow.deb
+          fi
+        fi
         ;;
     esac
-    command -v glow &>/dev/null \
-      && log_ok "glow installed" \
-      || log_warn "glow unavailable (docs render as plain text)"
+    if command -v glow &>/dev/null; then
+      log_ok "glow installed"
+    else
+      log_fail "glow could not be installed - last installer output:"
+      tail -5 "$LOG_FILE" 2>/dev/null | sed 's/^/      /' >&2
+    fi
   fi
 
   return 0

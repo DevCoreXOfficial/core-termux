@@ -32,24 +32,48 @@ _ensure_nvim_recent() {
 }
 
 _ensure_nvim_recent_impl() {
-  local tag arch dir
+  local tag arch dir url attempts remaining
   case "$(uname -m)" in
     x86_64) arch="x86_64" ;;
     aarch64) arch="arm64" ;;
     *) arch="$(uname -m)" ;;
   esac
-  tag=$(curl -fsSL https://api.github.com/repos/neovim/neovim/releases/latest \
-          | grep '"tag_name"' | cut -d'"' -f4)
-  [[ -z "$tag" ]] && { log_error "Could not resolve latest Neovim release"; return 1; }
+
+  # Resolve the latest tag; fall back to a known-good pin when the API is
+  # rate-limited (unauthenticated GitHub calls are shared per IP).
+  tag=""
+  for attempt in 1 2 3; do
+    tag=$(curl -fsSL https://api.github.com/repos/neovim/neovim/releases/latest \
+            | grep '"tag_name"' | cut -d'"' -f4)
+    [[ -n "$tag" ]] && break
+    sleep 2
+  done
+  [[ -z "$tag" ]] && { tag="v0.12.5"; log_warn "GitHub API unavailable - using pinned ${tag}"; }
 
   dir="$HOME/.local/opt/nvim-${tag}"
+  rm -rf "$dir"
   mkdir -p "$dir" "$HOME/.local/bin"
-  curl -fsSL "https://github.com/neovim/neovim/releases/download/${tag}/nvim-linux-${arch}.tar.gz" \
-    | tar -C "$HOME/.local/opt" -xz &>>"$LOG_FILE" || { log_error "Download failed"; return 1; }
 
-  # Atomic-ish swap so an interrupted run never leaves a broken link.
-  rm -rf "$dir.old"; [[ -d "$dir" ]] || { log_error "Extraction failed"; return 1; }
-  ln -sfn "${dir}/bin/nvim" "$HOME/.local/bin/nvim"
+  # Some releases shipped the legacy asset name; try both spellings.
+  url="https://github.com/neovim/neovim/releases/download/${tag}/nvim-linux-${arch}.tar.gz"
+  curl -fsSL "$url" -o /tmp/nvim.tar.gz &>>"$LOG_FILE" || \
+    curl -fsSL "https://github.com/neovim/neovim/releases/download/${tag}/nvim-linux64.tar.gz" \
+      -o /tmp/nvim.tar.gz &>>"$LOG_FILE" || {
+    log_error "Neovim download failed - last output:"
+    tail -5 "$LOG_FILE" 2>/dev/null | sed 's/^/  /' >&2
+    return 1
+  }
+
+  tar -C "$HOME/.local/opt" -xzf /tmp/nvim.tar.gz &>>"$LOG_FILE" || {
+    log_error "Extraction failed"; rm -f /tmp/nvim.tar.gz; return 1
+  }
+  rm -f /tmp/nvim.tar.gz
+
+  # The tarball root folder differs across releases; find its bin/nvim.
+  local real_bin
+  real_bin=$(find "$HOME/.local/opt" -maxdepth 3 -path "*nvim*/bin/nvim" -type f | head -1)
+  [[ -z "$real_bin" ]] && { log_error "nvim binary not found after extraction"; return 1; }
+  ln -sfn "$real_bin" "$HOME/.local/bin/nvim"
 }
 
 _install_deps() {
