@@ -8,11 +8,77 @@
   ],
   "check_cmd": "nvim",
   "homepage": "https://neovim.io",
-  "description": "Neovim bundled with the NvChad configuration maintained by Core (vendored, no external repo)",
+  "description": "NvChad configuration for Neovim maintained by Core - vendored per-platform (Termux & Ubuntu variants)",
   "tags": [
     "editor",
     "nvim",
     "nvchad",
     "lsp"
+  ],
+  "dependencies": [
+    {
+      "name": "git",
+      "check": "git",
+      "pkg": {
+        "termux": "git",
+        "ubuntu": "git"
+      }
+    },
+    {
+      "name": "neovim",
+      "check": "nvim",
+      "pkg": {
+        "termux": "neovim",
+        "ubuntu": "neovim"
+      }
+    },
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    },
+    {
+      "name": "python",
+      "check": "python3",
+      "pkg": {
+        "termux": "python",
+        "ubuntu": "python3"
+      }
+    },
+    {
+      "name": "perl",
+      "check": "perl",
+      "pkg": {
+        "termux": "perl",
+        "ubuntu": "perl"
+      }
+    },
+    {
+      "name": "curl",
+      "check": "curl",
+      "pkg": {
+        "termux": "curl",
+        "ubuntu": "curl"
+      }
+    },
+    {
+      "name": "wget",
+      "check": "wget",
+      "pkg": {
+        "termux": "wget",
+        "ubuntu": "wget"
+      }
+    },
+    {
+      "name": "ripgrep",
+      "check": "rg",
+      "pkg": {
+        "termux": "ripgrep",
+        "ubuntu": "ripgrep"
+      }
+    }
   ]
 }

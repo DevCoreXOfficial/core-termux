@@ -1,92 +1,90 @@
 #!/usr/bin/env bash
-# Platform: Termux / Android (requires the Termux bash path at runtime via wrappers).
+# Platform: Termux / Android.
+# Mirrors ~/nvchad-termux/nvchad.sh: exact deps, config copy to
+# ~/.config/nvim, then the three Lazy headless passes.
 [[ -n "$CORE_PATH" ]] || CORE_PATH="$HOME/.core/core"
+CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$CORE_PATH/utils/bootstrap.sh"
-CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # this platform folder
 import "@/utils/env"
-
-
 import "@/utils/log"
-import "@/utils/version"
 import "@/utils/uninstall"
 
-LOG_FILE="$CORE_CACHE/install_editor.log"
+LOG_FILE="$CORE_CACHE/install_editors.log"
+NVIM_DIR="$HOME/.config/nvim"
 
-_install_neovim_impl() {
+NVCHAD_PKGS=(git neovim nodejs-lts python perl curl wget lua-language-server ripgrep stylua tree-sitter)
+
+_install_deps() {
+  loading "Installing NvChad dependencies" _install_deps_impl
+}
+
+_install_deps_impl() {
+  local pkg
+  for pkg in "${NVCHAD_PKGS[@]}"; do
+    dpkg -l | grep -q "^ii  $pkg " || yes | pkg install "$pkg" &>>"$LOG_FILE"
+  done
+  # Prettier globally (formatter used by conform)
+  npm list -g --depth=0 2>/dev/null | grep -q "prettier@" || npm install -g prettier &>>"$LOG_FILE"
+}
+
+_deploy_config() {
+  if [[ -d "$NVIM_DIR" ]]; then
+    local backup="${NVIM_DIR}.bak.$(date +%s)"
+    mv "$NVIM_DIR" "$backup"
+    log_info "Existing config backed up to $backup"
+  fi
+  mkdir -p "$(dirname "$NVIM_DIR")"
+  cp -r "${CORE_TOOL_DIR}/nvim" "$NVIM_DIR"
+}
+
+_lazy_sync() {
+  nvim --headless "+Lazy! sync" +qa &>>"$LOG_FILE"
+  nvim --headless "+Lazy! clean nvim-treesitter" +qa &>>"$LOG_FILE"
+  nvim --headless "+Lazy! install nvim-treesitter" +qa &>>"$LOG_FILE"
+}
+
+install_nvchad() {
+  separator
+  box_large "Installing NvChad (Neovim)"
+  separator
+  echo
+
   mkdir -p "$(dirname "$LOG_FILE")"
-  if yes | pkg install neovim &>>"$LOG_FILE"; then
-    log_success "Neovim installed"
-    return 0
-  else
-    log_error "Failed to install Neovim"
-    return 1
-  fi
+
+  _install_deps || return 1
+  _deploy_config
+
+  log_info "Syncing plugins (headless)..."
+  _lazy_sync || log_warn "Some plugins still syncing - open nvim once more"
+
+  log_success "NvChad installed! Start Neovim with 'nvim'"
+  return 0
 }
 
-install_neovim() {
-  if command -v nvim &>/dev/null; then
-    log_info "Neovim is already installed"
-    return 0
-  fi
-  log_info "Installing Neovim..."
-  loading "Installing Neovim" _install_neovim_impl
-}
-
-_uninstall_neovim_impl() {
-  mkdir -p "$(dirname "$LOG_FILE")"
-  if pkg uninstall neovim -y &>>"$LOG_FILE"; then
-    log_success "Neovim uninstalled"
-    return 0
-  else
-    log_error "Failed to uninstall Neovim"
-    return 1
-  fi
-}
-
-uninstall_neovim() {
-  if ! command -v nvim &>/dev/null; then
-    log_info "Neovim is not installed"
-    return 2
-  fi
-
-  confirm_remove_configs "Neovim" \
+uninstall_nvchad() {
+  confirm_remove_configs "NvChad config" \
     "$HOME/.config/nvim" \
     "$HOME/.local/share/nvim" \
-    "$HOME/.local/state/nvim" \
-    "$HOME/.cache/nvim"
+    "$HOME/.cache/nvim" \
+    "$HOME/.local/state/nvim"
 
-  log_info "Uninstalling Neovim..."
-  loading "Uninstalling Neovim" _uninstall_neovim_impl
+  read_confirm_default "Also remove the Neovim binary?" n answer
+  [[ "$answer" = y ]] && yes | pkg uninstall neovim &>>"$LOG_FILE"
+
+  log_success "NvChad removed"
+  return 0
 }
 
-_update_neovim_impl() {
-  loading "Updating Neovim" _do_neovim_update
+update_nvchad() {
+  install_nvchad
 }
 
-_do_neovim_update() {
-  mkdir -p "$(dirname "$LOG_FILE")"
-  yes | pkg upgrade neovim -y &>>"$LOG_FILE"
+reinstall_nvchad() {
+  uninstall_nvchad
+  install_nvchad
 }
 
-update_neovim() {
-  _check_update_needed "Neovim" "$(_get_installed_pkg_version neovim "Neovim")" "$(_get_remote_pkg_version neovim)" _update_neovim_impl
-}
-
-reinstall_neovim() {
-  uninstall_neovim
-  install_neovim
-}
-
-# ===== verb dispatcher (called by the Core engine) =====
-if [[ "${1:-}" == "install" ]]; then
-  install_neovim || exit $?
-  LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  bash "$LIB_DIR/lib-nvchad.sh" deploy || log_warn "NvChad setup failed (see log)"
-fi
-if [[ "${1:-}" == "uninstall" ]]; then
-  LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  bash "$LIB_DIR/lib-nvchad.sh" remove_config >/dev/null 2>&1 || true
-  uninstall_neovim
-fi
-if [[ "${1:-}" == "update" ]]; then update_neovim; fi
-if [[ "${1:-}" == "reinstall" ]]; then reinstall_neovim; fi
+if [[ "${1:-}" == "install" ]]; then install_nvchad; fi
+if [[ "${1:-}" == "uninstall" ]]; then uninstall_nvchad; fi
+if [[ "${1:-}" == "update" ]]; then update_nvchad; fi
+if [[ "${1:-}" == "reinstall" ]]; then reinstall_nvchad; fi
