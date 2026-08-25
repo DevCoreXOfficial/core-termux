@@ -158,6 +158,25 @@ engine_check_installed() {
   manifest_is_installed "$1"
 }
 
+# Link newly-installed binaries that landed in non-PATH directories.
+  _engine_link_new_bins() {
+    local hit=0 b d
+    while IFS= read -r b; do
+      [[ -z "$b" ]] && continue
+      command -v "$b" >/dev/null 2>&1 && continue
+      for d in "$HOME/.opencode/bin" "$HOME/.bun/bin" "$HOME/.cargo/bin" \
+               "$HOME/go/bin" "$HOME/.factory/bin" "$HOME/.antigravity/bin" \
+               "$HOME/bin" "$HOME/.local/bin"; do
+        if [[ -x "$d/$b" ]]; then
+          ln -sf "$d/$b" "$HOME/.local/bin/$b"
+          hit=1
+          break
+        fi
+      done
+    done < <(manifest_check_list "$dir")
+    [[ $hit -eq 1 ]] && log_ok "Binary linked into ~/.local/bin"
+  }
+
 # engine_install <tool-name>
 engine_install() {
   local name="$1"
@@ -232,26 +251,7 @@ engine_install() {
     fi
   fi
 
-  # Link newly-installed binaries that landed in non-PATH directories.
-  _engine_link_new_bins() {
-    local hit=0 b d
-    while IFS= read -r b; do
-      [[ -z "$b" ]] && continue
-      command -v "$b" >/dev/null 2>&1 && continue
-      for d in "$HOME/.opencode/bin" "$HOME/.bun/bin" "$HOME/.cargo/bin" \
-               "$HOME/go/bin" "$HOME/.factory/bin" "$HOME/.antigravity/bin" \
-               "$HOME/bin" "$HOME/.local/bin"; do
-        if [[ -x "$d/$b" ]]; then
-          ln -sf "$d/$b" "$HOME/.local/bin/$b"
-          hit=1
-          break
-        fi
-      done
-    done < <(manifest_check_list "$dir")
-    [[ $hit -eq 1 ]] && log_ok "Binary linked into ~/.local/bin"
-  }
-
-  case $rc in
+    case $rc in
     0)
       registry_record "$name"
       [[ "$CORE_ENV" != "termux" ]] && _engine_link_new_bins
