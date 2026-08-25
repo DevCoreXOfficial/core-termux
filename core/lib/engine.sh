@@ -25,7 +25,6 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/utils/version"
 import "@/utils/uninstall"
-import "@/lib/nodejs"
 
 # ---------------------------------------------------------------------------
 # Dependency handling
@@ -62,10 +61,11 @@ engine_ensure_deps() {
     if _dep_present "$check"; then
       continue
     fi
-    # Node.js has a dedicated cross-platform installer (NodeSource LTS on
-    # Ubuntu, nodejs-lts + corepack on Termux) instead of the distro package.
+    # Node.js reuses the canonical per-platform nodejs tool installers
+    # (NodeSource LTS on Ubuntu/WSL, nodejs-lts + corepack on Termux)
+    # instead of the distro package.
     if [[ "$dep" == "nodejs" ]]; then
-      loading "Installing dependency: Node.js LTS" ensure_nodejs_lts || {
+      loading "Installing dependency: Node.js LTS" _engine_install_nodejs || {
         log_error "Failed to install dependency Node.js LTS"
         return 1
       }
@@ -97,6 +97,15 @@ engine_ensure_deps() {
 #   termux            -> termux/
 #   ubuntu | wsl      -> ubuntu/  (WSL uses the Ubuntu installers)
 #   future distros    -> add a mapping here + their folder per tool
+
+# _engine_install_nodejs : delegate to the canonical nodejs tool installer.
+_engine_install_nodejs() {
+  local dir script
+  dir="$(manifest_tool_dir "nodejs")" || { log_error "nodejs tool not found"; return 1; }
+  script="$(engine_script_for "$dir")" || { log_error "no ${CORE_PLATFORM} installer for nodejs"; return 1; }
+  LOG_FILE="$CORE_CACHE/install_languages.log"
+  bash "$script" install
+}
 
 # _script_is_interactive <script> : prompts require a visible terminal,
 # so interactive scripts never get wrapped in the loading animation.

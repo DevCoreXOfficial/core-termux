@@ -83,7 +83,7 @@ _install_deps() {
 _install_deps_impl() {
   _ensure_nvim_recent || return 1
   export PATH="$HOME/.local/bin:$PATH"
-  source "$CORE_PATH/lib/nodejs.sh"; ensure_nodejs_lts
+  command -v node >/dev/null 2>&1 || bash "$CORE_PATH/tools/nodejs/ubuntu/install.sh" install
   pm_install "${NVCHAD_PKGS[@]}" build-essential
   command -v prettier >/dev/null 2>&1 || _npm_g install -g prettier
 }

@@ -21,10 +21,17 @@ _npm_g() {
 }
 
 _impl_require_npm() {
-  # Shared Node.js LTS installer (NodeSource on Ubuntu/WSL).
-  source "$CORE_PATH/lib/nodejs.sh"
-  ensure_nodejs_lts
-  command -v npm >/dev/null 2>&1 || { log_error "npm still unavailable after Node.js install"; exit 1; }
+  command -v npm >/dev/null 2>&1 && return 0
+  # Delegate to Core's canonical Node.js installer (platform-aware).
+  if [[ -n "${TERMUX_VERSION:-}" || "${PREFIX:-}" == *com.termux* ]]; then
+    yes | pkg install -y nodejs-lts &>>"$LOG_FILE"
+    command -v corepack >/dev/null 2>&1 && corepack enable &>/dev/null || true
+  else
+    mkdir -p "$HOME/.local/bin"
+    bash "$CORE_PATH/tools/nodejs/ubuntu/install.sh" install
+    export PATH="$HOME/.local/bin:$PATH"
+  fi
+  command -v npm >/dev/null 2>&1 || { log_error "npm unavailable after Node.js install"; exit 1; }
 }
 
 _impl_install() {
