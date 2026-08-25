@@ -85,6 +85,13 @@ engine_ensure_deps() {
 #   termux            -> termux/
 #   ubuntu | wsl      -> ubuntu/  (WSL uses the Ubuntu installers)
 #   future distros    -> add a mapping here + their folder per tool
+
+# _script_is_interactive <script> : prompts require a visible terminal,
+# so interactive scripts never get wrapped in the loading animation.
+_script_is_interactive() {
+  grep -qE 'read_(confirm|select|input|secret|multiline)' "$1"
+}
+
 engine_platform_dir() {
   case "$CORE_PLATFORM" in
     termux) echo "termux" ;;
@@ -178,7 +185,11 @@ engine_install() {
       printf '\n# Added by Core\nexport PATH="$HOME/.local/bin:$PATH"\n' >>"$rc_file"
       log_ok "Added ~/.local/bin to your PATH ($rc_file)"
     fi
-    loading "Installing $display" _engine_run "$script" install
+    if _script_is_interactive "$script"; then
+      _engine_run "$script" install
+    else
+      loading "Installing $display" _engine_run "$script" install
+    fi
     rc=$?
 
     # Official installers sometimes exit non-zero on non-critical errors
@@ -238,19 +249,36 @@ engine_uninstall() {
     if [[ "$CORE_ENV" == "termux" ]]; then
       _engine_run "$script" uninstall
       rc=$?
+    elif _script_is_interactive "$script"; then
+      _engine_run "$script" uninstall
+      rc=$?
     else
       loading "Removing $display" _engine_run "$script" uninstall
       rc=$?
     fi
     # Some upstream uninstallers exit non-zero even when they succeed;
     # absence of the binary is the ground truth.
-    if [[ "$CORE_ENV" != "termux" ]] && manifest_is_installed "$dir"; then
-      log_warn "Binary still present - removing it directly"
+    # Safety net ONLY on failure: remove user-owned leftovers; system
+    # packages (e.g. /usr/bin/nvim from apt) are reported instead.
+    if [[ $rc -ne 0 && "$CORE_ENV" != "termux" ]] && manifest_is_installed "$dir"; then
+      log_warn "Uninstall incomplete - cleaning user-owned leftovers"
+      local leftover=0 b bpath
       while IFS= read -r b; do
         [[ -z "$b" ]] && continue
-        command -v "$b" >/dev/null 2>&1 && rm -f "$(command -v "$b")"
+        command -v "$b" >/dev/null 2>&1 || continue
+        bpath="$(command -v "$b")"
+        case "$bpath" in
+          "$HOME"/*)
+            rm -f "$bpath"
+            ;;
+          *)
+            leftover=1
+            list_item "System binary kept: $bpath (remove with your package manager)"
+            ;;
+        esac
       done < <(manifest_check_list "$dir")
-      ! manifest_is_installed "$dir" && rc=0
+      manifest_is_installed "$dir" || rc=0
+      [[ $leftover -eq 1 ]] && rc=0   # nothing more we can do; not an error
     fi
   else
     rc=0

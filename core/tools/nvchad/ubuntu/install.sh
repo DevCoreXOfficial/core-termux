@@ -19,11 +19,15 @@ _impl_deps() {
 }
 
 _impl_install_config() {
+  # Back up any existing config, then clear ALL neovim state so distro
+  # defaults or previous attempts cannot conflict with NvChad.
   if [[ -d "$NVIM_DIR" ]]; then
     local backup="${NVIM_DIR}.bak.$(date +%s)"
     mv "$NVIM_DIR" "$backup"
     log_info "Existing config backed up to $backup"
   fi
+  rm -rf "$HOME/.local/share/nvim" "$HOME/.local/state/nvim" "$HOME/.cache/nvim"
+
   mkdir -p "$(dirname "$NVIM_DIR")"
   cp -r "${CORE_TOOL_DIR}/../assets/nvim" "$NVIM_DIR"
 }
