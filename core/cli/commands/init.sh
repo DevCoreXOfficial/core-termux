@@ -156,7 +156,7 @@ configure_next() {
 			DEV_DEPS+=("@next/swc-linux-arm64-gnu" "lightningcss-linux-arm64-gnu" "@tailwindcss/oxide-linux-arm64-gnu" "@unrs/resolver-binding-linux-arm64-gnu")
 		fi
 	else
-		log_info "Turbopack requires the glibc toolchain (core install npm --turbopack)"
+		log_info "Turbopack requires the glibc toolchain (core install turbopack)"
 		read_confirm_default "Install Turbopack toolchain now?" "n" INSTALL_TURBO
 		if [[ "$INSTALL_TURBO" == "y" ]]; then
 			import "@/tools/npm/turbopack/install"

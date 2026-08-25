@@ -80,7 +80,7 @@ printf "    ${D_CYAN}%-12s${D_NC} %s\n" "voice" "Speech-to-agent via microphone 
   list_item "${D_CYAN}core search${D_NC}            all tools with install status"
   list_item "${D_CYAN}core search <text>${D_NC}     filter — e.g. ${D_CYAN}core search cloud${D_NC}, ${D_CYAN}core search js${D_NC}"
   list_item "${D_CYAN}core install nvchad${D_NC}    editor + NvChad in one shot"
-  list_item "${D_CYAN}core install zsh${D_NC}       shell + Oh My Zsh + plugins in one shot"
+  list_item "${D_CYAN}core install oh-my-zsh${D_NC}       shell + Oh My Zsh + plugins in one shot"
   echo
   echo
   separator_section "Help"

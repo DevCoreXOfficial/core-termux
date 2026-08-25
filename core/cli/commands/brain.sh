@@ -152,7 +152,7 @@ _brain_editor() {
 
 	if ! command -v nvim &>/dev/null; then
 		log_error "Neovim not found"
-		list_item "Install it: ${D_CYAN}core install editor${D_NC}"
+		list_item "Install it: ${D_CYAN}core install nvchad${D_NC}"
 		return 1
 	fi
 
@@ -1243,7 +1243,7 @@ brain_edit() {
 
 	if [[ -z "$editor" ]]; then
 		log_error "No editor found"
-		list_item "Install one: ${D_CYAN}core install editor${D_NC}"
+		list_item "Install one: ${D_CYAN}core install nvchad${D_NC}"
 		return 1
 	fi
 
