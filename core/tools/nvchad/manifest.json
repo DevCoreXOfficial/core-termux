@@ -25,14 +25,6 @@
       }
     },
     {
-      "name": "neovim",
-      "check": "nvim",
-      "pkg": {
-        "termux": "neovim",
-        "ubuntu": "neovim"
-      }
-    },
-    {
       "name": "nodejs",
       "check": "node",
       "pkg": {

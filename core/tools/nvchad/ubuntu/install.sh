@@ -16,13 +16,49 @@ core_detect_platform
 LOG_FILE="$CORE_CACHE/install_editors.log"
 NVIM_DIR="$HOME/.config/nvim"
 
-NVCHAD_PKGS=(git neovim nodejs npm lua-language-server ripgrep stylua tree-sitter curl wget)
+NVCHAD_PKGS=(git nodejs npm lua-language-server ripgrep stylua tree-sitter curl wget)
+# Neovim >= 0.10 is required (config uses vim.uv); distro packages ship 0.9.x,
+# so we install the official upstream build instead of the apt one.
+
+_ensure_nvim_recent() {
+  local need="0.10"
+  local have=""
+  command -v nvim >/dev/null 2>&1 && have="$(nvim --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -1)"
+  if [[ -n "$have" ]] && [[ "$(printf '%s\n%s\n' "$need" "$have" | sort -V | head -1)" == "$need" ]]; then
+    return 0
+  fi
+
+  loading "Installing Neovim >= 0.10 (official upstream build)" _ensure_nvim_recent_impl
+}
+
+_ensure_nvim_recent_impl() {
+  local tag arch dir
+  case "$(uname -m)" in
+    x86_64) arch="x86_64" ;;
+    aarch64) arch="arm64" ;;
+    *) arch="$(uname -m)" ;;
+  esac
+  tag=$(curl -fsSL https://api.github.com/repos/neovim/neovim/releases/latest \
+          | grep '"tag_name"' | cut -d'"' -f4)
+  [[ -z "$tag" ]] && { log_error "Could not resolve latest Neovim release"; return 1; }
+
+  dir="$HOME/.local/opt/nvim-${tag}"
+  mkdir -p "$dir" "$HOME/.local/bin"
+  curl -fsSL "https://github.com/neovim/neovim/releases/download/${tag}/nvim-linux-${arch}.tar.gz" \
+    | tar -C "$HOME/.local/opt" -xz &>>"$LOG_FILE" || { log_error "Download failed"; return 1; }
+
+  # Atomic-ish swap so an interrupted run never leaves a broken link.
+  rm -rf "$dir.old"; [[ -d "$dir" ]] || { log_error "Extraction failed"; return 1; }
+  ln -sfn "${dir}/bin/nvim" "$HOME/.local/bin/nvim"
+}
 
 _install_deps() {
   loading "Installing NvChad dependencies" _install_deps_impl
 }
 
 _install_deps_impl() {
+  _ensure_nvim_recent || return 1
+  export PATH="$HOME/.local/bin:$PATH"
   pm_install "${NVCHAD_PKGS[@]}" build-essential
   command -v prettier >/dev/null 2>&1 || _npm_g install -g prettier
 }
@@ -66,7 +102,11 @@ uninstall_nvchad() {
     "$HOME/.local/state/nvim"
 
   read_confirm_default "Also remove the Neovim binary?" n answer
-  [[ "$answer" = y ]] && pm_remove neovim
+  if [[ "$answer" = y ]]; then
+    rm -f "$HOME/.local/bin/nvim"
+    rm -rf "$HOME/.local/opt"/nvim-* 2>/dev/null
+    pm_remove neovim 2>/dev/null || true
+  fi
 
   log_success "NvChad removed"
   return 0
