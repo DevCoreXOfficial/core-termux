@@ -4,6 +4,7 @@ import "@/utils/log"
 import "@/utils/colors"
 import "@/lib/manifest"
 import "@/lib/registry"
+import "@/lib/platform"
 
 # core search              -> help for this command
 # core search --all | -a   -> every tool with install status
@@ -44,12 +45,17 @@ search_main() {
   fi
 
   local -a rows=()
-  local tool_dir tool display check installed desc tags
+  local tool_dir tool display check installed desc tags hidden_count=0
 
   for tool_dir in "$CORE_PATH/tools/"*/; do
     [[ -f "$tool_dir/manifest.json" ]] || continue
     # Style tools live under `core style`, not the tool catalog.
     [[ "$(manifest_field "$tool_dir" '.style // false')" == "true" ]] && continue
+    # Platform filter: hide tools that cannot run here (--all overrides).
+    if [[ $all -eq 0 ]] && ! manifest_supports_platform "$tool_dir"; then
+      ((hidden_count++))
+      continue
+    fi
     tool="$(basename "$tool_dir")"
     display="$(manifest_display "$tool_dir")"
     # Ground truth = the binary/config itself. The registry is bookkeeping,
@@ -101,5 +107,7 @@ search_main() {
   table_end
   echo
   list_item "Install: ${D_CYAN}core install <tool>${D_NC}   Docs: ${D_CYAN}core show <tool>${D_NC}"
+  [[ $hidden_count -gt 0 && "$CORE_ENV" != "termux" ]] && \
+    list_item "${D_GRAY}${hidden_count} Termux-only tool(s) hidden — see them with: core search --all${NC}"
   echo
 }
