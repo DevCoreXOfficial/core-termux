@@ -61,7 +61,7 @@ core_help() {
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "uninstall" "Remove installed tools"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "reinstall" "Uninstall + install tools"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "open" "Open documentation in browser"
-  printf "    ${D_CYAN}%-12s${D_NC} %s\n" "list" "List available tools"
+  printf "    ${D_CYAN}%-12s${D_NC} %s\n" "search" "Search tools (names, descriptions, tags)"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "pg" "PostgreSQL database manager"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "init" "Configure existing projects"
   printf "    ${D_CYAN}%-12s${D_NC} %s\n" "style" "Terminal look & feel (font, banner, cursor)"
