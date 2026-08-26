@@ -181,7 +181,7 @@ engine_check_installed() {
         done
       fi
     done < <(manifest_check_list "$dir")
-    [[ $hit -eq 1 ]] && log_ok "Binaries linked into ~/.local/bin"
+    [[ $hit -eq 1 ]] && log_success "Binaries linked into ~/.local/bin"
   }
 
 # engine_install <tool-name>
@@ -237,7 +237,7 @@ engine_install() {
     local path_line='export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"'
     if ! grep -qs 'Added by Core' "$rc_file"; then
       printf '\n# Added by Core\n%s\n' "$path_line" >>"$rc_file"
-      log_ok "Added tool binary paths to $rc_file"
+      log_success "Added tool binary paths to $rc_file"
       export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
     fi
     if _script_is_interactive "$script"; then

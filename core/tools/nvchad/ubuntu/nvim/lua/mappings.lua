@@ -118,9 +118,5 @@ vim.api.nvim_create_autocmd("FileType", {
       map("n", "<leader>fs", ":%!shfmt<CR>", vim.tbl_extend("force", bopts, { desc = "Format with shfmt" }))
     end
 
-    -- SQL
-    if ft == "sql" then
-      map("n", "<leader>fq", ":w<CR>:%!psqlformat --spaces=2 %<CR>", vim.tbl_extend("force", bopts, { desc = "Format SQL" }))
-    end
   end,
 })

@@ -41,14 +41,6 @@
       }
     },
     {
-      "name": "perl",
-      "check": "perl",
-      "pkg": {
-        "termux": "perl",
-        "ubuntu": "perl"
-      }
-    },
-    {
       "name": "curl",
       "check": "curl",
       "pkg": {

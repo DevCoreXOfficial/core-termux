@@ -78,7 +78,7 @@ NvChad is a modern Neovim configuration that provides a complete IDE-like experi
 
 ## Dependencies
 
-- Neovim, git, nodejs-lts, python, perl, curl, wget
+- Neovim, git, nodejs-lts, python, curl, wget
 - lua-language-server, ripgrep, stylua, tree-sitter
 
 ## Install

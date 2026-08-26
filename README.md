@@ -539,7 +539,7 @@ Run `core search --all` for the complete live catalog. Notable bundles:
 
 ### Languages & runtimes
 
-`nodejs`, `python`, `rust`, `golang`, `bun`, `clang`, `php`, `perl`, `typescript` — installed from `pkg` on Termux and from apt/official channels on Ubuntu/WSL.
+`nodejs`, `python`, `rust`, `golang`, `bun`, `clang`, `php`, `typescript` — installed from `pkg` on Termux and from apt/official channels on Ubuntu/WSL.
 
 ### Essentials
 
