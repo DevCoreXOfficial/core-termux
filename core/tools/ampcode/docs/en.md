@@ -9,9 +9,7 @@
 
 Amp is the frontier agent, for people who want the most out of an agent, rather than keeping their old ways.
 
-## How to use it?
-
-See https://ampcode.com/manual for full usage.
+Full documentation: https://ampcode.com/manual
 
 ## Notes
 

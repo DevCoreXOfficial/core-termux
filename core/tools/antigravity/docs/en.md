@@ -9,9 +9,7 @@
 
 Lightweight, terminal-first surface for Antigravity agents
 
-## How to use it?
-
-See https://antigravity.google for full usage.
+Full documentation: https://antigravity.google
 
 ## Notes
 

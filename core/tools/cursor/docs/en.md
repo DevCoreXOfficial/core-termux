@@ -9,9 +9,7 @@
 
 AI-powered coding agent that runs in your terminal
 
-## How to use it?
-
-See https://cursor.com/cli for full usage.
+Full documentation: https://cursor.com/cli
 
 ## Notes
 

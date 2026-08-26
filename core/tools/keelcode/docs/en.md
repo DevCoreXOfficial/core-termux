@@ -8,9 +8,7 @@
 
 The hosted coding agent for your terminal — inspect a project, edit files, run commands, search the web, use MCP servers
 
-## How to use it?
-
-See the project page for full usage.
+Full documentation: project page
 
 ## Notes
 

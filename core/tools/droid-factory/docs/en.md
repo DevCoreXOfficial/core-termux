@@ -9,9 +9,7 @@
 
 AI coding agent by Factory (Factory CLI)
 
-## How to use it?
-
-See https://factory.ai for full usage.
+Full documentation: https://factory.ai
 
 ## Notes
 
