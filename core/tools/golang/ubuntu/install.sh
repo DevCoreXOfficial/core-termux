@@ -13,6 +13,22 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  pm_install golang-go
+
+  # Go environment (user dirs + go/bin on PATH) in every shell config.
+  for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
+    [[ -f "$rc" ]] || continue
+    grep -q 'GOMODCACHE' "$rc" && continue
+    cat >>"$rc" <<'GOENV'
+
+# Added by Core - Go environment
+export GOPATH="$HOME/.local/go"
+export GOCACHE="$HOME/.cache/go"
+export GOMODCACHE="$GOPATH/pkg/mod"
+export PATH="$PATH:$HOME/go/bin:$GOPATH/bin"
+GOENV
+    log_ok "Go environment added to $rc"
+  done
   mkdir -p "$HOME/.local/bin"
   pm_install golang-go
 }

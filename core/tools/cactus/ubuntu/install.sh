@@ -9,14 +9,16 @@ CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/lib/platform"
+
+core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install_cactus.log}"
 CACTUS_INSTALL_DIR="${HOME}/.local/share/cactus"
 CACTUS_REPO="https://github.com/cactus-compute/cactus"
 
 _impl_deps() {
-  pm_install python3 python3-venv python3-pip cmake build-essential \\
-    libcurl4-openssl-dev git curl
+  pm_install python3 python3-venv python3-pip cmake build-essential libcurl4-openssl-dev git curl
 }
 
 _impl_clone() {

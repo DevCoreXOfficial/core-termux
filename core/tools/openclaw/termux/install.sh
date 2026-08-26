@@ -60,6 +60,13 @@ _install_openclaw_bun_impl() {
 }
 
 install_openclaw() {
+
+  # Avoid Bonjour/mDNS noise from the upstream CLI.
+  for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
+    [[ -f "$rc" ]] || continue
+    grep -qxF 'export OPENCLAW_DISABLE_BONJOUR=1' "$rc" || \
+      printf '\n# Added by Core\nexport OPENCLAW_DISABLE_BONJOUR=1\n' >>"$rc"
+  done
   if command -v openclaw &>/dev/null; then
     log_info "OpenClaw is already installed"
     return 2
