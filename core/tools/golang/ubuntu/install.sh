@@ -27,7 +27,7 @@ export GOCACHE="$HOME/.cache/go"
 export GOMODCACHE="$GOPATH/pkg/mod"
 export PATH="$PATH:$HOME/go/bin:$GOPATH/bin"
 GOENV
-    log_ok "Go environment added to $rc"
+    log_success "Go environment added to $rc"
   done
   mkdir -p "$HOME/.local/bin"
   pm_install golang-go
