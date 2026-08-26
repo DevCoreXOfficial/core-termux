@@ -3,61 +3,17 @@
 - **Name:** TypeScript
 - **Tags:** language, javascript, compiler
 - **Project:** https://www.typescriptlang.org
+- **Source:** https://github.com/microsoft/TypeScript
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Typed superset of JavaScript that compiles to plain JavaScript
+TypeScript is a superset of JavaScript that compiles to clean JavaScript output.
 
-**Package:** typescript  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://www.typescriptlang.org  
-**Type:** Node.js global module (npm)  
-**License:** Apache 2.0
-
-### Description
-
-TypeScript adds optional static typing, classes, and modules to JavaScript, enabling better tooling and catching errors at compile time. It compiles to clean, readable JavaScript that runs anywhere JavaScript runs.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-
-### Install
-
-```bash
-core install typescript
-```
-
-### Uninstall
-
-```bash
-core uninstall typescript
-```
-
-### Update
-
-```bash
-core update typescript
-```
-
-### Notes
-
-- Command: `tsc`
-- Installed as a global npm package
-- Required for `core init` templates (Next.js, React, Express, NestJS)
-
-## How to use it?
-
-```bash
-core install typescript      # install
-core update typescript       # update
-core uninstall typescript    # remove
-```
+Full documentation: https://www.typescriptlang.org
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show typescript:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show typescript:es`.

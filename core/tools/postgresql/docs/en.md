@@ -3,63 +3,17 @@
 - **Name:** PostgreSQL
 - **Tags:** db, sql, server
 - **Project:** https://www.postgresql.org
+- **Source:** https://github.com/postgres/postgres
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-Advanced open-source relational database
+Mirror of the official PostgreSQL GIT repository. Note that this is just a *mirror* - we don't work with pull requests on github. To contribute, please see https://wiki.postgresql.org/wiki/Submitting_a_Patch
 
-**Package:** postgresql  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://www.postgresql.org  
-**Type:** Database (pkg)  
-**License:** PostgreSQL License
-
-### Description
-
-PostgreSQL is a powerful, open-source object-relational database system with over 30 years of active development. It has a strong reputation for reliability, feature robustness, and performance. Core includes a dedicated manager (`core pg`) for starting, stopping, and managing PostgreSQL instances.
-
-### Dependencies
-
-- Installed via pkg
-- Data directory managed by `core pg`
-
-### Install
-
-```bash
-core install postgresql
-```
-
-### Uninstall
-
-```bash
-core uninstall postgresql
-```
-
-### Update
-
-```bash
-core update postgresql
-```
-
-### Notes
-
-- Managed via `core pg` commands (start, stop, restart, status, init, create, drop, list, shell)
-- Logs: `~/.cache/core-termux/postgresql.log`
-- Automatic data directory detection
-- Support for existing installations
-
-## How to use it?
-
-```bash
-core install postgresql      # install
-core update postgresql       # update
-core uninstall postgresql    # remove
-```
+Full documentation: https://www.postgresql.org
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show postgresql:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show postgresql:es`.

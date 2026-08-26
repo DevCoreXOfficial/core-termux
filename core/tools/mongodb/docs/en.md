@@ -3,60 +3,28 @@
 - **Name:** MongoDB
 - **Tags:** db, nosql, documents
 - **Project:** https://www.mongodb.com
+- **Source:** https://github.com/mongodb/mongo
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-NoSQL document database for modern applications
-
-**Package:** mongodb  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://www.mongodb.com  
-**Type:** Database (pkg)  
-**License:** Server Side Public License (SSPL)
-
-### Description
-
-MongoDB is a source-available, cross-platform, document-oriented database program. Classified as a NoSQL database product, MongoDB uses JSON-like documents with optional schemas, making it ideal for modern application development.
-
-### Dependencies
-
-- Installed via pkg
-
-### Install
-
-```bash
-core install mongodb
-```
-
-### Uninstall
-
-```bash
-core uninstall mongodb
-```
-
-### Update
-
-```bash
-core update mongodb
-```
-
-### Notes
-
-- Command: `mongod`, `mongosh`
-- Data directory: `$PREFIX/var/lib/mongodb/`
+The MongoDB Database
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install mongodb      # install
-core update mongodb       # update
-core uninstall mongodb    # remove
+$ ./mongod --help
 ```
+
+To run a single server database:
+```
+
+Full documentation: https://www.mongodb.com
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show mongodb:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show mongodb:es`.

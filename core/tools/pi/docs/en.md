@@ -2,64 +2,28 @@
 
 - **Name:** Pi Coding Agent
 - **Tags:** ai, agent, coding
+- **Source:** https://github.com/badlogic/pi-mono
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-Minimal terminal coding harness — adapt Pi to your workflows
-
-**Package:** @earendil-works/pi-coding-agent  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://github.com/earendil-works/pi  
-**Type:** AI coding agent (npm global package)  
-**License:** MIT
-
-### Description
-
-Pi is a minimal terminal coding harness. Adapt Pi to your workflows, not the other way around.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-- npm
-- ripgrep, git, fd
-
-### Install
-
-```bash
-core install pi
-```
-
-### Uninstall
-
-```bash
-core uninstall pi
-```
-
-### Update
-
-```bash
-core update pi
-```
-
-### Notes
-
-- Installed as a global npm package: `@earendil-works/pi-coding-agent`
-- Command: `pi`
-- Uses `ignore-scripts` flag for Android compatibility
-- Requires Node.js LTS (installed automatically if missing)
+AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install pi      # install
-core update pi       # update
-core uninstall pi    # remove
+VERSION="<release-version>"
+tar -xzf "pi-${VERSION}-source.tar.gz"
+cd "pi-${VERSION}"
+./scripts/build-binaries.sh --offline-model-data --platform linux-x64 --out "$PWD/out"
 ```
+
+Full documentation: https://github.com/badlogic/pi-mono
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show pi:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show pi:es`.

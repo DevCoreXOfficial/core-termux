@@ -2,61 +2,29 @@
 
 - **Name:** Markserv
 - **Tags:** markdown, preview, server
+- **Source:** https://github.com/markserv/markserv
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Markdown live-preview server
-
-**Package:** markserv  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://github.com/nice-registry/markserv  
-**Type:** Node.js global module (npm)  
-**License:** MIT
-
-### Description
-
-Markserv is a live-preview server for Markdown files. It renders Markdown as HTML in the browser with automatic reloading when the file changes, making it perfect for writing documentation, notes, or README files.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-
-### Install
-
-```bash
-core install markserv
-```
-
-### Uninstall
-
-```bash
-core uninstall markserv
-```
-
-### Update
-
-```bash
-core update markserv
-```
-
-### Notes
-
-- Command: `markserv`
-- Supports custom ports and themes
-- Live reload on file changes
+🏁  serve markdown as html (GitHub style), index directories, live-reload as you edit
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install markserv      # install
-core update markserv       # update
-core uninstall markserv    # remove
+# NPM
+$ npm i -g markserv
+
+# Yarn
+$ yarn global add markserv
 ```
+
+Full documentation: https://github.com/markserv/markserv
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show markserv:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show markserv:es`.

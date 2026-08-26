@@ -3,62 +3,32 @@
 - **Name:** Ollama
 - **Tags:** ai, llm, local
 - **Project:** https://ollama.com
-- **Dependencies:** None required by Core
+- **Source:** https://github.com/ollama/ollama
+- **Dependencies:** zstd
 
 ## What is it?
 
-Run open-source LLMs locally on Termux
-
-**Package:** ollama  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://ollama.com  
-**Type:** Local LLM runtime (pkg)  
-**License:** MIT
-
-### Description
-
-Ollama allows you to run open-source LLMs locally on Termux. It supports a wide range of models including Llama, Mistral, Gemma, Qwen, DeepSeek, and many more. All processing is done locally with no data sent to external servers.
-
-### Dependencies
-
-- Installed via pkg (termux package)
-
-### Install
-
-```bash
-core install ollama
-```
-
-### Uninstall
-
-```bash
-core uninstall ollama
-```
-
-### Update
-
-```bash
-core update ollama
-```
-
-### Notes
-
-- Runs entirely locally on your device
-- Supports models from Ollama library
-- Command: `ollama`
-- Model storage: `~/.ollama/`
+Get up and running with Kimi-K2.6, GLM-5.2, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install ollama      # install
-core update ollama       # update
-core uninstall ollama    # remove
+ollama
 ```
+
+You'll be prompted to run a model or connect Ollama to your existing agents or applications such as `Claude Code`, `OpenClaw`, `OpenCode` , `Codex`, `Copilot`,  and more.
+
+### Coding
+
+To launch a specific integration:
+```
+
+Full documentation: https://ollama.com
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show ollama:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show ollama:es`.

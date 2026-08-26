@@ -2,62 +2,31 @@
 
 - **Name:** Localtunnel
 - **Tags:** tunnel, localhost, expose
-- **Project:** https://theboroer.github.io/localtunnel-www/
+- **Source:** https://github.com/localtunnel/server
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Expose localhost to the internet securely
-
-**Package:** localtunnel  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://github.com/localtunnel/localtunnel  
-**Type:** Node.js global module (npm)  
-**License:** MIT
-
-### Description
-
-Localtunnel exposes your local development server to the internet with a public URL. It's perfect for testing webhooks, sharing progress with clients, and mobile testing. Includes an Android fix to use `termux-open-url` instead of `openurl`.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-
-### Install
-
-```bash
-core install localtunnel
-```
-
-### Uninstall
-
-```bash
-core uninstall localtunnel
-```
-
-### Update
-
-```bash
-core update localtunnel
-```
-
-### Notes
-
-- Command: `lt`
-- Android fix applied automatically to use `termux-open-url`
-- No configuration required
+server for localtunnel.me
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install localtunnel      # install
-core update localtunnel       # update
-core uninstall localtunnel    # remove
+# pick a place where the files will live
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+npm install
+
+# server set to run on port 1234
+bin/server --port 1234
 ```
+
+Full documentation: https://github.com/localtunnel/server
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show localtunnel:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show localtunnel:es`.

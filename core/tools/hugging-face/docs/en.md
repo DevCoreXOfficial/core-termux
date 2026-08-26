@@ -3,145 +3,85 @@
 - **Name:** Hugging Face CLI
 - **Tags:** ai, models, datasets, ml
 - **Project:** https://huggingface.co/docs/huggingface_hub
-- **Dependencies:** None required by Core
+- **Source:** https://github.com/huggingface/huggingface_hub
+- **Dependencies:** python, pip
 
 ## What is it?
 
-The official Hugging Face Hub CLI — download, upload, and manage models, datasets, Spaces, buckets, repos, papers, collections, Jobs, Inference Endpoints, sandboxes, webhooks, and skills from your terminal.
-
-**Package:** `hf` (PyPI)  
-**Author:** Hugging Face  
-**Official:** https://huggingface.co/docs/hub/  
-**Type:** Hugging Face Hub CLI (Python venv)  
-**License:** Apache 2.0
-
-### What it is
-
-`hf` is the official command-line interface for the Hugging Face Hub. It replaces the deprecated `huggingface-cli` command and provides a single tool for everything Hub-related: downloading and uploading models/datasets, managing Spaces and buckets, running Jobs, deploying Inference Endpoints, opening sandboxes, handling discussions and webhooks, browsing papers and collections, managing the local cache, and more.
-
-### Install via core
-
-```bash
-core install hugging-face
-```
-
-Under the hood this runs the official installer:
-
-```bash
-curl -LsSf https://hf.co/cli/install.sh | bash
-```
-
-The installer is idempotent and always installs/upgrades to the **latest** version. It builds a Python venv at `~/.hf-cli`, symlinks the `hf` binary into `~/.local/bin/hf`, and automatically installs the `hf-cli` AI-agent skill (for Claude and other agent frameworks).
-
-> **Note:** during a manual install you can pass `exclude-skill` to skip installing the AI-agent skill.
-
-### Authentication
-
-Most Hub operations require a token from https://huggingface.co/settings/tokens.
-
-```bash
-hf auth login    # browser-based login, or paste a token
-hf auth whoami   # check which account you are logged in as
-hf auth list     # list all stored access tokens
-hf auth switch   # switch between access tokens
-```
-
-The `HF_TOKEN` environment variable is the recommended way to authenticate for scripting (over `token`):
-
-```bash
-export HF_TOKEN=hf_...
-```
-
-### Main commands
-
-| Command | Description |
-|---------|-------------|
-| `hf auth ...` | Manage authentication (login, logout, whoami, switch, token) |
-| `hf download REPO_ID` | Download files from the Hub |
-| `hf upload REPO_ID` | Upload a file or a folder to the Hub |
-| `hf cp SRC` | Copy files between local paths, repositories, and buckets |
-| `hf sync` | Sync files between a local directory and a bucket |
-| `hf models ...` | Interact with models on the Hub |
-| `hf datasets ...` | Interact with datasets on the Hub |
-| `hf spaces ...` | Interact with Spaces on the Hub |
-| `hf buckets ...` | Interact with buckets |
-| `hf jobs ...` | Run and manage Jobs on the Hub |
-| `hf endpoints ...` | Manage Hugging Face Inference Endpoints |
-| `hf repos ...` | Manage repos on the Hub |
-| `hf discussions ...` | Manage discussions and pull requests on the Hub |
-| `hf collections ...` | Interact with collections on the Hub |
-| `hf papers ...` | Interact with papers on the Hub |
-| `hf cache ...` | Manage the local cache directory |
-| `hf sandbox ...` | Run and manage sandboxes on Hugging Face Jobs |
-| `hf webhooks ...` | Manage webhooks on the Hub |
-| `hf skills ...` | Manage skills for AI assistants |
-| `hf env` | Print information about the environment |
-| `hf update` | Update the `hf` CLI to the latest version |
-| `hf version` | Print information about the `hf` version |
-
-Use `hf <command> --help` for full options, descriptions, and examples.
-
-### Usage examples
-
-```bash
-## Authenticate
-hf auth login
-
-## Download a model
-hf download deepseek-ai/DeepSeek-R1
-
-## Download a dataset
-hf download HuggingFaceH4/ultrachat_200k --type dataset
-
-## Upload a single file to a model repo
-hf upload your-username/your-model model.safetensors
-
-## Upload a folder to a dataset repo
-hf upload your-username/your-dataset ./data --type dataset
-
-## Run a Job on HF infrastructure (detached, GPU flavor, streaming the token)
-hf jobs run --detach --expose 8000 --flavor a10g-small -s HF_TOKEN vllm/vllm-openai vllm serve LiquidAI/LFM2.5-8B-A1B --max-model-len 8192
-
-## Search models
-hf models search llama
-
-## Inspect the local cache
-hf cache list
-
-## Update the CLI itself
-hf update
-```
-
-### Termux notes
-
-- Installs into a Python venv at `~/.hf-cli` with the `hf` binary symlinked at `~/.local/bin/hf`.
-- Cache and config live under `~/.cache/huggingface` and `~/.config/huggingface`.
-- The AI-agent skill is installed at `~/.agents/skills/hf-cli` and `~/.claude/skills/hf-cli`.
-- `curl` and `python` are the only package dependencies; they are installed automatically if missing.
-
-### Uninstall / Update
-
-```bash
-core uninstall hugging-face
-core update hugging-face
-```
-
-Uninstalling asks whether to also remove the cache/config directories. Updating re-runs the official installer, which always upgrades to the latest version.
-
-### Installation method (v5)
-
-Global pip install of `huggingface_hub` **without venv**. Installed with `--no-deps` because `hf-xet` (hard dep on aarch64) has no Termux wheel and hangs on Rust builds; its real pure-python deps are installed explicitly. Xet transfers are disabled via `$PREFIX/etc/profile.d/huggingface.sh` (`HF_HUB_DISABLE_XET=1`) so Xet-hosted repos download over classic HTTP.
+The official CLI and Python client for the Hugging Face Hub.
 
 ## How to use it?
 
+### Quick start
+
+Install the [`hf` CLI](https://huggingface.co/docs/huggingface_hub/en/guides/cli) with the standalone installer:
+
 ```bash
-core install hugging-face      # install
-core update hugging-face       # update
-core uninstall hugging-face    # remove
+# On macOS and Linux.
+curl -LsSf https://hf.co/cli/install.sh | bash
 ```
+
+```powershell
+# On Windows.
+powershell -ExecutionPolicy ByPass -c "irm https://hf.co/cli/install.ps1 | iex"
+```
+
+Log in, then start working with the Hub:
+
+```bash
+# Log in (use --token $HF_TOKEN in non-interactive environments)
+hf auth login
+
+# Find models served by Inference Providers
+hf models ls --warm
+
+# Download a model
+hf download Qwen/Qwen3-0.6B
+
+# Upload files to your own repo
+hf upload username/my-cool-model ./model.safetensors
+
+# Sync a local folder to a storage bucket
+hf buckets sync ./checkpoints hf://buckets/username/my-bucket
+
+# Run a job on Hugging Face infrastructure
+hf jobs run python:3.12 python -c "print('Hello from the cloud!')"
+
+# Discover everything else
+hf --help
+```
+
+The Hub uses tokens to authenticate applications (see [docs](https://huggingface.co/docs/hub/security-tokens)). Check out the [CLI guide](https://huggingface.co/docs/huggingface_hub/en/guides/cli) for a tour of the main features.
+
+## What is `huggingface_hub`?
+
+The `huggingface_hub` library allows you to interact with the [Hugging Face Hub](https://huggingface.co/), a platform democratizing open-source Machine Learning for creators and collaborators. Discover pre-trained models and datasets for your projects, play with the thousands of machine learning apps hosted on the Hub, or create and share your own models, datasets and demos with the community. Everything ships in one package with two interfaces: the [`hf` CLI](https://huggingface.co/docs/huggingface_hub/en/guides/cli) for your terminal and the `huggingface_hub` library for Python — both designed to work well for humans and AI agents. Use them to:
+
+- [Download files](https://huggingface.co/docs/huggingface_hub/en/guides/download) from the Hub.
+- [Upload files](https://huggingface.co/docs/huggingface_hub/en/guides/upload) to the Hub.
+- [Manage your repositories](https://huggingface.co/docs/huggingface_hub/en/guides/repository).
+- [Run Inference](https://huggingface.co/docs/huggingface_hub/en/guides/inference) on deployed models.
+- [Run Jobs](https://huggingface.co/docs/huggingface_hub/en/guides/jobs) on Hugging Face infrastructure.
+- [Search](https://huggingface.co/docs/huggingface_hub/en/guides/search) for models, datasets and Spaces.
+- [Share Model Cards](https://huggingface.co/docs/huggingface_hub/en/guides/model-cards) to document your models.
+- [Engage with the community](https://huggingface.co/docs/huggingface_hub/en/guides/community) through PRs and comments.
+- Do all of the above from the terminal with the [`hf` CLI](https://huggingface.co/docs/huggingface_hub/en/guides/cli).
+
+## Built for humans and AI agents
+
+The `hf` CLI is designed for people and coding agents alike: the same commands adapt their output when run by an agent. If you use Claude Code, Codex, Cursor, or another coding agent, install the `hf` CLI Skill — a command reference generated from your installed CLI:
+
+```bash
+# for Codex, Cursor, OpenCode, Pi and other agents that load skills from `.agents/skills`
+hf skills add
+# includes the above + Claude Code
+hf skills add --claude
+```
+
+Learn more in the [Hugging Face CLI for AI agents guide](https://huggingface.co/docs/hub/agents-cli) and the [announcement blog post](https://huggingface.co/blog/hf-cli-for-agents).
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show hugging-face:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show hugging-face:es`.

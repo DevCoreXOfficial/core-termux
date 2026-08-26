@@ -3,65 +3,25 @@
 - **Name:** Redis
 - **Tags:** db, cache, nosql
 - **Project:** https://redis.io
+- **Source:** https://github.com/redis/redis
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-In-memory data structure store used as database, cache, and message broker
-
-**Package:** redis  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://redis.io  
-**Type:** Database (pkg)  
-**License:** BSD-3-Clause
-
-### Description
-
-Redis is an open-source (BSD-licensed), in-memory data structure store, used as a database, cache, and message broker. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes, and streams.
-
-### Dependencies
-
-- Installed via pkg
-
-### Install
-
-```bash
-core install redis
-```
-
-### Uninstall
-
-```bash
-core uninstall redis
-```
-
-### Update
-
-```bash
-core update redis
-```
-
-### Notes
-
-- No special configuration required for basic usage
-- Server binary: `redis-server` — client binary: `redis-cli`
-- Default port: 6379
-- Start the server with: `redis-server --daemonize yes`
-- Connect with: `redis-cli`
-- Test connectivity: `redis-cli PING` (should reply `PONG`)
-- Data persists to disk even when server is stopped
+For developers, who are building real-time data-driven applications, Redis is the preferred, fastest, and most feature-rich cache, data structure server, and document and vector query engine.
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install redis      # install
-core update redis       # update
-core uninstall redis    # remove
+docker run -d -p 6379:6379 redis:latest
 ```
+
+Full documentation: https://redis.io
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show redis:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show redis:es`.

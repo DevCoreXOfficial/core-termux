@@ -2,62 +2,28 @@
 
 - **Name:** html2text
 - **Tags:** html, conversion
+- **Source:** https://github.com/Alir3z4/html2text
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-Convert HTML documents to plain text
-
-**Package:** html2text  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://github.com/grobian/html2text  
-**Type:** Utility tool (pkg)  
-**License:** GPL-2.0
-
-### Description
-
-HTML2Text is a command-line tool that converts HTML documents into plain text. It handles tables, links, images, and formatting, making it useful for reading HTML emails, web pages, or documentation in the terminal.
-
-### Dependencies
-
-- Installed via pkg
-
-### Install
-
-```bash
-core install html2text
-```
-
-### Uninstall
-
-```bash
-core uninstall html2text
-```
-
-### Update
-
-```bash
-core update html2text
-```
-
-### Notes
-
-- Command: `html2text`
-- Converts HTML to readable plain text
-- Handles tables and formatting
-- Useful for terminal-based browsing
+Convert HTML to Markdown-formatted text.
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install html2text      # install
-core update html2text       # update
-core uninstall html2text    # remove
+>>> import html2text
+>>>
+>>> print(html2text.html2text("<p><strong>Zed's</strong> dead baby, <em>Zed's</em> dead.</p>"))
+**Zed's** dead baby, _Zed's_ dead.
 ```
+
+Full documentation: https://github.com/Alir3z4/html2text
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show html2text:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show html2text:es`.

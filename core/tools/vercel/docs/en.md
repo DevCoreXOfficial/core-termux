@@ -3,61 +3,28 @@
 - **Name:** Vercel CLI
 - **Tags:** cloud, deploy, hosting, serverless
 - **Project:** https://vercel.com/docs/cli
+- **Source:** https://github.com/vercel/vercel
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Deploy frontend applications and serverless functions
-
-**Package:** vercel  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://vercel.com/docs/cli  
-**Type:** Node.js global module (npm)  
-**License:** Apache 2.0
-
-### Description
-
-Vercel CLI allows you to deploy frontend applications and serverless functions to Vercel's global edge network. It supports frameworks like Next.js, React, and more with zero configuration required.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-
-### Install
-
-```bash
-core install vercel
-```
-
-### Uninstall
-
-```bash
-core uninstall vercel
-```
-
-### Update
-
-```bash
-core update vercel
-```
-
-### Notes
-
-- Command: `vercel`
-- Integrates with GitHub, GitLab, and Bitbucket
-- Supports environment variables, domains, and team management
+Develop. Preview. Ship.
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install vercel      # install
-core update vercel       # update
-core uninstall vercel    # remove
+npm i -g vercel
 ```
+
+Native CLI binaries are distributed separately and do not affect the `vercel` npm package. To opt into the native binary and replace existing global `vercel` and `vc` commands, install the native package explicitly:
+```
+
+Full documentation: https://vercel.com/docs/cli
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show vercel:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show vercel:es`.

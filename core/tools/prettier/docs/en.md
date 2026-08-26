@@ -3,61 +3,25 @@
 - **Name:** Prettier
 - **Tags:** formatter, javascript, code-style
 - **Project:** https://prettier.io
+- **Source:** https://github.com/prettier/prettier
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Opinionated code formatter supporting multiple languages
-
-**Package:** prettier  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://prettier.io  
-**Type:** Node.js global module (npm)  
-**License:** MIT
-
-### Description
-
-Prettier is an opinionated code formatter that supports many languages including JavaScript, TypeScript, CSS, HTML, JSON, Markdown, and more. It enforces a consistent code style across your entire codebase.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-
-### Install
-
-```bash
-core install prettier
-```
-
-### Uninstall
-
-```bash
-core uninstall prettier
-```
-
-### Update
-
-```bash
-core update prettier
-```
-
-### Notes
-
-- Command: `prettier`
-- Used in `core init` templates with `prettier-plugin-tailwindcss`
-- Supports most popular file formats
+Prettier is an opinionated code formatter.
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install prettier      # install
-core update prettier       # update
-core uninstall prettier    # remove
+foo(reallyLongArg(), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriouslyAnotherOne());
 ```
+
+Full documentation: https://prettier.io
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show prettier:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show prettier:es`.

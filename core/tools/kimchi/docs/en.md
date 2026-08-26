@@ -2,72 +2,85 @@
 
 - **Name:** Kimchi
 - **Tags:** ai, agent, coding
+- **Source:** https://github.com/getkimchi/kimchi
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-Terminal coding agent powered by Kimchi's multi-model orchestration
-
-**Package:** kimchi
-**Author:** DevCoreX
-**Repository:** https://github.com/DevCoreXOfficial/core
-**Official:** https://github.com/getkimchi/kimchi
-**Type:** AI coding agent (Binary + glibc bootstrapper)
-**License:** MIT
-
-### Description
-
-A coding agent CLI powered by kimchi. Built on the pi-mono coding agent SDK, kimchi gives you an AI-powered development assistant in your terminal that connects to kimchi's LLM infrastructure
-
-### Dependencies
-
-- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
-- **Native + proot mode:** proot
-- **Proot mode:** proot-distro, curl, ca-certificates, tar
-
-### Install
-
-```bash
-core install kimchi
-```
-
-You will be prompted to choose:
-
-1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest Kimchi binary from GitHub releases
-2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
-3. **Proot-distro (alternative)** — Runs Kimchi inside an Ubuntu proot-distro container
-
-### Uninstall
-
-```bash
-core uninstall kimchi
-```
-
-### Update
-
-```bash
-core update kimchi
-```
-
-### Notes
-
-- **Native mode** requires `glibc-repo`, `glibc`, `clang`, and other dependencies (installed automatically)
-- The native binary is stored in `~/.local/share/core-data/kimchi/`
-- A small C bootstrapper (`kimchi_helper.c`) handles ELF loading via the glibc dynamic linker
-- Auxiliary files are symlinked to `~/.local/share/kimchi/` for Kimchi to find themes and config
-- **Proot mode** uses `proot-distro ubuntu` and downloads the binary directly from GitHub releases
-- Data directory: `~/.local/share/core-data/kimchi/`
+Terminal coding agent powered by Kimchi's multi-model orchestration 
 
 ## How to use it?
 
+### Quick start
+
+Install the latest release:
+
+**Homebrew (macOS / Linux):**
+
 ```bash
-core install kimchi      # install
-core update kimchi       # update
-core uninstall kimchi    # remove
+brew install getkimchi/tap/kimchi
 ```
+
+**Install script (macOS / Linux):**
+
+```bash
+curl -fsSL https://github.com/getkimchi/kimchi/releases/latest/download/install.sh | bash
+```
+
+**PowerShell (Windows):**
+
+```powershell
+irm https://github.com/getkimchi/kimchi/releases/latest/download/install.ps1 | iex
+```
+
+Then configure your API key and launch:
+
+```bash
+kimchi setup   # one-time interactive setup
+kimchi         # launch the coding agent
+```
+
+Run `kimchi --help` to see all available subcommands and flags.
+
+## Models
+
+### Model selection
+
+The supported model list is fetched at startup from the kimchi metadata service. Use `/model` or `ctrl+p` in the interactive CLI to switch between available models.
+
+Kimchi operates in one of two modes:
+
+| Mode | Status line indicator | Behavior |
+|------|-----------------|----------|
+| **Multi-model** | `multi-model (orchestrator-id)` | The orchestrator delegates each task to the model assigned for that role |
+| **Single-model** | model name | All work runs on the selected model directly |
+
+Use `ctrl+p` to cycle through models. The last entry in the cycle is `multi-model`. You can also open the `/model` picker and select a specific model or `multi-model` from the list.
+
+In single-model mode the orchestration system prompt (environment, tools, research rules, guidelines, phase tagging) stays active, but task classification and delegation are disabled. The subagent tool remains available if you explicitly ask the agent to delegate.
+
+### Model roles
+
+In multi-model mode, each task type is handled by a specific role. Each role can have one model or a **pool of candidates** — the orchestrator reads model tier and description and picks the best fit for each task.
+
+Use `/multi-model` in the interactive CLI to toggle models on/off per role, or edit `~/.config/kimchi/harness/settings.json` directly:
+
+```json
+{
+  "modelRoles": {
+    "orchestrator": "kimchi-dev/kimi-k2.6",
+    "builder": ["kimchi-dev/minimax-m2.7", "anthropic/claude-sonnet-4-5"],
+    "reviewer": "anthropic/claude-sonnet-4-5",
+    "explorer": "kimchi-dev/nemotron-3-ultra-fp4"
+  }
+}
+```
+
+| Role | Default | Description |
+|------|---------|-------------|
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show kimchi:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show kimchi:es`.

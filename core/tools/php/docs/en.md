@@ -3,61 +3,29 @@
 - **Name:** PHP
 - **Tags:** language, runtime
 - **Project:** https://www.php.net
+- **Source:** https://github.com/php/php-src
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-Popular general-purpose scripting language for web development
-
-**Package:** php  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://www.php.net  
-**Type:** Language (pkg)  
-**License:** PHP License 3.01
-
-### Description
-
-PHP is a popular general-purpose scripting language that is especially suited to web development. It can be embedded into HTML and is widely used for building dynamic websites, web applications, and APIs.
-
-### Dependencies
-
-- Installed via pkg
-
-### Install
-
-```bash
-core install php
-```
-
-### Uninstall
-
-```bash
-core uninstall php
-```
-
-### Update
-
-```bash
-core update php
-```
-
-### Notes
-
-- Command: `php`
-- Includes built-in web server: `php -S`
-- Composer can be installed separately for dependency management
+The PHP Interpreter
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install php      # install
-core update php       # update
-core uninstall php    # remove
+./buildconf
 ```
+
+Configure your build. `--enable-debug` is recommended for development, see
+`./configure --help` for a full list of options.
+```
+
+Full documentation: https://www.php.net
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show php:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show php:es`.

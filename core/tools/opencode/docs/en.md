@@ -3,71 +3,54 @@
 - **Name:** OpenCode
 - **Tags:** ai, agent, coding
 - **Project:** https://opencode.ai
+- **Source:** https://github.com/anomalyco/opencode
 - **Dependencies:** git, ripgrep, jq, nodejs
 
 ## What is it?
 
-Open-source agent that helps you write code in your terminal
-
-**Package:** opencode  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://github.com/anomalyco/opencode  
-**Type:** AI coding agent (Binary + glibc bootstrapper)  
-**License:** MIT
-
-### Description
-
-OpenCode is an AI-powered coding agent developed by anomalyco that operates directly in your terminal. It provides intelligent code completion, refactoring suggestions, and natural language code generation. Core offers three installation methods: native with glibc support for best performance, native + proot to bypass "bad system call" errors, or via proot-distro Ubuntu container for maximum compatibility.
-
-### Dependencies
-
-- **Native mode:** glibc-repo, glibc, clang, git, ripgrep, jq, nodejs-lts, curl, tar
-- **Native + proot mode:** proot
-- **Proot mode:** proot-distro, curl, ca-certificates
-
-### Install
-
-```bash
-core install opencode
-```
-
-You will be prompted to choose:
-
-1. **Native (recommended)** — Compiles a glibc bootstrapper and downloads the latest OpenCode binary from GitHub releases
-2. **Native + proot (fix)** — Runs the same glibc-loaded binary under proot to bypass "bad system call" errors on some Android kernels
-3. **Proot-distro (alternative)** — Runs OpenCode inside an Ubuntu proot-distro container
-
-### Uninstall
-
-```bash
-core uninstall opencode
-```
-
-### Update
-
-```bash
-core update opencode
-```
-
-### Notes
-
-- **Native mode** requires `glibc-repo`, `glibc`, `clang`, and other dependencies (installed automatically)
-- The native binary is stored in `~/.local/share/core-data/opencode/`
-- A small C bootstrapper (`opencode_helper.c`) handles ELF loading via the glibc dynamic linker
-- **Proot mode** uses `proot-distro ubuntu` and installs via the official opencode.ai installer
-- Data directory: `~/.local/share/core-data/opencode/`
+The open source coding agent.
 
 ## How to use it?
 
-```bash
-core install opencode      # install
-core update opencode       # update
-core uninstall opencode    # remove
+### Examples
+
+OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bash
+XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
 ```
+
+### Agents
+
+OpenCode includes two built-in agents you can switch between with the `Tab` key.
+
+- **build** - Default, full-access agent for development work
+- **plan** - Read-only agent for analysis and code exploration
+  - Denies file edits by default
+  - Asks permission before running bash commands
+  - Ideal for exploring unfamiliar codebases or planning changes
+
+Also included is a **general** subagent for complex searches and multistep tasks.
+This is used internally and can be invoked using `@general` in messages.
+
+Learn more about [agents](https://opencode.ai/docs/agents).
+
+### Documentation
+
+For more info on how to configure OpenCode, [**head over to our docs**](https://opencode.ai/docs).
+
+### Contributing
+
+If you're interested in contributing to OpenCode, please read our [contributing docs](./CONTRIBUTING.md) before submitting a pull request.
+
+### Building on OpenCode
+
+If you are working on a project that's related to OpenCode and is using "opencode" as part of its name, for example "opencode-dashboard" or "opencode-mobile", please add a note to your README to clarify that it is not built by the OpenCode team and is not affiliated with us in any way.
+
+---
+
+**Join our community** [Discord](https://discord.gg/opencode) | [X.com](https://x.com/opencode)
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show opencode:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show opencode:es`.

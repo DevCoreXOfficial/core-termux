@@ -2,61 +2,39 @@
 
 - **Name:** Live Server
 - **Tags:** dev-server, frontend, reload
+- **Source:** https://github.com/tapio/live-server
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Development server with live reload capability
-
-**Package:** live-server  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://github.com/tapio/live-server  
-**Type:** Node.js global module (npm)  
-**License:** MIT
-
-### Description
-
-Live Server is a simple development HTTP server with live reload capability. It watches for file changes and automatically reloads the browser, making it ideal for front-end web development.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-
-### Install
-
-```bash
-core install live-server
-```
-
-### Uninstall
-
-```bash
-core uninstall live-server
-```
-
-### Update
-
-```bash
-core update live-server
-```
-
-### Notes
-
-- Command: `live-server`
-- Automatically opens browser on file changes
-- Supports custom ports and SSL
+A simple development http server with live reload capability.
 
 ## How to use it?
 
+Example from the official README:
+
 ```bash
-core install live-server      # install
-core update live-server       # update
-core uninstall live-server    # remove
+var liveServer = require("live-server");
+
+var params = {
+	port: 8181, // Set the server port. Defaults to 8080.
+	host: "0.0.0.0", // Set the address to bind to. Defaults to 0.0.0.0 or process.env.IP.
+	root: "/public", // Set root directory that's being served. Defaults to cwd.
+	open: false, // When false, it won't load your browser by default.
+	ignore: 'scss,my/templates', // comma-separated string for paths to ignore
+	file: "index.html", // When set, serve this file (server root relative) for every 404 (useful for single-page applications)
+	wait: 1000, // Waits for all changes, before reloading. Defaults to 0 sec.
+	mount: [['/components', './node_modules']], // Mount a directory to a route.
+	logLevel: 2, // 0 = errors only, 1 = some, 2 = lots
+	middleware: [function(req, res, next) { next(); }] // Takes an array of Connect-compatible middleware that are injected into the server middleware stack
+};
+liveServer.start(params);
 ```
+
+Full documentation: https://github.com/tapio/live-server
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show live-server:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show live-server:es`.

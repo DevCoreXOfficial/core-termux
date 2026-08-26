@@ -52,7 +52,7 @@ search_main() {
     # Style tools live under `core style`, not the tool catalog.
     [[ "$(manifest_field "$tool_dir" '.style // false')" == "true" ]] && continue
     # Platform filter: hide tools that cannot run here (--all overrides).
-    if [[ $all -eq 0 ]] && ! manifest_supports_platform "$tool_dir"; then
+    if ! manifest_supports_platform "$tool_dir"; then
       ((hidden_count++))
       continue
     fi
@@ -107,7 +107,15 @@ search_main() {
   table_end
   echo
   list_item "Install: ${D_CYAN}core install <tool>${D_NC}   Docs: ${D_CYAN}core show <tool>${D_NC}"
-  [[ $hidden_count -gt 0 && "$CORE_ENV" != "termux" ]] && \
-    list_item "${D_GRAY}${hidden_count} Termux-only tool(s) hidden — see them with: core search --all${NC}"
+  if [[ $hidden_count -gt 0 ]]; then
+    local hidden_names=""
+    for tool_dir in "$CORE_PATH/tools/"*/; do
+      [[ -f "$tool_dir/manifest.json" ]] || continue
+      manifest_supports_platform "$tool_dir" && continue
+      [[ "$(manifest_field "$tool_dir" '.style // false')" == "true" ]] && continue
+      hidden_names+="$(basename "$tool_dir") "
+    done
+    list_item "${D_GRAY}Not available on $(core_platform_label): ${hidden_names% }${NC}"
+  fi
   echo
 }

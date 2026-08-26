@@ -2,99 +2,85 @@
 
 - **Name:** OpenSpec
 - **Tags:** ai, spec-driven, development
+- **Source:** https://github.com/Fission-AI/OpenSpec
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Spec-Driven Development framework for AI coding assistants
-
-**Package:** @fission-ai/openspec (npm global package)  
-**Author:** Fission AI  
-**Repository:** https://github.com/Fission-AI/openspec  
-**Type:** Spec-Driven Development (SDD) framework / AI workflow orchestrator  
-**License:** MIT
-
-### Description
-
-OpenSpec is an open-source, CLI-driven framework that implements **Spec-Driven Development (SDD)** for AI coding assistants. Instead of asking an AI to "just build a feature," OpenSpec forces the creation of structured, source-of-truth specifications that AI agents can reference to produce more accurate, maintainable code.
-
-It bridges the gap between human intent and AI output by formalizing technical requirements into structured Markdown documents — **Proposals, Specs, Design notes, and Tasks** — stored in an `/openspec/` folder within your project repository.
-
-Key features:
-- **Structured Artifacts** — Proposals, Specs, Design docs, and Tasks stored in `/openspec/`
-- **AI Context Management** — AI agents reference specs to understand architecture and requirements
-- **Reduced Hallucinations** — Shifts AI from guess-based coding to verification-based coding
-- **CLI-first workflow** — Generate and iterate on specs entirely from the terminal
-- **Framework agnostic** — Works with Claude Code, Cursor, GitHub Copilot, and any AI coding tool
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-
-### Install
-
-```bash
-core install openspec
-```
-
-### Uninstall
-
-```bash
-core uninstall openspec
-```
-
-### Update
-
-```bash
-core update openspec
-```
-
-### Usage
-
-Once installed, initialize OpenSpec in your project:
-
-```bash
-openspec init
-```
-
-To propose a new capability:
-
-```bash
-openspec propose "your idea"
-```
-
-To view existing specs:
-
-```bash
-openspec list
-```
-
-### Typical Workflow
-
-1. **Proposal** — Create a high-level proposal describing the desired capability
-2. **Spec & Design** — Define exact functionality in `/openspec/specs/`
-3. **Task Definition** — Break complex features into small actionable tasks
-4. **Implementation** — AI executes against the defined specs
-5. **Archive** — Finished docs are archived as living documentation
-
-### Notes
-
-- Installed as a global npm package: `@fission-ai/openspec`
-- Command: `openspec`
-- Requires Node.js LTS (installed automatically if missing)
-- Creates an `/openspec/` directory in your project for all documentation
-- Ideal companion for any AI coding agent that needs structured context
+Spec-driven development (SDD) for AI coding assistants.
 
 ## How to use it?
 
+### Quick Start
+
+**Requires Node.js 20.19.0 or higher.**
+
+Install OpenSpec globally:
+
 ```bash
-core install openspec      # install
-core update openspec       # update
-core uninstall openspec    # remove
+npm install -g @fission-ai/openspec@latest
 ```
+
+Then navigate to your project directory and initialize:
+
+```bash
+cd your-project
+openspec init
+```
+
+> **Want your AI to do it?** Paste the [setup prompt](docs/installation.md#install-with-your-ai-assistant) into your coding assistant — it installs the CLI, runs `openspec init`, and verifies the result.
+
+Now talk to your AI:
+
+- **Not sure what to build yet?** Start with `/opsx:explore`, a no-stakes thinking partner that reads your code, weighs options, and shapes a plan before anything is written. ([Explore guide](docs/explore.md))
+- **Already know what you want?** Go straight to `/opsx:propose <what-you-want-to-build>`.
+
+Both are in the default profile. If you want the expanded workflow (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), select it with `openspec config profile` and apply with `openspec update`.
+
+`/opsx:propose` is the canonical name; your tool may spell it `/opsx-propose` (Cursor, GitHub Copilot), `@opsx-propose` (Amazon Q) or `$openspec-propose` (Codex). `openspec init` prints the right form for the tools you picked — see [How To Invoke](docs/supported-tools.md#how-to-invoke).
+
+> [!NOTE]
+> Not sure if your tool is supported? [View the full list](docs/supported-tools.md) – we support 30+ tools and growing.
+>
+> Also works with pnpm, yarn, bun, and nix. [See installation options](docs/installation.md).
+
+## Docs
+
+**Start here:** the **[Documentation Home](docs/README.md)** maps everything. New to OpenSpec? Read [Getting Started](docs/getting-started.md), then [How Commands Work](docs/how-commands-work.md) (where you actually type `/opsx:propose`).
+
+→ **[Getting Started](docs/getting-started.md)**: first steps<br>
+→ **[Explore First](docs/explore.md)**: think it through with `/opsx:explore` before you commit<br>
+→ **[How Commands Work](docs/how-commands-work.md)**: where slash commands run vs the CLI<br>
+→ **[Core Concepts at a Glance](docs/overview.md)**: the whole mental model, one page<br>
+→ **[Examples & Recipes](docs/examples.md)**: real changes, start to finish<br>
+→ **[Workflows](docs/workflows.md)**: combos and patterns<br>
+→ **[Existing Projects](docs/existing-projects.md)**: adopt OpenSpec on a brownfield codebase<br>
+→ **[Editing a Change](docs/editing-changes.md)**: update artifacts, go back, reconcile manual edits<br>
+→ **[Commands](docs/commands.md)**: slash commands & skills<br>
+→ **[CLI](docs/cli.md)**: terminal reference<br>
+→ **[Stores](docs/stores-beta/user-guide.md)**: plan in a separate repo, shared across your team (beta)<br>
+→ **[Supported Tools](docs/supported-tools.md)**: tool integrations & install paths<br>
+→ **[Concepts](docs/concepts.md)**: how it all fits<br>
+→ **[Multi-Language](docs/multi-language.md)**: multi-language support<br>
+→ **[Customization](docs/customization.md)**: make it yours<br>
+→ **[FAQ](docs/faq.md)** · **[Troubleshooting](docs/troubleshooting.md)** · **[Glossary](docs/glossary.md)**: quick help
+
+
+## Community schemas
+
+Third-party schema bundles distributed via standalone repositories — these provide opinionated workflows that integrate OpenSpec with other tools, similar to how [github/spec-kit's community extension catalog](https://github.com/github/spec-kit/tree/main/extensions) handles tool integrations.
+
+→ **[Browse the catalog](docs/customization.md#community-schemas)** in the customization docs.
+
+
+## Why OpenSpec?
+
+AI coding assistants are powerful but unpredictable when requirements live only in chat history. OpenSpec adds a lightweight spec layer so you agree on what to build before any code is written.
+
+- **Agree before you build** — human and AI align on specs before code gets written
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show openspec:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show openspec:es`.

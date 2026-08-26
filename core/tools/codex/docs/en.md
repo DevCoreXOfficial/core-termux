@@ -2,64 +2,47 @@
 
 - **Name:** Codex CLI
 - **Tags:** ai, agent, coding
-- **Project:** https://developers.openai.com/codex/
+- **Source:** https://github.com/openai/codex
 - **Dependencies:** nodejs
 
 ## What is it?
 
-Codex CLI is a coding agent from OpenAI that runs locally on your computer
-
-**Package:** codex  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://github.com/openai/codex
-**Type:** AI coding assistant (npm global package)
-**License:** MIT
-
-### Description
-
-Codex CLI is a coding agent from OpenAI that runs locally on your computer. It provides intelligent code suggestions and completions directly in your terminal.
-
-### Dependencies
-
-- Node.js LTS (nodejs-lts)
-- npm
-- git, ripgrep
-
-### Install
-
-```bash
-core install codex
-```
-
-### Uninstall
-
-```bash
-core uninstall codex
-```
-
-### Update
-
-```bash
-core update codex
-```
-
-### Notes
-
-- Installed as a global npm package: `@mmmbuto/codex-cli-termux`
-- Command: `codex`
-- Requires Node.js LTS (installed automatically if missing)
+Lightweight coding agent that runs in your terminal
 
 ## How to use it?
 
-```bash
-core install codex      # install
-core update codex       # update
-core uninstall codex    # remove
+### Quickstart
+
+### Installing and running Codex CLI
+
+Run the following on Mac or Linux to install Codex CLI:
+
+```shell
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
+
+Run the following on Windows to install Codex CLI:
+
+```shell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+The standalone installers download from `https://releases.openai.com/codex` by default and fall back to GitHub Releases if a metadata or asset download is unavailable. To force GitHub Releases, set `CODEX_INSTALLER_USE_RELEASES_OPENAI_COM` to `false` (`0` and `no` are also accepted):
+
+```shell
+curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_INSTALLER_USE_RELEASES_OPENAI_COM=false sh
+```
+
+```powershell
+$env:CODEX_INSTALLER_USE_RELEASES_OPENAI_COM='false'; irm https://chatgpt.com/codex/install.ps1 | iex
+```
+
+Codex CLI can also be installed via the following package managers:
+
+```shell
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show codex:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show codex:es`.

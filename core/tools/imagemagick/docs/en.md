@@ -3,62 +3,17 @@
 - **Name:** ImageMagick
 - **Tags:** images, convert, edit
 - **Project:** https://imagemagick.org
+- **Source:** https://github.com/ImageMagick/ImageMagick
 - **Dependencies:** None required by Core
 
 ## What is it?
 
-Image manipulation and conversion suite
+ImageMagick is a free, open-source software suite for creating, editing, converting, and displaying images. It supports 200+ formats and offers powerful command-line tools and APIs for automation, scripting, and integration across platforms.
 
-**Package:** imagemagick  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core  
-**Official:** https://imagemagick.org  
-**Type:** Graphics tool (pkg)  
-**License:** ImageMagick License
-
-### Description
-
-ImageMagick is a free, open-source software suite for displaying, converting, and editing raster image files. It supports over 200 image formats and provides powerful command-line tools for image manipulation.
-
-### Dependencies
-
-- Installed via pkg
-
-### Install
-
-```bash
-core install imagemagick
-```
-
-### Uninstall
-
-```bash
-core uninstall imagemagick
-```
-
-### Update
-
-```bash
-core update imagemagick
-```
-
-### Notes
-
-- Commands: `convert`, `identify`, `mogrify`, `montage`
-- Supports 200+ image formats
-- Batch processing capabilities
-- Used by various applications for thumbnails
-
-## How to use it?
-
-```bash
-core install imagemagick      # install
-core update imagemagick       # update
-core uninstall imagemagick    # remove
-```
+Full documentation: https://imagemagick.org
 
 ## Notes
 
 - Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show imagemagick:es`.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show imagemagick:es`.
