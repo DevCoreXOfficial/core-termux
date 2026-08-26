@@ -79,8 +79,28 @@ What gets imported:
 - **Messaging settings** — platform configs, allowed users, working directory
 - **API keys** — allowlisted secrets (Telegram, OpenRouter, OpenAI, Anthropic, ElevenLabs)
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show hermes-agent:es`.
+## Binary & CLI Reference
+
+- **Binary:** `hermes`
+
+### `--help` output
+
+```text
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/usr/bin/hermes-agent", line 3, in <module>
+    from run_agent import main
+ModuleNotFoundError: No module named 'run_agent'
+```
+
+
+### Common commands
+
+```bash
+hermes claw migrate              # Interactive migration (full preset)
+hermes claw migrate --dry-run    # Preview what would be migrated
+hermes claw migrate --preset user-data   # Migrate without secrets
+hermes claw migrate --overwrite  # Overwrite existing conflicts
+```
+

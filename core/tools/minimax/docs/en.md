@@ -79,8 +79,22 @@ We support two transport types: stdio and sse.
 
 ## Release Notes
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show minimax:es`.
+## Binary & CLI Reference
+
+- **Binary:** `mmx`
+
+### Common commands
+
+```bash
+{
+"mcpServers": {
+"MiniMax": {
+"command": "uvx",
+"args": [
+"minimax-mcp",
+"-y"
+],
+```
+

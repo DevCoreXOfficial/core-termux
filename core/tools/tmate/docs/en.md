@@ -57,8 +57,25 @@ core update tmate       # update
 core uninstall tmate    # remove
 ```
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show tmate:es`.
+## Binary & CLI Reference
+
+- **Binary:** `tmate`
+
+### `--help` output
+
+```text
+Usage: tmate [options] [tmux-command [flags]]
+
+Basic options:
+ -n <name>    specify the session token instead of getting a random one
+ -r <name>    same, but for the read-only token
+ -k <key>     specify an api-key, necessary for using named sessions on tmate.io
+ -F           set the foreground mode, useful for setting remote access
+ -f <path>    set the config file path
+ -S <path>    set the socket path, useful to issue commands to a running tmate instance
+ -v           set verbosity (can be repeated)
+ -V           print version
+```
+

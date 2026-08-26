@@ -79,8 +79,22 @@ git: 'gui' is not a git command. See 'git --help'.
 ```bash
 unalias gga 2>/dev/null
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show gga:es`.
+## Binary & CLI Reference
+
+- **Binary:** `gga`
+
+### Common commands
+
+```bash
+┌─────────────────┐     ┌──────────────┐     ┌─────────────────┐
+│   git commit    │ ──▶ │  AI Review   │ ──▶ │  ✅ Pass/Fail   │
+│  (staged files) │     │  (any LLM)   │     │  (with details) │
+└─────────────────┘     └──────────────┘     └─────────────────┘
+git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
+cd gentleman-guardian-angel
+./install.sh
+git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
+```
+

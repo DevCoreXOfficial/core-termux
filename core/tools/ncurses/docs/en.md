@@ -10,8 +10,29 @@ Terminal UI manipulation utilities
 
 Full documentation: project page
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show ncurses:es`.
+## Binary & CLI Reference
+
+- **Binary:** `tput`
+
+### `--help` output
+
+```text
+tput: invalid option -- -
+Usage: tput [options] [command]
+
+Options:
+  -S <<       read commands from standard input
+  -T TERM     use this instead of $TERM
+  -V          print curses-version
+  -v          verbose, show warnings
+  -x          do not try to clear scrollback
+
+Commands:
+  clear       clear the screen
+  init        initialize the terminal
+  reset       reinitialize the terminal
+  capname     unlike clear/init/reset, print value for capability "capname"
+```
+

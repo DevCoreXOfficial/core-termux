@@ -78,8 +78,22 @@ Combine with `--format group` for a truly _luxe_ experience:
 
 `ncu -i` pre-selects patch and minor upgrades, since `--format group` is enabled by default. Only when group formatting is disabled with `--format no-group` are all upgrades pre-selected, including major. Use `--interactiveSelect` to control this explicitly:
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show ncu:es`.
+## Binary & CLI Reference
+
+- **Binary:** `ncu`
+
+### Common commands
+
+```bash
+Upgrade a project's package file:
+Check global packages:
+Choose which packages to update in interactive mode:
+Combine with `--format group` for a truly _luxe_ experience:
+- <kbd>↑</kbd><kbd>↓</kbd> Select a package
+- <kbd>Space</kbd> Toggle selection
+- <kbd>a</kbd> Toggle all
+- <kbd>Enter</kbd> Upgrade
+```
+

@@ -20,8 +20,36 @@ powershell -ExecutionPolicy Bypass -Command "Invoke-Expression ((New-Object Syst
 
 Full documentation: https://superfile.dev
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show superfile:es`.
+## Binary & CLI Reference
+
+- **Binary:** `spf`
+
+### `--help` output
+
+```text
+Usage: spf [COMMAND] [OPTIONS] [PATH]...
+
+Pretty fancy and modern terminal file manager
+
+Commands:
+  path-list, pl        Print the path to the configuration and directory
+  help, h              Shows a list of commands or help for one command
+
+Options:
+  --debug-info, --di             Print debug information
+  --fix-hotkeys, --fh            Adds any missing hotkeys to the hotkey config file
+  --fix-config-file, --fch       Adds any missing fields to the config file
+  --print-last-dir, --pld        Print the last dir to stdout on exit (to use for cd)
+  --config-file, -c <value>      Specify the path to a different config file
+  --hotkey-file, --hf <value>    Specify the path to a different hotkey file
+  --chooser-file, --cf <value>   On trying to open any file, superfile will write to its path to this file, and exit
+  --help, -h                     show help
+  --version, -v                  print the version
+
+Version: v1.6.0
+
+Use "spf [COMMAND] --help" for more information about a command.
+```
+

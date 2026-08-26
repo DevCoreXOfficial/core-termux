@@ -80,8 +80,22 @@ If you know Claude Code, you already know Qwen Code — and then some. We've put
 | SDK                                                                |     ✓     |      ✓      |
 | Headless Mode, Session Management                                  |     ✓     |      ✓      |
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show qwen-code:es`.
+## Binary & CLI Reference
+
+- **Binary:** `qwen`
+
+### Common commands
+
+```bash
+qwen          # Launch interactive terminal UI
+/auth         # Configure your provider and API key
+</details>
+| Feature                                                            | Qwen Code | Claude Code |
+| ------------------------------------------------------------------ | :-------: | :---------: |
+| SubAgents, Agent Teams, Dynamic Workflows                          |     ✓     |      ✓      |
+| Auto-Memory, Auto-Skills, Hooks                                    |     ✓     |      ✓      |
+| Built-in Skills (/review, /batch, /loop, /bugfix…)                 |     ✓     |      ✓      |
+```
+

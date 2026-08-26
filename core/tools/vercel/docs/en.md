@@ -23,8 +23,8 @@ Native CLI binaries are distributed separately and do not affect the `vercel` np
 
 Full documentation: https://vercel.com/docs/cli
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show vercel:es`.
+## Binary & CLI Reference
+
+- **Binary:** `vercel`

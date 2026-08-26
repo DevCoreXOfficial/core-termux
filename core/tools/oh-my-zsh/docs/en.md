@@ -29,8 +29,69 @@ core uninstall zsh      # remove plugins + Oh My Zsh
 
 Then restart your shell or run `exec zsh`.
 
-## Notes
+<!-- cli-reference -->
 
-- On Ubuntu/WSL run `chsh -s $(which zsh)` to make ZSH your default shell.
-- Uninstall keeps your `.zshrc` (only the cloned plugin directories are removed).
-- The persistent-session feature stores state under `~/.cache/core/`.
+## Binary & CLI Reference
+
+- **Binary:** `zsh`
+
+### `--help` output
+
+```text
+Usage: zsh [<options>] [<argument> ...]
+
+Special options:
+  --help     show this message, then exit
+  --version  show zsh version number, then exit
+  -b         end option processing, like --
+  -c         take first argument as a command to execute
+  -o OPTION  set an option by name (see below)
+
+Normal options are named.  An option may be turned on by
+`-o OPTION', `--OPTION', `+o no_OPTION' or `+-no-OPTION'.  An
+option may be turned off by `-o no_OPTION', `--no-OPTION',
+`+o OPTION' or `+-OPTION'.  Options are listed below only in
+`--OPTION' or `--no-OPTION' form.
+
+Named options:
+  --aliases
+  --aliasfuncdef
+  --allexport
+  --alwayslastprompt
+  --alwaystoend
+  --appendcreate
+  --appendhistory
+  --autocd
+  --autocontinue
+  --autolist
+  --automenu
+  --autonamedirs
+  --autoparamkeys
+  --autoparamslash
+  --autopushd
+  --autoremoveslash
+  --autoresume
+  --badpattern
+  --banghist
+  --bareglobqual
+  --bashautolist
+  --bashrematch
+  --beep
+  --bgnice
+  --braceccl
+  --bsdecho
+  --caseglob
+  --casematch
+  --casepaths
+  --cbases
+  --cdablevars
+  --cdsilent
+  --chasedots
+  --chaselinks
+  --checkjobs
+  --checkrunningjobs
+  --clobber
+  --clobberempty
+  --combiningchars
+```
+

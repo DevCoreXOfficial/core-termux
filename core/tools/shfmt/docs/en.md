@@ -80,8 +80,68 @@ $ echo '$((foo); (bar))' | shfmt
 
 * `export`, `let`, and `declare` are parsed as keywords.
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show shfmt:es`.
+## Binary & CLI Reference
+
+- **Binary:** `shfmt`
+
+### `--help` output
+
+```text
+usage: shfmt [flags] [path ...]
+
+shfmt formats shell programs. If the only argument is a dash ('-') or no
+arguments are given, standard input will be used. If a given path is a
+directory, all shell scripts found under that directory will be used.
+
+  --version  show version and exit
+
+  -l[=0], --list[=0]  error with a list of files whose formatting differs from shfmt;
+                      paths are separated by a newline or a null character if -l=0
+  -w,     --write     write result to file instead of stdout
+  -d,     --diff      error with a diff when the formatting differs
+  --apply-ignore      always apply EditorConfig ignore rules
+  --filename str      provide a name for the standard input file
+
+Parser options:
+
+  -ln, --language-dialect str  bash/posix/mksh/bats/zsh, default "auto"
+  -p,  --posix                 shorthand for -ln=posix
+  -s,  --simplify              simplify the code
+
+Printer options:
+
+  -i,  --indent uint       0 for tabs (default), >0 for number of spaces
+  -bn, --binary-next-line  binary ops like && and | may start a line
+  -ci, --case-indent       switch cases will be indented
+  -sr, --space-redirects   redirect operators will be followed by a space
+  -kp, --keep-padding      keep column alignment paddings
+  -fn, --func-next-line    function opening braces are placed on a separate line
+  -mn, --minify             minify the code to reduce its size (implies -s)
+
+Utilities:
+
+  -f[=0], --find[=0]  recursively find all shell files and print the paths;
+                      paths are separated by a newline or a null character if -f=0
+  --to-json           print syntax tree to stdout as a typed JSON
+  --from-json         read syntax tree from stdin as a typed JSON
+
+Formatting options can also be read from EditorConfig files; see 'man shfmt'
+for a detailed description of the tool's behavior.
+For more information and to report bugs, see https://github.com/mvdan/sh.
+```
+
+
+### Common commands
+
+```bash
+$ echo '${array[spaced string]}' | shfmt
+<standard input>:1:16: not a valid arithmetic operator: `string`
+$ echo '${array[weird!key]}' | shfmt
+<standard input>:1:8: reached `!` without matching `[` with `]`
+$ echo '${array[dash-string]}' | shfmt
+${array[dash - string]}
+1:1: reached ) without matching $(( with ))
+```
+

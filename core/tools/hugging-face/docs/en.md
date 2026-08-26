@@ -80,8 +80,77 @@ hf skills add --claude
 
 Learn more in the [Hugging Face CLI for AI agents guide](https://huggingface.co/docs/hub/agents-cli) and the [announcement blog post](https://huggingface.co/blog/hf-cli-for-agents).
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show hugging-face:es`.
+## Binary & CLI Reference
+
+- **Binary:** `hf`
+
+### `--help` output
+
+```text
+Usage: hf [OPTIONS] [COMMAND] [ARGS]...
+
+  Hugging Face Hub CLI
+
+Options:
+  --install-completion  Install completion for the current shell.
+  --show-completion     Show completion for the current shell, to copy it or
+                        customize the installation.
+  -h, --help            Show this message and exit.
+
+Main commands:
+  auth                 Manage authentication (login, logout, etc.).
+  buckets              Commands to interact with buckets.
+  cache                Manage local cache directory.
+  collections          Interact with collections on the Hub.
+  cp                   Copy files between local paths, repositories, and
+                       buckets.
+  datasets             Interact with datasets on the Hub.
+  discussions          Manage discussions and pull requests on the Hub.
+  download             Download files from the Hub.
+  endpoints            Manage Hugging Face Inference Endpoints.
+  extensions           Manage hf CLI extensions. [alias: ext]
+  jobs                 Run and manage Jobs on the Hub.
+  models               Interact with models on the Hub.
+  papers               Interact with papers on the Hub.
+  repos                Manage repos on the Hub. [alias: repo]
+  sandbox              Run and manage sandboxes on Hugging Face Jobs.
+  skills               Manage skills for AI assistants.
+  spaces               Interact with spaces on the Hub.
+  sync                 Sync files between local directory and a bucket.
+  upload               Upload a file or a folder to the Hub.
+  upload-large-folder  [Deprecated] Upload a large folder to the Hub.
+  webhooks             Manage webhooks on the Hub.
+
+Help commands:
+  env      Print information about the environment.
+  update   Update the `hf` CLI to the latest version.
+  version  Print information about the hf version.
+
+Examples
+  $ hf cp hf://username/my-model/config.json
+  $ hf download meta-llama/Llama-3.2-1B-Instruct
+  $ hf upload my-cool-model . .
+  $ hf upload-large-folder Wauplin/my-cool-model ./large_model_dir
+
+Learn more
+  Use `hf <command> --help` for more information about a command.
+  Read the documentation at
+  https://huggingface.co/docs/huggingface_hub/en/guides/cli
+```
+
+
+### Common commands
+
+```bash
+Log in, then start working with the Hub:
+- [Download files](https://huggingface.co/docs/huggingface_hub/en/guides/download) from the Hub.
+- [Upload files](https://huggingface.co/docs/huggingface_hub/en/guides/upload) to the Hub.
+- [Manage your repositories](https://huggingface.co/docs/huggingface_hub/en/guides/repository).
+- [Run Inference](https://huggingface.co/docs/huggingface_hub/en/guides/inference) on deployed models.
+- [Run Jobs](https://huggingface.co/docs/huggingface_hub/en/guides/jobs) on Hugging Face infrastructure.
+- [Search](https://huggingface.co/docs/huggingface_hub/en/guides/search) for models, datasets and Spaces.
+- [Share Model Cards](https://huggingface.co/docs/huggingface_hub/en/guides/model-cards) to document your models.
+```
+

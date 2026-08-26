@@ -11,8 +11,8 @@ Amp is the frontier agent, for people who want the most out of an agent, rather 
 
 Full documentation: https://ampcode.com/manual
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show ampcode:es`.
+## Binary & CLI Reference
+
+- **Binary:** `amp`

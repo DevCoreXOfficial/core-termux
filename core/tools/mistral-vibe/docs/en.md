@@ -82,8 +82,22 @@ Trusted folders are remembered for future sessions. You can manage trusted folde
 
 This safety feature helps prevent accidental execution in sensitive directories.
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show mistral-vibe:es`.
+## Binary & CLI Reference
+
+- **Binary:** `vibe`
+
+### Common commands
+
+```bash
+cd /path/to/your/project
+vibe
+> Can you find all instances of the word "TODO" in the project?
+> grep(pattern="TODO", path=".")
+... (grep tool output) ...
+🤖 I found the following "TODO" comments in your project.
+vibe "Refactor the main function in cli/main.py to be more modular."
+cd /path/to/your/project
+```
+

@@ -14,8 +14,8 @@ Progressive Node.js framework for building efficient, reliable applications
 
 See https://docs.nestjs.com for full usage.
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show nestjs:es`.
+## Binary & CLI Reference
+
+- **Binary:** `nest`

@@ -51,8 +51,8 @@ Get_help
 2261 Market St #5698, San Francisco, CA 94114.
 Follow_us_on_XFollow_on_LinkedInJoin_our_Discord_serverFollow_us_on_GitHub
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show command-code:es`.
+## Binary & CLI Reference
+
+- **Binary:** `cmdc`

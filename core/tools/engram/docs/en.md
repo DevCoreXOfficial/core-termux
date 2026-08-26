@@ -79,8 +79,8 @@ MIT
 
 ---
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show engram:es`.
+## Binary & CLI Reference
+
+- **Binary:** `engram`

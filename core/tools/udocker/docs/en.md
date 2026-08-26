@@ -80,8 +80,83 @@ may have restrictions.
 ```bash
 udocker run -v /home/u457:/home/cuser -w /home/user myfed  /bin/bash
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show udocker:es`.
+## Binary & CLI Reference
+
+- **Binary:** `udocker`
+
+### `--help` output
+
+```text
+Syntax:
+  udocker  [general_options] <command>  [command_options]  <command_args>
+
+  udocker [-h|--help|help]        :Display this help and exits
+  udocker [-V|--version|version]  :Display udocker and tarball version and exits
+
+General options common to all commands must appear before the command:
+  -D, --debug                   :Debug
+  -q, --quiet                   :Less verbosity
+  --insecure                    :Allow insecure non authenticated https
+  --repo=<directory>            :Use repository at directory
+  --allow-root                  :Allow execution by root NOT recommended
+  --config=<conf_file>          :Use configuration <conf_file>
+
+Commands:
+  --help [command]              :Command specific help
+  showconf                      :Print all configuration options
+
+  search <repo/expression>      :Search dockerhub for container images
+  pull <repo/image:tag>         :Pull container image from dockerhub
+  create <repo/image:tag>       :Create container from a pulled image
+  run <container_id|name>       :Execute created container
+  run <repo/image:tag>          :Pull, create and execute container
+
+  images -l                     :List container images
+  ps -m -s                      :List created containers
+  name <container_id> <name>    :Give name to container
+  rmname <name>                 :Delete name from container
+  rename <name> <new_name>      :Change container name
+  clone <container_id>          :Duplicate container
+  rm  <container-id|name>       :Delete container
+  rmi <repo/image:tag>          :Delete image
+  tag <repo/image:tag> <repo2/image2:tag2> :Tag image
+
+  import <tar> <repo/image:tag> :Import tar file (exported by docker)
+  import - <repo/image:tag>     :Import from stdin (exported by docker)
+  export -o <tar> <container>   :Export container directory tree to file
+  export - <container>          :Export container directory tree to stdin
+  load -i <exported-image>      :Load image from file (saved by docker)
+  load                          :Load image from stdin (saved by docker)
+  save -o <imagefile> <repo/image:tag>  :Save image with layers to file
+
+  inspect -p <repo/image:tag>   :Print image or container metadata
+  verify <repo/image:tag>       :Verify a pulled image
+  manifest inspect <repo/image:tag> :Print manifest metadata
+
+  udocker manifest inspect centos/centos8
+  udocker pull --platform=linux/arm64 centos/centos8
+  udocker tag centos/centos8  mycentos/centos8:arm64
+
+  protect <repo/image:tag>      :Protect repository
+  unprotect <repo/image:tag>    :Unprotect repository
+  protect <container>           :Protect container
+  unprotect <container>         :Unprotect container
+
+```
+
+
+### Common commands
+
+```bash
+udocker search  fedora
+udocker search  ubuntu
+udocker search  debian
+udocker search --list-tags ubuntu
+udocker pull   fedora:39
+udocker pull   busybox
+udocker pull   iscampos/openqcd
+udocker images
+```
+

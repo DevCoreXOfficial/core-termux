@@ -61,8 +61,24 @@ core update turbopack       # update
 core uninstall turbopack    # remove
 ```
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show turbopack:es`.
+## Binary & CLI Reference
+
+- **Binary:** `next-turbopack`
+
+### `--help` output
+
+```text
+No package.json found in current or parent directories
+```
+
+
+### Common commands
+
+```bash
+cd my-next-app
+next-turbopack dev     # Start dev server with Turbopack
+next-turbopack build   # Production build with Turbopack
+```
+

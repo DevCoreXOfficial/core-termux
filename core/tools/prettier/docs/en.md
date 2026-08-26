@@ -20,8 +20,18 @@ foo(reallyLongArg(), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriou
 
 Full documentation: https://prettier.io
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show prettier:es`.
+## Binary & CLI Reference
+
+- **Binary:** `prettier`
+
+### Common commands
+
+```bash
+foo(reallyLongArg(), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriouslyAnotherOne());
+foo(reallyLongArg(), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriouslyAnotherOne());
+foo(reallyLongArg(), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriouslyAnotherOne());
+foo(reallyLongArg(), omgSoManyParameters(), IShouldRefactorThis(), isThereSeriouslyAnotherOne());
+```
+

@@ -12,8 +12,8 @@ Claude Code is an agentic coding tool that lives in your terminal, understands y
 
 Full documentation: https://claude.com/claude-code
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show claude-code:es`.
+## Binary & CLI Reference
+
+- **Binary:** `claude`

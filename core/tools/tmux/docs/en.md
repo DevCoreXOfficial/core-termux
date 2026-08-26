@@ -14,8 +14,17 @@ Terminal multiplexer for managing multiple sessions
 
 See https://github.com/tmux/tmux for full usage.
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show tmux:es`.
+## Binary & CLI Reference
+
+- **Binary:** `tmux`
+
+### `--help` output
+
+```text
+tmux: unknown option -- -
+usage: tmux [-2CDhlNuVv] [-c shell-command] [-f file] [-L socket-name]
+            [-S socket-path] [-T features] [command [flags]]
+```
+

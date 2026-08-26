@@ -80,8 +80,22 @@ on_http_request:
       config:
         name: client-ip-rate-limit
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show ngrok:es`.
+## Binary & CLI Reference
+
+- **Binary:** `ngrok`
+
+### Common commands
+
+```bash
+NGROK_AUTHTOKEN=xxxx_xxxx go run examples/http/main.go
+You can use ngrok's [Traffic Policy](https://ngrok.com/docs/traffic-policy/)
+engine to apply API Gateway behaviors at ngrok's cloud service to auth, route,
+block and rate-limit the traffic. For example:
+NGROK_AUTHTOKEN=xxxx_xxxx go run examples/http/main.go
+You can use ngrok's [Traffic Policy](https://ngrok.com/docs/traffic-policy/)
+engine to apply API Gateway behaviors at ngrok's cloud service to auth, route,
+block and rate-limit the traffic. For example:
+```
+

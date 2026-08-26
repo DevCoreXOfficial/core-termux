@@ -86,8 +86,22 @@ For Google Workspace accounts and other authentication methods, see the
 gemini
 ```
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show gemini-cli:es`.
+## Binary & CLI Reference
+
+- **Binary:** `gemini`
+
+### Common commands
+
+```bash
+gemini
+export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
+gemini
+export GEMINI_API_KEY="YOUR_API_KEY"
+gemini
+export GOOGLE_API_KEY="YOUR_API_KEY"
+export GOOGLE_GENAI_USE_VERTEXAI=true
+gemini
+```
+

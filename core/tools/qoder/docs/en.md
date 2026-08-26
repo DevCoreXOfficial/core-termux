@@ -66,8 +66,8 @@ core update qoder       # update
 core uninstall qoder    # remove
 ```
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show qoder:es`.
+## Binary & CLI Reference
+
+- **Binary:** `qodercli`

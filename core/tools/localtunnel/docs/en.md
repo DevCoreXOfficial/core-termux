@@ -25,8 +25,22 @@ bin/server --port 1234
 
 Full documentation: https://github.com/localtunnel/server
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show localtunnel:es`.
+## Binary & CLI Reference
+
+- **Binary:** `lt`
+
+### Common commands
+
+```bash
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+bin/server --port 1234
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+bin/server --port 1234
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+```
+

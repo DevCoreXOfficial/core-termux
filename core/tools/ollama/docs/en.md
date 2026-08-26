@@ -27,8 +27,18 @@ To launch a specific integration:
 
 Full documentation: https://ollama.com
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show ollama:es`.
+## Binary & CLI Reference
+
+- **Binary:** `ollama`
+
+### Common commands
+
+```bash
+ollama
+Full documentation: https://ollama.com
+<!-- cli-reference -->
+- **Binary:** `ollama`
+```
+

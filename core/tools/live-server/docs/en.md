@@ -33,8 +33,22 @@ liveServer.start(params);
 
 Full documentation: https://github.com/tapio/live-server
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show live-server:es`.
+## Binary & CLI Reference
+
+- **Binary:** `live-server`
+
+### Common commands
+
+```bash
+var liveServer = require("live-server");
+var params = {
+port: 8181, // Set the server port. Defaults to 8080.
+host: "0.0.0.0", // Set the address to bind to. Defaults to 0.0.0.0 or process.env.IP.
+root: "/public", // Set root directory that's being served. Defaults to cwd.
+open: false, // When false, it won't load your browser by default.
+ignore: 'scss,my/templates', // comma-separated string for paths to ignore
+wait: 1000, // Waits for all changes, before reloading. Defaults to 0 sec.
+```
+

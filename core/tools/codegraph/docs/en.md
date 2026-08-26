@@ -79,8 +79,80 @@ npm install -g @colbymchenry/codegraph
       "command": "codegraph",
       "args": ["serve", "--mcp"]
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show codegraph:es`.
+## Binary & CLI Reference
+
+- **Binary:** `codegraph`
+
+### `--help` output
+
+```text
+Usage: codegraph [options] [command]
+
+Code intelligence and knowledge graph for any codebase
+
+Options:
+  -V, --version                  output the version number
+  --color                        force ANSI colors even when stdout is not a TTY
+  --no-color                     disable ANSI colors (NO_COLOR env is also
+                                 honored)
+  -h, --help                     display help for command
+
+Commands:
+  init [options] [path]          Initialize CodeGraph in a project directory and
+                                 build the initial index
+  uninit [options] [path]        Remove CodeGraph from a project (deletes
+                                 .codegraph/ directory)
+  index [options] [path]         Rebuild the full index from scratch (same
+                                 result as a fresh init)
+  sync [options] [path]          Sync changes since last index
+  status [options] [path]        Show index status and statistics
+  query [options] <search>       Search for symbols in the codebase
+  explore [options] <query...>   Explore an area: relevant symbols' source +
+                                 call paths in one shot (same output as the
+                                 codegraph_explore MCP tool)
+  node [options] [name]          One symbol's source + caller/callee trail, or
+                                 read a file with line numbers + dependents
+                                 (same output as the codegraph_node MCP tool)
+  files [options]                Show project file structure from the index
+  daemon|daemons                 Manage running CodeGraph background daemons —
+                                 pick one and press enter to stop it
+  unlock [path]                  Remove a stale lock file that is blocking
+                                 indexing
+  callers [options] <symbol>     Find all functions/methods that call a specific
+                                 symbol
+  callees [options] <symbol>     Find all functions/methods that a specific
+                                 symbol calls
+  impact [options] <symbol>      Analyze what code is affected by changing a
+                                 symbol
+  affected [options] [files...]  Find test files affected by changed source
+                                 files
+  install [options]              Install codegraph MCP server into one or more
+                                 agents (Claude Code, Cursor, Codex CLI,
+                                 opencode, Hermes Agent)
+  uninstall [options]            Remove codegraph from your agents (Claude Code,
+                                 Cursor, Codex CLI, opencode, Hermes Agent)
+  telemetry [action]             Show or change anonymous usage telemetry
+                                 (status, on, off)
+  upgrade [options] [version]    Update CodeGraph to the latest release (or a
+                                 specific version)
+  version                        Print the installed CodeGraph version (also:
+                                 -v, --version)
+  help [command]                 display help for command
+```
+
+
+### Common commands
+
+```bash
+codegraph install --yes                              # auto-detect agents, install global
+codegraph install --target=cursor,claude --yes       # explicit target list
+codegraph install --target=auto --location=local     # detected agents, project-local
+codegraph install --target=copilot-vscode,copilot-cli,copilot-jetbrains --yes  # GitHub Copilot everywhere
+codegraph install --print-config codex               # print snippet, no file writes
+codegraph install --print-config copilot-vscode      # same, for Copilot in VS Code
+cd your-project
+codegraph init
+```
+

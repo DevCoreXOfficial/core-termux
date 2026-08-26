@@ -23,8 +23,22 @@ $ yarn global add markserv
 
 Full documentation: https://github.com/markserv/markserv
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show markserv:es`.
+## Binary & CLI Reference
+
+- **Binary:** `markserv`
+
+### Common commands
+
+```bash
+$ npm i -g markserv
+$ yarn global add markserv
+$ npm i -g markserv
+$ yarn global add markserv
+$ npm i -g markserv
+$ yarn global add markserv
+$ npm i -g markserv
+$ yarn global add markserv
+```
+

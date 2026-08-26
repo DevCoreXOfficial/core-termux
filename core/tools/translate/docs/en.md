@@ -83,8 +83,69 @@ e.g. `POETRY.txt`:
     there I heard you, Finite, singing,
     there I saw you, Mandelstam.
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show translate:es`.
+## Binary & CLI Reference
+
+- **Binary:** `trans`
+
+### `--help` output
+
+```text
+Usage:  trans [OPTIONS] [SOURCES]:[TARGETS] [TEXT]...
+
+Information options:
+    -V, -version
+        Print version and exit.
+    -H, -help
+        Print help message and exit.
+    -M, -man
+        Show man page and exit.
+    -T, -reference
+        Print reference table of languages (in endonyms) and codes, and exit.
+    -R, -reference-english
+        Print reference table of languages (in English names) and codes, and exit.
+    -S, -list-engines
+        List available translation engines and exit.
+    -list-languages
+        List all languages (in endonyms) and exit.
+    -list-languages-english
+        List all languages (in English names) and exit.
+    -list-codes
+        List all codes and exit.
+    -list-all
+        List all languages (endonyms and English names) and codes, and exit.
+    -L CODES, -linguist CODES
+        Print details of languages and exit.
+    -U, -upgrade
+        Check for upgrade of this program.
+
+Translator options:
+    -e ENGINE, -engine ENGINE
+        Specify the translation engine to use.
+
+Display options:
+    -verbose
+        Verbose mode. (default)
+    -b, -brief
+        Brief mode.
+    -d, -dictionary
+        Dictionary mode.
+    -identify
+        Language identification.
+    -show-original Y/n
+        Show original text or not.
+    -show-original-phonetics Y/n
+        Show phonetic notation of original text or not.
+    -show-translation Y/n
+        Show translation or not.
+    -show-translation-phonetics Y/n
+        Show phonetic notation of translation or not.
+    -show-prompt-message Y/n
+        Show prompt message or not.
+    -show-languages Y/n
+        Show source and target languages or not.
+    -show-original-dictionary y/N
+        Show dictionary entry of original text or not.
+```
+

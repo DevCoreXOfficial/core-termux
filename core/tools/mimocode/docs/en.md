@@ -79,8 +79,22 @@ If decorative animation is causing the lag, run `/vivid`, or configure **Vivid v
 On Windows with a non-UTF-8 system locale (e.g. zh-CN, whose active code page is 936/GBK),
 command output containing CJK characters may appear garbled (mojibake). MiMoCode forces
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show mimocode:es`.
+## Binary & CLI Reference
+
+- **Binary:** `mimo`
+
+### Common commands
+
+```bash
+powershell -ep Bypass -c "irm https://mimo.xiaomi.com/install.ps1 | iex"
+mimo
+sudo apt install xsel
+mimo serve --port 4096
+ssh -N -L 4096:127.0.0.1:4096 user@remote-host
+mimo attach http://127.0.0.1:4096
+powershell -ep Bypass -c "irm https://mimo.xiaomi.com/install.ps1 | iex"
+mimo
+```
+

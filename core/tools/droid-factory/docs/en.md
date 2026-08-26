@@ -11,8 +11,8 @@ AI coding agent by Factory (Factory CLI)
 
 Full documentation: https://factory.ai
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show droid-factory:es`.
+## Binary & CLI Reference
+
+- **Binary:** `droid`

@@ -79,8 +79,22 @@ After restarting Zsh, you can switch to agent mode by pressing `Ctrl-X`.
 
 ### MCP support
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show kimi-code:es`.
+## Binary & CLI Reference
+
+- **Binary:** `kimi`
+
+### Common commands
+
+```bash
+Then you can create Kimi CLI threads in IDE's agent panel.
+![](./docs/media/acp-integration.gif)
+You can use Kimi CLI together with Zsh, to empower your shell experience with AI agent capabilities.
+Install the [zsh-kimi-cli](https://github.com/MoonshotAI/zsh-kimi-cli) plugin via:
+> [!NOTE]
+Then add `kimi-cli` to your Zsh plugin list in `~/.zshrc`:
+After restarting Zsh, you can switch to agent mode by pressing `Ctrl-X`.
+<!-- cli-reference -->
+```
+

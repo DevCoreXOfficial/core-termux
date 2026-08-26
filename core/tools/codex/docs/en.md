@@ -41,8 +41,22 @@ Codex CLI can also be installed via the following package managers:
 
 ```shell
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show codex:es`.
+## Binary & CLI Reference
+
+- **Binary:** `codex`
+
+### Common commands
+
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+Codex CLI can also be installed via the following package managers:
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+Codex CLI can also be installed via the following package managers:
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+Codex CLI can also be installed via the following package managers:
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+Codex CLI can also be installed via the following package managers:
+```
+

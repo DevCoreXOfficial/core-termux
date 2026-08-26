@@ -56,55 +56,48 @@ core update neovim       # update
 core uninstall neovim    # remove
 ```
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show neovim:es`.
-# NvChad
+## Binary & CLI Reference
 
-Modern Neovim configuration with preconfigured plugins
+- **Binary:** `nvim`
 
-**Package:** nvchad (configuration)  
-**Author:** DevCoreX  
-**Repository:** https://github.com/DevCoreXOfficial/core-termux  
-**Official:** https://github.com/vendored inside Core (tools/nvchad/<platform>/nvim)  
-**Type:** Code editor configuration (git clone)  
-**License:** MIT
+### `--help` output
 
-## Description
+```text
+Usage:
+  nvim [options] [file ...]
 
-NvChad is a modern Neovim configuration that provides a complete IDE-like experience out of the box. The Core-Termux version includes GitHub Copilot, CodeCompanion AI, preconfigured LSP support, syntax highlighting, file explorer, and much more.
+Options:
+  --cmd <cmd>           Execute <cmd> before any config
+  +<cmd>, -c <cmd>      Execute <cmd> after config and first file
+  -l <script> [args...] Execute Lua <script> (with optional args)
+  -S <session>          Source <session> after loading the first file
+  -s <scriptin>         Read Normal mode commands from <scriptin>
+  -u <config>           Use this config file
 
-## Dependencies
+  -d                    Diff mode
+  -es, -Es              Silent (batch) mode
+  -h, --help            Print this help message
+  -i <shada>            Use this shada file
+  -n                    No swap file, use memory only
+  -o[N]                 Open N windows (default: one per file)
+  -O[N]                 Open N vertical windows (default: one per file)
+  -p[N]                 Open N tab pages (default: one per file)
+  -R                    Read-only (view) mode
+  -v, --version         Print version information
+  -V[N][file]           Verbose [level][file]
 
-- Neovim, git, nodejs-lts, python, curl, wget
-- lua-language-server, ripgrep, stylua, tree-sitter
+  --                    Only file names after this
+  --api-info            Write msgpack-encoded API metadata to stdout
+  --clean               "Factory defaults" (skip user config and plugins, shada)
+  --embed               Use stdin/stdout as a msgpack-rpc channel
+  --headless            Don't start a user interface
+  --listen <address>    Serve RPC API from this address
+  --remote[-subcommand] Execute commands remotely on a server
+  --server <address>    Connect to this Nvim server
+  --startuptime <file>  Write startup timing messages to <file>
 
-## Install
-
-```bash
-core install nvchad
+See ":help startup-options" for all options.
 ```
 
-## Uninstall
-
-```bash
-core uninstall nvchad
-```
-
-## Update
-
-```bash
-core update nvchad
-```
-
-## Notes
-
-- Installs to `~/.config/nvim/`
-- Includes GitHub Copilot and CodeCompanion
-- Preconfigured for TypeScript, JavaScript, Python, PHP, Perl, Rust, Lua
-- For detailed information: https://github.com/vendored inside Core (tools/nvchad/<platform>/nvim)
-
-
-> NvChad is bundled: `core install nvchad` sets up both.

@@ -79,8 +79,22 @@ AI coding assistants are powerful but unpredictable when requirements live only 
 
 - **Agree before you build** — human and AI align on specs before code gets written
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show openspec:es`.
+## Binary & CLI Reference
+
+- **Binary:** `openspec`
+
+### Common commands
+
+```bash
+cd your-project
+openspec init
+cd your-project
+openspec init
+cd your-project
+openspec init
+cd your-project
+openspec init
+```
+

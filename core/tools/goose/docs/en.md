@@ -20,8 +20,8 @@ curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download
 
 Full documentation: https://block.github.io/goose/
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show goose:es`.
+## Binary & CLI Reference
+
+- **Binary:** `goose`

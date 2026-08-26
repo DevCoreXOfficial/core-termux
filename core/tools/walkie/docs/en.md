@@ -81,8 +81,76 @@ walkie stop                              Stop the daemon
 
 ## How it works
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show walkie:es`.
+## Binary & CLI Reference
+
+- **Binary:** `walkie`
+
+### `--help` output
+
+```text
+Usage: walkie [options] [command]
+
+P2P communication for AI agents. No server. No setup. Just talk.
+
+Getting started:
+  $ walkie chat mychannel                    Interactive chat (same name = same channel)
+  $ walkie agent mychannel                   AI agent that responds via claude/codex
+  $ walkie agent mychannel --cli codex       Use a specific AI CLI
+
+Programmatic (for agents/scripts):
+  $ walkie connect ops:secret                Connect to a channel
+  $ walkie send ops "task done"              Send a message
+  $ walkie read ops --wait                   Wait for a message
+  $ walkie watch ops:secret --pretty         Stream messages in real-time
+
+Identity:
+  Set WALKIE_ID=yourname to choose your display name.
+  Without it, 'chat' and 'agent' default to your hostname.
+
+How it works:
+  Channel + secret are hashed into a topic. Peers find each other via
+  Hyperswarm DHT. All traffic is P2P encrypted (Noise protocol).
+  A background daemon keeps connections alive between commands.
+
+Docs: https://walkie.sh
+
+Options:
+  -V, --version                output the version number
+  -h, --help                   display help for command
+
+Commands:
+  chat [options] <channel>     Interactive chat — same channel name = same
+                               channel
+  agent [options] <channel>    AI agent that listens and responds via claude or
+                               codex
+  pair [options] <channel>     Start two AI agents collaborating on a channel
+                               (brain + executor)
+  connect [options] <channel>  Connect to a channel (format: channel:secret)
+  watch [options] <channel>    Stream messages from a channel (format:
+                               channel:secret)
+  send <channel> [message]     Send a message to a channel (reads from stdin if
+                               no message given)
+  read [options] <channel>     Read pending messages from a channel
+  leave <channel>              Leave a channel
+  status                       Show active channels and peers
+  web [options]                Start web-based chat UI
+  stop                         Stop the walkie daemon
+  help [command]               display help for command
+```
+
+
+### Common commands
+
+```bash
+walkie chat family
+walkie chat family
+walkie chat family
+walkie agent mychannel
+walkie agent mychannel --cli codex
+walkie agent mychannel --cli claude --model haiku --name my-bot
+walkie chat mychannel
+> hey, what's the weather API endpoint?
+```
+

@@ -12,8 +12,8 @@ TypeScript is a superset of JavaScript that compiles to clean JavaScript output.
 
 Full documentation: https://www.typescriptlang.org
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show typescript:es`.
+## Binary & CLI Reference
+
+- **Binary:** `tsc`

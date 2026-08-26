@@ -79,8 +79,22 @@ This project gets better when the community builds on top of it.
 
 When you select OpenCode in the installer, Gentle-AI asks whether to register each community plugin and offers a browser shortcut to review the repository first. Gentle-AI only ensures `~/.config/opencode/tui.json` exists and adds the plugin package names to its `plugin` array; OpenCode installs/loads those packages the next time it starts. Once OpenCode has materialized a plugin under `~/.config/opencode/node_modules/`, `gentle-ai update` can compare its local `package.json` version with the plugin's GitHub releases.
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show gentle-ai:es`.
+## Binary & CLI Reference
+
+- **Binary:** `gentle-ai`
+
+### Common commands
+
+```bash
+gentle-ai sync --profile cheap:openrouter/qwen/qwen3-30b-a3b:free
+gentle-ai sync --profile-phase cheap:sdd-design:anthropic/claude-sonnet-4-20250514
+engram projects list          # See all projects with memory counts
+engram projects consolidate   # Fix name drift ("my-app" vs "My-App")
+engram search "auth bug"      # Find a past decision from the terminal
+engram tui                    # Visual memory browser
+gentle-ai sync --profile cheap:openrouter/qwen/qwen3-30b-a3b:free
+gentle-ai sync --profile-phase cheap:sdd-design:anthropic/claude-sonnet-4-20250514
+```
+

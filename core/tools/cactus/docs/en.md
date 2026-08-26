@@ -116,8 +116,83 @@ core update cactus       # update
 core uninstall cactus    # remove
 ```
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux**.
-- Installation methods are platform-specific; Core picks the right one automatically.
-- Spanish docs (when available): `core show cactus:es`.
+## Binary & CLI Reference
+
+- **Binary:** `cactus`
+
+### `--help` output
+
+```text
+  Cactus CLI:
+
+  -----------------------------------------------------------------
+
+  cactus auth                          manage cloud API key
+    --status                           show key status
+    --clear                            remove saved key
+
+  cactus run [model|path]              run a model (default: google/gemma-4-E2B-it)
+    --bits 1|2|3|4                     CQ quantization (default: 4)
+    --image <path>                     image file for VLM inference
+    --audio <path>                     audio file for audio chat
+    --system <prompt>                  system prompt
+    --prompt <text>                    send prompt immediately
+    --thinking                         enable thinking/reasoning mode
+    --token <token>                    HuggingFace token (gated models)
+    --reconvert                        force local convert fallback
+
+  cactus transcribe [model]            live microphone transcription with a model
+    --file <audio.wav>                 audio file to transcribe (WAV)
+    --language <code>                  language code (default: en)
+    --bits 1|2|3|4                     CQ quantization (default: 4)
+    --token <token>                    HuggingFace token (gated models)
+    --reconvert                        force local rebuild from source
+
+  cactus download [model]              fetch a prebuilt bundle, else build locally (default: google/gemma-4-E2B-it)
+    --bits 1|2|3|4                     CQ quantization (default: 4)
+    --token <token>                    HuggingFace token (gated models)
+    --reconvert                        force local rebuild from source
+
+  cactus convert <model> [dir]         build a runnable bundle locally (skips prebuilt fetch)
+    --bits 1|2|3|4                     CQ quantization (default: 4)
+    --token <token>                    HuggingFace token (gated models)
+    --reconvert                        force local rebuild from source
+    --lora <path>                      merge a LoRA adapter before converting
+
+  cactus serve [model]                 OpenAI-compatible local HTTP server
+    --host <addr>                      bind address (default: 127.0.0.1)
+    --port <port>                      port (default: 8080)
+    --bits 1|2|3|4                     CQ quantization (default: 4)
+    --token <token>                    HuggingFace token (gated models)
+    --reconvert                        force local rebuild from source
+    --no-cloud-handoff                 disable automatic cloud handoff
+    --confidence-threshold <0..1>      handoff to cloud below this confidence
+    --cloud-timeout-ms <n>             max wait for cloud handoff before local fallback
+
+  cactus list                          list downloaded models
+
+  cactus build                         build cactus libraries
+    --apple                            Apple (iOS/macOS)
+    --android                          Android
+    --python                           shared lib for Python FFI
+
+  cactus test                          run the test suite
+    --component <name>                 kernels | graph | engine | all
+```
+
+
+### Common commands
+
+```bash
+cactus run <model...>      # run a model (local or hybrid)
+cactus serve               # start the OpenAI-compatible inference server
+cactus transcribe          # speech-to-text
+cactus build <model>       # build / export a model
+cactus convert             # convert a checkpoint
+cactus upload              # upload a model to the cloud
+cactus list                # list available models
+cactus auth                # manage cloud credentials
+```
+

@@ -13,8 +13,8 @@ The open source SWE agent — AI-powered coding assistant with multi-model suppo
 
 See the project page for full usage.
 
-## Notes
+<!-- cli-reference -->
 
-- Supported platforms: **termux, ubuntu, wsl**.
-- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
-- Spanish (when available): `core show supercode:es`.
+## Binary & CLI Reference
+
+- **Binary:** `supercode`
