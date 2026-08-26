@@ -14,6 +14,13 @@ _impl_install() {
   mkdir -p "$DEST"
   git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git "$DEST" 2>/dev/null || (cd "$DEST" && git pull --ff-only) &>>"$LOG_FILE"
   (cd "$DEST" && bash ./install.sh </dev/null) &>>"$LOG_FILE"
+
+  # Prevent the upstream 'gga' shell function from clashing with Core's tool.
+  for rc in "$HOME/.zshrc" "$HOME/.bashrc"; do
+    [[ -f "$rc" ]] || continue
+    grep -qxF "unalias gga 2>/dev/null" "$rc" || \
+      printf '\n# Added by Core\nunalias gga 2>/dev/null\n' >>"$rc"
+  done
 }
 
 _impl_uninstall() {

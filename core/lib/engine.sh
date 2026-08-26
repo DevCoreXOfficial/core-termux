@@ -160,21 +160,28 @@ engine_check_installed() {
 
 # Link newly-installed binaries that landed in non-PATH directories.
   _engine_link_new_bins() {
-    local hit=0 b d
+    local hit=0 b cur d
     while IFS= read -r b; do
       [[ -z "$b" ]] && continue
-      command -v "$b" >/dev/null 2>&1 && continue
+      # Already the canonical link? nothing to do.
+      [[ "$(command -v "$b")" == "$HOME/.local/bin/$b" ]] && continue
       for d in "$HOME/.opencode/bin" "$HOME/.bun/bin" "$HOME/.cargo/bin" \
                "$HOME/go/bin" "$HOME/.factory/bin" "$HOME/.antigravity/bin" \
-               "$HOME/bin" "$HOME/.local/bin"; do
+               "$HOME/.${name}"*/bin "$HOME/bin"; do
         if [[ -x "$d/$b" ]]; then
           ln -sf "$d/$b" "$HOME/.local/bin/$b"
           hit=1
           break
         fi
       done
+      # Generic vendor pattern: ~/.<tool>*/bin/<bin>
+      if ! [[ -e "$HOME/.local/bin/$b" ]]; then
+        for d in "$HOME/.${name}"*/bin; do
+          [[ -x "$d/$b" ]] && { ln -sf "$d/$b" "$HOME/.local/bin/$b"; hit=1; break; }
+        done
+      fi
     done < <(manifest_check_list "$dir")
-    [[ $hit -eq 1 ]] && log_ok "Binary linked into ~/.local/bin"
+    [[ $hit -eq 1 ]] && log_ok "Binaries linked into ~/.local/bin"
   }
 
 # engine_install <tool-name>
@@ -227,9 +234,11 @@ engine_install() {
       *zsh*)  rc_file="$HOME/.zshrc" ;;
       *)      rc_file="$HOME/.bashrc" ;;
     esac
-    if ! grep -qs 'HOME/.local/bin' "$rc_file"; then
-      printf '\n# Added by Core\nexport PATH="$HOME/.local/bin:$PATH"\n' >>"$rc_file"
-      log_ok "Added ~/.local/bin to your PATH ($rc_file)"
+    local path_line='export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"'
+    if ! grep -qs 'Added by Core' "$rc_file"; then
+      printf '\n# Added by Core\n%s\n' "$path_line" >>"$rc_file"
+      log_ok "Added tool binary paths to $rc_file"
+      export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
     fi
     if _script_is_interactive "$script"; then
       _engine_run "$script" install

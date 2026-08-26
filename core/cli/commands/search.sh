@@ -52,9 +52,9 @@ search_main() {
     [[ "$(manifest_field "$tool_dir" '.style // false')" == "true" ]] && continue
     tool="$(basename "$tool_dir")"
     display="$(manifest_display "$tool_dir")"
+    # Ground truth = the binary/config itself. The registry is bookkeeping,
+    # never proof of installation.
     if manifest_is_installed "$tool_dir"; then
-      installed="installed"
-    elif registry_is_installed "$tool"; then
       installed="installed"
     else
       installed="not installed"

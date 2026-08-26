@@ -13,6 +13,9 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  loading "Installing Engram (clone + go build)" _impl_install_impl
+}
+_impl_install_impl() {
   command -v go >/dev/null 2>&1 || pm_install golang-go
   mkdir -p "~/.local/share/core-data/engram" "$HOME/.local/bin" "$HOME/go/bin"
   git clone --depth 1 https://github.com/Gentleman-Programming/engram.git "~/.local/share/core-data/engram" 2>/dev/null || (cd "~/.local/share/core-data/engram" && git pull --ff-only) &>>"$LOG_FILE"

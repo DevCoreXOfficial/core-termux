@@ -15,7 +15,9 @@ LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 _impl_install() {
   command -v pip3 >/dev/null 2>&1 || pm_install python3-pip
   mkdir -p "$HOME/.local/bin"
-  pip3 install --user cactus-compute &>>"$LOG_FILE"
+  # Ubuntu's PEP 668 blocks user installs without this flag.
+  pip3 install --user --break-system-packages cactus-compute &>>"$LOG_FILE"
+  export PATH="$HOME/.local/bin:$PATH"
   export PATH="$HOME/.local/bin:$PATH"
 }
 
@@ -24,7 +26,7 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  pip3 install --user --upgrade cactus-compute &>>"$LOG_FILE"
+  pip3 install --user --break-system-packages --upgrade cactus-compute &>>"$LOG_FILE"
 }
 
 case "${1:-}" in
