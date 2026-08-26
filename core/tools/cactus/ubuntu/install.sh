@@ -40,7 +40,7 @@ _impl_expose_cli() {
   found=$(find "${CACTUS_INSTALL_DIR}" -maxdepth 4 -type f -name cactus -path "*bin*" | head -1)
   if [[ -n "$found" ]]; then
     ln -sfn "$found" "$HOME/.local/bin/cactus"
-    log_ok "Binary linked into ~/.local/bin"
+    log_success "Binary linked into ~/.local/bin"
   fi
 }
 
