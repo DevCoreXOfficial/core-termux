@@ -158,4 +158,8 @@ Kimchi operates in one of two modes:
 | Role | Default | Description |
 |------|---------|-------------|
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show kimchi:es`.

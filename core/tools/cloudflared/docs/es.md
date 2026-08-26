@@ -1,6 +1,5 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show cloudflared` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
@@ -13,10 +12,10 @@
 
 Cloudflare Tunnel client for secure connections
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show cloudflared
-> ```
+## Binario y referencia CLI
+
+**Binario:** `cloudflared`
+
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +23,19 @@ Cloudflare Tunnel client for secure connections
 core install cloudflared        # instalar
 core update cloudflared         # actualizar
 core uninstall cloudflared      # eliminar
-core search cloudflared         # encontrarlo entre las herramientas
 ```
+
+```bash
+core install cloudflared      # install
+core update cloudflared       # update
+core uninstall cloudflared    # remove
+```
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show cloudflared`.

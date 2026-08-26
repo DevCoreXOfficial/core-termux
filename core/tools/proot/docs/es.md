@@ -1,22 +1,84 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show proot` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** proot
 - **Tags:** container, chroot, termux
 - **Proyecto:** https://proot-me.github.io
+- **Código fuente:** https://github.com/proot-me/proot
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
-Chroot alternative for user-space sandboxing
+Chroot a nivel de usuario sin permisos root.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show proot
-> ```
+## Binario y referencia CLI
+
+**Binario:** `proot`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+proot 5.1.107.91: chroot, mount --bind, and binfmt_misc without privilege/setup.
+
+Usage:
+  proot [option] ... [command]
+
+
+Regular options:
+  -r *path*, --rootfs=*path*
+	Use *path* as the new guest root file-system, default is /.
+
+	The specified path typically contains a Linux distribution where
+	all new programs will be confined.  The default rootfs is /
+	when none is specified, this makes sense when the bind mechanism
+	is used to relocate host files and directories, see the -b
+	option and the Examples section for details.
+
+	It is recommended to use the -R or -S options instead.
+
+  -b *path*, --bind=*path*, -m *path*, --mount=*path*
+	Make the content of *path* accessible in the guest rootfs.
+
+	This option makes any file or directory of the host rootfs
+	accessible in the confined environment just as if it were part of
+	the guest rootfs.  By default the host path is bound to the same
+	path in the guest rootfs but users can specify any other location
+	with the syntax: -b *host_path*:*guest_location*.  If the
+	guest location is a symbolic link, it is dereferenced to ensure
+	the new content is accessible through all the symbolic links that
+	point to the overlaid content.  In most cases this default
+	behavior shouldn't be a problem, although it is possible to
+	explicitly not dereference the guest location by appending it the
+	! character: -b *host_path*:*guest_location!*.
+
+  -q *command*, --qemu=*command*
+	Execute guest programs through QEMU as specified by *command*.
+
+	Each time a guest program is going to be executed, PRoot inserts
+	the QEMU user-mode command in front of the initial request.
+	That way, guest programs actually run on a virtual guest CPU
+	emulated by QEMU user-mode.  The native execution of host programs
+	is still effective and the whole host rootfs is bound to
+	/host-rootfs in the guest environment.
+
+  -w *path*, --pwd=*path*, --cwd=*path*
+	Set the initial working directory to *path*.
+
+	Some programs expect to be launched from a given directory but do
+	not perform any chdir by themselves.  This option avoids the
+	need for running a shell and then entering the directory manually.
+
+  --kill-on-exit
+	Kill all processes on command exit.
+
+	When the executed command leaves orphean or detached processes
+	around, proot waits until all processes possibly terminate. This option forces
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +86,15 @@ Chroot alternative for user-space sandboxing
 core install proot        # instalar
 core update proot         # actualizar
 core uninstall proot      # eliminar
-core search proot         # encontrarlo entre las herramientas
 ```
+
+See https://proot-me.github.io for full usage.
+
+<!-- cli-reference -->
+
 
 ## Notas
 
-- Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- Plataformas soportadas: **termux**.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show proot`.

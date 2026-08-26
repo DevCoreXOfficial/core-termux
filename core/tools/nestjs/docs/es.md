@@ -1,22 +1,25 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show nestjs` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** NestJS CLI
 - **Tags:** framework, backend, nodejs, api
 - **Proyecto:** https://docs.nestjs.com
+- **Código fuente:** https://github.com/nestjs/nest
 - **Dependencias:** nodejs
 
 ## ¿Qué es?
 
-Progressive Node.js framework for building efficient, reliable applications
+Framework progresivo de Node.js para APIs empresariales.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show nestjs
-> ```
+## Binario y referencia CLI
+
+**Binario:** `nest`
+
+Salida real de `--help` y comandos comunes:
+
+- **Binary:** `nest`
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +27,15 @@ Progressive Node.js framework for building efficient, reliable applications
 core install nestjs        # instalar
 core update nestjs         # actualizar
 core uninstall nestjs      # eliminar
-core search nestjs         # encontrarlo entre las herramientas
 ```
+
+See https://docs.nestjs.com for full usage.
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show nestjs`.

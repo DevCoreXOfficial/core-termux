@@ -96,4 +96,8 @@ HELP TOPICS
 "ghcr.io/devcontainers/features/github-cli:1": {}
 }
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show gh:es`.

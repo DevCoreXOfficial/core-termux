@@ -1,22 +1,37 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show localtunnel` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** Localtunnel
 - **Tags:** tunnel, localhost, expose
 - **Proyecto:** https://theboroer.github.io/localtunnel-www/
+- **Código fuente:** https://github.com/localtunnel/server
 - **Dependencias:** nodejs
 
 ## ¿Qué es?
 
-Expose localhost to the internet securely
+Expone tu localhost a internet de forma gratuita.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show localtunnel
-> ```
+## Binario y referencia CLI
+
+**Binario:** `lt`
+
+Salida real de `--help` y comandos comunes:
+
+
+### Common commands
+
+```bash
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+bin/server --port 1234
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+bin/server --port 1234
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +39,29 @@ Expose localhost to the internet securely
 core install localtunnel        # instalar
 core update localtunnel         # actualizar
 core uninstall localtunnel      # eliminar
-core search localtunnel         # encontrarlo entre las herramientas
 ```
+
+> Extracto de la documentación oficial (en inglés):
+>
+Example from the official README:
+
+```bash
+# pick a place where the files will live
+git clone git://github.com/defunctzombie/localtunnel-server.git
+cd localtunnel-server
+npm install
+
+# server set to run on port 1234
+bin/server --port 1234
+```
+
+Full documentation: https://github.com/localtunnel/server
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show localtunnel`.

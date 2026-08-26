@@ -45,4 +45,8 @@ upload, verbose.
 Use "--help all" to list all options
 Use "--help [option]" to view documentation for a given option
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show curl:es`.

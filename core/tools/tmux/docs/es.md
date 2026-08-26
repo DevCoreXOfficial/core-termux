@@ -1,22 +1,32 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show tmux` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** tmux
 - **Tags:** terminal, multiplexer, sessions
 - **Proyecto:** https://github.com/tmux/tmux
+- **Código fuente:** https://github.com/tmux/tmux
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
-Terminal multiplexer for managing multiple sessions
+Multiplexor de terminal: sesiones persistentes, ventanas y paneles.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show tmux
-> ```
+## Binario y referencia CLI
+
+**Binario:** `tmux`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+tmux: unknown option -- -
+usage: tmux [-2CDhlNuVv] [-c shell-command] [-f file] [-L socket-name]
+            [-S socket-path] [-T features] [command [flags]]
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +34,15 @@ Terminal multiplexer for managing multiple sessions
 core install tmux        # instalar
 core update tmux         # actualizar
 core uninstall tmux      # eliminar
-core search tmux         # encontrarlo entre las herramientas
 ```
+
+See https://github.com/tmux/tmux for full usage.
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show tmux`.

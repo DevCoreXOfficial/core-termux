@@ -153,4 +153,8 @@ Log in, then start working with the Hub:
 - [Search](https://huggingface.co/docs/huggingface_hub/en/guides/search) for models, datasets and Spaces.
 - [Share Model Cards](https://huggingface.co/docs/huggingface_hub/en/guides/model-cards) to document your models.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show hugging-face:es`.

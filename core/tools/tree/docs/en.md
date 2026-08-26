@@ -78,4 +78,8 @@ usage: tree [-acdfghilnpqrstuvxACDFJQNSUX] [-L level [-R]] [-H [-]baseHREF]
   -t            Sort files by last modification time.
   -c            Sort files by last status change time.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show tree:es`.

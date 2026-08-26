@@ -1,6 +1,5 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show tmate` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
@@ -13,10 +12,10 @@
 
 Instant terminal sharing for pair programming
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show tmate
-> ```
+## Binario y referencia CLI
+
+**Binario:** `tmate`
+
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +23,19 @@ Instant terminal sharing for pair programming
 core install tmate        # instalar
 core update tmate         # actualizar
 core uninstall tmate      # eliminar
-core search tmate         # encontrarlo entre las herramientas
 ```
+
+```bash
+core install tmate      # install
+core update tmate       # update
+core uninstall tmate    # remove
+```
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show tmate`.

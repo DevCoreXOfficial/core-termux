@@ -1,22 +1,38 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show bc` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** bc
 - **Tags:** calculator, math
-- **Proyecto:** —
+
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
 Arbitrary precision calculator language
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show bc
-> ```
+## Binario y referencia CLI
+
+**Binario:** `bc`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+usage: bc [options] [file ...]
+  -h  --help         print this usage and exit
+  -i  --interactive  force interactive mode
+  -l  --mathlib      use the predefined math routines
+  -q  --quiet        don't print initial banner
+  -s  --standard     non-standard bc constructs are errors
+  -w  --warn         warn about non-standard bc constructs
+  -v  --version      print version information and exit
+
+Please report bugs to <bug-bc@gnu.org>
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +40,12 @@ Arbitrary precision calculator language
 core install bc        # instalar
 core update bc         # actualizar
 core uninstall bc      # eliminar
-core search bc         # encontrarlo entre las herramientas
 ```
+
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show bc`.

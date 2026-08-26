@@ -77,3 +77,8 @@ MIT
 ## Binary & CLI Reference
 
 - **Binary:** `ctx7`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show ctx7:es`.

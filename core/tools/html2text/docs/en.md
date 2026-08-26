@@ -43,4 +43,8 @@ Unrecognized command line option "--help", try "-help".
 >>> print(html2text.html2text("<p><strong>Zed's</strong> dead baby, <em>Zed's</em> dead.</p>"))
 **Zed's** dead baby, _Zed's_ dead.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show html2text:es`.

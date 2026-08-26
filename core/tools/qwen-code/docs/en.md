@@ -98,4 +98,8 @@ qwen          # Launch interactive terminal UI
 | Auto-Memory, Auto-Skills, Hooks                                    |     ✓     |      ✓      |
 | Built-in Skills (/review, /batch, /loop, /bugfix…)                 |     ✓     |      ✓      |
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show qwen-code:es`.

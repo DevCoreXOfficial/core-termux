@@ -148,4 +148,8 @@ Display options:
     -show-original-dictionary y/N
         Show dictionary entry of original text or not.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show translate:es`.

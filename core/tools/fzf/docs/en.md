@@ -159,4 +159,8 @@ export FZF_CTRL_R_OPTS="
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show fzf:es`.

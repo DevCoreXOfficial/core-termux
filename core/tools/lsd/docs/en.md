@@ -95,4 +95,8 @@ Options:
 The alias above will replace a stock ls command with an lsd command without additional parameters.
 Some examples of other useful aliases are:
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show lsd:es`.

@@ -77,4 +77,8 @@ Image Settings:
   -intensity method    method to generate an intensity value from a pixel
   -intent type         type of rendering intent when managing the image color
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show imagemagick:es`.

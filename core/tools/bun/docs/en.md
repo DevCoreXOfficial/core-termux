@@ -37,14 +37,14 @@ Commands:
   run       ./my-script.ts       Execute a file with Bun
             lint                 Run a package.json script
   test                           Run unit tests with Bun
-  x         vite                 Execute a package binary (CLI), installing if needed (bunx)
+  x         eslint               Execute a package binary (CLI), installing if needed (bunx)
   repl                           Start a REPL session with Bun
   exec                           Run a shell script directly with Bun
 
   install                        Install dependencies for a package.json (bun i)
-  add       hono                 Add a dependency to package.json (bun a)
-  remove    left-pad             Remove a dependency from package.json (bun rm)
-  update    react                Update outdated dependencies
+  add       @zarfjs/zarf         Add a dependency to package.json (bun a)
+  remove    babel-core           Remove a dependency from package.json (bun rm)
+  update    zod                  Update outdated dependencies
   audit                          Check installed packages for vulnerabilities
   dedupe                         Remove duplicate versions from the lockfile
   prune                          Remove packages that are not in the lockfile from node_modules
@@ -54,13 +54,13 @@ Commands:
   publish                        Publish a package to the npm registry
   patch <pkg>                    Prepare a package for patching
   pm <subcommand>                Additional package management utilities
-  info      lyra                 Display package metadata from the registry
-  why       @remix-run/dev       Explain why a package is installed
+  info      tailwindcss          Display package metadata from the registry
+  why       elysia               Explain why a package is installed
 
   build     ./a.ts ./b.jsx       Bundle TypeScript & JavaScript into a single file
 
   init                           Start an empty Bun project from a built-in template
-  create    elysia               Create a new project from a template (bun c)
+  create    svelte               Create a new project from a template (bun c)
   upgrade                        Upgrade to latest version of Bun.
 
   <command> --help               Print help text for command.
@@ -92,4 +92,8 @@ Flags:
 ```bash
 bun run index.tsx             # TS and JSX supported out-of-the-box
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show bun:es`.

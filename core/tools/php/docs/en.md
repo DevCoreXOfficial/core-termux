@@ -88,4 +88,8 @@ Full documentation: https://www.php.net
 <!-- cli-reference -->
 - **Binary:** `php`
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show php:es`.

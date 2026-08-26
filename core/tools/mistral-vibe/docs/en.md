@@ -100,4 +100,8 @@ vibe
 vibe "Refactor the main function in cli/main.py to be more modular."
 cd /path/to/your/project
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show mistral-vibe:es`.

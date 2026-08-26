@@ -56,3 +56,8 @@ Follow_us_on_XFollow_on_LinkedInJoin_our_Discord_serverFollow_us_on_GitHub
 ## Binary & CLI Reference
 
 - **Binary:** `cmdc`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show command-code:es`.

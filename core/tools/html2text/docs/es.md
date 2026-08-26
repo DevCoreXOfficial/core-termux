@@ -1,22 +1,39 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show html2text` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** html2text
 - **Tags:** html, conversion
-- **Proyecto:** —
+- **Código fuente:** https://github.com/Alir3z4/html2text
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
-Convert HTML documents to plain text
+Convierte HTML a texto plano legible.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show html2text
-> ```
+## Binario y referencia CLI
+
+**Binario:** `html2text`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+Unrecognized command line option "--help", try "-help".
+```
+
+
+### Common commands
+
+```bash
+>>> import html2text
+>>>
+>>> print(html2text.html2text("<p><strong>Zed's</strong> dead baby, <em>Zed's</em> dead.</p>"))
+**Zed's** dead baby, _Zed's_ dead.
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +41,26 @@ Convert HTML documents to plain text
 core install html2text        # instalar
 core update html2text         # actualizar
 core uninstall html2text      # eliminar
-core search html2text         # encontrarlo entre las herramientas
 ```
+
+> Extracto de la documentación oficial (en inglés):
+>
+Example from the official README:
+
+```bash
+>>> import html2text
+>>>
+>>> print(html2text.html2text("<p><strong>Zed's</strong> dead baby, <em>Zed's</em> dead.</p>"))
+**Zed's** dead baby, _Zed's_ dead.
+```
+
+Full documentation: https://github.com/Alir3z4/html2text
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show html2text`.

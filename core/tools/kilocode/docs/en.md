@@ -29,7 +29,7 @@ Full documentation: https://kilocode.ai
 ### `--help` output
 
 ```text
-INFO  2026-08-26T04:29:23 +207ms service=default version=7.4.23 command=--help process_role=main run_id=562d98dd-ad0d-4c50-9cb1-082be04d29b6 opencode
+INFO  2026-08-26T04:42:48 +242ms service=default version=7.4.23 command=--help process_role=main run_id=d0354513-e65c-4dde-9ae8-a3191511ed1e opencode
 ██  ██ ██🬺🬏   ██  ██   ██🬺🬏     ████ ██     ██🬺🬏
 ████🬺🬏 ~~██   ██  ~~ ██~~██   ██~~~~ ██     ~~██
 ██  ██ ██████ 🬁🬬████ 🬁🬬██~~   🬁🬬████ 🬁🬬████ ██████
@@ -92,4 +92,8 @@ Options:
 ```bash
 kilo run --auto "run tests and fix any failures"
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show kilocode:es`.

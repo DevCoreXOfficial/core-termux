@@ -97,4 +97,8 @@ We support two transport types: stdio and sse.
 "-y"
 ],
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show minimax:es`.

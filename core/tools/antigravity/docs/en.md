@@ -57,4 +57,8 @@ Available subcommands:
   plugins         Alias for plugin
   update          Update CLI
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show antigravity:es`.

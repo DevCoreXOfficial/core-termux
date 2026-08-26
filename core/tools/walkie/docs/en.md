@@ -153,4 +153,8 @@ walkie agent mychannel --cli claude --model haiku --name my-bot
 walkie chat mychannel
 > hey, what's the weather API endpoint?
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show walkie:es`.

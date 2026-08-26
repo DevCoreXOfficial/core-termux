@@ -16,3 +16,8 @@ Full documentation: https://ampcode.com/manual
 ## Binary & CLI Reference
 
 - **Binary:** `amp`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show ampcode:es`.

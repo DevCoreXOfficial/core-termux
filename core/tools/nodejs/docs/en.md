@@ -85,4 +85,8 @@ Options:
   --disable-warning=...       silence specific process warnings
   --disable-wasm-trap-handler Disable trap-handler-based WebAssembly
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show nodejs:es`.

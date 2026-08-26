@@ -103,4 +103,8 @@ hermes claw migrate --dry-run    # Preview what would be migrated
 hermes claw migrate --preset user-data   # Migrate without secrets
 hermes claw migrate --overwrite  # Overwrite existing conflicts
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show hermes-agent:es`.

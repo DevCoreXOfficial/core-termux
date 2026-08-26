@@ -81,4 +81,8 @@ cd my-next-app
 next-turbopack dev     # Start dev server with Turbopack
 next-turbopack build   # Production build with Turbopack
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show turbopack:es`.

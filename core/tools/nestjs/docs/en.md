@@ -19,3 +19,8 @@ See https://docs.nestjs.com for full usage.
 ## Binary & CLI Reference
 
 - **Binary:** `nest`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show nestjs:es`.

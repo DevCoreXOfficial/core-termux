@@ -98,4 +98,8 @@ Full documentation: https://www.mongodb.com
 <!-- cli-reference -->
 - **Binary:** `mongosh` (aliases: `mongod`, `mongo`)
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show mongodb:es`.

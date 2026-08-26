@@ -77,4 +77,8 @@ OPTIONS:
   -darwin-target-variant <value>
                           Generate code for an additional runtime variant of the deployment target
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show clang:es`.

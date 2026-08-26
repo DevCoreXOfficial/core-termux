@@ -92,4 +92,8 @@ Command options:
 ```bash
 docker run --rm -i ghcr.io/jqlang/jq:latest < package.json '.version'
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show jq:es`.

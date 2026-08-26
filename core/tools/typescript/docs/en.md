@@ -17,3 +17,8 @@ Full documentation: https://www.typescriptlang.org
 ## Binary & CLI Reference
 
 - **Binary:** `tsc`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show typescript:es`.

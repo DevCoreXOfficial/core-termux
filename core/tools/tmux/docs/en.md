@@ -27,4 +27,8 @@ tmux: unknown option -- -
 usage: tmux [-2CDhlNuVv] [-c shell-command] [-f file] [-L socket-name]
             [-S socket-path] [-T features] [command [flags]]
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show tmux:es`.

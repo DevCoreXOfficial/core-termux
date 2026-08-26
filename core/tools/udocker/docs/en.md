@@ -159,4 +159,8 @@ udocker pull   busybox
 udocker pull   iscampos/openqcd
 udocker images
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show udocker:es`.

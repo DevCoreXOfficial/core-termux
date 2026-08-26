@@ -53,4 +53,8 @@ Options:
 OR
 You can also start codebuff in an existing project directory:
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show freebuff:es`.

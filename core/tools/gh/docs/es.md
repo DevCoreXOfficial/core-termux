@@ -1,22 +1,93 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show gh` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** GitHub CLI
 - **Tags:** git, github, cli
 - **Proyecto:** https://cli.github.com
+- **Código fuente:** https://github.com/cli/cli
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
-Official GitHub command-line tool for managing repositories, PRs, and issues
+CLI oficial de GitHub: PRs, issues, releases y más desde la terminal.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show gh
-> ```
+## Binario y referencia CLI
+
+**Binario:** `gh`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+Work seamlessly with GitHub from the command line.
+
+USAGE
+  gh <command> <subcommand> [flags]
+
+CORE COMMANDS
+  auth:          Authenticate gh and git with GitHub
+  browse:        Open repositories, issues, pull requests, and more in the browser
+  codespace:     Connect to and manage codespaces
+  discussion:    Work with GitHub Discussions (preview)
+  gist:          Manage gists
+  issue:         Manage issues
+  org:           Manage organizations
+  pr:            Manage pull requests
+  project:       Work with GitHub Projects.
+  release:       Manage releases
+  repo:          Manage repositories
+  skill:         Install and manage agent skills (preview)
+
+GITHUB ACTIONS COMMANDS
+  cache:         Manage GitHub Actions caches
+  run:           View details about workflow runs
+  workflow:      View details about GitHub Actions workflows
+
+ALIAS COMMANDS
+  co:            Alias for "pr checkout"
+
+ADDITIONAL COMMANDS
+  agent-task:    Work with agent tasks (preview)
+  alias:         Create command shortcuts
+  api:           Make an authenticated GitHub API request
+  attestation:   Work with artifact attestations
+  completion:    Generate shell completion scripts
+  config:        Manage configuration for gh
+  copilot:       Run the GitHub Copilot CLI (preview)
+  extension:     Manage gh extensions
+  gpg-key:       Manage GPG keys
+  label:         Manage labels
+  licenses:      View third-party license information
+  preview:       Execute previews for gh features
+  ruleset:       View info about repo rulesets
+  search:        Search for repositories, issues, and pull requests
+  secret:        Manage GitHub secrets
+  ssh-key:       Manage SSH keys
+  status:        Print information about relevant issues, pull requests, and notifications across repositories
+  variable:      Manage GitHub Actions variables
+
+HELP TOPICS
+  accessibility: Learn about GitHub CLI's accessibility experiences
+  actions:       Learn about working with GitHub Actions
+  environment:   Environment variables that can be used with gh
+  exit-codes:    Exit codes used by gh
+  formatting:    Formatting options for JSON data exported from gh
+  mintty:        Information about using gh with MinTTY
+  reference:     A comprehensive reference of all gh commands
+```
+
+
+### Common commands
+
+```bash
+"features": {
+"ghcr.io/devcontainers/features/github-cli:1": {}
+}
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +95,23 @@ Official GitHub command-line tool for managing repositories, PRs, and issues
 core install gh        # instalar
 core update gh         # actualizar
 core uninstall gh      # eliminar
-core search gh         # encontrarlo entre las herramientas
 ```
+
+Example from the official README:
+
+```bash
+"features": {
+  "ghcr.io/devcontainers/features/github-cli:1": {}
+}
+```
+
+Full documentation: https://cli.github.com
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show gh`.

@@ -144,4 +144,8 @@ $ echo '${array[dash-string]}' | shfmt
 ${array[dash - string]}
 1:1: reached ) without matching $(( with ))
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show shfmt:es`.

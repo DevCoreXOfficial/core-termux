@@ -28,3 +28,8 @@ Full documentation: https://vercel.com/docs/cli
 ## Binary & CLI Reference
 
 - **Binary:** `vercel`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show vercel:es`.

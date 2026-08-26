@@ -97,4 +97,8 @@ Then add `kimi-cli` to your Zsh plugin list in `~/.zshrc`:
 After restarting Zsh, you can switch to agent mode by pressing `Ctrl-X`.
 <!-- cli-reference -->
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show kimi-code:es`.

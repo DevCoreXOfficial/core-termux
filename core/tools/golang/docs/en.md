@@ -75,4 +75,8 @@ Additional help topics:
 
 Use "go help <topic>" for more information about that topic.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show golang:es`.

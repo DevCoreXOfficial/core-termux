@@ -97,4 +97,8 @@ mimo attach http://127.0.0.1:4096
 powershell -ep Bypass -c "irm https://mimo.xiaomi.com/install.ps1 | iex"
 mimo
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show mimocode:es`.

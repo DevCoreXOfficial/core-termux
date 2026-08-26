@@ -79,4 +79,8 @@ Regular options:
 	When the executed command leaves orphean or detached processes
 	around, proot waits until all processes possibly terminate. This option forces
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show proot:es`.

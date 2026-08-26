@@ -52,4 +52,8 @@ cd openssh
 ./configure # [options]
 make && make tests
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show openssh:es`.

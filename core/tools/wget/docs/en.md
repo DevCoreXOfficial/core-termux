@@ -79,4 +79,8 @@ Download:
                                      (applies if more then 1 URL is to be retrieved)
        --waitretry=SECONDS         wait 1..SECONDS between retries of a retrieval
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show wget:es`.

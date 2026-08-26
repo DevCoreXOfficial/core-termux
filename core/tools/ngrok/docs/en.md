@@ -98,4 +98,8 @@ You can use ngrok's [Traffic Policy](https://ngrok.com/docs/traffic-policy/)
 engine to apply API Gateway behaviors at ngrok's cloud service to auth, route,
 block and rate-limit the traffic. For example:
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show ngrok:es`.

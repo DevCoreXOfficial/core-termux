@@ -55,4 +55,8 @@ Sentinel mode:
 ```bash
 docker run -d -p 6379:6379 redis:latest
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show redis:es`.

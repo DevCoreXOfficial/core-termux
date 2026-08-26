@@ -77,4 +77,8 @@ Connection options:
   -U, --username=USERNAME  database user name
   -w, --no-password        never prompt for password
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show postgresql:es`.

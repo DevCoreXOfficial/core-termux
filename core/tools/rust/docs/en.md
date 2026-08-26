@@ -109,4 +109,8 @@ Commands:
 
 See 'cargo help <command>' for more information on a specific command.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show rust:es`.

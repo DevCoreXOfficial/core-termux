@@ -145,4 +145,8 @@ The following specify which files/extra groups are read (specified before remain
                       with --comments.
   -C, --compress      Use compression in server/client protocol.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show mariadb:es`.

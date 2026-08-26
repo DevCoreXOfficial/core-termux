@@ -138,4 +138,8 @@ Options:
 This program built for aarch64-unknown-linux-android
 Report bugs to <bug-make@gnu.org>
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show make:es`.

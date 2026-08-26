@@ -97,4 +97,8 @@ openspec init
 cd your-project
 openspec init
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show openspec:es`.

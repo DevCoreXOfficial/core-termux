@@ -27,3 +27,8 @@ Full documentation: https://github.com/gitlawb/openclaude
 ## Binary & CLI Reference
 
 - **Binary:** `openclaude`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show openclaude:es`.

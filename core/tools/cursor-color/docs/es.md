@@ -1,22 +1,21 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show cursor-color` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** Cursor Color
 - **Tags:** terminal, theme, color, cursor
-- **Proyecto:** —
+
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
-Set your terminal cursor color (green by default)
+Color del cursor del terminal (verde por defecto).
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show cursor-color
-> ```
+## Binario y referencia CLI
+
+**Binario:** `(sin binario)`
+
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +23,17 @@ Set your terminal cursor color (green by default)
 core install cursor-color        # instalar
 core update cursor-color         # actualizar
 core uninstall cursor-color      # eliminar
-core search cursor-color         # encontrarlo entre las herramientas
 ```
+
+```bash
+core install cursor      # install
+core update cursor       # update
+core uninstall cursor    # remove
+```
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show cursor-color`.

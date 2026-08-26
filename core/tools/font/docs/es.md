@@ -1,22 +1,21 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show font` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** Meslo Nerd Font
 - **Tags:** terminal, nerd-font, typography
-- **Proyecto:** —
+
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
-Meslo Nerd Font for your terminal
+Fuente Meslo Nerd Font para tu terminal.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show font
-> ```
+## Binario y referencia CLI
+
+**Binario:** `(sin binario)`
+
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +23,17 @@ Meslo Nerd Font for your terminal
 core install font        # instalar
 core update font         # actualizar
 core uninstall font      # eliminar
-core search font         # encontrarlo entre las herramientas
 ```
+
+```bash
+core install font      # install
+core update font       # update
+core uninstall font    # remove
+```
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show font`.

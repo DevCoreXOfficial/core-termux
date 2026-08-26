@@ -41,4 +41,8 @@ Full documentation: https://ollama.com
 <!-- cli-reference -->
 - **Binary:** `ollama`
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show ollama:es`.

@@ -43,4 +43,8 @@ bin/server --port 1234
 git clone git://github.com/defunctzombie/localtunnel-server.git
 cd localtunnel-server
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show localtunnel:es`.

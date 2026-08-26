@@ -97,4 +97,8 @@ engram tui                    # Visual memory browser
 gentle-ai sync --profile cheap:openrouter/qwen/qwen3-30b-a3b:free
 gentle-ai sync --profile-phase cheap:sdd-design:anthropic/claude-sonnet-4-20250514
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show gentle-ai:es`.

@@ -84,67 +84,6 @@ OpenClaw was built for **Molty**, a space lobster AI assistant, by Peter Steinbe
 
 - **Binary:** `openclaw`
 
-### `--help` output
-
-```text
-OpenClaw 2026.7.1-2 (0790d9f) — All your chats, one OpenClaw.
-
-Usage: openclaw [options] [command]
-
-Options:
-  --container <name>   Run the CLI inside a running Podman/Docker container
-                       named <name> (default: env OPENCLAW_CONTAINER)
-  --dev                Dev profile: isolate state under ~/.openclaw-dev, default
-                       gateway port 19001, and shift derived ports
-                       (browser/canvas)
-  -h, --help           Display help for command
-  --log-level <level>  Global log level override for file + console
-                       (silent|fatal|error|warn|info|debug|trace)
-  --no-color           Disable ANSI colors
-  --profile <name>     Use a named profile (isolates
-                       OPENCLAW_STATE_DIR/OPENCLAW_CONFIG_PATH under
-                       ~/.openclaw-<name>)
-  -V, --version        output the version number
-
-Commands:
-  Hint: commands suffixed with * have subcommands. Run <command> --help for details.
-  acp *                Run an ACP bridge backed by the Gateway
-  agent                Run an agent turn via the Gateway (use --local for
-                       embedded)
-  agents *             Manage isolated agents (workspaces + auth + routing)
-  approvals *          Manage exec approvals (gateway or node host)
-  attach               Attach Claude Code to a gateway session with scoped MCP
-                       tools
-  audit                Inspect metadata-only agent run and tool action records
-  backup *             Create and verify local backup archives for OpenClaw
-                       state
-  capability *         Run provider capability commands (fallback alias: infer)
-  channels *           Manage connected chat channels and accounts
-  chat                 Open a local terminal UI (alias for tui --local)
-  clawbot *            Legacy clawbot command aliases
-  commitments *        List and manage inferred follow-up commitments
-  completion           Generate shell completion script
-  config *             Non-interactive config helpers
-                       (get/set/patch/unset/file/schema/validate). Run without
-                       subcommand for guided setup.
-  configure            Interactive configuration for credentials, channels,
-                       gateway, and agent defaults
-  crestodian           Open the ring-zero setup and repair helper
-  cron *               Manage cron jobs (via Gateway)
-  daemon *             Manage the Gateway service (launchd/systemd/schtasks)
-  dashboard            Open the Control UI with your current token
-  devices *            Device pairing and auth tokens
-  directory *          Lookup contact and group IDs (self, peers, groups) for
-                       supported chat channels
-  dns *                DNS helpers for wide-area discovery (Tailscale + CoreDNS)
-  docs                 Search the live OpenClaw docs
-  doctor               Health checks + quick fixes for the gateway and channels
-  exec-approvals *     Manage exec approvals (alias for approvals)
-  exec-policy *        Show or synchronize requested exec policy with host
-                       approvals
-```
-
-
 ### Common commands
 
 ```bash
@@ -157,4 +96,8 @@ pnpm install
 pnpm build
 pnpm ui:build
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show openclaw:es`.

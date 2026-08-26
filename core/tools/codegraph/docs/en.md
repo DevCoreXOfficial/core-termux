@@ -155,4 +155,8 @@ codegraph install --print-config copilot-vscode      # same, for Copilot in VS C
 cd your-project
 codegraph init
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show codegraph:es`.

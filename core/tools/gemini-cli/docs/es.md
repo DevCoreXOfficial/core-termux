@@ -1,22 +1,37 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show gemini-cli` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** Gemini CLI
 - **Tags:** ai, agent, coding
 - **Proyecto:** https://google-gemini.github.io/gemini-cli/
+- **Código fuente:** https://github.com/google-gemini/gemini-cli
 - **Dependencias:** git, ripgrep
 
 ## ¿Qué es?
 
-Google's AI assistant with Gemini
+CLI de Google con el agente Gemini para tu terminal.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show gemini-cli
-> ```
+## Binario y referencia CLI
+
+**Binario:** `gemini`
+
+Salida real de `--help` y comandos comunes:
+
+
+### Common commands
+
+```bash
+gemini
+export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
+gemini
+export GEMINI_API_KEY="YOUR_API_KEY"
+gemini
+export GOOGLE_API_KEY="YOUR_API_KEY"
+export GOOGLE_GENAI_USE_VERTEXAI=true
+gemini
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +39,77 @@ Google's AI assistant with Gemini
 core install gemini-cli        # instalar
 core update gemini-cli         # actualizar
 core uninstall gemini-cli      # eliminar
-core search gemini-cli         # encontrarlo entre las herramientas
 ```
+
+> Extracto de la documentación oficial (en inglés):
+>
+### Option 1: Sign in with Google (OAuth login using your Google Account)
+
+**✨ Best for:** Individual developers as well as anyone who has a Gemini Code
+Assist License. (see
+[quota limits and terms of service](https://cloud.google.com/gemini/docs/quotas)
+for details)
+
+**Benefits:**
+
+- **Free tier**: 60 requests/min and 1,000 requests/day
+- **Gemini 3 models** with 1M token context window
+- **No API key management** - just sign in with your Google account
+- **Automatic updates** to latest models
+
+#### Start Gemini CLI, then choose _Sign in with Google_ and follow the browser authentication flow when prompted
+
+```bash
+gemini
+```
+
+#### If you are using a paid Code Assist License from your organization, remember to set the Google Cloud Project
+
+```bash
+# Set your Google Cloud Project
+export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
+gemini
+```
+
+### Option 2: Gemini API Key
+
+**✨ Best for:** Developers who need specific model control or paid tier access
+
+**Benefits:**
+
+- **Free tier**: 1000 requests/day with Gemini 3 (mix of flash and pro)
+- **Model selection**: Choose specific Gemini models
+- **Usage-based billing**: Upgrade for higher limits when needed
+
+```bash
+# Get your key from https://aistudio.google.com/apikey
+export GEMINI_API_KEY="YOUR_API_KEY"
+gemini
+```
+
+### Option 3: Vertex AI
+
+**✨ Best for:** Enterprise teams and production workloads
+
+**Benefits:**
+
+- **Enterprise features**: Advanced security and compliance
+- **Scalable**: Higher rate limits with billing account
+- **Integration**: Works with existing Google Cloud infrastructure
+
+```bash
+# Get your key from Google Cloud Console
+export GOOGLE_API_KEY="YOUR_API_KEY"
+export GOOGLE_GENAI_USE_VERTEXAI=true
+gemini
+```
+
+For Google Workspace accounts and other authentication methods, see the
+[authentication guide](https://www.geminicli.com/docs/get-started/authentication).
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show gemini-cli`.

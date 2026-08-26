@@ -16,3 +16,8 @@ Full documentation: https://cursor.com/cli
 ## Binary & CLI Reference
 
 - **Binary:** `cursor`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show cursor:es`.

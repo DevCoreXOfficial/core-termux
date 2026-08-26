@@ -96,4 +96,8 @@ Combine with `--format group` for a truly _luxe_ experience:
 - <kbd>a</kbd> Toggle all
 - <kbd>Enter</kbd> Upgrade
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show ncu:es`.

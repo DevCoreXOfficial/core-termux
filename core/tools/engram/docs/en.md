@@ -84,3 +84,8 @@ MIT
 ## Binary & CLI Reference
 
 - **Binary:** `engram`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show engram:es`.

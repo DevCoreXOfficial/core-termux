@@ -1,22 +1,25 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show typescript` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** TypeScript
 - **Tags:** language, javascript, compiler
 - **Proyecto:** https://www.typescriptlang.org
+- **Código fuente:** https://github.com/microsoft/TypeScript
 - **Dependencias:** nodejs
 
 ## ¿Qué es?
 
-Typed superset of JavaScript that compiles to plain JavaScript
+Superset tipado de JavaScript que compila a JS plano.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show typescript
-> ```
+## Binario y referencia CLI
+
+**Binario:** `tsc`
+
+Salida real de `--help` y comandos comunes:
+
+- **Binary:** `tsc`
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +27,12 @@ Typed superset of JavaScript that compiles to plain JavaScript
 core install typescript        # instalar
 core update typescript         # actualizar
 core uninstall typescript      # eliminar
-core search typescript         # encontrarlo entre las herramientas
 ```
+
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show typescript`.

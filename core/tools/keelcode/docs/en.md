@@ -75,4 +75,8 @@ OPTIONS
       --resume [id|#]      resume a saved session, or list sessions if omitted
 
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show keelcode:es`.

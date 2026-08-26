@@ -1,22 +1,43 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show ncurses` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** ncurses-utils
 - **Tags:** tput, terminal
-- **Proyecto:** —
+
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
 Terminal UI manipulation utilities
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show ncurses
-> ```
+## Binario y referencia CLI
+
+**Binario:** `tput`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+tput: invalid option -- -
+Usage: tput [options] [command]
+
+Options:
+  -S <<       read commands from standard input
+  -T TERM     use this instead of $TERM
+  -V          print curses-version
+  -v          verbose, show warnings
+  -x          do not try to clear scrollback
+
+Commands:
+  clear       clear the screen
+  init        initialize the terminal
+  reset       reinitialize the terminal
+  capname     unlike clear/init/reset, print value for capability "capname"
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +45,12 @@ Terminal UI manipulation utilities
 core install ncurses        # instalar
 core update ncurses         # actualizar
 core uninstall ncurses      # eliminar
-core search ncurses         # encontrarlo entre las herramientas
 ```
+
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show ncurses`.

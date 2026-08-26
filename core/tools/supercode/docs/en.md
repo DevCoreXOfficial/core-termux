@@ -18,3 +18,8 @@ See the project page for full usage.
 ## Binary & CLI Reference
 
 - **Binary:** `supercode`
+## Notes
+
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show supercode:es`.

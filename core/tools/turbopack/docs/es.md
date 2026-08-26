@@ -1,6 +1,5 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show turbopack` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
@@ -13,10 +12,27 @@
 
 Run Next.js with Turbopack on Termux (Android aarch64).
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show turbopack
-> ```
+## Binario y referencia CLI
+
+**Binario:** `next-turbopack`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+No package.json found in current or parent directories
+```
+
+
+### Common commands
+
+```bash
+cd my-next-app
+next-turbopack dev     # Start dev server with Turbopack
+next-turbopack build   # Production build with Turbopack
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +40,19 @@ Run Next.js with Turbopack on Termux (Android aarch64).
 core install turbopack        # instalar
 core update turbopack         # actualizar
 core uninstall turbopack      # eliminar
-core search turbopack         # encontrarlo entre las herramientas
 ```
+
+```bash
+core install turbopack      # install
+core update turbopack       # update
+core uninstall turbopack    # remove
+```
+
+<!-- cli-reference -->
+
 
 ## Notas
 
 - Plataformas soportadas: **termux**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show turbopack`.

@@ -1,22 +1,84 @@
-> 🇪🇸 **Documentación en español.** El contenido técnico profundo procede de la
-> documentación oficial del proyecto; la traducción íntegra está en progreso.
-> Consulta la versión completa con `core show imagemagick` (inglés).
+> 🇪🇸 **Documentación en español.** Los comandos, banderas y salidas de ayuda
+> se mantienen en su idioma original porque así se usan en la terminal.
 
 ## Información del Paquete
 
 - **Nombre:** ImageMagick
 - **Tags:** images, convert, edit
 - **Proyecto:** https://imagemagick.org
+- **Código fuente:** https://github.com/ImageMagick/ImageMagick
 - **Dependencias:** ninguna requerida por Core
 
 ## ¿Qué es?
 
-Image manipulation and conversion suite
+Suite para crear, editar, componer y convertir imágenes.
 
-> ℹ️ La descripción técnica detallada de este proyecto está disponible en inglés:
-> ```bash
-> core show imagemagick
-> ```
+## Binario y referencia CLI
+
+**Binario:** `magick`
+
+Salida real de `--help` y comandos comunes:
+
+
+### `--help` output
+
+```text
+Version: ImageMagick 7.1.2-29 Q16-HDRI aarch64 b919b37fd:20260727 https://imagemagick.org
+Copyright: (C) 1999 ImageMagick Studio LLC
+License: https://imagemagick.org/license/
+Features: Cipher DPC HDRI
+Delegates (built-in): bzlib cairo djvu fftw fontconfig freetype gslib gvc heic jng jp2 jpeg jxl lcms lqr lzma openexr pangocairo png ps raqm raw rsvg tiff webp x xml zip zlib zstd
+Compiler: clang (21.0.0)
+Usage: magick tool [ {option} | {image} ... ] {output_image}
+Usage: magick [ {option} | {image} ... ] {output_image}
+       magick [ {option} | {image} ... ] -script {filename} [ {script_args} ...]
+
+Image Settings:
+  -adjoin              join images into a single multi-image file
+  -affine matrix       affine transform matrix
+  -alpha option        activate, deactivate, reset, or set the alpha channel
+  -antialias           remove pixel-aliasing
+  -authenticate password
+                       decipher image with this password
+  -attenuate value     lessen (or intensify) when adding noise to an image
+  -background color    background color
+  -bias value          add bias when convolving an image
+  -black-point-compensation
+                       use black point compensation
+  -blue-primary point  chromaticity blue primary point
+  -bordercolor color   border color
+  -caption string      assign a caption to an image
+  -clip                clip along the first path from the 8BIM profile
+  -clip-mask filename  associate a clip mask with the image
+  -clip-path id        clip along a named path from the 8BIM profile
+  -colorspace type     alternate image colorspace
+  -comment string      annotate image with comment
+  -compose operator    set image composite operator
+  -compress type       type of pixel compression when writing the image
+  -define format:option
+                       define one or more image format options
+  -delay value         display the next image after pausing
+  -density geometry    horizontal and vertical density of the image
+  -depth value         image depth
+  -direction type      render text right-to-left or left-to-right
+  -display server      get image or font from this X server
+  -dispose method      layer disposal method
+  -dither method       apply error diffusion to image
+  -encoding type       text encoding type
+  -endian type         endianness (MSB or LSB) of the image
+  -family name         render text with this font family
+  -features distance   analyze image features (e.g. contrast, correlation)
+  -fill color          color to use when filling a graphic primitive
+  -filter type         use this filter when resizing an image
+  -font name           render text with this font
+  -format "string"     output formatted image characteristics
+  -fuzz distance       colors within this distance are considered equal
+  -gravity type        horizontal and vertical text placement
+  -green-primary point chromaticity green primary point
+  -illuminant type     reference illuminant
+  -intensity method    method to generate an intensity value from a pixel
+  -intent type         type of rendering intent when managing the image color
+```
 
 ## ¿Cómo usarlo?
 
@@ -24,11 +86,12 @@ Image manipulation and conversion suite
 core install imagemagick        # instalar
 core update imagemagick         # actualizar
 core uninstall imagemagick      # eliminar
-core search imagemagick         # encontrarlo entre las herramientas
 ```
+
+
 
 ## Notas
 
 - Plataformas soportadas: **termux, ubuntu, wsl**.
-- Los métodos de instalación son específicos por plataforma; Core elige el correcto automáticamente.
-- En Termux algunas herramientas ofrecen varios métodos de instalación (glibc nativo, glibc+proot, contenedor proot-distro); en Ubuntu/WSL se usan siempre métodos oficiales sin workarounds.
+- En Termux algunas herramientas ofrecen varios métodos de instalación (menú interactivo); en Ubuntu/WSL se usan siempre métodos oficiales.
+- Documentación completa en inglés: `core show imagemagick`.

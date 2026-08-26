@@ -52,4 +52,8 @@ Version: v1.6.0
 
 Use "spf [COMMAND] --help" for more information about a command.
 ```
+## Notes
 
+- Supported platforms: see manifest.
+- Termux uses platform-specific installers; Ubuntu/WSL use official channels.
+- Spanish (when available): `core show superfile:es`.
