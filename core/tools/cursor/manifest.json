@@ -6,7 +6,10 @@
     "ubuntu",
     "wsl"
   ],
-  "check_cmd": "cursor",
+  "check_cmd": [
+    "agent",
+    "cursor-agent"
+  ],
   "homepage": "https://cursor.com/cli",
   "description": "AI-powered coding agent that runs in your terminal",
   "tags": [

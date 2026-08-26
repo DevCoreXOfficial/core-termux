@@ -13,8 +13,12 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
-  mkdir -p "$HOME/.local/bin"
+  # Official prerequisites (docs): git, curl, xz-utils on Debian/Ubuntu.
+  pm_install git curl xz-utils ca-certificates
+  mkdir -p "$HOME/.local/bin" "$HOME/.local/opt"
   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash &>>"$LOG_FILE"
+  # Per-user layout symlinks into ~/.local/bin already; expose if root-mode.
+  [ -f /usr/local/bin/hermes ] && ln -sf /usr/local/bin/hermes "$HOME/.local/bin/hermes"
   # Expose binaries from well-known script locations.
   for d in "$HOME/.local/bin" "$HOME/bin"; do [[ -d "$d" ]] && case ":$PATH:" in *":$d:"*) ;; *) export PATH="$d:$PATH";; esac; done
 }

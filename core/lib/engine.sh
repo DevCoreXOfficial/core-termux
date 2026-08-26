@@ -165,9 +165,11 @@ engine_check_installed() {
       [[ -z "$b" ]] && continue
       # Already the canonical link? nothing to do.
       [[ "$(command -v "$b")" == "$HOME/.local/bin/$b" ]] && continue
+      local npmbin
+      npmbin="$(npm config get prefix 2>/dev/null)/bin"
       for d in "$HOME/.opencode/bin" "$HOME/.bun/bin" "$HOME/.cargo/bin" \
                "$HOME/go/bin" "$HOME/.factory/bin" "$HOME/.antigravity/bin" \
-               "$HOME/.${name}"*/bin "$HOME/bin"; do
+               "$npmbin" "$HOME/.${name}"*/bin "$HOME/bin"; do
         if [[ -x "$d/$b" ]]; then
           ln -sf "$d/$b" "$HOME/.local/bin/$b"
           hit=1
