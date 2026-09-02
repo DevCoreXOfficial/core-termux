@@ -317,9 +317,9 @@ engine_uninstall() {
     fi
     # Some upstream uninstallers exit non-zero even when they succeed;
     # absence of the binary is the ground truth.
-    # Safety net ONLY on failure: remove user-owned leftovers; system
+    # Safety net: remove user-owned leftovers; system
     # packages (e.g. /usr/bin/nvim from apt) are reported instead.
-    if [[ $rc -ne 0 && "$CORE_ENV" != "termux" ]] && manifest_is_installed "$dir"; then
+    if manifest_is_installed "$dir"; then
       log_warn "Uninstall incomplete - cleaning user-owned leftovers"
       local leftover=0 b bpath
       while IFS= read -r b; do

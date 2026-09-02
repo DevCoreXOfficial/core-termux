@@ -87,7 +87,17 @@ _download_binary() {
 }
 
 _download_binary_impl() {
+  mkdir -p "$DATA_DIR"
   if MUSE_LAUNCHER_INSTALL=1 bash "$LAUNCHER" &>>"$LOG_FILE"; then
+    # The launcher puts the binary as muse-bin-<version> in $DATA_DIR
+    # Create a wrapper script at ~/.local/bin/muse-code that invokes the launcher
+    mkdir -p "$HOME/.local/bin"
+    cat > "$HOME/.local/bin/muse-code" <<'WRAPPER'
+#!/data/data/com.termux/files/usr/bin/bash
+exec bash "$HOME/.local/share/muse-code/muse-launcher" "$@"
+WRAPPER
+    chmod 755 "$HOME/.local/bin/muse-code"
+    ln -sf "$HOME/.local/bin/muse-code" "$HOME/.local/bin/muse" 2>/dev/null || true
     return 0
   else
     log_warn "Binary download failed; first 'muse-code' run will retry"
@@ -96,9 +106,16 @@ _download_binary_impl() {
 }
 
 _setup_alias_and_support() {
-  if [[ -e "${PREFIX}/bin/muse-code" ]]; then
-    ln -sf muse-code "${PREFIX}/bin/muse" 2>/dev/null || true
+  mkdir -p "$HOME/.local/bin"
+  # ensure the wrapper exists and is executable
+  if [[ ! -x "$HOME/.local/bin/muse-code" ]]; then
+    cat > "$HOME/.local/bin/muse-code" <<'WRAPPER'
+#!/data/data/com.termux/files/usr/bin/bash
+exec bash "$HOME/.local/share/muse-code/muse-launcher" "$@"
+WRAPPER
+    chmod 755 "$HOME/.local/bin/muse-code"
   fi
+  ln -sf "$HOME/.local/bin/muse-code" "$HOME/.local/bin/muse" 2>/dev/null || true
   if [[ -r /linkerconfig/ld.config.txt ]]; then
     mkdir -p "${PREFIX}/linkerconfig" 2>/dev/null
     cp /linkerconfig/ld.config.txt "${PREFIX}/linkerconfig/ld.config.txt" 2>/dev/null || true
@@ -137,11 +154,11 @@ install_muse_code() {
   _download_binary || return 1
   _setup_alias_and_support
 
-  if [[ -x "${PREFIX}/bin/muse-code" ]]; then
-    if "${PREFIX}/bin/muse-code" --version &>/dev/null; then
+  if [[ -x "$HOME/.local/bin/muse-code" ]]; then
+    if "$HOME/.local/bin/muse-code" --version &>/dev/null; then
       log_success "Muse Code installed"
       echo
-      list_item "Run: ${D_CYAN}muse-code${NC}  (alias: ${D_CYAN}muse${NC})"
+      list_item "Run: ${GRAY_19}muse-code${NC}  (alias: ${GRAY_19}muse${NC})"
       echo
       return 0
     else

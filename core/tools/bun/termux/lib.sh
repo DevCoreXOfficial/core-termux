@@ -307,3 +307,21 @@ _install_pkg_fallback() {
   return 1
 }
 
+_uninstall_pkg_fallback() {
+  local pkg="$1"
+
+  if bun remove -g "$pkg" &>>"$LOG_FILE"; then
+    return 0
+  fi
+
+  _ensure_npm || return 1
+
+  if npm uninstall -g "$pkg" &>>"$LOG_FILE"; then
+    log_info "Removed '${pkg}' via npm (fallback)"
+    return 0
+  fi
+
+  log_error "Failed to remove '${pkg}' via both bun and npm"
+  return 1
+}
+

@@ -74,6 +74,8 @@ uninstall_supercode() {
 
 _uninstall_supercode_impl() {
   _uninstall_pkg_fallback "supercode-cli"
+  # also remove the binary from PREFIX/bin if it exists
+  rm -f "${PREFIX}/bin/supercode" 2>/dev/null || true
   return 0
 }
 
