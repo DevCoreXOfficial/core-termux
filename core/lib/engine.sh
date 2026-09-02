@@ -439,8 +439,16 @@ engine_update() {
 
   # Version flow: local -> remote -> compare -> suggest.
   local local_ver remote_ver
-  local_ver=$(bash "$script" version-local 2>/dev/null)
-  remote_ver=$(bash "$script" version-remote 2>/dev/null)
+  export CORE_PATH
+  _engine_check_versions() {
+    local_ver=$(bash "$script" version-local 2>/dev/null)
+    remote_ver=$(bash "$script" version-remote 2>/dev/null)
+  }
+  if [[ "$CORE_ENV" == "termux" ]]; then
+    loading "Checking versions" _engine_check_versions
+  else
+    _engine_check_versions
+  fi
 
   if [[ -z "$local_ver" || -z "$remote_ver" ]]; then
     local answer

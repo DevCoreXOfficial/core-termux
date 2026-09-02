@@ -48,10 +48,11 @@ _spin_capture() {
   local tmp
   tmp=$(mktemp)
   local spinner_fd
-  if [ -c /dev/tty ] 2>/dev/null; then
+  # Default to /dev/null (no terminal = no spinner)
+  spinner_fd=/dev/null
+  # Only use /dev/tty if we have a controlling terminal
+  if [ -t 0 ] || [ -t 1 ] || [ -t 2 ]; then
     spinner_fd=/dev/tty
-  else
-    spinner_fd=/dev/null
   fi
 
   printf "    ${WHITE}%s${GRAY_19} %s${NC}" "${frames[0]}" "$msg" >"$spinner_fd"
