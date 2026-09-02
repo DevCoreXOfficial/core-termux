@@ -221,7 +221,10 @@ engine_install() {
   local rc_snapshot_before rc_snapshot_after
   rc_snapshot_before=$(cat "$HOME/.zshrc" "$HOME/.bashrc" 2>/dev/null | cksum)
 
-  if _script_is_interactive "$script"; then
+  if [[ "$CORE_ENV" == "termux" ]]; then
+    _engine_run "$script" install
+    rc=$?
+  elif _script_is_interactive "$script"; then
     _engine_run "$script" install
     rc=$?
   else
@@ -308,7 +311,10 @@ engine_uninstall() {
   if [[ -n "$script" ]]; then
     LOG_FILE="$CORE_CACHE/install_$name.log"
 
-    if _script_is_interactive "$script"; then
+    if [[ "$CORE_ENV" == "termux" ]]; then
+      _engine_run "$script" uninstall
+      rc=$?
+    elif _script_is_interactive "$script"; then
       _engine_run "$script" uninstall
       rc=$?
     else
