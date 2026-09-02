@@ -15,7 +15,6 @@ LAUNCHER_URL="https://api.meta.ai/muse-launcher.sh"
 LAUNCHER="$DATA_DIR/muse-launcher"
 CHANNEL_URL="https://api.meta.ai/muse-code/channels/muse-stable"
 
-# ensure core cache dir for logs
 mkdir -p "$(dirname "$LOG_FILE")" 2>/dev/null
 
 sha256_of() {
@@ -89,15 +88,6 @@ _download_binary() {
 _download_binary_impl() {
   mkdir -p "$DATA_DIR"
   if MUSE_LAUNCHER_INSTALL=1 bash "$LAUNCHER" &>>"$LOG_FILE"; then
-    # The launcher puts the binary as muse-bin-<version> in $DATA_DIR
-    # Create a wrapper script at ~/.local/bin/muse-code that invokes the launcher
-    mkdir -p "$HOME/.local/bin"
-    cat > "$HOME/.local/bin/muse-code" <<'WRAPPER'
-#!/data/data/com.termux/files/usr/bin/bash
-exec bash "$HOME/.local/share/muse-code/muse-launcher" "$@"
-WRAPPER
-    chmod 755 "$HOME/.local/bin/muse-code"
-    ln -sf "$HOME/.local/bin/muse-code" "$HOME/.local/bin/muse" 2>/dev/null || true
     return 0
   else
     log_warn "Binary download failed; first 'muse-code' run will retry"
@@ -105,17 +95,36 @@ WRAPPER
   fi
 }
 
-_setup_alias_and_support() {
-  mkdir -p "$HOME/.local/bin"
-  # ensure the wrapper exists and is executable
-  if [[ ! -x "$HOME/.local/bin/muse-code" ]]; then
-    cat > "$HOME/.local/bin/muse-code" <<'WRAPPER'
-#!/data/data/com.termux/files/usr/bin/bash
-exec bash "$HOME/.local/share/muse-code/muse-launcher" "$@"
+_install_wrapper() {
+  loading "Installing Muse Code wrapper" _install_wrapper_impl
+}
+
+_install_wrapper_impl() {
+  # Wrapper from the official .deb package (uses proot for proper Termux env)
+  cat > "$PREFIX/bin/muse-code" <<'WRAPPER'
+#!/data/data/com.termux/files/usr/bin/env bash
+set -euo pipefail
+
+PREFIX="/data/data/com.termux/files/usr"
+LAUNCHER="${HOME}/.local/share/muse-code/muse-launcher"
+
+if [[ ! -f "$LAUNCHER" ]]; then
+  printf 'muse-code: launcher missing at %s; rerun the package installation\n' "$LAUNCHER" >&2
+  exit 1
+fi
+
+bindings=()
+for d in data system vendor product odm apex dev proc sys storage sdcard mnt; do
+  [[ -e "/$d" ]] && bindings+=( -b "/$d:/$d" )
+done
+
+export TZ="${TZ:-$(getprop persist.sys.timezone 2>/dev/null || true)}"
+
+exec proot -r "$PREFIX" "${bindings[@]}" "$PREFIX/bin/bash" "$LAUNCHER" "$@"
 WRAPPER
-    chmod 755 "$HOME/.local/bin/muse-code"
-  fi
-  ln -sf "$HOME/.local/bin/muse-code" "$HOME/.local/bin/muse" 2>/dev/null || true
+  chmod 755 "$PREFIX/bin/muse-code"
+  ln -sf muse-code "$PREFIX/bin/muse" 2>/dev/null || true
+
   if [[ -r /linkerconfig/ld.config.txt ]]; then
     mkdir -p "${PREFIX}/linkerconfig" 2>/dev/null
     cp /linkerconfig/ld.config.txt "${PREFIX}/linkerconfig/ld.config.txt" 2>/dev/null || true
@@ -152,19 +161,14 @@ install_muse_code() {
   _muse_install_deps || return 1
   _download_launcher || return 1
   _download_binary || return 1
-  _setup_alias_and_support
+  _install_wrapper || return 1
 
-  if [[ -x "$HOME/.local/bin/muse-code" ]]; then
-    if "$HOME/.local/bin/muse-code" --version &>/dev/null; then
-      log_success "Muse Code installed"
-      echo
-      list_item "Run: ${GRAY_19}muse-code${NC}  (alias: ${GRAY_19}muse${NC})"
-      echo
-      return 0
-    else
-      log_warn "Installed but first run reported an error (will self-heal on next launch)"
-      return 0
-    fi
+  if command -v muse-code &>/dev/null; then
+    log_success "Muse Code installed"
+    echo
+    list_item "Run: ${GRAY_19}muse-code${NC}  (alias: ${GRAY_19}muse${NC})"
+    echo
+    return 0
   else
     log_warn "Wrapper not found after install"
     return 1
@@ -190,7 +194,6 @@ uninstall_muse_code() {
   log_info "Removing Muse Code..."
 
   rm -f "${PREFIX}/bin/muse" "${PREFIX}/bin/muse-code" 2>/dev/null || true
-  rm -f "${HOME}/.local/bin/muse" "${HOME}/.local/bin/muse-code" 2>/dev/null || true
   rm -rf "$DATA_DIR" 2>/dev/null || true
 
   log_success "Muse Code uninstalled"
@@ -201,7 +204,6 @@ _get_installed_muse_version() {
   local out
   out="$(muse-code --version 2>&1 || muse --version 2>&1 || true)"
   echo "$out" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+[~.\-][Rr]?[0-9.]+' | head -1
-  # fallback to generic parser
   if [[ -z "$out" ]]; then
     _get_installed_version muse-code 2>/dev/null || _get_installed_version muse 2>/dev/null || true
   fi
@@ -214,14 +216,12 @@ _get_remote_muse_version() {
     echo "$ver"
     return 0
   fi
-  # fallback to deb control version pattern if channel fails
   curl -fsSL "$LAUNCHER_URL" 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+~R[0-9.]+' | head -1 || true
 }
 
 _update_muse_code() {
   _download_launcher || return 1
   _download_binary || return 1
-  _setup_alias_and_support
   log_success "Muse Code updated"
 }
 
@@ -233,3 +233,8 @@ reinstall_muse_code() {
   uninstall_muse_code
   install_muse_code
 }
+
+if [[ "${1:-}" == "install" ]]; then install_muse_code; fi
+if [[ "${1:-}" == "uninstall" ]]; then uninstall_muse_code; fi
+if [[ "${1:-}" == "update" ]]; then update_muse_code; fi
+if [[ "${1:-}" == "reinstall" ]]; then reinstall_muse_code; fi
