@@ -149,7 +149,7 @@ table_row() {
 		# Only apply default color if the field does not already contain an ANSI escape
 		if [[ "$field" != *$'\x1b['* ]]; then
 			case $i in
-			0) colored+=("${D_GREEN}${field}${NC}") ;;
+			0) colored+=("${GRAY_12}${field}${NC}") ;;
 			1) colored+=("${GRAY_19}${field}${NC}") ;;
 			*) colored+=("${D_NC}${field}${NC}") ;;
 			esac
@@ -217,7 +217,7 @@ table_end() {
 	# Headers (D_RED by default)
 	echo -ne "${GRAY}│${NC}"
 	for ((i = 0; i < cols; i++)); do
-		printf " ${D_RED}%-${TABLE_WIDTHS[$i]}s ${GRAY}│${NC}" "${TABLE_HEADERS[$i]}"
+		printf " ${GRAY_19}%-${TABLE_WIDTHS[$i]}s ${GRAY}│${NC}" "${TABLE_HEADERS[$i]}"
 	done
 	echo
 

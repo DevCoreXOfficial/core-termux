@@ -1,0 +1,35 @@
+{
+  "name": "muse-code",
+  "display": "Muse Code",
+  "description": "Meta Muse Code interactive terminal AI coding agent for Termux and Ubuntu",
+  "homepage": "https://developer.meta.com/ai/products/muse-code/",
+  "platforms": ["termux", "ubuntu", "wsl"],
+  "check_cmd": ["muse-code", "muse"],
+  "tags": ["ai", "agent", "coding", "meta"],
+  "dependencies": [
+    {
+      "name": "curl",
+      "check": "curl",
+      "pkg": {
+        "termux": "curl",
+        "ubuntu": "curl"
+      }
+    },
+    {
+      "name": "proot",
+      "check": "proot",
+      "pkg": {
+        "termux": "proot",
+        "ubuntu": ""
+      }
+    },
+    {
+      "name": "python",
+      "check": "python3",
+      "pkg": {
+        "termux": "python",
+        "ubuntu": "python3"
+      }
+    }
+  ]
+}
