@@ -422,4 +422,4 @@ if [[ "${1:-}" == "uninstall" ]]; then uninstall_kilocode_cli; fi
 if [[ "${1:-}" == "update" ]]; then update_kilocode_cli; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_kilocode_cli; fi
 if [[ "${1:-}" == "version-local" ]]; then _get_installed_version kilo; fi
-if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version kilocode/kilocode; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version Kilo-Org/kilocode; fi

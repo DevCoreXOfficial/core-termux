@@ -3,6 +3,7 @@
 import "@/utils/log"
 import "@/utils/colors"
 import "@/lib/engine"
+import "@/lib/manifest"
 
 update_main() {
 

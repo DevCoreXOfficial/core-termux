@@ -410,6 +410,15 @@ engine_uninstall() {
   return $rc
 }
 
+# _engine_check_versions : runs in subprocess via loading.
+# Writes results to _ECV_OUTFILE so parent can read them.
+_engine_check_versions() {
+  {
+    echo "LOCAL=$(bash "$_ECV_SCRIPT" version-local 2>/dev/null)"
+    echo "REMOTE=$(bash "$_ECV_SCRIPT" version-remote 2>/dev/null)"
+  } > "$_ECV_OUTFILE"
+}
+
 # engine_update <tool-name> : local vs remote version comparison flow.
 engine_update() {
   local name="$1"
@@ -440,15 +449,17 @@ engine_update() {
   # Version flow: local -> remote -> compare -> suggest.
   local local_ver remote_ver
   export CORE_PATH
-  _engine_check_versions() {
-    local_ver=$(bash "$script" version-local 2>/dev/null)
-    remote_ver=$(bash "$script" version-remote 2>/dev/null)
-  }
+  export _ECV_SCRIPT="$script"
+  local _ecv_tmp
+  _ecv_tmp="$(mktemp)"
+  export _ECV_OUTFILE="$_ecv_tmp"
   if [[ "$CORE_ENV" == "termux" ]]; then
     loading "Checking versions" _engine_check_versions
   else
     _engine_check_versions
   fi
+  eval "$(cat "$_ecv_tmp")"
+  rm -f "$_ecv_tmp"
 
   if [[ -z "$local_ver" || -z "$remote_ver" ]]; then
     local answer
