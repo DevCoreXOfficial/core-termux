@@ -75,7 +75,6 @@ engine_ensure_deps() {
 
     pkg="$(_deps_pkg_for_platform "$pkg_t" "$pkg_a")"
     if [[ -z "$pkg" ]]; then
-      log_warn "Dependency '$dep' missing and no package mapping for $CORE_PKG_MGR"
       continue
     fi
     loading "Installing dependency: $dep" pm_install "$pkg" || {

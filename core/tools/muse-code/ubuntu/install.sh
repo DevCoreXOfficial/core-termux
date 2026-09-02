@@ -48,31 +48,29 @@ install_muse_code() {
 
   _muse_ubuntu_deps || return 1
 
-  log_info "Downloading and installing Muse Code (official installer)..."
-  mkdir -p "$(dirname "$LOG_FILE")"
+  loading "Downloading and installing Muse Code" _muse_ubuntu_install_impl
 
+  if command -v muse-code &>/dev/null || command -v muse &>/dev/null; then
+    log_success "Muse Code installed"
+    echo
+    list_item "Run: ${GRAY_19}muse-code${NC}  (alias: ${GRAY_19}muse${NC})"
+    echo
+    return 0
+  else
+    log_error "Installation finished but binary not found on PATH"
+    log_info "Check log: $LOG_FILE"
+    return 1
+  fi
+}
+
+_muse_ubuntu_install_impl() {
+  mkdir -p "$(dirname "$LOG_FILE")"
   if ! curl -fsSL "$OFFICIAL_URL" | bash &>>"$LOG_FILE"; then
     log_error "Failed to install Muse Code"
     log_info "Check log: $LOG_FILE"
     return 1
   fi
-
-  # Ensure binary is on PATH (official installer uses ~/.local/bin)
-  if [[ -f "$HOME/.local/bin/muse-code" ]] && ! command -v muse-code &>/dev/null; then
-    log_info "Binary installed to ~/.local/bin/muse-code — ensure it is on PATH"
-  fi
-
-  if command -v muse-code &>/dev/null || command -v muse &>/dev/null; then
-    log_success "Muse Code installed"
-    echo
-    list_item "Run: ${D_CYAN}muse-code${NC}  (alias: ${D_CYAN}muse${NC})"
-    echo
-    return 0
-  else
-    log_error "Installation finished but binary not found on PATH"
-    log_info "Try: export PATH=\"\$HOME/.local/bin:\$PATH\" && muse-code --version"
-    return 1
-  fi
+  return 0
 }
 
 uninstall_muse_code() {
@@ -126,12 +124,15 @@ _get_remote_muse_version() {
 }
 
 _update_muse_code() {
-  log_info "Updating Muse Code..."
+  loading "Updating Muse Code" _update_muse_code_impl
+}
+
+_update_muse_code_impl() {
   if ! curl -fsSL "$OFFICIAL_URL" | bash &>>"$LOG_FILE"; then
     log_error "Failed to update Muse Code"
     return 1
   fi
-  log_success "Muse Code updated"
+  return 0
 }
 
 update_muse_code() {
