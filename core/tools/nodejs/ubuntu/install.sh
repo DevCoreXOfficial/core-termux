@@ -7,6 +7,7 @@ CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/utils/version"
 import "@/lib/platform"
 core_detect_platform
 
@@ -88,7 +89,7 @@ _impl_vremote() {
 case "${1:-install}" in
   install)        _impl_install ;;
   uninstall)      _impl_uninstall ;;
-  update)         _impl_update ;;
+  update)         _check_update_needed "Node.js LTS" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)      _impl_install ;;
   version-local)  _impl_vlocal ;;
   version-remote) _impl_vremote ;;

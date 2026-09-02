@@ -38,10 +38,18 @@ _impl_update() {
   curl -fsSL https://ampcode.com/install.sh | bash &>>"$LOG_FILE"
 }
 
+_impl_vlocal() {
+  _get_installed_version amp
+}
+
+_impl_vremote() {
+  _get_remote_github_version anthropics/amp
+}
+
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
-  update)     _impl_update ;;
+  update)     _check_update_needed "AMP Code CLI" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)  _impl_install ;;
   *)
     exit 0

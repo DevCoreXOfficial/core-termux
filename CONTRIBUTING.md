@@ -82,14 +82,14 @@ bash termux/install.sh install     # also: uninstall | update | reinstall | vers
 |------|----------|-------|
 | `install` | yes | Idempotent-ish; return `2` if already installed, `0` success, `1` failure |
 | `uninstall` | recommended | Remove binaries AND ask about config dirs (mirror your Termux `confirm_remove_configs` paths on Ubuntu) |
-| `update` | recommended | Re-run official installer, `npm i -g pkg@latest`, git pull + rebuild, etc. |
+| `update` | recommended | Own the **local↔remote comparison and prompt**: call `_check_update_needed "<Display>" "<local ver>" "<remote ver>" <your update fn>` exactly once, then update. Never rely on the engine to compare — `engine_update` just runs your `update` verb |
 | `reinstall` | nice-to-have | uninstall then install |
-| `version-local` / `version-remote` | nice-to-have | Enable real version comparison in `core update` |
+| `version-local` / `version-remote` | nice-to-have | Convenience interface for manual/scripted queries (`bash install.sh version-local`). The `update` verb reuses the same version functions through `_check_update_needed` |
 
 **UX rules:**
 
 - **Termux**: own the whole experience — spinners (`loading`), menus (`read_select`), messages. The engine runs your script bare.
-- **Ubuntu/WSL**: stay quiet; the engine wraps you in a `loading` animation and reports success based on binary presence.
+- **Ubuntu/WSL**: stay quiet for `install`/`uninstall` (the engine wraps you in a `loading` animation). But if your `update` verb compares versions via `_check_update_needed`, the engine detects the prompt and runs it directly so the question stays on the terminal.
 - Write all code and user-facing strings in **English**.
 
 **Imports cheat-sheet** (missing these causes runtime `command not found`):

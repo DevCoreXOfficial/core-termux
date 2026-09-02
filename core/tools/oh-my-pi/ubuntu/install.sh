@@ -28,6 +28,14 @@ _impl_update() {
   curl -fsSL https://omp.sh/install | bash &>>"$LOG_FILE"
 }
 
+_impl_vlocal() {
+  _get_installed_version omp
+}
+
+_impl_vremote() {
+  _get_remote_github_version ohmyzsh/ohmyzsh
+}
+
 case "${1:-}" in
   install)
     separator
@@ -43,7 +51,7 @@ case "${1:-}" in
     echo
 
     _impl_uninstall ;;
-  update)     _impl_update ;;
+  update)     _check_update_needed "Oh-My-Pi" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)  _impl_install ;;
   *)
     exit 0

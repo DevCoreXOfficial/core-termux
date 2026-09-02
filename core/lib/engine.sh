@@ -108,8 +108,10 @@ _engine_install_nodejs() {
 
 # _script_is_interactive <script> : prompts require a visible terminal,
 # so interactive scripts never get wrapped in the loading animation.
+# Installers that compare versions via _check_update_needed prompt the user
+# (read_confirm_default), so they count as interactive too.
 _script_is_interactive() {
-  grep -qE 'read_(confirm|select|input|secret|multiline)' "$1"
+  grep -qE 'read_(confirm|select|input|secret|multiline)|_check_update_needed' "$1"
 }
 
 engine_platform_dir() {
@@ -410,7 +412,11 @@ engine_uninstall() {
   return $rc
 }
 
-# engine_update <tool-name> : local vs remote version comparison flow.
+# engine_update <tool-name> : delegates to the tool installer's update verb.
+#
+# The installers own the local↔remote version comparison and the "update?"
+# suggestion on every platform (via _check_update_needed) — this is the
+# behavior proven in Core-Termux 4.x. Nothing is compared twice.
 engine_update() {
   local name="$1"
   local dir
@@ -435,39 +441,15 @@ engine_update() {
     export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
   fi
 
-  # Version flow: local -> remote -> compare -> suggest.
-  local local_ver remote_ver
-  export CORE_PATH
-  local_ver=$(bash "$script" version-local 2>/dev/null || true)
-  remote_ver=$(bash "$script" version-remote 2>/dev/null || true)
-
-  if [[ -z "$local_ver" || -z "$remote_ver" ]]; then
-    local answer
-    read_confirm_default "Could not compare versions. Update $display anyway?" "y" answer
-    if [[ "$CORE_ENV" == "termux" ]]; then
-      [[ "$answer" == "y" ]] && _engine_run "$script" update
-    else
-      [[ "$answer" == "y" ]] && loading "Updating $display" _engine_run "$script" update
-    fi
-    return $?
-  fi
-
-  if _compare_versions "$local_ver" "$remote_ver"; then
-    log_success "$display is already up to date ${D_NC}(${D_GREEN}v$local_ver${D_NC})"
-    return 0
-  fi
-
-  log_info "$display: ${D_GREEN}v$local_ver${D_NC} → ${D_CYAN}v$remote_ver${D_NC}"
-  local answer
-  read_confirm_default "Update $display to v$remote_ver?" "y" answer
-  if [[ "$answer" == "y" ]]; then
-    if [[ "$CORE_ENV" == "termux" ]]; then
-      _engine_run "$script" update
-    else
-      loading "Updating $display" _engine_run "$script" update
-    fi
+  # Termux installers own their full UX (version check + prompt inside the
+  # update verb). On Ubuntu/WSL, interactive scripts run directly so their
+  # prompts stay on the terminal; quiet scripts get the loading animation.
+  if [[ "$CORE_ENV" == "termux" ]]; then
+    _engine_run "$script" update
+  elif _script_is_interactive "$script"; then
+    _engine_run "$script" update
   else
-    log_info "Skipped $display"
+    loading "Updating $display" _engine_run "$script" update
   fi
 }
 

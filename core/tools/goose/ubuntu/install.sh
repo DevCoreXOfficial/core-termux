@@ -49,7 +49,7 @@ _impl_vremote() {
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
-  update)     _impl_update ;;
+  update)     _check_update_needed "Goose CLI" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   version-local)  _impl_vlocal ;;
   version-remote) _impl_vremote ;;
   reinstall)  _impl_install ;;

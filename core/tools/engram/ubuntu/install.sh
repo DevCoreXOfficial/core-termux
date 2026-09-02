@@ -44,10 +44,18 @@ _impl_update() {
   (cd "~/.local/share/core-data/engram" && CGO_ENABLED=0 go install ./cmd/engram) &>>"$LOG_FILE"
 }
 
+_impl_vlocal() {
+  _get_installed_version engram
+}
+
+_impl_vremote() {
+  _get_remote_github_version Gentleman-Programming/engram
+}
+
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
-  update)     _impl_update ;;
+  update)     _check_update_needed "Engram" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)  _impl_uninstall >/dev/null 2>&1 || true ; _impl_install ;;
   version-local)  _impl_vlocal ;;
   *)

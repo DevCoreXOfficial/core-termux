@@ -48,10 +48,18 @@ _impl_update() {
   curl -fsSL https://bun.sh/install | bash &>>"$LOG_FILE"
 }
 
+_impl_vlocal() {
+  _get_installed_version bun
+}
+
+_impl_vremote() {
+  _get_remote_github_version oven-sh/bun
+}
+
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
-  update)     _impl_update ;;
+  update)     _check_update_needed "Bun" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)  _impl_install ;;
   *)
     exit 0

@@ -6,6 +6,7 @@ CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/utils/version"
 import "@/lib/platform"
 core_detect_platform
 
@@ -46,10 +47,18 @@ _impl_update() {
   $CORE_SUDO apt-get update -qq && $CORE_SUDO apt-get install -y mongodb-org mongodb-mongosh
 }
 
+_impl_vlocal() {
+  _get_installed_version mongosh
+}
+
+_impl_vremote() {
+  _get_remote_github_version mongodb/mongosh
+}
+
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
-  update)     _impl_update ;;
+  update)     _check_update_needed "MongoDB" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)  _impl_uninstall ; _impl_install ;;
   *)
     exit 0

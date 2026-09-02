@@ -70,7 +70,7 @@ _impl_vremote() {
 case "${1:-}" in
   install)    _impl_install ;;
   uninstall)  _impl_uninstall ;;
-  update)     _impl_update ;;
+  update)     _check_update_needed "Qwen Code" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)  _impl_uninstall >/dev/null 2>&1 || true ; _impl_install ;;
   version-local)  _impl_vlocal ;;
   version-remote) _impl_vremote ;;
