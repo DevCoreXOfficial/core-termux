@@ -410,15 +410,6 @@ engine_uninstall() {
   return $rc
 }
 
-# _engine_check_versions : runs in subprocess via loading.
-# Writes results to _ECV_OUTFILE so parent can read them.
-_engine_check_versions() {
-  {
-    echo "LOCAL=$(bash "$_ECV_SCRIPT" version-local 2>/dev/null)"
-    echo "REMOTE=$(bash "$_ECV_SCRIPT" version-remote 2>/dev/null)"
-  } > "$_ECV_OUTFILE"
-}
-
 # engine_update <tool-name> : local vs remote version comparison flow.
 engine_update() {
   local name="$1"
@@ -441,25 +432,14 @@ engine_update() {
   LOG_FILE="$CORE_CACHE/install_$name.log"
   if [[ "$CORE_ENV" != "termux" ]]; then
     mkdir -p "$HOME/.local/bin"
-    # Pre-load every directory official installers commonly use, so
-    # freshly-installed binaries resolve inside THIS session too.
     export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
   fi
 
   # Version flow: local -> remote -> compare -> suggest.
   local local_ver remote_ver
   export CORE_PATH
-  export _ECV_SCRIPT="$script"
-  local _ecv_tmp
-  _ecv_tmp="$(mktemp)"
-  export _ECV_OUTFILE="$_ecv_tmp"
-  if [[ "$CORE_ENV" == "termux" ]]; then
-    loading "Checking versions" _engine_check_versions
-  else
-    _engine_check_versions
-  fi
-  eval "$(cat "$_ecv_tmp")"
-  rm -f "$_ecv_tmp"
+  local_ver=$(bash "$script" version-local 2>/dev/null || true)
+  remote_ver=$(bash "$script" version-remote 2>/dev/null || true)
 
   if [[ -z "$local_ver" || -z "$remote_ver" ]]; then
     local answer
