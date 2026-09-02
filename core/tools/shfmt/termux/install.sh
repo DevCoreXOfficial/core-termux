@@ -97,3 +97,5 @@ if [[ "${1:-}" == "install" ]]; then install_shfmt; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_shfmt; fi
 if [[ "${1:-}" == "update" ]]; then update_shfmt; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_shfmt; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version shfmt; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version mvdan/sh; fi

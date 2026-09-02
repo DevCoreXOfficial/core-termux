@@ -97,3 +97,5 @@ if [[ "${1:-}" == "install" ]]; then install_jq; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_jq; fi
 if [[ "${1:-}" == "update" ]]; then update_jq; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_jq; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version jq; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version jq; fi

@@ -100,3 +100,5 @@ if [[ "${1:-}" == "install" ]]; then install_rust; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_rust; fi
 if [[ "${1:-}" == "update" ]]; then update_rust; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_rust; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version cargo; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version rust; fi

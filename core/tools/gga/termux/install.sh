@@ -194,3 +194,5 @@ if [[ "${1:-}" == "install" ]]; then install_gga; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_gga; fi
 if [[ "${1:-}" == "update" ]]; then update_gga; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_gga; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version gga; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version Gentleman-Programming/gentleman-guardian-angel; fi

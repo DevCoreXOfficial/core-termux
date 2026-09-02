@@ -125,3 +125,5 @@ if [[ "${1:-}" == "install" ]]; then install_openspec; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_openspec; fi
 if [[ "${1:-}" == "update" ]]; then update_openspec; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_openspec; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version openspec; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version @fission-ai/openspec; fi

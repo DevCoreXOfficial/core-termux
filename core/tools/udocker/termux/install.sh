@@ -96,6 +96,10 @@ reinstall_udocker() {
 	install_udocker
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version udocker; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version indigo-data/udocker; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_udocker; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_udocker; fi

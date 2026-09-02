@@ -130,3 +130,5 @@ if [[ "${1:-}" == "install" ]]; then install_gemini_cli; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_gemini_cli; fi
 if [[ "${1:-}" == "update" ]]; then update_gemini_cli; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_gemini_cli; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version gemini; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version @google/gemini-cli; fi

@@ -606,3 +606,5 @@ if [[ "${1:-}" == "install" ]]; then install_walkie; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_walkie; fi
 if [[ "${1:-}" == "update" ]]; then update_walkie; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_walkie; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version walkie; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version walkie-ai/walkie; fi

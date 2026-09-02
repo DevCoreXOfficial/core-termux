@@ -155,5 +155,7 @@ case "${1:-install}" in
   uninstall) uninstall_hugging_face ;;
   update) update_hugging_face ;;
   reinstall) reinstall_hugging_face ;;
+  version-local) _get_installed_version hf ;;
+  version-remote) _get_remote_pip_version huggingface_hub ;;
   *) exit 0 ;;
 esac

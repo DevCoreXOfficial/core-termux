@@ -108,3 +108,5 @@ if [[ "${1:-}" == "install" ]]; then install_nestjs; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_nestjs; fi
 if [[ "${1:-}" == "update" ]]; then update_nestjs; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_nestjs; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version nest; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version @nestjs/cli; fi

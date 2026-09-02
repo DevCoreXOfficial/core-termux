@@ -183,3 +183,5 @@ if [[ "${1:-}" == "install" ]]; then install_command_code; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_command_code; fi
 if [[ "${1:-}" == "update" ]]; then update_command_code; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_command_code; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version cmdc; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version command-code; fi

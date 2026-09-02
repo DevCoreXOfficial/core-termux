@@ -383,3 +383,5 @@ if [[ "${1:-}" == "install" ]]; then install_claude_code; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_claude_code; fi
 if [[ "${1:-}" == "update" ]]; then update_claude_code; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_claude_code; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version claude; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version anthropics/claude-code; fi

@@ -80,6 +80,10 @@ reinstall_font() {
 	install_font
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version font; fi
+if [[ "${1:-}" == "version-remote" ]]; then echo "1.0.0"; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_font; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_font; fi

@@ -438,6 +438,10 @@ reinstall_oh_my_pi() {
   install_oh_my_pi
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version omp; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version ohmyzsh/ohmyzsh; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_oh_my_pi; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_oh_my_pi; fi

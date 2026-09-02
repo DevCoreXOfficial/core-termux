@@ -75,6 +75,10 @@ reinstall_cursor() {
 	install_cursor
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version cursor-color; fi
+if [[ "${1:-}" == "version-remote" ]]; then echo "1.0.0"; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_cursor; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_cursor; fi

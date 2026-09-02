@@ -92,6 +92,10 @@ reinstall_translate() {
 	install_translate
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version trans; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version translate-shell; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_translate; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_translate; fi

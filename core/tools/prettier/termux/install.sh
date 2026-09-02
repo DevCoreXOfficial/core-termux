@@ -103,6 +103,10 @@ reinstall_prettier() {
   install_prettier
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version prettier; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version prettier; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_prettier; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_prettier; fi

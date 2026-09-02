@@ -417,3 +417,5 @@ if [[ "${1:-}" == "install" ]]; then install_goose; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_goose; fi
 if [[ "${1:-}" == "update" ]]; then update_goose; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_goose; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version goose; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version block/goose; fi

@@ -172,6 +172,10 @@ EOF
   fi
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version zsh; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version zsh; fi
+
 case "${1:-install}" in
   install)
     separator

@@ -101,3 +101,5 @@ if [[ "${1:-}" == "install" ]]; then install_golang; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_golang; fi
 if [[ "${1:-}" == "update" ]]; then update_golang; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_golang; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version go; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version golang; fi

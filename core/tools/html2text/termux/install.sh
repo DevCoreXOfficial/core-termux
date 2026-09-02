@@ -97,3 +97,5 @@ if [[ "${1:-}" == "install" ]]; then install_html2text; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_html2text; fi
 if [[ "${1:-}" == "update" ]]; then update_html2text; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_html2text; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version html2text; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version html2text; fi

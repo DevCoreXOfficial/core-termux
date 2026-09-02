@@ -89,6 +89,10 @@ reinstall_mongodb() {
 	install_mongodb
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version mongosh; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version mongodb/mongosh; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_mongodb; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_mongodb; fi

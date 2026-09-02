@@ -92,6 +92,10 @@ reinstall_tmate() {
 	install_tmate
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version tmate; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version tmate-io/tmate; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_tmate; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_tmate; fi

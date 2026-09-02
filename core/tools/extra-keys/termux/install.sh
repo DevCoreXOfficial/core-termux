@@ -79,6 +79,10 @@ reinstall_extra_keys() {
 	install_extra_keys
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version extra-keys; fi
+if [[ "${1:-}" == "version-remote" ]]; then echo "1.0.0"; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_extra_keys; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_extra_keys; fi

@@ -114,3 +114,5 @@ if [[ "${1:-}" == "install" ]]; then install_vercel; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_vercel; fi
 if [[ "${1:-}" == "update" ]]; then update_vercel; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_vercel; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version vercel; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version vercel; fi

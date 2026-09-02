@@ -115,3 +115,5 @@ if [[ "${1:-}" == "install" ]]; then install_supercode; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_supercode; fi
 if [[ "${1:-}" == "update" ]]; then update_supercode; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_supercode; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version supercode; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version supercode-cli; fi

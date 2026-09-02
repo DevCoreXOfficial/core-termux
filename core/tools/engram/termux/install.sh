@@ -169,3 +169,5 @@ if [[ "${1:-}" == "install" ]]; then install_engram; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_engram; fi
 if [[ "${1:-}" == "update" ]]; then update_engram; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_engram; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version engram; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version Gentleman-Programming/engram; fi

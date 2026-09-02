@@ -97,3 +97,5 @@ if [[ "${1:-}" == "install" ]]; then install_cloudflared; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_cloudflared; fi
 if [[ "${1:-}" == "update" ]]; then update_cloudflared; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_cloudflared; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version cloudflared; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version cloudflare/cloudflared; fi

@@ -127,3 +127,5 @@ if [[ "${1:-}" == "install" ]]; then install_n8n; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_n8n; fi
 if [[ "${1:-}" == "update" ]]; then update_n8n; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_n8n; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version n8n; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version n8n; fi

@@ -104,3 +104,5 @@ if [[ "${1:-}" == "install" ]]; then install_ollama; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_ollama; fi
 if [[ "${1:-}" == "update" ]]; then update_ollama; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_ollama; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version ollama; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version ollama/ollama; fi

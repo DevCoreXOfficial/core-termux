@@ -96,3 +96,5 @@ if [[ "${1:-}" == "install" ]]; then install_php; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_php; fi
 if [[ "${1:-}" == "update" ]]; then update_php; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_php; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version php; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version php; fi

@@ -97,3 +97,5 @@ if [[ "${1:-}" == "install" ]]; then install_tmux; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_tmux; fi
 if [[ "${1:-}" == "update" ]]; then update_tmux; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_tmux; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version tmux; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version tmux; fi

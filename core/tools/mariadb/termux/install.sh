@@ -81,6 +81,10 @@ reinstall_mariadb() {
 	install_mariadb
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version mariadb; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version mariadb; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_mariadb; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_mariadb; fi

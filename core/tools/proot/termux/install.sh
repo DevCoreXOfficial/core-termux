@@ -92,6 +92,10 @@ reinstall_proot() {
 	install_proot
 }
 
+# ===== version check =====
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version proot; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_pkg_version proot; fi
+
 # ===== verb dispatcher (called by the Core engine) =====
 if [[ "${1:-}" == "install" ]]; then install_proot; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_proot; fi

@@ -131,3 +131,5 @@ if [[ "${1:-}" == "install" ]]; then install_kimi_code; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_kimi_code; fi
 if [[ "${1:-}" == "update" ]]; then update_kimi_code; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_kimi_code; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version kimi; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_npm_version @moonshot-ai/kimi-code; fi

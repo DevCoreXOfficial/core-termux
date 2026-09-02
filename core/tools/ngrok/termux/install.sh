@@ -113,3 +113,5 @@ if [[ "${1:-}" == "install" ]]; then install_ngrok; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_ngrok; fi
 if [[ "${1:-}" == "update" ]]; then update_ngrok; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_ngrok; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_version ngrok; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version ngrok/ngrok; fi
