@@ -64,8 +64,9 @@ install_muse_code() {
 }
 
 _muse_ubuntu_install_impl() {
-  mkdir -p "$(dirname "$LOG_FILE")"
-  if ! curl -fsSL "$OFFICIAL_URL" | bash &>>"$LOG_FILE"; then
+  mkdir -p "$HOME/.local/bin"
+  # Run the official installer - it outputs to stdout/stderr which loading captures
+  if ! curl -fsSL "$OFFICIAL_URL" | bash; then
     log_error "Failed to install Muse Code"
     log_info "Check log: $LOG_FILE"
     return 1
@@ -143,3 +144,10 @@ reinstall_muse_code() {
   uninstall_muse_code
   install_muse_code
 }
+
+if [[ "${1:-}" == "install" ]]; then install_muse_code; fi
+if [[ "${1:-}" == "uninstall" ]]; then uninstall_muse_code; fi
+if [[ "${1:-}" == "update" ]]; then update_muse_code; fi
+if [[ "${1:-}" == "reinstall" ]]; then reinstall_muse_code; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_muse_version; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_muse_version; fi

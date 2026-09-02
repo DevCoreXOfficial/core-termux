@@ -238,3 +238,5 @@ if [[ "${1:-}" == "install" ]]; then install_muse_code; fi
 if [[ "${1:-}" == "uninstall" ]]; then uninstall_muse_code; fi
 if [[ "${1:-}" == "update" ]]; then update_muse_code; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_muse_code; fi
+if [[ "${1:-}" == "version-local" ]]; then _get_installed_muse_version; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_muse_version; fi
