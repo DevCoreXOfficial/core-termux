@@ -49,6 +49,12 @@ install_translate() {
 		log_info "Translate Shell is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Translate"
+	separator
+	echo
+
 	log_info "Installing Translate Shell..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_translate() {
 		log_info "Translate Shell is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Translate"
+	separator
+	echo
+
 	log_info "Uninstalling Translate Shell..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

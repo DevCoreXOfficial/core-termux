@@ -49,6 +49,12 @@ install_cloudflared() {
 		log_info "Cloudflared is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Cloudflared"
+	separator
+	echo
+
 	log_info "Installing Cloudflared..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_cloudflared() {
 		log_info "Cloudflared is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Cloudflared"
+	separator
+	echo
+
 	log_info "Uninstalling Cloudflared..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

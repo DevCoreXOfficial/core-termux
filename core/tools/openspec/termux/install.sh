@@ -55,6 +55,11 @@ install_openspec() {
     return 2
   fi
 
+  separator
+  box_large "Installing OpenSpec"
+  separator
+  echo
+
   log_info "Installing OpenSpec..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -71,6 +76,11 @@ uninstall_openspec() {
     log_info "OpenSpec is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling OpenSpec"
+  separator
+  echo
 
   confirm_remove_configs "OpenSpec" \
     "$HOME/.config/openspec"

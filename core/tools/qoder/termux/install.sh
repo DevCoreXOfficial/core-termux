@@ -310,6 +310,11 @@ install_qoder() {
 
   log_info "Select installation method for Qoder:"
 
+  separator
+  box_large "Installing Qoder"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -336,6 +341,11 @@ uninstall_qoder() {
     log_warn "Qoder is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling Qoder"
+  separator
+  echo
 
   confirm_remove_configs "Qoder" \
     "$HOME/.qoder"

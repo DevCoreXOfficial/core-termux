@@ -94,6 +94,11 @@ install_turbopack() {
 		[[ "$REINSTALL" != "y" ]] && { log_warn "Skipped"; return 0; }
 	fi
 
+	separator
+	box_large "Installing Turbopack"
+	separator
+	echo
+
 	_install_deps || return 1
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -109,6 +114,11 @@ uninstall_turbopack() {
 		log_warn "Turbopack is not installed"
 		return 1
 	fi
+
+	separator
+	box_large "Uninstalling Turbopack"
+	separator
+	echo
 
 	loading "Removing Node.js glibc" _uninstall_node
 	loading "Removing CLI wrappers" _uninstall_wrappers

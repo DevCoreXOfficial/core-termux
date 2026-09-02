@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v python3 &>/dev/null; then
+    log_info "Python is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Python"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install python3
 }
 
 _impl_uninstall() {
+  if ! command -v python3 &>/dev/null; then
+    log_info "Python is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Python"
+  separator
+  echo
+
   pm_remove python3
 }
 

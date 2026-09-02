@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v html2text &>/dev/null; then
+    log_info "html2text is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing html2text"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install html2text
 }
 
 _impl_uninstall() {
+  if ! command -v html2text &>/dev/null; then
+    log_info "html2text is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling html2text"
+  separator
+  echo
+
   pm_remove html2text
 }
 

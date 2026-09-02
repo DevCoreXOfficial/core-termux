@@ -26,6 +26,12 @@ install_redis() {
 		log_info "Redis is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Redis"
+	separator
+	echo
+
 	log_info "Installing Redis..."
 	loading "Installing Redis" _install_redis_impl
 }
@@ -46,6 +52,12 @@ uninstall_redis() {
 		log_info "Redis is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Redis"
+	separator
+	echo
+
 	log_info "Uninstalling Redis..."
 	loading "Uninstalling Redis" _uninstall_redis_impl
 }

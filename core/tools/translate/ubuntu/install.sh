@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v trans &>/dev/null; then
+    log_info "Translate is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Translate"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install translate-shell
 }
 
 _impl_uninstall() {
+  if ! command -v trans &>/dev/null; then
+    log_info "Translate is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Translate"
+  separator
+  echo
+
   pm_remove translate-shell
 }
 

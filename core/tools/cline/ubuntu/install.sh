@@ -35,12 +35,22 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  separator
+  box_large "Installing Cline"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g cline &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Cline"
+  separator
+  echo
+
   _npm_g uninstall -g cline &>>"$LOG_FILE" || true
 }
 

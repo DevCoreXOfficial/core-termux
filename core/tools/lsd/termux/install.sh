@@ -49,6 +49,12 @@ install_lsd() {
 		log_info "LSD is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing LSD"
+	separator
+	echo
+
 	log_info "Installing LSD..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_lsd() {
 		log_info "LSD is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling LSD"
+	separator
+	echo
+
 	log_info "Uninstalling LSD..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

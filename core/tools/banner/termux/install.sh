@@ -114,6 +114,12 @@ install_banner() {
 		log_info "Core Banner already installed"
 		return 0
 	fi
+
+	separator
+	box_large "Installing Banner"
+	separator
+	echo
+
 	log_info "Installing Core Banner..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	loading "Installing Banner" _install_banner_impl
@@ -159,6 +165,12 @@ uninstall_banner() {
 		log_warn "Core Banner not installed"
 		return 0
 	fi
+
+	separator
+	box_large "Uninstalling Banner"
+	separator
+	echo
+
 	log_info "Uninstalling Core Banner..."
 	loading "Uninstalling Banner" _uninstall_banner_impl
 }

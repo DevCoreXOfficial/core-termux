@@ -13,6 +13,11 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  separator
+  box_large "Installing Hermes Agent"
+  separator
+  echo
+
   # Official prerequisites (docs): git, curl, xz-utils on Debian/Ubuntu.
   pm_install git curl xz-utils ca-certificates
   mkdir -p "$HOME/.local/bin" "$HOME/.local/opt"
@@ -24,6 +29,11 @@ _impl_install() {
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Hermes Agent"
+  separator
+  echo
+
   log_info "Removing binaries..."
   command -v "hermes" >/dev/null 2>&1 && rm -f "$(command -v hermes)"
 }

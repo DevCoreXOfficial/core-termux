@@ -28,6 +28,12 @@ install_cursor() {
 		log_info "Cursor Color already configured"
 		return 0
 	fi
+
+	separator
+	box_large "Installing Cursor Color"
+	separator
+	echo
+
 	log_info "Installing Cursor Color..."
 	loading "Installing Cursor Color" _install_cursor_impl
 }
@@ -46,6 +52,12 @@ uninstall_cursor() {
 		log_info "Cursor Color is not installed"
 		return 0
 	fi
+
+	separator
+	box_large "Uninstalling Cursor Color"
+	separator
+	echo
+
 	log_info "Uninstalling Cursor Color..."
 	loading "Uninstalling Cursor Color" _uninstall_cursor_impl
 }

@@ -38,6 +38,12 @@ install_markserv() {
   if command -v markserv &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing Markserv"
+  separator
+  echo
+
   log_info "Installing Markserv..."
 
   _markserv_dependencies
@@ -66,6 +72,12 @@ uninstall_markserv() {
     log_info "Markserv is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling Markserv"
+  separator
+  echo
+
   log_info "Uninstalling Markserv..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -28,6 +28,12 @@ install_tmux() {
     log_info "Tmux is already installed"
     return 2
   fi
+
+  separator
+  box_large "Installing tmux"
+  separator
+  echo
+
   log_info "Installing Tmux..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -54,6 +60,12 @@ uninstall_tmux() {
     log_info "Tmux is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling tmux"
+  separator
+  echo
+
   log_info "Uninstalling Tmux..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

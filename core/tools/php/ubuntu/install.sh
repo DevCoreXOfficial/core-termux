@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v php &>/dev/null; then
+    log_info "PHP is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing PHP"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install php
 }
 
 _impl_uninstall() {
+  if ! command -v php &>/dev/null; then
+    log_info "PHP is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling PHP"
+  separator
+  echo
+
   pm_remove php
 }
 

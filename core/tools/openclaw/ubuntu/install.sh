@@ -35,12 +35,22 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  separator
+  box_large "Installing OpenClaw"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g openclaw &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling OpenClaw"
+  separator
+  echo
+
   _npm_g uninstall -g openclaw &>>"$LOG_FILE" || true
 }
 

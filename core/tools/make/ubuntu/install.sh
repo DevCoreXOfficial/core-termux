@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v make &>/dev/null; then
+    log_info "Make is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Make"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install build-essential cmake
 }
 
 _impl_uninstall() {
+  if ! command -v make &>/dev/null; then
+    log_info "Make is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Make"
+  separator
+  echo
+
   pm_remove build-essential
 }
 

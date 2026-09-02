@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v fzf &>/dev/null; then
+    log_info "fzf is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing fzf"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install fzf
 }
 
 _impl_uninstall() {
+  if ! command -v fzf &>/dev/null; then
+    log_info "fzf is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling fzf"
+  separator
+  echo
+
   pm_remove fzf
 }
 

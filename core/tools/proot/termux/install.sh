@@ -49,6 +49,12 @@ install_proot() {
 		log_info "Proot is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing proot"
+	separator
+	echo
+
 	log_info "Installing Proot..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_proot() {
 		log_info "Proot is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling proot"
+	separator
+	echo
+
 	log_info "Uninstalling Proot..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

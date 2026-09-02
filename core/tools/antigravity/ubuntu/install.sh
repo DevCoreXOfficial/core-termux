@@ -13,6 +13,11 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  separator
+  box_large "Installing Antigravity"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   curl -fsSL https://antigravity.google/cli/install.sh | bash &>>"$LOG_FILE"
   # Expose binaries from well-known script locations.
@@ -20,6 +25,11 @@ _impl_install() {
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Antigravity"
+  separator
+  echo
+
   log_info "Removing Antigravity..."
   rm -f "$HOME/.local/bin/agy" "$HOME/bin/agy" 2>/dev/null
   rm -rf "$HOME/.antigravity" 2>/dev/null

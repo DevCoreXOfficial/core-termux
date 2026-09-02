@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v psql &>/dev/null; then
+    log_info "PostgreSQL is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing PostgreSQL"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install postgresql postgresql-contrib
 }
 
 _impl_uninstall() {
+  if ! command -v psql &>/dev/null; then
+    log_info "PostgreSQL is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling PostgreSQL"
+  separator
+  echo
+
   pm_remove postgresql
 }
 

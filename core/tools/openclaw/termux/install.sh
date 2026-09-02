@@ -71,6 +71,10 @@ install_openclaw() {
     log_info "OpenClaw is already installed"
     return 2
   fi
+  separator
+  box_large "Installing OpenClaw"
+  separator
+  echo
   log_info "Installing OpenClaw..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -88,6 +92,11 @@ uninstall_openclaw() {
     log_info "OpenClaw is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling OpenClaw"
+  separator
+  echo
 
   confirm_remove_configs "OpenClaw" \
     "$HOME/.openclaw"

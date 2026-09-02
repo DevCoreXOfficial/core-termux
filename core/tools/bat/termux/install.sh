@@ -49,6 +49,12 @@ install_bat() {
 		log_info "Bat is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Bat"
+	separator
+	echo
+
 	log_info "Installing Bat..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_bat() {
 		log_info "Bat is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Bat"
+	separator
+	echo
+
 	log_info "Uninstalling Bat..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

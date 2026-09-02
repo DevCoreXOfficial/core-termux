@@ -49,6 +49,12 @@ install_tree() {
 		log_info "Tree is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Tree"
+	separator
+	echo
+
 	log_info "Installing Tree..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_tree() {
 		log_info "Tree is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Tree"
+	separator
+	echo
+
 	log_info "Uninstalling Tree..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

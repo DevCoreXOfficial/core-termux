@@ -68,6 +68,11 @@ install_mistral_vibe() {
     return 2
   fi
 
+  separator
+  box_large "Installing Mistral Vibe"
+  separator
+  echo
+
   log_info "Installing Mistral Vibe..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -85,6 +90,11 @@ uninstall_mistral_vibe() {
     log_info "Mistral Vibe is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Mistral Vibe"
+  separator
+  echo
 
   confirm_remove_configs "Mistral Vibe" \
     "$HOME/.vibe"

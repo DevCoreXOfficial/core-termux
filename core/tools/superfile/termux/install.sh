@@ -74,6 +74,10 @@ install_superfile() {
     log_info "SuperFile is already installed"
     return 2
   fi
+  separator
+  box_large "Installing SuperFile"
+  separator
+  echo
   log_info "Installing SuperFile..."
 
   export GOPATH="$HOME/.local/go"
@@ -95,6 +99,11 @@ uninstall_superfile() {
     log_info "SuperFile is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling SuperFile"
+  separator
+  echo
 
   confirm_remove_configs "SuperFile" \
     "$HOME/.config/superfile" \

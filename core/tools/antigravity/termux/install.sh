@@ -398,6 +398,11 @@ install_antigravity_cli() {
     return 2
   fi
 
+  separator
+  box_large "Installing Antigravity"
+  separator
+  echo
+
   log_info "Select installation method for Antigravity CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
@@ -432,6 +437,11 @@ uninstall_antigravity_cli() {
     log_warn "Antigravity CLI is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling Antigravity"
+  separator
+  echo
 
   confirm_remove_configs "Antigravity CLI" \
     "$HOME/.cache/antigravity" \

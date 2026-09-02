@@ -50,6 +50,12 @@ install_fzf() {
 		log_info "Fzf is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing fzf"
+	separator
+	echo
+
 	log_info "Installing Fzf..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -64,6 +70,11 @@ uninstall_fzf() {
 		log_info "Fzf is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling fzf"
+	separator
+	echo
 
 	confirm_remove_configs "Fzf" \
 		"$HOME/.fzf"

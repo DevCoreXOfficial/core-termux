@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v curl &>/dev/null; then
+    log_info "curl is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing curl"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install curl
 }
 
 _impl_uninstall() {
+  if ! command -v curl &>/dev/null; then
+    log_info "curl is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling curl"
+  separator
+  echo
+
   pm_remove curl
 }
 

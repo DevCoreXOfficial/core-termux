@@ -12,10 +12,20 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  separator
+  box_large "Installing SuperFile"
+  separator
+  echo
+
   curl -fsSL https://superfile.dev/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling SuperFile"
+  separator
+  echo
+
   rm -f "$HOME/.local/bin/spf"
 }
 

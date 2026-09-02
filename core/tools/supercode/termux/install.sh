@@ -41,6 +41,11 @@ install_supercode() {
     return 2
   fi
 
+  separator
+  box_large "Installing SuperCode"
+  separator
+  echo
+
   log_info "Installing SuperCode..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -58,6 +63,11 @@ uninstall_supercode() {
     log_info "SuperCode is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling SuperCode"
+  separator
+  echo
 
   confirm_remove_configs "SuperCode" \
     "$HOME/.config/supercode" \

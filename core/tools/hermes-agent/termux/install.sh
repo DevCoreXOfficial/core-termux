@@ -139,6 +139,11 @@ install_hermes_agent() {
     return 2
   fi
 
+  separator
+  box_large "Installing Hermes Agent"
+  separator
+  echo
+
   log_info "Installing Hermes Agent..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -155,6 +160,11 @@ uninstall_hermes_agent() {
     log_info "Hermes Agent is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Hermes Agent"
+  separator
+  echo
 
   confirm_remove_configs "Hermes Agent" \
     "$HOME/.hermes" \

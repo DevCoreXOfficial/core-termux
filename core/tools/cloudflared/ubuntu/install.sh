@@ -12,12 +12,32 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v cloudflared &>/dev/null; then
+    log_info "Cloudflared is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Cloudflared"
+  separator
+  echo
+
   curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | $CORE_SUDO tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
   echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | $CORE_SUDO tee /etc/apt/sources.list.d/cloudflared.list >/dev/null
   pm_install cloudflared
 }
 
 _impl_uninstall() {
+  if ! command -v cloudflared &>/dev/null; then
+    log_info "Cloudflared is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Cloudflared"
+  separator
+  echo
+
   $CORE_SUDO rm -f /etc/apt/sources.list.d/cloudflared.list
   pm_remove cloudflared
 }

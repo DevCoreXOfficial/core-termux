@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v bc &>/dev/null; then
+    log_info "BC is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing BC"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install bc
 }
 
 _impl_uninstall() {
+  if ! command -v bc &>/dev/null; then
+    log_info "BC is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling BC"
+  separator
+  echo
+
   pm_remove bc
 }
 

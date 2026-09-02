@@ -35,12 +35,22 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  separator
+  box_large "Installing Context7"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g ctx7 &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Context7"
+  separator
+  echo
+
   _npm_g uninstall -g ctx7 &>>"$LOG_FILE" || true
 }
 

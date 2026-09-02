@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v lsd &>/dev/null; then
+    log_info "LSD is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing LSD"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install lsd
 }
 
 _impl_uninstall() {
+  if ! command -v lsd &>/dev/null; then
+    log_info "LSD is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling LSD"
+  separator
+  echo
+
   pm_remove lsd
 }
 

@@ -112,6 +112,11 @@ _impl_wire_zshrc() {
 
 case "${1:-install}" in
   install)
+    separator
+    box_large "Installing Oh My ZSH"
+    separator
+    echo
+
     mkdir -p "$(dirname "$LOG_FILE")" "$CORE_CACHE"
     _impl_install_deps || exit 1
     _impl_install_omz || exit 1
@@ -120,6 +125,11 @@ case "${1:-install}" in
     log_success "ZSH environment ready — restart your shell or run: exec zsh"
     ;;
   uninstall)
+    separator
+    box_large "Uninstalling Oh My ZSH"
+    separator
+    echo
+
     confirm_remove_configs "ZSH plugins" "$ZSH_PLUGINS_DIR" || true
     rm -rf "$ZSH_PLUGINS_DIR"
     $CORE_SUDO rm -rf "$OH_MY_ZSH_DIR"

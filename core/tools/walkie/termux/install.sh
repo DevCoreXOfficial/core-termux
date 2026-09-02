@@ -512,6 +512,11 @@ install_walkie() {
     return 2
   fi
 
+  separator
+  box_large "Installing Walkie"
+  separator
+  echo
+
   log_info "Installing walkie..."
   mkdir -p "$(dirname "$LOG_FILE")" "$WALKIE_DATA_DIR"
 
@@ -534,6 +539,11 @@ uninstall_walkie() {
     log_info "walkie is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Walkie"
+  separator
+  echo
 
   confirm_remove_configs "Walkie" \
     "$WALKIE_DIR_CONFIG"

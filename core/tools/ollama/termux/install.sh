@@ -30,6 +30,12 @@ install_ollama() {
     log_info "Ollama is already installed"
     return 2
   fi
+
+  separator
+  box_large "Installing Ollama"
+  separator
+  echo
+
   log_info "Installing Ollama..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -45,6 +51,11 @@ uninstall_ollama() {
     log_info "Ollama is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Ollama"
+  separator
+  echo
 
   confirm_remove_configs "Ollama" \
     "$HOME/.ollama" \

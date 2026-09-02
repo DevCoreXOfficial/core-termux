@@ -13,6 +13,16 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v bat &>/dev/null; then
+    log_info "Bat is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Bat"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install bat
   # Debian/Ubuntu ships the binary as batcat — expose it as bat.
@@ -20,6 +30,16 @@ _impl_install() {
 }
 
 _impl_uninstall() {
+  if ! command -v bat &>/dev/null; then
+    log_info "Bat is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Bat"
+  separator
+  echo
+
   pm_remove bat
 }
 

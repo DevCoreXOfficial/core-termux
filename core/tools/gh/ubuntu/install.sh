@@ -12,6 +12,16 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v gh &>/dev/null; then
+    log_info "GitHub CLI is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing GitHub CLI"
+  separator
+  echo
+
   curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | $CORE_SUDO dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
   $CORE_SUDO chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | $CORE_SUDO tee /etc/apt/sources.list.d/github-cli.list >/dev/null
@@ -19,6 +29,16 @@ _impl_install() {
 }
 
 _impl_uninstall() {
+  if ! command -v gh &>/dev/null; then
+    log_info "GitHub CLI is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling GitHub CLI"
+  separator
+  echo
+
   $CORE_SUDO rm -f /etc/apt/sources.list.d/github-cli.list
   pm_remove gh
 }

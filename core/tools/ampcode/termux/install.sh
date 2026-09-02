@@ -294,6 +294,11 @@ install_amp_code_cli() {
     return 2
   fi
 
+  separator
+  box_large "Installing Ampcode"
+  separator
+  echo
+
   log_info "Select installation method for AMP Code CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
@@ -322,6 +327,11 @@ uninstall_amp_code_cli() {
     log_warn "AMP Code CLI is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling Ampcode"
+  separator
+  echo
 
   confirm_remove_configs "AMP Code CLI" \
     "$HOME/.config/amp" \

@@ -28,6 +28,12 @@ case "${1:-install}" in
       log_info "Cursor color already configured"
       exit 0
     fi
+
+    separator
+    box_large "Installing Cursor Color"
+    separator
+    echo
+
     cat >>"$RC" <<EOF
 
 $MARKER
@@ -57,6 +63,12 @@ EOF
   uninstall)
     RC="$(_detect_shell_config)"
     [[ -z "$RC" ]] && exit 0
+
+    separator
+    box_large "Uninstalling Cursor Color"
+    separator
+    echo
+
     if grep -qF "$MARKER" "$RC"; then
       sed -i "/^$MARKER\$/d; /^# Green cursor (OSC 12/d; /^printf '\\\\033]12;/d" "$RC"
       log_success "Cursor color removed"

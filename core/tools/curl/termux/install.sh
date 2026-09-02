@@ -49,6 +49,12 @@ install_curl() {
 		log_info "Curl is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing curl"
+	separator
+	echo
+
 	log_info "Installing Curl..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_curl() {
 		log_info "Curl is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling curl"
+	separator
+	echo
+
 	log_info "Uninstalling Curl..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -29,6 +29,12 @@ install_python() {
 		log_info "Python is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Python"
+	separator
+	echo
+
 	log_info "Installing Python..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -54,6 +60,11 @@ uninstall_python() {
 		log_info "Python is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Python"
+	separator
+	echo
 
 	confirm_remove_configs "Python" \
 		"$HOME/.python_history" \

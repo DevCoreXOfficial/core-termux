@@ -78,6 +78,11 @@ install_command_code() {
     return 2
   fi
 
+  separator
+  box_large "Installing Command Code"
+  separator
+  echo
+
   log_info "Installing Command Code..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -96,6 +101,11 @@ uninstall_command_code() {
     log_info "Command Code is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Command Code"
+  separator
+  echo
 
   confirm_remove_configs "Command Code" \
     "$HOME/.commandcode"

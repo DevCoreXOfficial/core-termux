@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v clang &>/dev/null; then
+    log_info "Clang is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Clang"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install clang
 }
 
 _impl_uninstall() {
+  if ! command -v clang &>/dev/null; then
+    log_info "Clang is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Clang"
+  separator
+  echo
+
   pm_remove clang
 }
 

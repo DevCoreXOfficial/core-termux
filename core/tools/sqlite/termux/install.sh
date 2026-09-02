@@ -26,6 +26,12 @@ install_sqlite() {
 		log_info "SQLite is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing SQLite"
+	separator
+	echo
+
 	log_info "Installing SQLite..."
 	loading "Installing SQLite" _install_sqlite_impl
 }
@@ -46,6 +52,12 @@ uninstall_sqlite() {
 		log_info "SQLite is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling SQLite"
+	separator
+	echo
+
 	log_info "Uninstalling SQLite..."
 	loading "Uninstalling SQLite" _uninstall_sqlite_impl
 }

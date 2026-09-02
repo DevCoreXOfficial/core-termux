@@ -35,12 +35,32 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  if command -v nest &>/dev/null; then
+    log_info "NestJS is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing NestJS"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g @nestjs/cli &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  if ! command -v nest &>/dev/null; then
+    log_info "NestJS is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling NestJS"
+  separator
+  echo
+
   _npm_g uninstall -g @nestjs/cli &>>"$LOG_FILE" || true
 }
 

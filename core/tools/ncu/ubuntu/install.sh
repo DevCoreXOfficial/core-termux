@@ -35,12 +35,32 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  if command -v ncu &>/dev/null; then
+    log_info "ncu is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing ncu"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g npm-check-updates &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  if ! command -v ncu &>/dev/null; then
+    log_info "ncu is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling ncu"
+  separator
+  echo
+
   _npm_g uninstall -g npm-check-updates &>>"$LOG_FILE" || true
 }
 

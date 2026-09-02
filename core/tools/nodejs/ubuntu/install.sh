@@ -13,6 +13,16 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install_languages.log}"
 
 _impl_install() {
+  if command -v node &>/dev/null; then
+    log_info "Node.js is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Node.js"
+  separator
+  echo
+
   command -v curl >/dev/null 2>&1 || pm_install curl ca-certificates
 
   loading "Removing outdated distro Node.js" bash -c '
@@ -35,6 +45,16 @@ _impl_install() {
 }
 
 _impl_uninstall() {
+  if ! command -v node &>/dev/null; then
+    log_info "Node.js is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Node.js"
+  separator
+  echo
+
   local answer
   read_confirm_default "Remove global npm packages too?" n answer
   [[ "$answer" = y ]] && $CORE_SUDO npm ls -g --depth=0 >/dev/null 2>&1 && \

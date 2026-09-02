@@ -38,6 +38,12 @@ install_nestjs() {
   if command -v nest &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing NestJS"
+  separator
+  echo
+
   log_info "Installing NestJS CLI..."
 
   _nestjs_dependencies
@@ -66,6 +72,12 @@ uninstall_nestjs() {
     log_info "NestJS CLI is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling NestJS"
+  separator
+  echo
+
   log_info "Uninstalling NestJS CLI..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

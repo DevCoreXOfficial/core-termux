@@ -59,6 +59,11 @@ install_kimi_code() {
     return 2
   fi
 
+  separator
+  box_large "Installing Kimi Code"
+  separator
+  echo
+
   log_info "Installing Kimi Code..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -76,6 +81,11 @@ uninstall_kimi_code() {
     log_success "Kimi Code is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Kimi Code"
+  separator
+  echo
 
   confirm_remove_configs "Kimi Code" \
     "$HOME/.kimi" \

@@ -38,6 +38,12 @@ install_prettier() {
   if command -v prettier &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing Prettier"
+  separator
+  echo
+
   log_info "Installing Prettier..."
 
   _prettier_dependencies
@@ -66,6 +72,12 @@ uninstall_prettier() {
     log_info "Prettier is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling Prettier"
+  separator
+  echo
+
   log_info "Uninstalling Prettier..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

@@ -29,6 +29,12 @@ install_openssh() {
     log_info "OpenSSH is already installed"
     return 2
   fi
+
+  separator
+  box_large "Installing OpenSSH"
+  separator
+  echo
+
   log_info "Installing OpenSSH..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -55,6 +61,11 @@ uninstall_openssh() {
     log_info "OpenSSH is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling OpenSSH"
+  separator
+  echo
 
   confirm_remove_configs "OpenSSH" \
     "$HOME/.ssh"

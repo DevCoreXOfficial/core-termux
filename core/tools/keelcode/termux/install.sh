@@ -301,6 +301,11 @@ install_keelcode() {
 
   log_info "Select installation method for KeelCode:"
 
+  separator
+  box_large "Installing KeelCode"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -327,6 +332,11 @@ uninstall_keelcode() {
     log_warn "KeelCode is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling KeelCode"
+  separator
+  echo
 
   confirm_remove_configs "KeelCode" \
     "$HOME/.keelcode"

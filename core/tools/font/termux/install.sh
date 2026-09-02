@@ -33,6 +33,12 @@ install_font() {
 		log_info "Meslo Nerd Font already installed"
 		return 0
 	fi
+
+	separator
+	box_large "Installing Font"
+	separator
+	echo
+
 	log_info "Installing Meslo Nerd Font..."
 	loading "Installing Meslo Nerd Font" _install_font_impl
 }
@@ -51,6 +57,12 @@ uninstall_font() {
 		log_info "Meslo Nerd Font is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Font"
+	separator
+	echo
+
 	log_info "Uninstalling Meslo Nerd Font..."
 	loading "Uninstalling Meslo Nerd Font" _uninstall_font_impl
 }

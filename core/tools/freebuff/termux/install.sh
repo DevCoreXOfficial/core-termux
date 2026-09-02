@@ -282,6 +282,11 @@ install_freebuff() {
 
   log_info "Select installation method for Freebuff:"
 
+  separator
+  box_large "Installing FreeBuff"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -309,6 +314,11 @@ uninstall_freebuff() {
     log_warn "Freebuff is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling FreeBuff"
+  separator
+  echo
 
   confirm_remove_configs "FreeBuff" \
     "$HOME/.config/fresh" \

@@ -283,6 +283,11 @@ install_goose() {
 
   log_info "Select installation method for Goose CLI:"
 
+  separator
+  box_large "Installing Goose"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -309,6 +314,11 @@ uninstall_goose() {
     log_warn "Goose CLI is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling Goose"
+  separator
+  echo
 
   confirm_remove_configs "Goose" \
     "$HOME/.goose" \

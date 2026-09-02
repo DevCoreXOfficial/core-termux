@@ -50,6 +50,12 @@ install_wget() {
 		log_info "Wget is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing wget"
+	separator
+	echo
+
 	log_info "Installing Wget..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -64,6 +70,11 @@ uninstall_wget() {
 		log_info "Wget is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling wget"
+	separator
+	echo
 
 	confirm_remove_configs "Wget" \
 		"$HOME/.wget-hsts"

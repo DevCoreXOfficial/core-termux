@@ -26,6 +26,12 @@ install_mariadb() {
 		log_info "MariaDB is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing MariaDB"
+	separator
+	echo
+
 	log_info "Installing MariaDB..."
 	loading "Installing MariaDB" _install_mariadb_impl
 }
@@ -46,6 +52,12 @@ uninstall_mariadb() {
 		log_info "MariaDB is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling MariaDB"
+	separator
+	echo
+
 	log_info "Uninstalling MariaDB..."
 	loading "Uninstalling MariaDB" _uninstall_mariadb_impl
 }

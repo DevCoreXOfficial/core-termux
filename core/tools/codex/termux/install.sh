@@ -56,6 +56,10 @@ install_codex() {
 		log_info "Codex CLI is already installed"
 		return 2
 	fi
+	separator
+	box_large "Installing Codex"
+	separator
+	echo
 	log_info "Installing Codex CLI..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -73,6 +77,11 @@ uninstall_codex() {
 		log_info "Codex CLI is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Codex"
+	separator
+	echo
 
 	confirm_remove_configs "Codex CLI" \
 		"$HOME/.codex" \

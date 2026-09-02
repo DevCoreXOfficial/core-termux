@@ -327,6 +327,11 @@ install_cursor_cli() {
 
   log_info "Select installation method for Cursor CLI:"
 
+  separator
+  box_large "Installing Cursor"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -353,6 +358,11 @@ uninstall_cursor_cli() {
     log_warn "Cursor CLI is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling Cursor"
+  separator
+  echo
 
   confirm_remove_configs "Cursor CLI" \
     "$HOME/.cursor" \

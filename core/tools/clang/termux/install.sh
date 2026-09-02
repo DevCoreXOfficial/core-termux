@@ -28,6 +28,12 @@ install_clang() {
 		log_info "C/C++ (Clang) is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Clang"
+	separator
+	echo
+
 	log_info "Installing C/C++ (Clang)..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -53,6 +59,12 @@ uninstall_clang() {
 		log_info "C/C++ (Clang) is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Clang"
+	separator
+	echo
+
 	log_info "Uninstalling C/C++ (Clang)..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	_uninstall_clang_pkg || return 1

@@ -49,6 +49,12 @@ install_ncurses() {
 		log_info "Ncurses Utils is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing ncurses"
+	separator
+	echo
+
 	log_info "Installing Ncurses Utils..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_ncurses() {
 		log_info "Ncurses Utils is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling ncurses"
+	separator
+	echo
+
 	log_info "Uninstalling Ncurses Utils..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

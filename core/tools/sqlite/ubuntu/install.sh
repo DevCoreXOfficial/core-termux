@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v sqlite3 &>/dev/null; then
+    log_info "SQLite is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing SQLite"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install sqlite3
 }
 
 _impl_uninstall() {
+  if ! command -v sqlite3 &>/dev/null; then
+    log_info "SQLite is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling SQLite"
+  separator
+  echo
+
   pm_remove sqlite3
 }
 

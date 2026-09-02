@@ -31,6 +31,11 @@ _wsl_windows_font() {
 
 case "${1:-install}" in
   install)
+    separator
+    box_large "Installing Font"
+    separator
+    echo
+
     mkdir -p "$FONT_DIR" "$(dirname "$LOG_FILE")"
     FONT_SRC="$(dirname "$CORE_PATH")/assets/fonts/font.ttf"
     if [[ ! -f "$FONT_SRC" ]]; then
@@ -71,6 +76,11 @@ case "${1:-install}" in
     log_info "Select it in your terminal emulator settings"
     ;;
   uninstall)
+    separator
+    box_large "Uninstalling Font"
+    separator
+    echo
+
     rm -f "$FONT_DIR/MesloNerdFont.ttf"
     command -v fc-cache >/dev/null 2>&1 && fc-cache -f "$FONT_DIR" &>/dev/null
     log_success "Font removed"

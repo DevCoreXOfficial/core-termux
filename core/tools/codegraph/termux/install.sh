@@ -88,6 +88,10 @@ install_codegraph() {
 		log_info "CodeGraph is already installed"
 		return 2
 	fi
+	separator
+	box_large "Installing CodeGraph"
+	separator
+	echo
 	log_info "Installing CodeGraph..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -105,6 +109,11 @@ uninstall_codegraph() {
 		log_info "CodeGraph is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling CodeGraph"
+	separator
+	echo
 
 	confirm_remove_configs "CodeGraph" \
 		"$HOME/.codegraph"

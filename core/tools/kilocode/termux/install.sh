@@ -287,6 +287,11 @@ install_kilocode_cli() {
 
   log_info "Select installation method for KiloCode CLI:"
 
+  separator
+  box_large "Installing KiloCode"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -313,6 +318,11 @@ uninstall_kilocode_cli() {
     log_warn "KiloCode CLI is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling KiloCode"
+  separator
+  echo
 
   confirm_remove_configs "KiloCode CLI" \
     "$HOME/.config/kilo" \

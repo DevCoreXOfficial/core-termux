@@ -29,6 +29,12 @@ install_golang() {
 		log_info "Go (Golang) is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Go"
+	separator
+	echo
+
 	log_info "Installing Go (Golang)..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -54,6 +60,11 @@ uninstall_golang() {
 		log_info "Go (Golang) is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Go"
+	separator
+	echo
 
 	confirm_remove_configs "Go" \
 		"$HOME/.cache/go" \

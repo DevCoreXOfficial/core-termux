@@ -41,6 +41,12 @@ install_npmjs() {
 		log_info "Node.js LTS is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Node.js"
+	separator
+	echo
+
 	log_info "Installing Node.js LTS..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -67,6 +73,11 @@ uninstall_npmjs() {
 		log_info "Node.js LTS is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Node.js"
+	separator
+	echo
 
 	confirm_remove_configs "Node.js" \
 		"$HOME/.npm" \

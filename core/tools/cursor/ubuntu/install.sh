@@ -12,10 +12,20 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  separator
+  box_large "Installing Cursor"
+  separator
+  echo
+
   curl -fsSL https://cursor.com/install | bash &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Cursor"
+  separator
+  echo
+
   rm -rf "$HOME/.cursor-agent"
 }
 

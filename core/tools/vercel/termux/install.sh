@@ -39,6 +39,12 @@ install_vercel() {
   if command -v vercel &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing Vercel"
+  separator
+  echo
+
   log_info "Installing Vercel CLI..."
 
   _vercel_dependencies
@@ -67,6 +73,11 @@ uninstall_vercel() {
     log_info "Vercel CLI is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling Vercel"
+  separator
+  echo
 
   confirm_remove_configs "Vercel CLI" \
     "$HOME/.local/share/com.vercel.cli" \

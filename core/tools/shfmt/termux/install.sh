@@ -49,6 +49,12 @@ install_shfmt() {
 		log_info "Shfmt is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing shfmt"
+	separator
+	echo
+
 	log_info "Installing Shfmt..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_shfmt() {
 		log_info "Shfmt is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling shfmt"
+	separator
+	echo
+
 	log_info "Uninstalling Shfmt..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

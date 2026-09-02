@@ -60,6 +60,12 @@ install_n8n() {
     log_info "n8n is already installed"
     return 0
   fi
+
+  separator
+  box_large "Installing n8n"
+  separator
+  echo
+
   log_info "Installing n8n..."
   loading "Installing n8n" _install_n8n_impl
 }
@@ -81,6 +87,11 @@ uninstall_n8n() {
     log_info "n8n is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling n8n"
+  separator
+  echo
 
   confirm_remove_configs "n8n" \
     "$HOME/.n8n" \

@@ -296,6 +296,11 @@ install_droid_factory() {
 
   log_info "Select installation method for Droid Factory:"
 
+  separator
+  box_large "Installing Droid Factory"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -343,6 +348,11 @@ uninstall_droid_factory() {
     log_info "Droid Factory is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Droid Factory"
+  separator
+  echo
 
   confirm_remove_configs "Droid Factory" \
     "$HOME/.factory"

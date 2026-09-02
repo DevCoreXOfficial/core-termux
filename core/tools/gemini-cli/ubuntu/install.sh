@@ -35,12 +35,22 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  separator
+  box_large "Installing Gemini CLI"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g @google/gemini-cli &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Gemini CLI"
+  separator
+  echo
+
   _npm_g uninstall -g @google/gemini-cli &>>"$LOG_FILE" || true
 }
 

@@ -68,6 +68,10 @@ install_engram() {
     log_info "Engram is already installed"
     return 2
   fi
+  separator
+  box_large "Installing Engram"
+  separator
+  echo
   log_info "Installing Engram..."
 
   export GOPATH="$HOME/.local/go"
@@ -89,6 +93,11 @@ uninstall_engram() {
     log_info "Engram is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Engram"
+  separator
+  echo
 
   confirm_remove_configs "Engram" \
     "$HOME/.engram"

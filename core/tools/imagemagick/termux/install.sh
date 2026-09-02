@@ -49,6 +49,12 @@ install_imagemagick() {
 		log_info "ImageMagick is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing ImageMagick"
+	separator
+	echo
+
 	log_info "Installing ImageMagick..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_imagemagick() {
 		log_info "ImageMagick is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling ImageMagick"
+	separator
+	echo
+
 	log_info "Uninstalling ImageMagick..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

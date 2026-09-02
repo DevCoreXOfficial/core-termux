@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v redis-server &>/dev/null; then
+    log_info "Redis is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Redis"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install redis-server
 }
 
 _impl_uninstall() {
+  if ! command -v redis-server &>/dev/null; then
+    log_info "Redis is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Redis"
+  separator
+  echo
+
   pm_remove redis-server
 }
 

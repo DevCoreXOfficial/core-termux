@@ -35,12 +35,32 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  if command -v n8n &>/dev/null; then
+    log_info "n8n is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing n8n"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g n8n &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  if ! command -v n8n &>/dev/null; then
+    log_info "n8n is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling n8n"
+  separator
+  echo
+
   _npm_g uninstall -g n8n &>>"$LOG_FILE" || true
 }
 

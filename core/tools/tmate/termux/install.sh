@@ -49,6 +49,12 @@ install_tmate() {
 		log_info "Tmate is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing tmate"
+	separator
+	echo
+
 	log_info "Installing Tmate..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_tmate() {
 		log_info "Tmate is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling tmate"
+	separator
+	echo
+
 	log_info "Uninstalling Tmate..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

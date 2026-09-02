@@ -55,6 +55,12 @@ install_localtunnel() {
   if command -v lt &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing LocalTunnel"
+  separator
+  echo
+
   log_info "Installing Localtunnel..."
 
   _localtunnel_dependencies
@@ -83,6 +89,12 @@ uninstall_localtunnel() {
     log_info "Localtunnel is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling LocalTunnel"
+  separator
+  echo
+
   log_info "Uninstalling Localtunnel..."
   mkdir -p "$(dirname "$LOG_FILE")"
 

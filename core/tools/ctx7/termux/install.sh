@@ -55,6 +55,11 @@ install_ctx7() {
     return 2
   fi
 
+  separator
+  box_large "Installing Context7"
+  separator
+  echo
+
   log_info "Installing Context7..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -71,6 +76,11 @@ uninstall_ctx7() {
     log_info "Context7 is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Context7"
+  separator
+  echo
 
   confirm_remove_configs "Context7 CLI" \
     "$HOME/.config/context7" \

@@ -78,6 +78,11 @@ install_hugging_face() {
     return 2
   fi
 
+  separator
+  box_large "Installing Hugging Face"
+  separator
+  echo
+
   log_info "Installing Hugging Face CLI..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -107,6 +112,11 @@ uninstall_hugging_face() {
     "$HOME/.cache/huggingface" \
     "$HOME/.config/huggingface" \
     "$HOME/.cache/huggingface-token"
+
+  separator
+  box_large "Uninstalling Hugging Face"
+  separator
+  echo
 
   loading "Removing huggingface-hub" bash -c "pip uninstall -y huggingface-hub &>>'$LOG_FILE'" || true
   rm -f "${HF_PROFILE_D}" "${PREFIX}/bin/hf" "${PREFIX}/bin/huggingface-cli"

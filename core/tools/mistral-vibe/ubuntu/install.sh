@@ -13,6 +13,11 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  separator
+  box_large "Installing Mistral Vibe"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   curl -fsSL https://mistral.ai/vibe/install.sh | bash &>>"$LOG_FILE"
   # Expose binaries from well-known script locations.
@@ -20,6 +25,11 @@ _impl_install() {
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Mistral Vibe"
+  separator
+  echo
+
   log_info "Removing binaries..."
   command -v "vibe" >/dev/null 2>&1 && rm -f "$(command -v vibe)"
 }

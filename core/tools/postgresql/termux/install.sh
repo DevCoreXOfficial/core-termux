@@ -27,6 +27,12 @@ install_postgresql() {
 		log_info "PostgreSQL is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing PostgreSQL"
+	separator
+	echo
+
 	log_info "Installing PostgreSQL..."
 	loading "Installing PostgreSQL" _install_postgresql_impl
 }
@@ -47,6 +53,11 @@ uninstall_postgresql() {
 		log_info "PostgreSQL is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling PostgreSQL"
+	separator
+	echo
 
 	confirm_remove_configs "PostgreSQL" \
 		"$HOME/.psql_history"

@@ -39,6 +39,12 @@ install_typescript() {
   if command -v tsc &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing TypeScript"
+  separator
+  echo
+
   log_info "Installing TypeScript..."
 
   _typescript_dependencies
@@ -67,6 +73,11 @@ uninstall_typescript() {
     log_info "TypeScript is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling TypeScript"
+  separator
+  echo
 
   confirm_remove_configs "TypeScript" \
     "$HOME/.cache/typescript"

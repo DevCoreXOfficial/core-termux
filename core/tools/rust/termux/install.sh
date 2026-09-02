@@ -29,6 +29,12 @@ install_rust() {
 		log_info "Rust is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Rust"
+	separator
+	echo
+
 	log_info "Installing Rust..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -54,6 +60,11 @@ uninstall_rust() {
 		log_info "Rust is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Rust"
+	separator
+	echo
 
 	confirm_remove_configs "Rust" \
 		"$HOME/.cargo"

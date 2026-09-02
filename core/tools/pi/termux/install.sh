@@ -58,6 +58,10 @@ install_pi() {
     log_info "Pi Coding Agent is already installed"
     return 2
   fi
+  separator
+  box_large "Installing PI"
+  separator
+  echo
   log_info "Installing Pi Coding Agent..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -75,6 +79,11 @@ uninstall_pi() {
     log_info "Pi Coding Agent is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling PI"
+  separator
+  echo
 
   confirm_remove_configs "Pi" \
     "$HOME/.pi"

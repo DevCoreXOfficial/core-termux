@@ -219,6 +219,11 @@ install_gentle_ai() {
     return 2
   fi
 
+  separator
+  box_large "Installing Gentle AI"
+  separator
+  echo
+
   log_info "Installing gentle-ai..."
   mkdir -p "$(dirname "$LOG_FILE")" "$CORE_CACHE"
 
@@ -238,6 +243,11 @@ uninstall_gentle_ai() {
     log_info "gentle-ai is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Gentle AI"
+  separator
+  echo
 
   confirm_remove_configs "Gentle AI" \
     "$HOME/.gentle-ai"

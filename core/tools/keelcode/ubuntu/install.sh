@@ -34,11 +34,21 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  separator
+  box_large "Installing KeelCode"
+  separator
+  echo
+
   _impl_require_npm
   _npm_g install -g @keelcode-ai/keelcode &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling KeelCode"
+  separator
+  echo
+
   _npm_g uninstall -g @keelcode-ai/keelcode &>>"$LOG_FILE" || true
 }
 

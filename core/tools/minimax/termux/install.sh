@@ -59,6 +59,11 @@ install_minimax_cli() {
     return 2
   fi
 
+  separator
+  box_large "Installing MiniMax"
+  separator
+  echo
+
   log_info "Installing MiniMax CLI..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -76,6 +81,11 @@ uninstall_minimax_cli() {
     log_success "MiniMax CLI is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling MiniMax"
+  separator
+  echo
 
   confirm_remove_configs "MiniMax" \
     "$HOME/.mmx"

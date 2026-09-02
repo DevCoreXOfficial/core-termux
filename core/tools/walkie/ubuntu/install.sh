@@ -34,11 +34,21 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  separator
+  box_large "Installing Walkie"
+  separator
+  echo
+
   _impl_require_npm
   _npm_g install -g github:vikasprogrammer/walkie &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Walkie"
+  separator
+  echo
+
   _npm_g uninstall -g github:vikasprogrammer/walkie &>>"$LOG_FILE" || true
 }
 

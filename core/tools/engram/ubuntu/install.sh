@@ -13,6 +13,11 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  separator
+  box_large "Installing Engram"
+  separator
+  echo
+
   loading "Installing Engram (clone + go build)" _impl_install_impl
 }
 _impl_install_impl() {
@@ -24,6 +29,11 @@ _impl_install_impl() {
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling Engram"
+  separator
+  echo
+
   rm -f "$HOME/.local/bin/engram" "$HOME/go/bin/engram" 2>/dev/null
   read_confirm_default "Delete ~/.local/share/core-data/engram?" n __a
   [ "$__a" = y ] && rm -rf "~/.local/share/core-data/engram"

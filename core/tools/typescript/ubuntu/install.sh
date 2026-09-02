@@ -35,12 +35,32 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  if command -v tsc &>/dev/null; then
+    log_info "TypeScript is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing TypeScript"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g typescript &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  if ! command -v tsc &>/dev/null; then
+    log_info "TypeScript is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling TypeScript"
+  separator
+  echo
+
   _npm_g uninstall -g typescript &>>"$LOG_FILE" || true
 }
 

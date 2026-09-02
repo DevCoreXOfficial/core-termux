@@ -49,6 +49,12 @@ install_html2text() {
 		log_info "HTML2Text is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing html2text"
+	separator
+	echo
+
 	log_info "Installing html2text..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_html2text() {
 		log_info "HTML2Text is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling html2text"
+	separator
+	echo
+
 	log_info "Uninstalling html2text..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

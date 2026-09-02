@@ -49,6 +49,12 @@ install_jq() {
 		log_info "jq is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing jq"
+	separator
+	echo
+
 	log_info "Installing jq..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_jq() {
 		log_info "jq is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling jq"
+	separator
+	echo
+
 	log_info "Uninstalling jq..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

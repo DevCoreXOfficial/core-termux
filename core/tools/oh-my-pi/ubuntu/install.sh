@@ -29,8 +29,20 @@ _impl_update() {
 }
 
 case "${1:-}" in
-  install)    _impl_install ;;
-  uninstall)  _impl_uninstall ;;
+  install)
+    separator
+    box_large "Installing Oh My Pi"
+    separator
+    echo
+
+    _impl_install ;;
+  uninstall)
+    separator
+    box_large "Uninstalling Oh My Pi"
+    separator
+    echo
+
+    _impl_uninstall ;;
   update)     _impl_update ;;
   reinstall)  _impl_install ;;
   *)

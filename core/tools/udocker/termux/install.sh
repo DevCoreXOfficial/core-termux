@@ -50,6 +50,12 @@ install_udocker() {
 		log_info "Udocker is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing uDocker"
+	separator
+	echo
+
 	log_info "Installing Udocker..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -64,6 +70,11 @@ uninstall_udocker() {
 		log_info "Udocker is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling uDocker"
+	separator
+	echo
 
 	confirm_remove_configs "Udocker" \
 		"$HOME/.udocker"

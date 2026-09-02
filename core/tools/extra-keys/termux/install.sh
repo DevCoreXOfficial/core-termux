@@ -32,6 +32,12 @@ install_extra_keys() {
 		log_info "Extra Keys already installed"
 		return 0
 	fi
+
+	separator
+	box_large "Installing Extra Keys"
+	separator
+	echo
+
 	log_info "Installing Extra Keys..."
 	loading "Installing Extra Keys" _install_extra_keys_impl
 }
@@ -50,6 +56,12 @@ uninstall_extra_keys() {
 		log_info "Extra Keys is not installed"
 		return 0
 	fi
+
+	separator
+	box_large "Uninstalling Extra Keys"
+	separator
+	echo
+
 	log_info "Uninstalling Extra Keys..."
 	loading "Uninstalling Extra Keys" _uninstall_extra_keys_impl
 }

@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v tput &>/dev/null; then
+    log_info "ncurses is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing ncurses"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install ncurses-bin
 }
 
 _impl_uninstall() {
+  if ! command -v tput &>/dev/null; then
+    log_info "ncurses is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling ncurses"
+  separator
+  echo
+
   pm_remove ncurses-bin
 }
 

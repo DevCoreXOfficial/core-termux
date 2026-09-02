@@ -39,6 +39,12 @@ install_ncu() {
   if command -v ncu &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing ncu"
+  separator
+  echo
+
   log_info "Installing NPM Check Updates..."
 
   _ncu_dependencies
@@ -67,6 +73,11 @@ uninstall_ncu() {
     log_info "NPM Check Updates is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling ncu"
+  separator
+  echo
 
   confirm_remove_configs "NPM Check Updates" \
     "$HOME/.config/configstore"

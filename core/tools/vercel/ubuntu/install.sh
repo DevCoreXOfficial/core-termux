@@ -35,12 +35,32 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  if command -v vercel &>/dev/null; then
+    log_info "Vercel is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Vercel"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g vercel &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  if ! command -v vercel &>/dev/null; then
+    log_info "Vercel is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Vercel"
+  separator
+  echo
+
   _npm_g uninstall -g vercel &>>"$LOG_FILE" || true
 }
 

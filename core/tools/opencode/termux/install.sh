@@ -267,6 +267,11 @@ install_opencode() {
 
   log_info "Select installation method for OpenCode:"
 
+  separator
+  box_large "Installing OpenCode"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -293,6 +298,11 @@ uninstall_opencode() {
     log_warn "OpenCode is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling OpenCode"
+  separator
+  echo
 
   confirm_remove_configs "OpenCode" \
     "$HOME/.config/opencode" \

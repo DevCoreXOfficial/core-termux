@@ -35,12 +35,32 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  if command -v prettier &>/dev/null; then
+    log_info "Prettier is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Prettier"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g prettier &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  if ! command -v prettier &>/dev/null; then
+    log_info "Prettier is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Prettier"
+  separator
+  echo
+
   _npm_g uninstall -g prettier &>>"$LOG_FILE" || true
 }
 

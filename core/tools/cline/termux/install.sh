@@ -267,6 +267,11 @@ install_cline() {
     return 2
   fi
 
+  separator
+  box_large "Installing Cline"
+  separator
+  echo
+
   log_info "Select installation method for Cline CLI:"
 
   read_select "Installation method" SELECTED_METHOD \
@@ -291,6 +296,11 @@ uninstall_cline() {
     log_warn "Cline CLI is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling Cline"
+  separator
+  echo
 
   confirm_remove_configs "Cline" \
     "$HOME/.cline"

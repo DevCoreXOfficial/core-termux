@@ -110,6 +110,11 @@ install_gga() {
 		return 2
 	fi
 
+	separator
+	box_large "Installing GGA"
+	separator
+	echo
+
 	log_info "Installing GGA..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -128,6 +133,11 @@ uninstall_gga() {
 		log_info "GGA is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling GGA"
+	separator
+	echo
 
 	confirm_remove_configs "GGA" \
 		"$HOME/.config/gga" \

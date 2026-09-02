@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v tmate &>/dev/null; then
+    log_info "tmate is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing tmate"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install tmate
 }
 
 _impl_uninstall() {
+  if ! command -v tmate &>/dev/null; then
+    log_info "tmate is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling tmate"
+  separator
+  echo
+
   pm_remove tmate
 }
 

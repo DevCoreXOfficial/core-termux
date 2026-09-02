@@ -49,6 +49,12 @@ install_make() {
 		log_info "Make is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing Make"
+	separator
+	echo
+
 	log_info "Installing Make..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_make() {
 		log_info "Make is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling Make"
+	separator
+	echo
+
 	log_info "Uninstalling Make..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

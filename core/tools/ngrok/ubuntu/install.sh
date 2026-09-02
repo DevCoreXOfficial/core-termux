@@ -35,12 +35,32 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  if command -v ngrok &>/dev/null; then
+    log_info "ngrok is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing ngrok"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g ngrok &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  if ! command -v ngrok &>/dev/null; then
+    log_info "ngrok is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling ngrok"
+  separator
+  echo
+
   _npm_g uninstall -g ngrok &>>"$LOG_FILE" || true
 }
 

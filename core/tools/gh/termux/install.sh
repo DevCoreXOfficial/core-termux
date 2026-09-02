@@ -50,6 +50,12 @@ install_gh() {
 		log_info "GitHub CLI is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing GitHub CLI"
+	separator
+	echo
+
 	log_info "Installing GitHub CLI..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -64,6 +70,11 @@ uninstall_gh() {
 		log_info "GitHub CLI is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling GitHub CLI"
+	separator
+	echo
 
 	confirm_remove_configs "GitHub CLI" \
 		"$HOME/.config/gh" \

@@ -49,6 +49,12 @@ install_bc() {
 		log_info "bc is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing BC"
+	separator
+	echo
+
 	log_info "Installing bc..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -63,6 +69,12 @@ uninstall_bc() {
 		log_info "bc is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling BC"
+	separator
+	echo
+
 	log_info "Uninstalling bc..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 

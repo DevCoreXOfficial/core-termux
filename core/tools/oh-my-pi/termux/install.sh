@@ -282,6 +282,11 @@ install_oh_my_pi() {
     return 2
   fi
 
+  separator
+  box_large "Installing Oh My Pi"
+  separator
+  echo
+
   log_info "Select installation method for Oh-My-Pi:"
 
   read_select "Installation method" SELECTED_METHOD \
@@ -331,6 +336,11 @@ uninstall_oh_my_pi() {
     log_info "Oh-My-Pi is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Oh My Pi"
+  separator
+  echo
 
   confirm_remove_configs "Oh My Pi" \
     "$HOME/.omp"

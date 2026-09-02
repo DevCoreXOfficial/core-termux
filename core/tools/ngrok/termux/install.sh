@@ -39,6 +39,12 @@ install_ngrok() {
   if command -v ngrok &>/dev/null; then
     return 0
   fi
+
+  separator
+  box_large "Installing ngrok"
+  separator
+  echo
+
   log_info "Installing Ngrok..."
 
   _ngrok_dependencies
@@ -67,6 +73,11 @@ uninstall_ngrok() {
     log_info "Ngrok is not installed"
     return 0
   fi
+
+  separator
+  box_large "Uninstalling ngrok"
+  separator
+  echo
 
   confirm_remove_configs "Ngrok" \
     "$HOME/.ngrok" \

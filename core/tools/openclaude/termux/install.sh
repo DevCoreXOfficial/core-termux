@@ -58,6 +58,10 @@ install_openclaude() {
     log_info "OpenClaude is already installed"
     return 2
   fi
+  separator
+  box_large "Installing OpenClaude"
+  separator
+  echo
   log_info "Installing OpenClaude..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -75,6 +79,11 @@ uninstall_openclaude() {
     log_info "OpenClaude is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling OpenClaude"
+  separator
+  echo
 
   confirm_remove_configs "OpenClaude" \
     "$HOME/.openclaude" \

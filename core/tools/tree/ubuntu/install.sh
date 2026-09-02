@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v tree &>/dev/null; then
+    log_info "Tree is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Tree"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install tree
 }
 
 _impl_uninstall() {
+  if ! command -v tree &>/dev/null; then
+    log_info "Tree is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Tree"
+  separator
+  echo
+
   pm_remove tree
 }
 

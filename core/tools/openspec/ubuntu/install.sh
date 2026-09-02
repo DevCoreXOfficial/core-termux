@@ -35,12 +35,22 @@ _impl_require_npm() {
 }
 
 _impl_install() {
+  separator
+  box_large "Installing OpenSpec"
+  separator
+  echo
+
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g @fission-ai/openspec &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
+  separator
+  box_large "Uninstalling OpenSpec"
+  separator
+  echo
+
   _npm_g uninstall -g @fission-ai/openspec &>>"$LOG_FILE" || true
 }
 

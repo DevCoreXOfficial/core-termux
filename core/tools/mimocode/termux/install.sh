@@ -265,6 +265,11 @@ install_mimocode() {
 
   log_info "Select installation method for mimocode:"
 
+  separator
+  box_large "Installing MimoCode"
+  separator
+  echo
+
   read_select "Installation method" SELECTED_METHOD \
     "glibc (recommended)" \
     "glibc + proot (bad system call)" \
@@ -292,6 +297,11 @@ uninstall_mimocode() {
     log_warn "mimocode is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling MimoCode"
+  separator
+  echo
 
   confirm_remove_configs "MimoCode" \
     "$HOME/.mimocode" \

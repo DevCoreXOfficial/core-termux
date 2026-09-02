@@ -13,6 +13,16 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v bun &>/dev/null; then
+    log_info "Bun is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Bun"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   curl -fsSL https://bun.sh/install | bash &>>"$LOG_FILE"
   # Expose binaries from well-known script locations.
@@ -20,6 +30,16 @@ _impl_install() {
 }
 
 _impl_uninstall() {
+  if ! command -v bun &>/dev/null; then
+    log_info "Bun is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Bun"
+  separator
+  echo
+
   log_info "Removing binaries..."
   command -v "bun" >/dev/null 2>&1 && rm -f "$(command -v bun)"
 }

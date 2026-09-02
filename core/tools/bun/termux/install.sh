@@ -208,6 +208,11 @@ install_bun() {
     return 2
   fi
 
+  separator
+  box_large "Installing Bun"
+  separator
+  echo
+
   mkdir -p "$(dirname "$LOG_FILE")"
 
   log_info "Select installation method for Bun:"
@@ -265,6 +270,11 @@ uninstall_bun() {
     log_info "Bun is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Bun"
+  separator
+  echo
 
   confirm_remove_configs "Bun" \
     "$HOME/.bun" \

@@ -28,6 +28,12 @@ install_php() {
 		log_info "PHP is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing PHP"
+	separator
+	echo
+
 	log_info "Installing PHP..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
@@ -53,6 +59,12 @@ uninstall_php() {
 		log_info "PHP is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling PHP"
+	separator
+	echo
+
 	log_info "Uninstalling PHP..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 	_uninstall_php_pkg || return 1

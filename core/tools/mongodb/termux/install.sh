@@ -34,6 +34,12 @@ install_mongodb() {
 		log_info "MongoDB is already installed"
 		return 2
 	fi
+
+	separator
+	box_large "Installing MongoDB"
+	separator
+	echo
+
 	log_info "Installing MongoDB..."
 	loading "Installing MongoDB" _install_mongodb_impl
 }
@@ -54,6 +60,12 @@ uninstall_mongodb() {
 		log_info "MongoDB is not installed"
 		return 2
 	fi
+
+	separator
+	box_large "Uninstalling MongoDB"
+	separator
+	echo
+
 	log_info "Uninstalling MongoDB..."
 	loading "Uninstalling MongoDB" _uninstall_mongodb_impl
 }

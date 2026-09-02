@@ -13,6 +13,16 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v go &>/dev/null; then
+    log_info "Go is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing Go"
+  separator
+  echo
+
   pm_install golang-go
 
   # Go environment (user dirs + go/bin on PATH) in every shell config.
@@ -34,6 +44,16 @@ GOENV
 }
 
 _impl_uninstall() {
+  if ! command -v go &>/dev/null; then
+    log_info "Go is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling Go"
+  separator
+  echo
+
   pm_remove golang-go
 }
 

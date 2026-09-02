@@ -59,6 +59,11 @@ install_qwen_code() {
     return 2
   fi
 
+  separator
+  box_large "Installing Qwen Code"
+  separator
+  echo
+
   log_info "Installing Qwen Code..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -76,6 +81,11 @@ uninstall_qwen_code() {
     log_info "Qwen Code is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Qwen Code"
+  separator
+  echo
 
   confirm_remove_configs "Qwen Code" \
     "$HOME/.qwen"

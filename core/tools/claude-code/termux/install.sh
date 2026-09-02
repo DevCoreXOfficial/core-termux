@@ -260,6 +260,11 @@ install_claude_code() {
     return 2
   fi
 
+  separator
+  box_large "Installing Claude Code"
+  separator
+  echo
+
   log_info "Select installation method for Claude Code:"
 
   read_select "Installation method" SELECTED_METHOD \
@@ -289,6 +294,11 @@ uninstall_claude_code() {
     log_warn "Claude Code is not installed"
     return 1
   fi
+
+  separator
+  box_large "Uninstalling Claude Code"
+  separator
+  echo
 
   confirm_remove_configs "Claude Code" \
     "$HOME/.claude" \

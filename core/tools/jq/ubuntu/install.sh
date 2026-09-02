@@ -13,11 +13,31 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  if command -v jq &>/dev/null; then
+    log_info "jq is already installed"
+    return 2
+  fi
+
+  separator
+  box_large "Installing jq"
+  separator
+  echo
+
   mkdir -p "$HOME/.local/bin"
   pm_install jq
 }
 
 _impl_uninstall() {
+  if ! command -v jq &>/dev/null; then
+    log_info "jq is not installed"
+    return 2
+  fi
+
+  separator
+  box_large "Uninstalling jq"
+  separator
+  echo
+
   pm_remove jq
 }
 

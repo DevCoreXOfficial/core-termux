@@ -174,6 +174,11 @@ EOF
 
 case "${1:-install}" in
   install)
+    separator
+    box_large "Installing Oh My ZSH"
+    separator
+    echo
+
     mkdir -p "$(dirname "$LOG_FILE")" "$CORE_CACHE"
     _install_deps || exit 1
     _install_oh_my_zsh || exit 1
@@ -182,6 +187,11 @@ case "${1:-install}" in
     log_success "ZSH environment ready — restart your shell or run: exec zsh"
     ;;
   uninstall)
+    separator
+    box_large "Uninstalling Oh My ZSH"
+    separator
+    echo
+
     confirm_remove_configs "ZSH plugins" "$ZSH_PLUGINS_DIR" >/dev/null 2>&1 || true
     rm -rf "$ZSH_PLUGINS_DIR"
     loading "Removing Oh My Zsh" rm -rf "$OH_MY_ZSH_DIR"

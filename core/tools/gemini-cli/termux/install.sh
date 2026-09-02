@@ -59,6 +59,11 @@ install_gemini_cli() {
     return 2
   fi
 
+  separator
+  box_large "Installing Gemini CLI"
+  separator
+  echo
+
   log_info "Installing Gemini CLI..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
@@ -76,6 +81,11 @@ uninstall_gemini_cli() {
     log_info "Gemini CLI is not installed"
     return 2
   fi
+
+  separator
+  box_large "Uninstalling Gemini CLI"
+  separator
+  echo
 
   confirm_remove_configs "Gemini CLI" \
     "$HOME/.gemini"
