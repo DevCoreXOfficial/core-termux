@@ -221,57 +221,49 @@ engine_install() {
   local rc_snapshot_before rc_snapshot_after
   rc_snapshot_before=$(cat "$HOME/.zshrc" "$HOME/.bashrc" 2>/dev/null | cksum)
 
-  if [[ "$CORE_ENV" == "termux" ]]; then
+  if _script_is_interactive "$script"; then
     _engine_run "$script" install
     rc=$?
   else
-    mkdir -p "$HOME/.local/bin"
-    # Pre-load every directory official installers commonly use, so
-    # freshly-installed binaries resolve inside THIS session too.
-    export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
-    # Persist the binary dir once (pip --user, go install, script installers).
-    # Respect the user's actual login shell.
-    local rc_file
-    case "${SHELL:-}" in
-      *zsh*)  rc_file="$HOME/.zshrc" ;;
-      *)      rc_file="$HOME/.bashrc" ;;
-    esac
-    local path_line='export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"'
-    if ! grep -qs 'Added by Core' "$rc_file"; then
-      printf '\n# Added by Core\n%s\n' "$path_line" >>"$rc_file"
-      log_success "Added tool binary paths to $rc_file"
+    if [[ "$CORE_ENV" != "termux" ]]; then
+      mkdir -p "$HOME/.local/bin"
       export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
-    fi
-    if _script_is_interactive "$script"; then
-      _engine_run "$script" install
-      rc=$?
-    else
-      # Many official installers exit non-zero over cosmetic tail errors
-      # while leaving the binary perfectly usable. Judge by PRESENCE, and
-      # keep the animation green so users are never alarmed:
-      # the wrapper swallows the raw exit code; we evaluate afterwards.
-      ENGINE_RAW_RC=0
-      _engine_run_capture() {
-        _engine_run "$script" install
-        ENGINE_RAW_RC=$?
-      }
-      loading "Installing $display" _engine_run_capture
-
-      _engine_link_new_bins
-
-      if manifest_is_installed "$dir"; then
-        rc=0
-        [[ "${CORE_DEBUG:-0}" == "1" && $ENGINE_RAW_RC -ne 0 ]] &&
-          log_debug "$display installer exited with $ENGINE_RAW_RC (non-critical; binary verified)"
-      else
-        rc=${ENGINE_RAW_RC:-1}
+      local rc_file
+      case "${SHELL:-}" in
+        *zsh*)  rc_file="$HOME/.zshrc" ;;
+        *)      rc_file="$HOME/.bashrc" ;;
+      esac
+      local path_line='export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"'
+      if ! grep -qs 'Added by Core' "$rc_file"; then
+        printf '\n# Added by Core\n%s\n' "$path_line" >>"$rc_file"
+        log_success "Added tool binary paths to $rc_file"
+        export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.bun/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.factory/bin:$HOME/.antigravity/bin:$HOME/bin:$PATH"
       fi
+    fi
+    ENGINE_RAW_RC=0
+    _engine_run_capture() {
+      _engine_run "$script" install
+      ENGINE_RAW_RC=$?
+    }
+    loading "Installing $display" _engine_run_capture
+
+    if [[ "$CORE_ENV" != "termux" ]]; then
+      _engine_link_new_bins
+    fi
+    hash -r 2>/dev/null || true
+    if manifest_is_installed "$dir"; then
+      rc=0
+      [[ "${CORE_DEBUG:-0}" == "1" && $ENGINE_RAW_RC -ne 0 ]] &&
+        log_debug "$display installer exited with $ENGINE_RAW_RC (non-critical; binary verified)"
+    else
+      rc=${ENGINE_RAW_RC:-1}
     fi
   fi
 
     case $rc in
     0)
       registry_record "$name"
+      hash -r 2>/dev/null || true
       [[ "$CORE_ENV" != "termux" ]] && _engine_link_new_bins
 
       rc_snapshot_after=$(cat "$HOME/.zshrc" "$HOME/.bashrc" 2>/dev/null | cksum)
@@ -279,9 +271,10 @@ engine_install() {
         local rc_file="$HOME/.zshrc"
         [[ -f "$HOME/.zshrc" ]] || rc_file="$HOME/.bashrc"
         log_info "$display updated your shell config ($rc_file)"
-        list_item "Apply now: ${D_CYAN}source $rc_file${D_NC}   or open a new terminal."
+        list_item "Apply now: ${GRAY_19}source $rc_file${NC}   or open a new terminal."
       fi
 
+      hash -r 2>/dev/null || true
       if ! manifest_is_installed "$dir"; then
         log_warn "$display finished but its binary was not found on PATH"
         list_item "Open a NEW terminal (or run: hash -r) and retry."
@@ -315,10 +308,7 @@ engine_uninstall() {
   if [[ -n "$script" ]]; then
     LOG_FILE="$CORE_CACHE/install_$name.log"
 
-    if [[ "$CORE_ENV" == "termux" ]]; then
-      _engine_run "$script" uninstall
-      rc=$?
-    elif _script_is_interactive "$script"; then
+    if _script_is_interactive "$script"; then
       _engine_run "$script" uninstall
       rc=$?
     else
