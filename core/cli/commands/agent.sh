@@ -32,56 +32,56 @@ agent_help() {
 	echo
 	separator_section "Subcommands"
 	echo
-	printf "    ${D_CYAN}%-11s${D_NC} %s\n" "ask" "Assistant (prompt → LLM → colored markdown answer)"
-	printf "    ${D_CYAN}%-11s${D_NC} %s\n" "run" "Agent (prompt → LLM markdown → bash creates files / runs commands)"
-	printf "    ${D_CYAN}%-11s${D_NC} %s\n" "config" "Show or edit saved settings"
-	printf "    ${D_CYAN}%-11s${D_NC} %s\n" "status" "Show endpoint/model status"
+	printf "    ${GRAY_19}%-11s${D_NC} %s\n" "ask" "Assistant (prompt → LLM → colored markdown answer)"
+	printf "    ${GRAY_19}%-11s${D_NC} %s\n" "run" "Agent (prompt → LLM markdown → bash creates files / runs commands)"
+	printf "    ${GRAY_19}%-11s${D_NC} %s\n" "config" "Show or edit saved settings"
+	printf "    ${GRAY_19}%-11s${D_NC} %s\n" "status" "Show endpoint/model status"
 	echo
 	separator_section "Options (ask & run)"
 	echo
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-p, --prompt <text>" "Task/question (omit for interactive shell)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-m, --model <name>" "Model id (default: $AGENT_MODEL)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-u, --endpoint <url>" "OpenAI-compatible endpoint (default: $AGENT_ENDPOINT)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-t, --temperature <n>" "Sampling temperature (default: $AGENT_TEMPERATURE)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--max-tokens <n>" "Max output tokens (default: $AGENT_MAX_TOKENS)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-w, --workspace <dir>" "Agent working dir (run mode, default: \$PWD)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-n, --max-iterations <n>" "Agent loop limit (default: $AGENT_MAX_ITERATIONS)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-y, --yes" "Auto-approve commands (skip y/N prompt)"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--plan" "Plan mode (read-only): no file writes, write commands blocked"
-	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--build" "Build mode (default): files and commands applied"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "-p, --prompt <text>" "Task/question (omit for interactive shell)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "-m, --model <name>" "Model id (default: $AGENT_MODEL)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "-u, --endpoint <url>" "OpenAI-compatible endpoint (default: $AGENT_ENDPOINT)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "-t, --temperature <n>" "Sampling temperature (default: $AGENT_TEMPERATURE)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "--max-tokens <n>" "Max output tokens (default: $AGENT_MAX_TOKENS)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "-w, --workspace <dir>" "Agent working dir (run mode, default: \$PWD)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "-n, --max-iterations <n>" "Agent loop limit (default: $AGENT_MAX_ITERATIONS)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "-y, --yes" "Auto-approve commands (skip y/N prompt)"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "--plan" "Plan mode (read-only): no file writes, write commands blocked"
+	printf "    ${GRAY_19}%-22s${D_NC} %s\n" "--build" "Build mode (default): files and commands applied"
 	echo
 	separator_section "Files & commands"
 	echo
-	list_item "Type ${D_CYAN}@name${D_NC} in a message to attach a file's contents (live fzf picker while typing)"
-	list_item "Start a message with ${D_CYAN}!${D_NC} for shell mode (e.g. ${D_CYAN}!git status${D_NC}) — the prompt turns green ${D_CYAN}Shell${D_NC} and the output is added to the agent's context"
-	list_item "Commands from the model run only after your ${D_CYAN}y/N${D_NC} confirmation (${D_CYAN}-y${D_NC} auto-approves)"
-	list_item "Press ${D_CYAN}ESC ESC${D_NC} at any prompt to cancel the agent"
-	list_item "The interactive REPL remembers the conversation and shows ${D_CYAN}[context % · elapsed]${D_NC} after each answer/task"
-	list_item "Dictate your prompt with ${D_CYAN}/voice${D_NC} (Termux:API)"
-	list_item "If the model server is down, the agent starts ${D_CYAN}cactus${D_NC} in the background (logs → ${D_CYAN}~/.cache/core/core-agent.log${D_NC}) and stops it when you leave (${D_CYAN}/exit${D_NC} or ${D_CYAN}Ctrl+C${D_NC})"
+	list_item "Type ${GRAY_19}@name${D_NC} in a message to attach a file's contents (live fzf picker while typing)"
+	list_item "Start a message with ${GRAY_19}!${D_NC} for shell mode (e.g. ${GRAY_19}!git status${D_NC}) — the prompt turns green ${GRAY_19}Shell${D_NC} and the output is added to the agent's context"
+	list_item "Commands from the model run only after your ${GRAY_19}y/N${D_NC} confirmation (${GRAY_19}-y${D_NC} auto-approves)"
+	list_item "Press ${GRAY_19}ESC ESC${D_NC} at any prompt to cancel the agent"
+	list_item "The interactive REPL remembers the conversation and shows ${GRAY_19}[context % · elapsed]${D_NC} after each answer/task"
+	list_item "Dictate your prompt with ${GRAY_19}/voice${D_NC} (Termux:API)"
+	list_item "If the model server is down, the agent starts ${GRAY_19}cactus${D_NC} in the background (logs → ${GRAY_19}~/.cache/core/core-agent.log${D_NC}) and stops it when you leave (${GRAY_19}/exit${D_NC} or ${GRAY_19}Ctrl+C${D_NC})"
 	echo
 	separator_section "Interactive slash commands"
 	echo
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/help" "Show this help"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/model <name>" "Switch model"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/endpoint <url>" "Switch endpoint"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/temp <n>" "Set temperature"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/max <n>" "Set max tokens"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/workspace <dir>" "Set agent workspace (run)"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/voice" "Dictate with Termux:API"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/clear" "Reset conversation"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/history" "Show conversation history"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/status" "Show current settings"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "/exit" "Leave the interactive shell"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/help" "Show this help"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/model <name>" "Switch model"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/endpoint <url>" "Switch endpoint"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/temp <n>" "Set temperature"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/max <n>" "Set max tokens"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/workspace <dir>" "Set agent workspace (run)"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/voice" "Dictate with Termux:API"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/clear" "Reset conversation"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/history" "Show conversation history"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/status" "Show current settings"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "/exit" "Leave the interactive shell"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}core agent ask -p \"Explain rsync\"${D_NC}\n"
-	printf "    ${D_CYAN}core agent run -p \"create a backup script\"${D_NC}\n"
-	printf "    ${D_CYAN}core agent run -p \"...\" -m gemma-4-e2b-it-cq4 -u http://127.0.0.1:8000/v1${D_NC}\n"
-	printf "    ${D_CYAN}core agent ask${D_NC}                    # interactive chat\n"
+	printf "    ${GRAY_19}core agent ask -p \"Explain rsync\"${D_NC}\n"
+	printf "    ${GRAY_19}core agent run -p \"create a backup script\"${D_NC}\n"
+	printf "    ${GRAY_19}core agent run -p \"...\" -m gemma-4-e2b-it-cq4 -u http://127.0.0.1:8000/v1${D_NC}\n"
+	printf "    ${GRAY_19}core agent ask${D_NC}                    # interactive chat\n"
 	echo
 }
 
@@ -111,7 +111,7 @@ agent_main() {
 		agent_help
 		;;
 	*)
-		log_error "Unknown subcommand: ${D_CYAN}$cmd${D_NC}"
+		log_error "Unknown subcommand: ${GRAY_19}$cmd${D_NC}"
 		echo
 		agent_help
 		exit 1
@@ -123,14 +123,14 @@ agent_main() {
 # agent_status_line — compact one-liner of current settings
 # ------------------------------------------------------------
 agent_status_line() {
-	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Model" "$NC" "$AGENT_MODEL"
-	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Endpoint" "$NC" "$AGENT_ENDPOINT"
-	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Temp" "$NC" "$AGENT_TEMPERATURE"
-	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Max tokens" "$NC" "$AGENT_MAX_TOKENS"
-	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Context" "$NC" "$AGENT_CONTEXT_WINDOW tokens"
+	printf '    %b%-10s%b : %s\n' "$GRAY_19" "Model" "$NC" "$AGENT_MODEL"
+	printf '    %b%-10s%b : %s\n' "$GRAY_19" "Endpoint" "$NC" "$AGENT_ENDPOINT"
+	printf '    %b%-10s%b : %s\n' "$GRAY_19" "Temp" "$NC" "$AGENT_TEMPERATURE"
+	printf '    %b%-10s%b : %s\n' "$GRAY_19" "Max tokens" "$NC" "$AGENT_MAX_TOKENS"
+	printf '    %b%-10s%b : %s\n' "$GRAY_19" "Context" "$NC" "$AGENT_CONTEXT_WINDOW tokens"
 	# PLAN/BUILD modes are a run-mode concept; hide them in ask
-	[[ "$AGENT_REPL_MODE" != "ask" ]] && printf '    %b%-10s%b : %s\n' "$D_CYAN" "Mode" "$NC" "$([[ $AGENT_PLAN_MODE == 1 ]] && echo 'PLAN (read-only)' || echo 'BUILD (full access)')"
-	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Workspace" "$NC" "$AGENT_WORKSPACE"
+	[[ "$AGENT_REPL_MODE" != "ask" ]] && printf '    %b%-10s%b : %s\n' "$GRAY_19" "Mode" "$NC" "$([[ $AGENT_PLAN_MODE == 1 ]] && echo 'PLAN (read-only)' || echo 'BUILD (full access)')"
+	printf '    %b%-10s%b : %s\n' "$GRAY_19" "Workspace" "$NC" "$AGENT_WORKSPACE"
 }
 
 # ------------------------------------------------------------
@@ -144,7 +144,7 @@ agent_status() {
 	separator_section "Server"
 	echo
 	if agent_check_server; then
-		log_success "Endpoint reachable: ${D_CYAN}$AGENT_ENDPOINT${D_NC}"
+		log_success "Endpoint reachable: ${GRAY_19}$AGENT_ENDPOINT${D_NC}"
 		local ms
 		ms=$(agent_models_list 2>/dev/null)
 		echo
@@ -170,17 +170,17 @@ agent_config_help() {
 	echo
 	separator_section "Settings"
 	echo
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "model" "Model id (default: gemma-4-e2b-it-cq4)"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "endpoint" "OpenAI-compatible URL"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "temperature" "Sampling temperature"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "max_tokens" "Max output tokens"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "max_iterations" "Agent loop limit"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "confirm_commands" "Ask y/N before running commands (1/0)"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "context_window" "Model context window in tokens (default: 8192)"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "server_command" "Command that starts the model server in the background"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "workspace" "Default agent working dir"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "model" "Model id (default: gemma-4-e2b-it-cq4)"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "endpoint" "OpenAI-compatible URL"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "temperature" "Sampling temperature"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "max_tokens" "Max output tokens"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "max_iterations" "Agent loop limit"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "confirm_commands" "Ask y/N before running commands (1/0)"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "context_window" "Model context window in tokens (default: 8192)"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "server_command" "Command that starts the model server in the background"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "workspace" "Default agent working dir"
 	echo
-	log_tip "Run ${D_CYAN}core agent config${D_NC} with no arguments to show current settings."
+	log_tip "Run ${GRAY_19}core agent config${D_NC} with no arguments to show current settings."
 }
 
 # ------------------------------------------------------------
@@ -198,7 +198,7 @@ agent_config_cmd() {
 		echo
 		separator_section "Config file"
 		echo
-		list_item "Saved at: ${D_CYAN}$AGENT_CONF_FILE${D_NC}"
+		list_item "Saved at: ${GRAY_19}$AGENT_CONF_FILE${D_NC}"
 		echo
 		agent_config_help
 		echo
@@ -213,7 +213,7 @@ agent_config_cmd() {
 		return 1
 	fi
 	agent_config_set "$key" "$value"
-	log_success "Saved $key = ${D_CYAN}$value${D_NC}"
+	log_success "Saved $key = ${GRAY_19}$value${D_NC}"
 }
 # ------------------------------------------------------------
 # Slash-command help
@@ -222,20 +222,20 @@ agent_repl_help() {
 	local mode="${1:-$AGENT_REPL_MODE}"
 	separator_section "Slash commands"
 	echo
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/model <name>" "Switch model"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/endpoint <url>" "Switch endpoint"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/temp <n>" "Set temperature"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/max <n>" "Set max tokens"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/workspace <dir>" "Set agent workspace (run)"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/voice" "Dictate with Termux:API (editable prompt)"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/clear" "Reset conversation"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/history" "Show conversation history"
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/status" "Show current settings"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/model <name>" "Switch model"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/endpoint <url>" "Switch endpoint"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/temp <n>" "Set temperature"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/max <n>" "Set max tokens"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/workspace <dir>" "Set agent workspace (run)"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/voice" "Dictate with Termux:API (editable prompt)"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/clear" "Reset conversation"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/history" "Show conversation history"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/status" "Show current settings"
 	if [[ "$mode" != "ask" ]]; then
-		printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
-		printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
+		printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/plan" "Plan mode (read-only) — next task only inspects and proposes"
+		printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/build" "Build mode — next task applies files and commands"
 	fi
-	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "/exit" "Leave the interactive shell"
+	printf "    ${GRAY_19}%-14s${D_NC} %s\n" "/exit" "Leave the interactive shell"
 	echo
 }
 
@@ -365,7 +365,7 @@ agent_ask_once() {
 
 	outfile=$(agent_md_dir)/ask_stream.txt
 	AGENT_ABORT=0
-	if agent_exec_loading "Asking ${D_CYAN}$AGENT_MODEL${D_NC}…" agent_chat_text_to "$history" "$outfile"; then
+	if agent_exec_loading "Asking ${GRAY_19}$AGENT_MODEL${D_NC}…" agent_chat_text_to "$history" "$outfile"; then
 		resp=$(agent_clean_output "$(cat "$outfile")")
 		echo
 		if [[ -z "$resp" ]]; then
@@ -412,26 +412,26 @@ agent_repl_handle() {
 	/plan | /build)
 		if [[ "$mode" == "ask" ]]; then
 			echo
-			log_warn "Plan/Build modes only exist in ${D_CYAN}core agent run${D_NC} — ask is a plain chat"
+			log_warn "Plan/Build modes only exist in ${GRAY_19}core agent run${D_NC} — ask is a plain chat"
 			echo
 			return 0
 		fi
 		if [[ "$line" == "/plan" ]]; then
 			AGENT_PLAN_MODE=1
 			echo
-			log_success "Mode → ${D_CYAN}PLAN (read-only)${D_NC} — file blocks and write commands will be ignored"
+			log_success "Mode → ${GRAY_19}PLAN (read-only)${D_NC} — file blocks and write commands will be ignored"
 			list_item "Next task will only run read-only commands and produce a plan"
 		else
 			AGENT_PLAN_MODE=0
 			echo
-			log_success "Mode → ${D_CYAN}BUILD (full access)${D_NC} — files and commands will be applied"
+			log_success "Mode → ${GRAY_19}BUILD (full access)${D_NC} — files and commands will be applied"
 		fi
 		echo
 		return 0
 		;;
 	/voice)
 		echo
-		printf '    %sListening… speak now, then stop the dialog when done%s\n' "$D_CYAN" "$NC"
+		printf '    %sListening… speak now, then stop the dialog when done%s\n' "$GRAY_19" "$NC"
 		echo
 		if agent_voice_capture; then
 			AGENT_REPL_PREFILL="$AGENT_VOICE_TEXT"
@@ -452,7 +452,7 @@ agent_repl_handle() {
 		fi
 		if [[ -z "$m" ]]; then return 0; fi
 		AGENT_MODEL="$m"
-		log_success "Model → ${D_CYAN}$AGENT_MODEL${D_NC}"
+		log_success "Model → ${GRAY_19}$AGENT_MODEL${D_NC}"
 		return 0
 		;;
 	/endpoint*)
@@ -462,7 +462,7 @@ agent_repl_handle() {
 		if [[ -z "$e" ]]; then agent_read_input "Endpoint URL (e.g. http://127.0.0.1:8000/v1)" e; fi
 		if [[ -z "$e" ]]; then return 0; fi
 		AGENT_ENDPOINT="$e"
-		log_success "Endpoint → ${D_CYAN}$AGENT_ENDPOINT${D_NC}"
+		log_success "Endpoint → ${GRAY_19}$AGENT_ENDPOINT${D_NC}"
 		return 0
 		;;
 	/temp*)
@@ -470,7 +470,7 @@ agent_repl_handle() {
 		t="${t#/temp}"
 		t=$(echo "$t" | xargs)
 		if [[ -z "$t" ]]; then agent_read_input "Temperature (0-2)" t; fi
-		if [[ -n "$t" ]]; then AGENT_TEMPERATURE="$t"; log_success "Temperature → ${D_CYAN}$AGENT_TEMPERATURE${D_NC}"; fi
+		if [[ -n "$t" ]]; then AGENT_TEMPERATURE="$t"; log_success "Temperature → ${GRAY_19}$AGENT_TEMPERATURE${D_NC}"; fi
 		return 0
 		;;
 	/max*)
@@ -478,7 +478,7 @@ agent_repl_handle() {
 		mx="${mx#/max}"
 		mx=$(echo "$mx" | xargs)
 		if [[ -z "$mx" ]]; then agent_read_input "Max tokens" mx; fi
-		if [[ -n "$mx" ]]; then AGENT_MAX_TOKENS="$mx"; log_success "Max tokens → ${D_CYAN}$AGENT_MAX_TOKENS${D_NC}"; fi
+		if [[ -n "$mx" ]]; then AGENT_MAX_TOKENS="$mx"; log_success "Max tokens → ${GRAY_19}$AGENT_MAX_TOKENS${D_NC}"; fi
 		return 0
 		;;
 	/workspace*)
@@ -489,7 +489,7 @@ agent_repl_handle() {
 		if [[ -n "$ws" ]]; then
 			mkdir -p "$ws"
 			AGENT_WORKSPACE="$ws"
-			log_success "Workspace → ${D_CYAN}$AGENT_WORKSPACE${D_NC}"
+			log_success "Workspace → ${GRAY_19}$AGENT_WORKSPACE${D_NC}"
 		fi
 		return 0
 		;;
@@ -554,7 +554,7 @@ agent_ask_repl() {
 	echo
 	agent_status_line
 	echo
-	list_item "Type ${D_CYAN}/help${D_NC} to see all commands"
+	list_item "Type ${GRAY_19}/help${D_NC} to see all commands"
 	echo
 
 	agent_repl_bind
@@ -592,7 +592,7 @@ agent_ask_repl() {
 		outfile=$(agent_md_dir)/ask_stream.txt
 		agent_timer_start
 		AGENT_ABORT=0
-		if agent_exec_loading "Asking ${D_CYAN}$AGENT_MODEL${D_NC}…" agent_chat_text_to "$AGENT_REPL_HISTORY" "$outfile"; then
+		if agent_exec_loading "Asking ${GRAY_19}$AGENT_MODEL${D_NC}…" agent_chat_text_to "$AGENT_REPL_HISTORY" "$outfile"; then
 			_ems=$(agent_timer_ms)
 			resp=$(agent_clean_output "$(cat "$outfile")")
 			echo
@@ -669,7 +669,7 @@ agent_run_repl() {
 	echo
 	agent_status_line
 	echo
-	list_item "Type ${D_CYAN}/help${D_NC} to see all commands"
+	list_item "Type ${GRAY_19}/help${D_NC} to see all commands"
 	echo
 
 	agent_repl_bind

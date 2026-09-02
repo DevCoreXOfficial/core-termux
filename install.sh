@@ -61,7 +61,7 @@ banner() {
   echo
   echo -e "  ${P_BORDER}┌─────────────────────────────────────────┐${P_NC}"
   echo -e "  ${P_BORDER}│${P_NC}       ${P_PRIMARY}         ◈ CORE ◈${P_NC}                 ${P_BORDER}│${P_NC}"
-  echo -e "  ${P_BORDER}│${P_NC} ${P_DIM}One CLI — Your environment. Everywhere.${D_NC} ${P_BORDER}│${P_NC}"
+  echo -e "  ${P_BORDER}│${P_NC} ${P_DIM}CORE — Your Environment. Everywhere.${D_NC} ${P_BORDER}│${P_NC}"
   echo -e "  ${P_BORDER}└─────────────────────────────────────────┘${P_NC}"
   echo
 }

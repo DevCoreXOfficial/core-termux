@@ -15,7 +15,7 @@ update_main() {
     echo
     log_info "Update flow: local version → remote version → compare → suggest update."
     echo
-    list_item "${D_CYAN}core update opencode${D_NC}           found by name automatically"
+    list_item "${GRAY_19}core update opencode${D_NC}           found by name automatically"
     echo
     return
   fi
@@ -38,7 +38,7 @@ update_main() {
       fi
     else
       log_warn "Core was not installed via git — reinstall to update:"
-      list_item "${D_CYAN}curl -fsSL https://raw.githubusercontent.com/DevCoreXOfficial/core/main/install.sh | bash${D_NC}"
+      list_item "${GRAY_19}curl -fsSL https://raw.githubusercontent.com/DevCoreXOfficial/core/main/install.sh | bash${D_NC}"
     fi
     echo
     return

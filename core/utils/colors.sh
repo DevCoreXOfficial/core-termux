@@ -21,6 +21,32 @@ D_PURPLE=$'\e[0;35m'
 D_YELLOW=$'\e[0;33m'
 D_NC=$'\e[0;37m' # no color or white
 
+# grayscale ramp (diamond banner — 232 near black → 255 near white)
+GRAY_0=$'\e[38;5;232m'
+GRAY_1=$'\e[38;5;233m'
+GRAY_2=$'\e[38;5;234m'
+GRAY_3=$'\e[38;5;235m'
+GRAY_4=$'\e[38;5;236m'
+GRAY_5=$'\e[38;5;237m'
+GRAY_6=$'\e[38;5;238m'
+GRAY_7=$'\e[38;5;239m'
+GRAY_8=$'\e[38;5;240m'
+GRAY_9=$'\e[38;5;241m'
+GRAY_10=$'\e[38;5;242m'
+GRAY_11=$'\e[38;5;243m'
+GRAY_12=$'\e[38;5;244m'
+GRAY_13=$'\e[38;5;245m'
+GRAY_14=$'\e[38;5;246m'
+GRAY_15=$'\e[38;5;247m'
+GRAY_16=$'\e[38;5;248m'
+GRAY_17=$'\e[38;5;249m'
+GRAY_18=$'\e[38;5;250m'
+GRAY_19=$'\e[38;5;251m'
+GRAY_20=$'\e[38;5;252m'
+GRAY_21=$'\e[38;5;253m'
+GRAY_22=$'\e[38;5;254m'
+GRAY_23=$'\e[38;5;255m'
+
 # background colors
 BG_BLACK=$(setterm -background black)
 BG_BLUE=$(setterm -background blue)

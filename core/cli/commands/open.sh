@@ -31,9 +31,9 @@ open_main() {
     echo
     log_info "Open official documentation in browser:"
     echo
-    list_item "${D_CYAN}core open${D_NC}                Core documentation"
-    list_item "${D_CYAN}core open devcorex${D_NC}       DevCoreX website"
-    list_item "${D_CYAN}core open devcorex${D_NC}"
+    list_item "${GRAY_19}core open${D_NC}                Core documentation"
+    list_item "${GRAY_19}core open devcorex${D_NC}       DevCoreX website"
+    list_item "${GRAY_19}core open devcorex${D_NC}"
     echo
     return
   fi

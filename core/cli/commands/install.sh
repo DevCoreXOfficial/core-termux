@@ -15,14 +15,14 @@ install_main() {
     echo
     log_info "Every tool installs individually and is located by name:"
     echo
-    list_item "${D_CYAN}core install opencode${D_NC}"
-    list_item "${D_CYAN}core install nvchad${D_NC}            editor + NvChad in one shot"
-    list_item "${D_CYAN}core install oh-my-zsh${D_NC}               shell + Oh My Zsh + 10 plugins"
+    list_item "${GRAY_19}core install opencode${D_NC}"
+    list_item "${GRAY_19}core install nvchad${D_NC}            editor + NvChad in one shot"
+    list_item "${GRAY_19}core install oh-my-zsh${D_NC}               shell + Oh My Zsh + 10 plugins"
     echo
     log_info "Discover tools by keyword (name, description or tags):"
     echo
-    list_item "${D_CYAN}core search${D_NC}                    everything, with install status"
-    list_item "${D_CYAN}core search tunnel${D_NC}             filtered by keyword"
+    list_item "${GRAY_19}core search${D_NC}                    everything, with install status"
+    list_item "${GRAY_19}core search tunnel${D_NC}             filtered by keyword"
     echo
     return
   fi
@@ -45,7 +45,7 @@ install_main() {
     dir="$(manifest_tool_dir "$name")"
 
     if [[ -n "$dir" && "$(manifest_field "$dir" '.style // false')" == "true" ]]; then
-      log_warn "'$name' is a style — apply it with: ${D_CYAN}core style $name${D_NC}"
+      log_warn "'$name' is a style — apply it with: ${GRAY_19}core style $name${D_NC}"
       ((unknown_count++))
       continue
     fi

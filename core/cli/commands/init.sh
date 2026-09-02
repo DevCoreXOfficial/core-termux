@@ -15,17 +15,17 @@ init_help() {
 	echo
 	separator_section "Available Templates"
 	echo
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "next" "Configure Next.js project"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "react" "Configure React + Vite project"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "nest" "Configure NestJS project"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "express" "Configure Express.js API"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "next" "Configure Next.js project"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "react" "Configure React + Vite project"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "nest" "Configure NestJS project"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "express" "Configure Express.js API"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}cd my-next-app && core init next${NC}\n"
-	printf "    ${D_CYAN}cd my-react-app && core init react${NC}\n"
-	printf "    ${D_CYAN}cd api && core init express${NC}\n"
-	printf "    ${D_CYAN}cd backend && core init nest${NC}\n"
+	printf "    ${GRAY_19}cd my-next-app && core init next${NC}\n"
+	printf "    ${GRAY_19}cd my-react-app && core init react${NC}\n"
+	printf "    ${GRAY_19}cd api && core init express${NC}\n"
+	printf "    ${GRAY_19}cd backend && core init nest${NC}\n"
 	echo
 }
 
@@ -137,7 +137,7 @@ configure_next() {
 
 	local PM
 	PM=$(detect_package_manager)
-	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	log_info "Package manager detected: ${GRAY_19}$PM${NC}"
 	echo
 
 	# ── Dependencies array ──
@@ -232,7 +232,7 @@ NPMRCEOF
 	if [[ ${#DEPS[@]} -gt 0 ]]; then
 		echo
 		section_title "Installing dependencies"
-		log_info "Packages: ${D_CYAN}${DEPS[*]}${NC}"
+		log_info "Packages: ${GRAY_19}${DEPS[*]}${NC}"
 		if ! loading "Installing dependencies" _install_pkgs "$PM" "${DEPS[@]}"; then
 			log_warn "Some dependencies failed to install"
 		fi
@@ -316,16 +316,16 @@ EOF
 	log_success "Next.js configured!"
 	separator
 	echo
-	list_item "Package manager: ${D_CYAN}$PM${NC}"
-	$USE_TURBOPACK && list_item "Bundler: ${D_CYAN}Turbopack${NC}" || list_item "Bundler: Webpack"
-	list_item "Dependencies: ${D_CYAN}${DEPS[*]:-(none selected)}${NC}"
+	list_item "Package manager: ${GRAY_19}$PM${NC}"
+	$USE_TURBOPACK && list_item "Bundler: ${GRAY_19}Turbopack${NC}" || list_item "Bundler: Webpack"
+	list_item "Dependencies: ${GRAY_19}${DEPS[*]:-(none selected)}${NC}"
 	echo
 	log_info "Next steps:"
 	echo
 	if $USE_TURBOPACK; then
-		list_item "Start: ${D_CYAN}next-turbopack dev${NC}"
+		list_item "Start: ${GRAY_19}next-turbopack dev${NC}"
 	else
-		list_item "Start: ${D_CYAN}npm run dev${NC} (or ${D_CYAN}$PM run dev${NC})"
+		list_item "Start: ${GRAY_19}npm run dev${NC} (or ${GRAY_19}$PM run dev${NC})"
 	fi
 	echo
 }
@@ -415,7 +415,7 @@ configure_react() {
 
 	local PM
 	PM=$(detect_package_manager)
-	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	log_info "Package manager detected: ${GRAY_19}$PM${NC}"
 	echo
 
 	if ! grep -q "vite" package.json 2>/dev/null; then
@@ -560,9 +560,9 @@ EOF
 	log_success "React + Vite configured!"
 	separator
 	echo
-	list_item "Dependencies: ${D_CYAN}${DEPS[*]:-(none selected)}${NC}"
+	list_item "Dependencies: ${GRAY_19}${DEPS[*]:-(none selected)}${NC}"
 	echo
-	list_item "Start: ${D_CYAN}$PM run dev${NC}"
+	list_item "Start: ${GRAY_19}$PM run dev${NC}"
 	echo
 }
 
@@ -577,7 +577,7 @@ configure_express() {
 
 	local PM
 	PM=$(detect_package_manager)
-	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	log_info "Package manager detected: ${GRAY_19}$PM${NC}"
 	echo
 
 	# ── Interactive ──
@@ -994,8 +994,8 @@ PRODRTEOF
 	log_success "Express.js configured!"
 	separator
 	echo
-	list_item "Start: ${D_CYAN}$PM run dev${NC}"
-	list_item "Build: ${D_CYAN}$PM run build${NC}"
+	list_item "Start: ${GRAY_19}$PM run dev${NC}"
+	list_item "Build: ${GRAY_19}$PM run build${NC}"
 	echo
 }
 
@@ -1010,7 +1010,7 @@ configure_nest() {
 
 	local PM
 	PM=$(detect_package_manager)
-	log_info "Package manager detected: ${D_CYAN}$PM${NC}"
+	log_info "Package manager detected: ${GRAY_19}$PM${NC}"
 	echo
 
 	if ! grep -q "@nestjs" package.json 2>/dev/null; then
@@ -1053,7 +1053,7 @@ configure_nest() {
 	log_success "NestJS configured!"
 	separator
 	echo
-	list_item "Start: ${D_CYAN}$PM run start:dev${NC}"
+	list_item "Start: ${GRAY_19}$PM run start:dev${NC}"
 	echo
 }
 

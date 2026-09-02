@@ -25,7 +25,7 @@ AG_LINK=$'\033[0;34m'
 # need `echo -e`; our renderer prints with printf %s so we need the
 # actual ESC byte here).
 AG_GRAY=$'\033[0;90m'
-AG_CYAN=$'\033[0;36m'
+AG_CYAN=$'\033[38;5;251m'
 AG_GREEN=$'\033[0;32m'
 AG_PURPLE=$'\033[0;35m'
 AG_NC=$'\033[0;37m'

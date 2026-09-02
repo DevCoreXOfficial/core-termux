@@ -12,12 +12,12 @@ uninstall_main() {
     echo
     log_info "Usage: core uninstall <tool> [<tool2> ...]"
     echo
-    list_item "${D_CYAN}core uninstall opencode${D_NC}"
+    list_item "${GRAY_19}core uninstall opencode${D_NC}"
     echo
     log_info "After each uninstall Core offers removal of orphaned exclusive"
     log_info "dependencies (never shared ones)."
     echo
-    log_info "Browse installed tools: ${D_CYAN}core search${D_NC}"
+    log_info "Browse installed tools: ${GRAY_19}core search${D_NC}"
     echo
     log_warn "Warning: This will remove installed packages and configurations!"
     echo
@@ -41,7 +41,7 @@ uninstall_main() {
     dir="$(manifest_tool_dir "$name")"
 
     if [[ -n "$dir" && "$(manifest_field "$dir" '.style // false')" == "true" ]]; then
-      log_warn "'$name' is a style — remove it with: ${D_CYAN}core style -r $name${D_NC}"
+      log_warn "'$name' is a style — remove it with: ${GRAY_19}core style -r $name${D_NC}"
       ((unknown_count++))
       continue
     fi

@@ -420,9 +420,9 @@ agent_apply_files() {
 			nlines=$(wc -l <"$target" 2>/dev/null | tr -d ' ')
 			AGENT_FILES_WRITTEN=$((AGENT_FILES_WRITTEN + 1))
 			if (( existed )); then
-				log_success "Updated ${D_CYAN}$target${D_NC} ${D_DIM}($nlines lines)${D_NC}"
+				log_success "Updated ${GRAY_19}$target${D_NC} ${D_DIM}($nlines lines)${D_NC}"
 			else
-				log_success "Created ${D_CYAN}$target${D_NC} ${D_DIM}($nlines lines)${D_NC}"
+				log_success "Created ${GRAY_19}$target${D_NC} ${D_DIM}($nlines lines)${D_NC}"
 			fi
 		else
 			log_error "Cannot write $target"
@@ -657,7 +657,7 @@ agent_at_pick() {
 # ═══════════════════════════════════════════════════════════
 agent_banner() {
 	# ── EDIT ME: your banner goes here ──────────────────────────
-	echo -e "${D_CYAN}
+	echo -e "${GRAY_19}
      ███   ███  ████  █████   
     █ ░░░ █ ░░█ █░░░█ █░░░░░  
     █░ ░░░█░ ░█░████░░████░░░ 
@@ -861,7 +861,7 @@ agent_exec_loading() {
 		stty -echo 2>/dev/null
 	fi
 
-	printf "    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[0]}" "$message"
+	printf "    ${WHITE}%s${GRAY_19} %s${NC}" "${frames[0]}" "$message"
 
 	"$@" >"$tmpfile" 2>&1 &
 	local pid=$!
@@ -877,7 +877,7 @@ agent_exec_loading() {
 			AGENT_ABORT=1
 			return 130
 		fi
-		printf "\r    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[i]}" "$message"
+		printf "\r    ${WHITE}%s${GRAY_19} %s${NC}" "${frames[i]}" "$message"
 		((i = (i + 1) % ${#frames[@]}))
 		sleep "$delay"
 	done
@@ -889,7 +889,7 @@ agent_exec_loading() {
 		printf "\r    ${GREEN}✔${D_GREEN} %s${NC}\n" "$message"
 		[[ -s "$tmpfile" ]] && cat "$tmpfile"
 	elif [[ $exit_code -eq 2 ]]; then
-		printf "\r    ${CYAN}➜${D_CYAN} %s${NC}\n" "$message"
+		printf "\r    ${WHITE}➜${GRAY_19} %s${NC}\n" "$message"
 		[[ -s "$tmpfile" ]] && cat "$tmpfile"
 	else
 		printf "\r    ${RED}✖${D_RED} %s${NC}\n" "$message"
@@ -919,7 +919,7 @@ agent_shell_cmd() {
 	cmd="${line#!}"
 	cmd=$(printf '%s\n' "$cmd" | sed 's/^[[:space:]]*//')
 	if [[ -z "$cmd" ]]; then
-		log_warn "Empty command — usage: ${D_CYAN}!<shell command>${D_NC}"
+		log_warn "Empty command — usage: ${GRAY_19}!<shell command>${D_NC}"
 		echo
 		return 0
 	fi
@@ -1081,7 +1081,7 @@ agent_voice_capture() {
 	AGENT_VOICE_TEXT=""
 	if ! command -v termux-dialog &>/dev/null; then
 		log_warn "Termux:API is not installed (voice capture is Termux-only)"
-		list_item "Install the package: ${D_CYAN}pkg install termux-api${NC}"
+		list_item "Install the package: ${GRAY_19}pkg install termux-api${NC}"
 		list_item "Install the app from: https://devcorex-web.vercel.app/termux/api"
 		return 1
 	fi
@@ -1122,7 +1122,7 @@ agent_server_wait() {
 	# ── WAIT TIMEOUT IN SECONDS — change 10 to whatever you need ──
 	for ((i = 0; i < 10; i++)); do
 		if curl -fsS -m 3 "$(agent_models_url)" &>/dev/null; then
-			log_success "Model server is up: ${D_CYAN}$AGENT_ENDPOINT${D_NC}"
+			log_success "Model server is up: ${GRAY_19}$AGENT_ENDPOINT${D_NC}"
 			return 0
 		fi
 		sleep 1
@@ -1143,12 +1143,12 @@ agent_server_ensure() {
 	fi
 	if ! command -v cactus &>/dev/null; then
 		log_warn "cactus not installed — start the server manually:"
-		list_item "${D_CYAN}$AGENT_SERVER_CMD${D_NC}"
+		list_item "${GRAY_19}$AGENT_SERVER_CMD${D_NC}"
 		return 1
 	fi
 	echo
 	log_info "Starting the Cactus model server in the background…"
-	list_item "Logs: ${D_CYAN}$AGENT_SERVER_LOG${D_NC}"
+	list_item "Logs: ${GRAY_19}$AGENT_SERVER_LOG${D_NC}"
 	mkdir -p "$(dirname "$AGENT_SERVER_PID_FILE")"
 	rm -f "$AGENT_SERVER_PID_FILE"
 	# stdin from /dev/null so proot-distro (used by the cactus wrapper)
@@ -1213,7 +1213,7 @@ agent_confirm() {
 # ------------------------------------------------------------
 agent_read_input() {
 	local prompt="$1" var="$2" _val
-	printf '    %s%s%s > ' "$D_CYAN" "$prompt" "$NC" >&2
+	printf '    %s%s%s > ' "$GRAY_19" "$prompt" "$NC" >&2
 	read -r _val
 	read -r "$var" <<<"$_val"
 }
@@ -1349,7 +1349,7 @@ agent_maybe_compact() {
 	local frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
 	local delay=0.08 pct_msg
 	pct_msg=$(printf '%s%%' "$(( toks * 100 / window ))")
-	printf '\r    %s%s%s %s%s' "$D_CYAN" "${frames[0]}" "context $pct_msg — compacting older messages…" "$D_GRAY" "$NC" >&2
+	printf '\r    %s%s%s %s%s' "$GRAY_19" "${frames[0]}" "context $pct_msg — compacting older messages…" "$D_GRAY" "$NC" >&2
 
 	local pid stty_saved="" i=0 rc=0
 	if [[ -t 0 ]]; then
@@ -1366,7 +1366,7 @@ agent_maybe_compact() {
 			rc=130
 			break
 		fi
-		printf '\r    %s%s%s %s%s' "$D_CYAN" "${frames[i]}" "context $pct_msg — compacting older messages…" "$D_GRAY" "$NC" >&2
+		printf '\r    %s%s%s %s%s' "$GRAY_19" "${frames[i]}" "context $pct_msg — compacting older messages…" "$D_GRAY" "$NC" >&2
 		((i = (i + 1) % ${#frames[@]}))
 		sleep "$delay"
 	done

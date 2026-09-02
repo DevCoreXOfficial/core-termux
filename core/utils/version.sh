@@ -54,14 +54,14 @@ _spin_capture() {
     spinner_fd=/dev/null
   fi
 
-  printf "    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[0]}" "$msg" >"$spinner_fd"
+  printf "    ${WHITE}%s${GRAY_19} %s${NC}" "${frames[0]}" "$msg" >"$spinner_fd"
 
   ("$@" >"$tmp" 2>&1) &
   local pid=$!
 
   local i=0
   while kill -0 "$pid" 2>/dev/null; do
-    printf "\r    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[i]}" "$msg" >"$spinner_fd"
+    printf "\r    ${WHITE}%s${GRAY_19} %s${NC}" "${frames[i]}" "$msg" >"$spinner_fd"
     ((i = (i + 1) % ${#frames[@]}))
     sleep 0.08
   done
@@ -222,7 +222,7 @@ _check_update_needed() {
   local remote_ver_display="$remote_ver"
   [[ "$display_ver" != v* ]] && display_ver="v$display_ver"
   [[ "$remote_ver_display" != v* ]] && remote_ver_display="v$remote_ver_display"
-  log_info "$display_name: ${D_GREEN}${display_ver}${D_NC} → ${D_CYAN}${remote_ver_display}${D_NC}"
+  log_info "$display_name: ${D_GREEN}${display_ver}${D_NC} → ${GRAY_19}${remote_ver_display}${D_NC}"
 
   local confirm_var
   read_confirm_default "Update $display_name to $remote_ver?" "y" confirm_var

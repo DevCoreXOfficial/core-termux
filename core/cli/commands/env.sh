@@ -35,15 +35,15 @@ env_help() {
 	echo
 	separator_section "Available Commands"
 	echo
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "set" "Create or update an environment variable"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "unset" "Remove an environment variable"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "ls" "List all user-defined variables"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "set" "Create or update an environment variable"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "unset" "Remove an environment variable"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "ls" "List all user-defined variables"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}core env set${D_NC}              # Interactive: add/update a variable\n"
-	printf "    ${D_CYAN}core env unset${D_NC}            # Interactive: select and remove a variable\n"
-	printf "    ${D_CYAN}core env ls${D_NC}               # List all export vars in rc file\n"
+	printf "    ${GRAY_19}core env set${D_NC}              # Interactive: add/update a variable\n"
+	printf "    ${GRAY_19}core env unset${D_NC}            # Interactive: select and remove a variable\n"
+	printf "    ${GRAY_19}core env ls${D_NC}               # List all export vars in rc file\n"
 	echo
 }
 
@@ -68,7 +68,7 @@ env_set() {
 		current_value=$(grep "^export $key=" "$rc_file" | head -1 | sed 's/^export [^=]*=//')
 		echo
 		log_info "Current value: ${D_DIM}${current_value:0:40}${D_NC}"
-		log_warn "Variable $D_CYAN$key$D_YELLOW already exists in $(basename "$rc_file")"
+		log_warn "Variable $GRAY_19$key$D_YELLOW already exists in $(basename "$rc_file")"
 		read_confirm "Replace it?" confirm
 		if [[ "$confirm" != "y" ]]; then
 			echo
@@ -78,7 +78,7 @@ env_set() {
 		fi
 		sed -i "/^export ${key}=/d" "$rc_file"
 		echo
-		log_info "Replacing $D_CYAN$key$D_NC..."
+		log_info "Replacing $GRAY_19$key$D_NC..."
 	else
 		echo
 	fi
@@ -86,8 +86,8 @@ env_set() {
 	echo "export $key=$value" >>"$rc_file"
 
 	echo
-	log_success "Variable ${D_CYAN}${key}${D_GREEN} set in ${D_NC}$(basename "$rc_file")"
-	list_item "Run: ${D_CYAN}source $(basename "$rc_file")${D_NC} to apply, or restart your terminal"
+	log_success "Variable ${GRAY_19}${key}${D_GREEN} set in ${D_NC}$(basename "$rc_file")"
+	list_item "Run: ${GRAY_19}source $(basename "$rc_file")${D_NC} to apply, or restart your terminal"
 	separator
 }
 
@@ -111,7 +111,7 @@ env_unset() {
 		separator
 		echo
 		log_warn "No environment variables found in $(basename "$rc_file")"
-		list_item "Add one first: ${D_CYAN}core env set${D_NC}"
+		list_item "Add one first: ${GRAY_19}core env set${D_NC}"
 		separator
 		return 0
 	fi
@@ -124,7 +124,7 @@ env_unset() {
 	echo
 
 	for k in "${keys[@]}"; do
-		printf "    ${D_GREEN}•${D_NC} ${D_CYAN}%s${D_NC}\n" "$k"
+		printf "    ${D_GREEN}•${D_NC} ${GRAY_19}%s${D_NC}\n" "$k"
 	done
 
 	echo
@@ -140,13 +140,13 @@ env_unset() {
 
 	if ! $found; then
 		echo
-		log_error "Variable $D_CYAN$key$D_RED not found in $(basename "$rc_file")"
+		log_error "Variable $GRAY_19$key$D_RED not found in $(basename "$rc_file")"
 		separator
 		return 1
 	fi
 
 	echo
-	log_warn "This will remove $D_CYAN$key$D_YELLOW from $(basename "$rc_file")"
+	log_warn "This will remove $GRAY_19$key$D_YELLOW from $(basename "$rc_file")"
 	read_confirm "Are you sure?" confirm
 	if [[ "$confirm" != "y" ]]; then
 		echo
@@ -158,8 +158,8 @@ env_unset() {
 	sed -i "/^export ${key}=/d" "$rc_file"
 
 	echo
-	log_success "Variable ${D_CYAN}${key}${D_GREEN} removed from ${D_NC}$(basename "$rc_file")"
-	list_item "Run: ${D_CYAN}source $(basename "$rc_file")${D_NC} to apply, or restart your terminal"
+	log_success "Variable ${GRAY_19}${key}${D_GREEN} removed from ${D_NC}$(basename "$rc_file")"
+	list_item "Run: ${GRAY_19}source $(basename "$rc_file")${D_NC} to apply, or restart your terminal"
 	separator
 }
 
@@ -189,7 +189,7 @@ env_ls() {
 	if [[ $count -eq 0 ]]; then
 		list_item "No environment variables defined yet"
 		echo
-		list_item "Add one: ${D_CYAN}core env set${D_NC}"
+		list_item "Add one: ${GRAY_19}core env set${D_NC}"
 	fi
 
 	echo

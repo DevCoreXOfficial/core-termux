@@ -18,22 +18,22 @@ pg_help() {
 	echo
 	separator_section "Available Commands"
 	echo
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "start" "Start PostgreSQL server"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "stop" "Stop PostgreSQL server"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "restart" "Restart PostgreSQL server"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "status" "Check PostgreSQL status"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "init" "Initialize PostgreSQL database"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "create" "Create a new database"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "drop" "Drop a database"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "list" "List all databases"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "shell" "Open psql shell"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "start" "Start PostgreSQL server"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "stop" "Stop PostgreSQL server"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "restart" "Restart PostgreSQL server"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "status" "Check PostgreSQL status"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "init" "Initialize PostgreSQL database"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "create" "Create a new database"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "drop" "Drop a database"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "list" "List all databases"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "shell" "Open psql shell"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}core pg start${D_NC}              # Start PostgreSQL\n"
-	printf "    ${D_CYAN}core pg stop${D_NC}               # Stop PostgreSQL\n"
-	printf "    ${D_CYAN}core pg create mydb${D_NC}        # Create database 'mydb'\n"
-	printf "    ${D_CYAN}core pg shell${D_NC}              # Open psql shell\n"
+	printf "    ${GRAY_19}core pg start${D_NC}              # Start PostgreSQL\n"
+	printf "    ${GRAY_19}core pg stop${D_NC}               # Stop PostgreSQL\n"
+	printf "    ${GRAY_19}core pg create mydb${D_NC}        # Create database 'mydb'\n"
+	printf "    ${GRAY_19}core pg shell${D_NC}              # Open psql shell\n"
 	echo
 }
 
@@ -41,7 +41,7 @@ pg_help() {
 check_pg_installed() {
 	if ! command -v pg_ctl &>/dev/null; then
 		log_error "PostgreSQL is not installed"
-		log_info "Run: ${D_CYAN}core install db${NC}"
+		log_info "Run: ${GRAY_19}core install db${NC}"
 		return 1
 	fi
 	return 0
@@ -87,7 +87,7 @@ pg_init() {
 		log_warn "PostgreSQL is already initialized"
 		echo
 		list_item "Data directory: $PG_DATA"
-		list_item "Run: ${D_CYAN}core pg start${NC}"
+		list_item "Run: ${GRAY_19}core pg start${NC}"
 		echo
 		return 0
 	fi
@@ -102,7 +102,7 @@ pg_init() {
 		list_item "Data directory: $PG_DATA"
 		list_item "Default user: $PG_USER"
 		echo
-		log_info "Start PostgreSQL with: ${D_CYAN}core pg start${NC}"
+		log_info "Start PostgreSQL with: ${GRAY_19}core pg start${NC}"
 	else
 		log_error "Failed to initialize PostgreSQL"
 		log_warn "Check log: $PG_LOG"
@@ -276,12 +276,12 @@ pg_status() {
 			log_warn "PostgreSQL is STOPPED"
 			echo
 			list_item "Data directory: $PG_DATA"
-			list_item "Run: ${D_CYAN}core pg start${NC}"
+			list_item "Run: ${GRAY_19}core pg start${NC}"
 		fi
 	else
 		log_info "PostgreSQL data directory not found"
 		echo
-		list_item "Run: ${D_CYAN}core pg init${NC}"
+		list_item "Run: ${GRAY_19}core pg init${NC}"
 	fi
 
 	echo
@@ -469,7 +469,7 @@ pg_ubuntu_init() {
   command -v psql >/dev/null 2>&1 || { pm_install postgresql || return 1; }
   log_info "Cluster created automatically by apt on install."
   log_info "Set the postgres password with:"
-  list_item "${D_CYAN}$_pg_sudo_user psql -c \"ALTER USER postgres PASSWORD '...';\"${D_NC}"
+  list_item "${GRAY_19}$_pg_sudo_user psql -c \"ALTER USER postgres PASSWORD '...';\"${D_NC}"
   echo
 }
 

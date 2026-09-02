@@ -30,11 +30,11 @@ search_main() {
     echo
     log_info "Searches match tool names, descriptions and tags:"
     echo
-    list_item "${D_CYAN}core search tunnel${D_NC}     ngrok, cloudflared, localtunnel..."
-    list_item "${D_CYAN}core search ai${D_NC}         AI agents & coding assistants"
-    list_item "${D_CYAN}core search js${D_NC}         JavaScript/TypeScript ecosystem"
+    list_item "${GRAY_19}core search tunnel${D_NC}     ngrok, cloudflared, localtunnel..."
+    list_item "${GRAY_19}core search ai${D_NC}         AI agents & coding assistants"
+    list_item "${GRAY_19}core search js${D_NC}         JavaScript/TypeScript ecosystem"
     echo
-    list_item "Install: ${D_CYAN}core install <tool>${D_NC}   Docs: ${D_CYAN}core show <tool>${D_NC}"
+    list_item "Install: ${GRAY_19}core install <tool>${D_NC}   Docs: ${GRAY_19}core show <tool>${D_NC}"
     echo
     return
   fi
@@ -80,7 +80,7 @@ search_main() {
 
   if [[ ${#rows[@]} -eq 0 ]]; then
     log_warn "No tools match '${query}'"
-    list_item "Run ${D_CYAN}core search --all${D_NC} to see everything"
+    list_item "Run ${GRAY_19}core search --all${D_NC} to see everything"
     return 1
   fi
 
@@ -106,7 +106,7 @@ search_main() {
 
   table_end
   echo
-  list_item "Install: ${D_CYAN}core install <tool>${D_NC}   Docs: ${D_CYAN}core show <tool>${D_NC}"
+  list_item "Install: ${GRAY_19}core install <tool>${D_NC}   Docs: ${GRAY_19}core show <tool>${D_NC}"
   if [[ $hidden_count -gt 0 ]]; then
     local hidden_names=""
     for tool_dir in "$CORE_PATH/tools/"*/; do

@@ -89,8 +89,8 @@ style_main() {
       echo
       separator_section "Usage"
       echo
-      list_item "${D_CYAN}core style <style>${D_NC}             apply — e.g. ${D_CYAN}core style font${D_NC}"
-      list_item "${D_CYAN}core style --remove <style>${D_NC}    remove — e.g. ${D_CYAN}core style -r font${D_NC}"
+      list_item "${GRAY_19}core style <style>${D_NC}             apply — e.g. ${GRAY_19}core style font${D_NC}"
+      list_item "${GRAY_19}core style --remove <style>${D_NC}    remove — e.g. ${GRAY_19}core style -r font${D_NC}"
       echo
       list_item "These are environment tweaks, not packages: nothing to update."
       echo
@@ -109,7 +109,7 @@ style_main() {
     if [[ $known -eq 0 ]]; then
       dir="$(manifest_tool_dir "$t")"
       if [[ -n "$dir" ]] && [[ "$(manifest_field "$dir" '.style // false')" != "true" ]]; then
-        log_warn "'$t' is a regular tool — use ${D_CYAN}core install $t${D_NC}"
+        log_warn "'$t' is a regular tool — use ${GRAY_19}core install $t${D_NC}"
       else
         log_warn "Unknown style: $t"
       fi

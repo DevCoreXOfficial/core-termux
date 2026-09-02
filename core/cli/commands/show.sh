@@ -70,10 +70,10 @@ show_main() {
     echo
     log_info "'about' is an alias of 'show': both display tool documentation."
     echo
-    list_item "${D_CYAN}core show opencode${D_NC}"
-    list_item "${D_CYAN}core about opencode:es${D_NC}"
+    list_item "${GRAY_19}core show opencode${D_NC}"
+    list_item "${GRAY_19}core about opencode:es${D_NC}"
     echo
-    log_info "Run ${D_CYAN}core search${D_NC} to see all available tools"
+    log_info "Run ${GRAY_19}core search${D_NC} to see all available tools"
     echo
     return
   fi

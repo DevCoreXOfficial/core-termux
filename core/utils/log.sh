@@ -5,7 +5,7 @@ import "@/utils/colors"
 # ===== LOG FUNCTIONS =====
 
 log_info() {
-	echo -e "    ${CYAN}➜${D_CYAN} $*"${D_NC}
+	echo -e "    ${GRAY_19}➜${GRAY_12} $*"${D_NC}
 }
 
 log_success() {
@@ -71,7 +71,7 @@ separator_section() {
 	local padding=$(( (cols - ${#title} - 2) / 2 ))
 	local line=$(printf "%${padding}s")
 
-	echo -e "${GRAY}${line// /─} ${D_CYAN}${title}${GRAY} ${line// /─}${NC}"
+	echo -e "${GRAY}${line// /─} ${GRAY_19}${title}${GRAY} ${line// /─}${NC}"
 }
 
 # ===== CENTER TEXT =====
@@ -99,7 +99,7 @@ box() {
 	local line=$(printf "%$((len + 2))s")
 
 	echo -e "${GRAY}╭${line// /─}╮${NC}"
-	echo -e "${GRAY}│${D_CYAN} $text ${GRAY}│${NC}"
+	echo -e "${GRAY}│${GRAY_19} $text ${GRAY}│${NC}"
 	echo -e "${GRAY}╰${line// /─}╯${NC}"
 }
 
@@ -109,7 +109,7 @@ box_large() {
 	local line=$(printf "%$((len + 4))s")
 
 	echo -e "${GRAY}╔${line// /═}╗${NC}"
-	echo -e "${GRAY}║${D_CYAN}  $text  ${GRAY}║${NC}"
+	echo -e "${GRAY}║${GRAY_19}  $text  ${GRAY}║${NC}"
 	echo -e "${GRAY}╚${line// /═}╝${NC}"
 }
 
@@ -120,7 +120,7 @@ box_with_subtitle() {
 	local line=$(printf "%$((max_len + 2))s")
 
 	echo -e "${GRAY}╭${line// /─}╮${NC}"
-	echo -e "${GRAY}│${D_CYAN} $title${GRAY}$(printf "%$((max_len - ${#title}))s") │${NC}"
+	echo -e "${GRAY}│${GRAY_19} $title${GRAY}$(printf "%$((max_len - ${#title}))s") │${NC}"
 	echo -e "${GRAY}│${D_PURPLE} $subtitle${GRAY}$(printf "%$((max_len - ${#subtitle}))s") │${NC}"
 	echo -e "${GRAY}╰${line// /─}╯${NC}"
 }
@@ -140,7 +140,7 @@ table_start() {
 
 # ===== ADD ROW =====
 # Simple usage: table_row "value1" "value2" "value3"
-# By default: col 1 → D_GREEN, col 2 → D_CYAN, rest → no color
+# By default: col 1 → D_GREEN, col 2 → GRAY_19, rest → no color
 # Also accepts custom colors: table_row "${RED}value${NC}" ...
 table_row() {
 	local -a colored=()
@@ -150,7 +150,7 @@ table_row() {
 		if [[ "$field" != *$'\x1b['* ]]; then
 			case $i in
 			0) colored+=("${D_GREEN}${field}${NC}") ;;
-			1) colored+=("${D_CYAN}${field}${NC}") ;;
+			1) colored+=("${GRAY_19}${field}${NC}") ;;
 			*) colored+=("${D_NC}${field}${NC}") ;;
 			esac
 		else
@@ -257,8 +257,8 @@ read_input() {
 	local var="$2"
 	local _val
 
-	echo -e -n "    ${GRAY}┌─${D_CYAN} ${prompt} ${NC}\n" >&2
-	echo -e -n "    ${GRAY}└─${D_CYAN}▶ ${D_NC}" >&2
+	echo -e -n "    ${GRAY}┌─${GRAY_19} ${prompt} ${NC}\n" >&2
+	echo -e -n "    ${GRAY}└─${GRAY_19}▶ ${D_NC}" >&2
 	read -r _val
 	read -r "$var" <<<"$_val"
 }
@@ -272,9 +272,9 @@ read_secret() {
 	local _val=""
 	local char
 
-	echo -e -n "    ${GRAY}┌─${D_CYAN} ${prompt} ${NC}\n" >&2
+	echo -e -n "    ${GRAY}┌─${GRAY_19} ${prompt} ${NC}\n" >&2
 	echo -e -n "    ${GRAY}│${D_DIM} (input will be hidden)${D_NC}\n" >&2
-	echo -e -n "    ${GRAY}└─${D_CYAN}▶ ${D_NC}" >&2
+	echo -e -n "    ${GRAY}└─${GRAY_19}▶ ${D_NC}" >&2
 
 	local old_stty
 	old_stty=$(stty -g 2>/dev/null)
@@ -383,14 +383,14 @@ read_select() {
 	local max_width=$((cols - margin))
 
 	_render_select() {
-		echo -e "    ${GRAY}┌─${D_CYAN} ${prompt}${NC}" >&2
+		echo -e "    ${GRAY}┌─${GRAY_19} ${prompt}${NC}" >&2
 		for ((i = 0; i < total; i++)); do
 			local text="${options[$i]}"
 			if (( ${#text} > max_width )); then
 				text="${text:0:$((max_width - 3))}..."
 			fi
 			if ((i == selected)); then
-				echo -e "    ${GRAY}│  ${D_CYAN}▶ ${WHITE}${text}${D_NC}" >&2
+				echo -e "    ${GRAY}│  ${GRAY_19}▶ ${WHITE}${text}${D_NC}" >&2
 			else
 				echo -e "    ${GRAY}│    ${GRAY}${text}${D_NC}" >&2
 			fi
@@ -424,7 +424,7 @@ read_select() {
 	tput cnorm
 
 	read -r "$var" <<<"${options[$selected]}"
-	echo -e "    ${GRAY}└─${D_CYAN}▶ ${D_NC}${options[$selected]}${D_NC}" >&2
+	echo -e "    ${GRAY}└─${GRAY_19}▶ ${D_NC}${options[$selected]}${D_NC}" >&2
 }
 
 # --- Multi-line input (interactive shell, no external editor) ---
@@ -445,7 +445,7 @@ read_multiline() {
 	printf -v bar '%*s' "$w" ''
 
 	echo -e "    ${GRAY}╭${bar// /─}╮${NC}" >&2
-	printf "    ${GRAY}│${NC}  ${D_CYAN}✎  Write your memory${D_NC}%*s ${GRAY}│${NC}\n" $((w - 24)) "" >&2
+	printf "    ${GRAY}│${NC}  ${GRAY_19}✎  Write your memory${D_NC}%*s ${GRAY}│${NC}\n" $((w - 24)) "" >&2
 	printf "    ${GRAY}│${NC}  ${D_DIM}(Ctrl+D to finish, Ctrl+C to cancel)${D_NC}%*s ${GRAY}│${NC}\n" $((w - 40)) "" >&2
 	echo -e "    ${GRAY}├${bar// /─}┤${NC}" >&2
 
@@ -472,14 +472,14 @@ loading() {
 	local tmpfile
 	tmpfile="$(mktemp)"
 
-	printf "    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[0]}" "$message"
+	printf "    ${GRAY_19}%s${GRAY_12} %s${NC}" "${frames[0]}" "$message"
 
 	"$@" >"$tmpfile" 2>&1 &
 	local pid=$!
 
 	local i=0
 	while kill -0 "$pid" 2>/dev/null; do
-		printf "\r    ${CYAN}%s${D_CYAN} %s${NC}" "${frames[i]}" "$message"
+		printf "\r    ${GRAY_19}%s${GRAY_12} %s${NC}" "${frames[i]}" "$message"
 		((i = (i + 1) % ${#frames[@]}))
 		sleep $delay
 	done
@@ -491,7 +491,7 @@ loading() {
 		printf "\r    ${GREEN}✔${D_GREEN} %s${NC}\n" "$message"
 		[[ -s "$tmpfile" ]] && cat "$tmpfile"
 	elif [[ $exit_code -eq 2 ]]; then
-		printf "\r    ${CYAN}➜${D_CYAN} %s${NC}\n" "$message"
+		printf "\r    ${GRAY_19}➜${GRAY_12} %s${NC}\n" "$message"
 		[[ -s "$tmpfile" ]] && cat "$tmpfile"
 	else
 		printf "\r    ${RED}✖${D_RED} %s${NC}\n" "$message"
@@ -520,7 +520,7 @@ progress_bar() {
 		bar+="░"
 	done
 
-	printf "\r${D_CYAN}[${D_NC}${D_GREEN}%s${D_NC}${D_CYAN}]${D_NC} %3d%%" "$bar" "$percentage"
+	printf "\r${GRAY_19}[${D_NC}${D_GREEN}%s${D_NC}${GRAY_19}]${D_NC} %3d%%" "$bar" "$percentage"
 }
 
 # ===== STEP FUNCTIONS =====
@@ -528,7 +528,7 @@ progress_bar() {
 step_start() {
 	local step="$1"
 	local message="$2"
-	echo -e "    ${D_CYAN}[$step]${D_NC} $message"
+	echo -e "    ${GRAY_19}[$step]${D_NC} $message"
 }
 
 step_success() {
@@ -558,18 +558,18 @@ icon_warning() {
 }
 
 icon_info() {
-	echo -e "${CYAN}ℹ${NC}"
+	echo -e "${WHITE}ℹ${NC}"
 }
 
 icon_arrow() {
-	echo -e "${D_CYAN}→${NC}"
+	echo -e "${GRAY_19}→${NC}"
 }
 
 # ===== BADGE FUNCTIONS =====
 
 badge() {
 	local text="$1"
-	local color="${2:-D_CYAN}"
+	local color="${2:-GRAY_19}"
 	echo -e "${!color}[ $text ]${NC}"
 }
 
@@ -588,5 +588,5 @@ badge_deprecated() {
 # ===== TIP FUNCTION =====
 
 log_tip() {
-	echo -e "    ${D_CYAN}●${NC} $*"
+	echo -e "    ${GRAY_19}●${NC} $*"
 }

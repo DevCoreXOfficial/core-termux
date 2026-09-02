@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>One CLI — Your environment. Everywhere.</strong>
+  <strong>CORE — Your Environment. Everywhere.</strong>
 </p>
 
 <p align="center">
@@ -26,7 +26,7 @@
 
 <br>
 
-**CORE** is a _multiplatform dev environment_ that turns your terminal into a complete development workstation — on Termux/Android, Ubuntu Linux and Ubuntu on WSL. Through a single `core` CLI it covers the full developer stack: programming languages, databases, AI agents, code editors, shell configuration and automation — all manageable with simple, consistent commands like `core install`, `core update` and `core uninstall`.
+**CORE** is a cross-platform CLI designed to simplify the installation, configuration, and management of your development environment.
 
 Every tool installs individually and is found by name:
 

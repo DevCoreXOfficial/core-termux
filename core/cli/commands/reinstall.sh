@@ -12,7 +12,7 @@ reinstall_main() {
     echo
     log_info "Usage: core reinstall <tool> [<tool2> ...]"
     echo
-    list_item "${D_CYAN}core reinstall opencode${D_NC}"
+    list_item "${GRAY_19}core reinstall opencode${D_NC}"
     echo
     return
   fi

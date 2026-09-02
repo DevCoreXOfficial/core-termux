@@ -13,35 +13,35 @@ voice_help() {
 	echo
 	separator_section "Agents"
 	echo
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "opencode" "opencode run \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "claude-code" "claude -p \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "codex" "codex \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "gemini-cli" "gemini -p \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "hermes-agent" "hermes chat -q \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "kilocode" "kilo run \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "kimi-code" "kimi -p \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "mimocode" "mimo run \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "mistral-vibe" "vibe --prompt \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "openclaude" "openclaude --bg \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "pi" "pi -p \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "qoder" "qodercli -p \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "qwen-code" "qwen -p \"prompt\""
-	printf "    ${D_CYAN}%-16s${D_NC} %s\n" "text" "Print prompt to stdout"
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "opencode" "opencode run \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "claude-code" "claude -p \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "codex" "codex \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "gemini-cli" "gemini -p \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "hermes-agent" "hermes chat -q \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "kilocode" "kilo run \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "kimi-code" "kimi -p \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "mimocode" "mimo run \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "mistral-vibe" "vibe --prompt \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "openclaude" "openclaude --bg \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "pi" "pi -p \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "qoder" "qodercli -p \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "qwen-code" "qwen -p \"prompt\""
+	printf "    ${GRAY_19}%-16s${D_NC} %s\n" "text" "Print prompt to stdout"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}core voice${D_NC}                   # Show this help\n"
-	printf "    ${D_CYAN}core voice opencode${D_NC}          # Capture → nvim → opencode\n"
-	printf "    ${D_CYAN}core voice qoder${D_NC}             # Capture → nvim → qoder\n"
-	printf "    ${D_CYAN}core voice claude-code${D_NC}       # Capture → nvim → claude -p\n"
-	printf "    ${D_CYAN}core voice text${D_NC}              # Capture → nvim → print to stdout\n"
-	printf "    ${D_CYAN}core voice !${D_NC}                 # Alias for 'text'\n"
+	printf "    ${GRAY_19}core voice${D_NC}                   # Show this help\n"
+	printf "    ${GRAY_19}core voice opencode${D_NC}          # Capture → nvim → opencode\n"
+	printf "    ${GRAY_19}core voice qoder${D_NC}             # Capture → nvim → qoder\n"
+	printf "    ${GRAY_19}core voice claude-code${D_NC}       # Capture → nvim → claude -p\n"
+	printf "    ${GRAY_19}core voice text${D_NC}              # Capture → nvim → print to stdout\n"
+	printf "    ${GRAY_19}core voice !${D_NC}                 # Alias for 'text'\n"
 	echo
 	separator_section "Requirements"
 	echo
-	list_item "Termux:API package: ${D_CYAN}pkg install termux-api${D_NC}"
-	list_item "Neovim for editing: ${D_CYAN}core install nvchad${D_NC}"
-	list_item "Termux:API app: ${D_BLUE}devcorex-web.vercel.app/termux/api${D_NC}"
+	list_item "Termux:API package: ${GRAY_19}pkg install termux-api${D_NC}"
+	list_item "Neovim for editing: ${GRAY_19}core install nvchad${D_NC}"
+	list_item "Termux:API app: ${GRAY_12}devcorex-web.vercel.app/termux/api${D_NC}"
 	echo
 }
 
@@ -50,7 +50,7 @@ voice_main() {
 	core_detect_platform
 	if [[ "$CORE_ENV" != "termux" ]]; then
 		log_warn "core voice requires the Termux:API app (Termux/Android only)"
-		list_item "On Ubuntu/WSL, dictate into ${D_CYAN}core agent${D_NC} directly or type your prompt."
+		list_item "On Ubuntu/WSL, dictate into ${GRAY_19}core agent${D_NC} directly or type your prompt."
 		return 1
 	fi
 
@@ -64,7 +64,7 @@ voice_main() {
 	# ── dependency checks ──
 	if ! command -v termux-dialog &>/dev/null; then
 		log_error "Termux:API is not installed"
-		list_item "Install the package: ${D_CYAN}pkg install termux-api${NC}"
+		list_item "Install the package: ${GRAY_19}pkg install termux-api${NC}"
 		list_item "Install the app from: https://devcorex-web.vercel.app/termux/api"
 		separator
 		exit 1
@@ -72,7 +72,7 @@ voice_main() {
 
 	if ! command -v nvim &>/dev/null; then
 		log_error "Neovim (nvim) is not installed"
-		list_item "Install the editor: ${D_CYAN}core install nvchad${NC}"
+		list_item "Install the editor: ${GRAY_19}core install nvchad${NC}"
 		separator
 		exit 1
 	fi
@@ -130,7 +130,7 @@ voice_main() {
 	fi
 
 	# ── dispatch to agent ──
-	log_info "Launching ${D_CYAN}$agent${NC} with prompt…"
+	log_info "Launching ${GRAY_19}$agent${NC} with prompt…"
 	echo
 
 	case "$agent" in

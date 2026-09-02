@@ -10,7 +10,7 @@ readonly BRAIN_DIR="$CORE_DATA/brain"
 _brain_ensure() {
 	if [[ ! -d "$BRAIN_DIR" ]]; then
 		log_error "Brain not initialized"
-		list_item "Run: ${D_CYAN}core brain init${D_NC}"
+		list_item "Run: ${GRAY_19}core brain init${D_NC}"
 		return 1
 	fi
 }
@@ -152,7 +152,7 @@ _brain_editor() {
 
 	if ! command -v nvim &>/dev/null; then
 		log_error "Neovim not found"
-		list_item "Install it: ${D_CYAN}core install nvchad${D_NC}"
+		list_item "Install it: ${GRAY_19}core install nvchad${D_NC}"
 		return 1
 	fi
 
@@ -185,45 +185,45 @@ brain_help() {
 	echo
 	separator_section "Subcommands"
 	echo
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "init" "Initialize brain directory and GitHub repo"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "save" "Save a new memory interactively"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "search" "Search memories by keywords or tags"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "ls" "List memories by category"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "edit" "Edit a memory in your \$EDITOR"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "delete" "Delete a memory permanently"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "reset" "Destroy the entire brain"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "show" "View a memory with its relations"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "graph" "Visual map of all connections"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "skill" "Create an AI skill from memories"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "relate" "Link two memories"
-	printf "    ${D_CYAN}%-12s${D_NC} %s\n" "sync" "Push/pull to GitHub private repo"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "init" "Initialize brain directory and GitHub repo"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "save" "Save a new memory interactively"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "search" "Search memories by keywords or tags"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "ls" "List memories by category"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "edit" "Edit a memory in your \$EDITOR"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "delete" "Delete a memory permanently"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "reset" "Destroy the entire brain"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "show" "View a memory with its relations"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "graph" "Visual map of all connections"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "skill" "Create an AI skill from memories"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "relate" "Link two memories"
+	printf "    ${GRAY_19}%-12s${D_NC} %s\n" "sync" "Push/pull to GitHub private repo"
 	echo
 	separator_section "Examples"
 	echo
-	printf "    ${D_CYAN}core brain init${D_NC}              # Create local brain\n"
-	printf "    ${D_CYAN}core brain save${D_NC}              # Interactive save\n"
-	printf "    ${D_CYAN}core brain search react${D_NC}      # Search all memories\n"
-	printf "    ${D_CYAN}core brain ls${D_NC}                # List all categories\n"
-	printf "    ${D_CYAN}core brain ls react${D_NC}          # List react category\n"
-	printf "    ${D_CYAN}core brain edit${D_NC}              # Interactive edit\n"
-	printf "    ${D_CYAN}core brain edit slug-name${D_NC}    # Edit by slug\n"
-	printf "    ${D_CYAN}core brain delete${D_NC}            # Interactive delete\n"
-	printf "    ${D_CYAN}core brain reset${D_NC}             # Destroy local brain\n"
-	printf "    ${D_CYAN}core brain show slug-name${D_NC}    # View memory + relations\n"
-	printf "    ${D_CYAN}core brain graph${D_NC}             # Show connection map\n"
-	printf "    ${D_CYAN}core brain skill${D_NC}             # Create a skill from memories\n"
-	printf "    ${D_CYAN}core brain sync${D_NC}              # Sync with GitHub\n"
+	printf "    ${GRAY_19}core brain init${D_NC}              # Create local brain\n"
+	printf "    ${GRAY_19}core brain save${D_NC}              # Interactive save\n"
+	printf "    ${GRAY_19}core brain search react${D_NC}      # Search all memories\n"
+	printf "    ${GRAY_19}core brain ls${D_NC}                # List all categories\n"
+	printf "    ${GRAY_19}core brain ls react${D_NC}          # List react category\n"
+	printf "    ${GRAY_19}core brain edit${D_NC}              # Interactive edit\n"
+	printf "    ${GRAY_19}core brain edit slug-name${D_NC}    # Edit by slug\n"
+	printf "    ${GRAY_19}core brain delete${D_NC}            # Interactive delete\n"
+	printf "    ${GRAY_19}core brain reset${D_NC}             # Destroy local brain\n"
+	printf "    ${GRAY_19}core brain show slug-name${D_NC}    # View memory + relations\n"
+	printf "    ${GRAY_19}core brain graph${D_NC}             # Show connection map\n"
+	printf "    ${GRAY_19}core brain skill${D_NC}             # Create a skill from memories\n"
+	printf "    ${GRAY_19}core brain sync${D_NC}              # Sync with GitHub\n"
 	echo
 	separator_section "Non-interactive flags (AI agent mode)"
 	echo
-	printf "    ${D_CYAN}core brain save --title \"T\" --content \"C\" [--category c] [--tags \"a, b\"]${D_NC}\n"
-	printf "    ${D_CYAN}core brain search \"query\" --full${D_NC}\n"
-	printf "    ${D_CYAN}core brain edit <slug> --content \"new text\"${D_NC}\n"
-	printf "    ${D_CYAN}core brain delete <slug> --yes${D_NC}\n"
-	printf "    ${D_CYAN}core brain graph --json${D_NC}\n"
-	printf "    ${D_CYAN}core brain skill --all --name <name> [--global]${D_NC}\n"
+	printf "    ${GRAY_19}core brain save --title \"T\" --content \"C\" [--category c] [--tags \"a, b\"]${D_NC}\n"
+	printf "    ${GRAY_19}core brain search \"query\" --full${D_NC}\n"
+	printf "    ${GRAY_19}core brain edit <slug> --content \"new text\"${D_NC}\n"
+	printf "    ${GRAY_19}core brain delete <slug> --yes${D_NC}\n"
+	printf "    ${GRAY_19}core brain graph --json${D_NC}\n"
+	printf "    ${GRAY_19}core brain skill --all --name <name> [--global]${D_NC}\n"
 	echo
-	list_item "These skip all prompts — used by ${D_CYAN}core agent${D_NC}, scripts and the REPL shell mode"
+	list_item "These skip all prompts — used by ${GRAY_19}core agent${D_NC}, scripts and the REPL shell mode"
 	echo
 }
 
@@ -236,7 +236,7 @@ brain_init() {
 	echo
 
 	if [[ -d "$BRAIN_DIR" ]]; then
-		log_warn "Brain already exists at: ${D_CYAN}$BRAIN_DIR${D_NC}"
+		log_warn "Brain already exists at: ${GRAY_19}$BRAIN_DIR${D_NC}"
 		separator
 		return 0
 	fi
@@ -248,8 +248,8 @@ brain_init() {
 
 	if ! $gh_ok; then
 		mkdir -p "$BRAIN_DIR"
-		log_success "Local brain created: ${D_CYAN}$BRAIN_DIR${D_NC}"
-		list_item "Install gh for GitHub sync: ${D_CYAN}core install dev${D_NC}"
+		log_success "Local brain created: ${GRAY_19}$BRAIN_DIR${D_NC}"
+		list_item "Install gh for GitHub sync: ${GRAY_19}core install dev${D_NC}"
 		separator
 		return 0
 	fi
@@ -259,7 +259,7 @@ brain_init() {
 	local repo_name="core-brain"
 
 	if gh repo view "$gh_user/$repo_name" &>/dev/null; then
-		log_info "Found existing brain repo: ${D_CYAN}$gh_user/$repo_name${D_NC}"
+		log_info "Found existing brain repo: ${GRAY_19}$gh_user/$repo_name${D_NC}"
 		echo
 		read_confirm "Clone it to restore your memories?" confirm
 		if [[ "$confirm" == "y" ]]; then
@@ -271,7 +271,7 @@ brain_init() {
 	fi
 
 	mkdir -p "$BRAIN_DIR"
-	log_success "Local brain created: ${D_CYAN}$BRAIN_DIR${D_NC}"
+	log_success "Local brain created: ${GRAY_19}$BRAIN_DIR${D_NC}"
 	echo
 
 	read_confirm "Create a private GitHub repo for your brain?" confirm
@@ -281,7 +281,7 @@ brain_init() {
 		return 0
 	fi
 
-	log_info "Creating private repo: ${D_CYAN}$gh_user/$repo_name${D_NC}..."
+	log_info "Creating private repo: ${GRAY_19}$gh_user/$repo_name${D_NC}..."
 	if gh repo create "$repo_name" --private &>/dev/null; then
 		cd "$BRAIN_DIR" || return 1
 		git init &>/dev/null
@@ -290,7 +290,7 @@ brain_init() {
 		git commit -m "init brain" &>/dev/null
 		git remote add origin "https://github.com/$gh_user/$repo_name.git"
 		loading "Pushing to GitHub..." git push -u origin main
-		log_success "Repo created and linked: ${D_CYAN}https://github.com/$gh_user/$repo_name${D_NC}"
+		log_success "Repo created and linked: ${GRAY_19}https://github.com/$gh_user/$repo_name${D_NC}"
 	else
 		log_warn "Failed to create repo. Check your permissions."
 	fi
@@ -348,7 +348,7 @@ brain_save() {
 				log_info "Existing categories:"
 				echo
 				while IFS= read -r cat; do
-					printf "    ${D_GREEN}•${D_NC} ${D_CYAN}%s${D_NC}\n" "$cat"
+					printf "    ${D_GREEN}•${D_NC} ${GRAY_19}%s${D_NC}\n" "$cat"
 				done <<<"$categories"
 				echo
 			fi
@@ -451,7 +451,7 @@ brain_save() {
 	fi
 
 	echo
-	log_success "Memory saved to ${D_CYAN}$category/${date_prefix}_${slug}.md${D_NC}"
+	log_success "Memory saved to ${GRAY_19}$category/${date_prefix}_${slug}.md${D_NC}"
 
 	if [[ "$flags" != "1" ]] && command -v bat &>/dev/null; then
 		read_confirm "Preview with bat?" preview
@@ -552,7 +552,7 @@ brain_search() {
 		if ! $seen; then
 			menu_files+=("$f")
 			menu_titles+=("$title")
-			printf "    ${D_GREEN}%2d.${D_NC} ${D_CYAN}%s${D_NC}\n" $((idx + 1)) "$title"
+			printf "    ${D_GREEN}%2d.${D_NC} ${GRAY_19}%s${D_NC}\n" $((idx + 1)) "$title"
 			((idx++))
 		fi
 	done
@@ -617,7 +617,7 @@ brain_ls() {
 		if [[ -z "$dirs" ]]; then
 			echo -e "    ${D_GRAY}No memories yet${D_NC}"
 			echo
-			list_item "Add one: ${D_CYAN}core brain save${D_NC}"
+			list_item "Add one: ${GRAY_19}core brain save${D_NC}"
 			return 0
 		fi
 	fi
@@ -702,7 +702,7 @@ brain_relate() {
 	_brain_update_related "$file_a" "$slug_b"
 	_brain_update_related "$file_b" "$slug_a"
 
-	log_success "Linked ${D_CYAN}$(_brain_title "$file_a")${D_NC} ↔ ${D_CYAN}$(_brain_title "$file_b")${D_NC}"
+	log_success "Linked ${GRAY_19}$(_brain_title "$file_a")${D_NC} ↔ ${GRAY_19}$(_brain_title "$file_b")${D_NC}"
 	echo
 }
 
@@ -821,7 +821,7 @@ brain_graph() {
 		local related
 		related=$(grep "^related:" "$f" 2>/dev/null | sed 's/related: \[//;s/\]//')
 
-		printf "    ${D_CYAN}%s${NC} ${D_DIM}(%s)${D_NC}\n" "$title" "$category"
+		printf "    ${GRAY_19}%s${NC} ${D_DIM}(%s)${D_NC}\n" "$title" "$category"
 
 		if [[ -n "$related" ]]; then
 			local IFS=','
@@ -862,7 +862,7 @@ brain_sync() {
 
 	if [[ ! -d "$BRAIN_DIR/.git" ]]; then
 		log_warn "Not a git repository"
-		list_item "Run: ${D_CYAN}core brain init${D_NC} to set up Git"
+		list_item "Run: ${GRAY_19}core brain init${D_NC} to set up Git"
 		separator
 		return 1
 	fi
@@ -871,7 +871,7 @@ brain_sync() {
 
 	if ! git remote -v &>/dev/null; then
 		log_info "No remote configured — local commit only"
-		list_item "Set up GitHub sync with: ${D_CYAN}core brain init${D_NC}"
+		list_item "Set up GitHub sync with: ${GRAY_19}core brain init${D_NC}"
 		separator
 		return 0
 	fi
@@ -893,7 +893,7 @@ brain_sync() {
 			log_success "Brain synced with GitHub"
 		else
 			log_error "Push failed"
-			list_item "Check your GitHub authentication: ${D_CYAN}gh auth login${D_NC}"
+			list_item "Check your GitHub authentication: ${GRAY_19}gh auth login${D_NC}"
 		fi
 		separator
 		return
@@ -903,8 +903,8 @@ brain_sync() {
 	local pull_exit=$?
 	if [[ $pull_exit -ne 0 ]]; then
 		log_error "Pull failed — your local and remote histories diverged"
-		list_item "Force push instead: ${D_CYAN}git push --force${D_NC}"
-		list_item "Or resolve manually in: ${D_CYAN}$BRAIN_DIR${D_NC}"
+		list_item "Force push instead: ${GRAY_19}git push --force${D_NC}"
+		list_item "Or resolve manually in: ${GRAY_19}$BRAIN_DIR${D_NC}"
 		separator
 		return 1
 	fi
@@ -985,7 +985,7 @@ brain_skill() {
 		separator
 		echo
 		list_item "No memories yet"
-		list_item "Create some: ${D_CYAN}core brain save${D_NC}"
+		list_item "Create some: ${GRAY_19}core brain save${D_NC}"
 		separator
 		return 0
 	fi
@@ -1092,7 +1092,7 @@ brain_skill() {
 	fi
 
 	mkdir -p "$skill_dir/memories"
-	log_success "Creating skill: ${D_CYAN}$skill_name${D_NC}"
+	log_success "Creating skill: ${GRAY_19}$skill_name${D_NC}"
 
 	# ── Generate SKILL.md ──
 	local description="Skill generated from brain memories"
@@ -1173,7 +1173,7 @@ brain_skill() {
 		((midx++))
 	done
 
-	log_success "Skill created: ${D_CYAN}$skill_dir${D_NC}"
+	log_success "Skill created: ${GRAY_19}$skill_dir${D_NC}"
 	list_item "Your agent will load it automatically"
 	separator
 }
@@ -1224,7 +1224,7 @@ brain_edit() {
 		else
 			echo "$content" >>"$file"
 		fi
-		log_success "Memory updated: ${D_CYAN}$(_brain_title "$file")${D_NC}"
+		log_success "Memory updated: ${GRAY_19}$(_brain_title "$file")${D_NC}"
 		echo
 		return 0
 	fi
@@ -1243,12 +1243,12 @@ brain_edit() {
 
 	if [[ -z "$editor" ]]; then
 		log_error "No editor found"
-		list_item "Install one: ${D_CYAN}core install nvchad${D_NC}"
+		list_item "Install one: ${GRAY_19}core install nvchad${D_NC}"
 		return 1
 	fi
 
 	echo
-	log_info "Opening: ${D_CYAN}$(_brain_title "$file")${D_NC}"
+	log_info "Opening: ${GRAY_19}$(_brain_title "$file")${D_NC}"
 
 	"$editor" "$file"
 
@@ -1292,7 +1292,7 @@ brain_delete() {
 	title=$(_brain_title "$file")
 	if [[ "$yes" != "1" ]]; then
 		echo
-		log_warn "Delete memory: ${D_CYAN}$title${D_NC}?"
+		log_warn "Delete memory: ${GRAY_19}$title${D_NC}?"
 		read_confirm "This cannot be undone" confirm
 		if [[ "$confirm" != "y" ]]; then
 			log_info "Cancelled"
@@ -1308,7 +1308,7 @@ brain_delete() {
 	done < <(rg -l "$file_slug" "$BRAIN_DIR" --glob '*.md' 2>/dev/null || true)
 
 	rm "$file"
-	log_success "Deleted: ${D_CYAN}$title${D_NC}"
+	log_success "Deleted: ${GRAY_19}$title${D_NC}"
 
 	# Clean up empty category directory
 	local dir
@@ -1336,7 +1336,7 @@ brain_reset() {
 	fi
 
 	log_warn "This will DESTROY all local memories:"
-	list_item "Location: ${D_CYAN}$BRAIN_DIR${D_NC}"
+	list_item "Location: ${GRAY_19}$BRAIN_DIR${D_NC}"
 	echo
 
 	read_confirm "Are you sure?" confirm
@@ -1349,7 +1349,7 @@ brain_reset() {
 	echo
 	loading "Deleting local brain..." rm -rf "$BRAIN_DIR"
 	log_success "Brain destroyed"
-	list_item "Recreate with: ${D_CYAN}core brain init${D_NC}"
+	list_item "Recreate with: ${GRAY_19}core brain init${D_NC}"
 	separator
 }
 
@@ -1372,23 +1372,23 @@ brain_dashboard() {
 	local has_git=false
 	[[ -d "$BRAIN_DIR/.git" ]] && has_git=true
 
-	printf "    ${D_CYAN}%-20s${NC} ${GRAY}=${NC} %s\n" "Memories" "$total_files"
-	printf "    ${D_CYAN}%-20s${NC} ${GRAY}=${NC} %s\n" "Categories" "$total_categories"
-	printf "    ${D_CYAN}%-20s${NC} ${GRAY}=${NC} %s\n" "Git" "$($has_git && echo '✓' || echo '✗')"
-	printf "    ${D_CYAN}%-20s${NC} ${GRAY}=${NC} ${D_DIM}%s${D_NC}\n" "Location" "$BRAIN_DIR"
+	printf "    ${GRAY_19}%-20s${NC} ${GRAY}=${NC} %s\n" "Memories" "$total_files"
+	printf "    ${GRAY_19}%-20s${NC} ${GRAY}=${NC} %s\n" "Categories" "$total_categories"
+	printf "    ${GRAY_19}%-20s${NC} ${GRAY}=${NC} %s\n" "Git" "$($has_git && echo '✓' || echo '✗')"
+	printf "    ${GRAY_19}%-20s${NC} ${GRAY}=${NC} ${D_DIM}%s${D_NC}\n" "Location" "$BRAIN_DIR"
 	echo
 
 	separator_section "Quick Start"
 	echo
-	list_item "Save: ${D_CYAN}core brain save${D_NC}"
-	list_item "Show: ${D_CYAN}core brain show${D_NC}"
-	list_item "Search: ${D_CYAN}core brain search${D_NC}"
-	list_item "Edit: ${D_CYAN}core brain edit${D_NC}"
-	list_item "Delete: ${D_CYAN}core brain delete${D_NC}"
-	list_item "Reset: ${D_CYAN}core brain reset${D_NC}"
-	list_item "Graph: ${D_CYAN}core brain graph${D_NC}"
-	list_item "Skill: ${D_CYAN}core brain skill${D_NC}"
-	list_item "Sync: ${D_CYAN}core brain sync${D_NC}"
+	list_item "Save: ${GRAY_19}core brain save${D_NC}"
+	list_item "Show: ${GRAY_19}core brain show${D_NC}"
+	list_item "Search: ${GRAY_19}core brain search${D_NC}"
+	list_item "Edit: ${GRAY_19}core brain edit${D_NC}"
+	list_item "Delete: ${GRAY_19}core brain delete${D_NC}"
+	list_item "Reset: ${GRAY_19}core brain reset${D_NC}"
+	list_item "Graph: ${GRAY_19}core brain graph${D_NC}"
+	list_item "Skill: ${GRAY_19}core brain skill${D_NC}"
+	list_item "Sync: ${GRAY_19}core brain sync${D_NC}"
 	echo
 }
 
