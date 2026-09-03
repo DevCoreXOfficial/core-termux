@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y translate-shell
+  loading "Updating Translate Shell" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y translate-shell || { log_error "Failed to update Translate Shell"; return 1; }
+  log_success "Translate Shell updated to the latest version"
 }
 
 _impl_vlocal() {
+  __translate_vl_query() {
   dpkg -s translate-shell 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting Translate Shell version" __translate_vl_query
 }
 
 _impl_vremote() {
+  __translate_vr_query() {
   apt-cache policy translate-shell 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking Translate Shell updates" __translate_vr_query
 }
 
 case "${1:-}" in

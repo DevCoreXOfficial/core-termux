@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y html2text
+  loading "Updating html2text" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y html2text || { log_error "Failed to update html2text"; return 1; }
+  log_success "html2text updated to the latest version"
 }
 
 _impl_vlocal() {
+  __html2text_vl_query() {
   dpkg -s html2text 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting html2text version" __html2text_vl_query
 }
 
 _impl_vremote() {
+  __html2text_vr_query() {
   apt-cache policy html2text 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking html2text updates" __html2text_vr_query
 }
 
 case "${1:-}" in

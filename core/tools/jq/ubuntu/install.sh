@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y jq
+  loading "Updating jq" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y jq || { log_error "Failed to update jq"; return 1; }
+  log_success "jq updated to the latest version"
 }
 
 _impl_vlocal() {
+  __jq_vl_query() {
   dpkg -s jq 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting jq version" __jq_vl_query
 }
 
 _impl_vremote() {
+  __jq_vr_query() {
   apt-cache policy jq 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking jq updates" __jq_vr_query
 }
 
 case "${1:-}" in

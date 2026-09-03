@@ -56,15 +56,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g ctx7@latest &>>"$LOG_FILE"
+  loading "Updating Context7" bash -c '_npm_g install -g ctx7@latest &>>"$LOG_FILE"' || { log_error "Failed to update Context7"; return 1; }
+  log_success "Context7 updated to the latest version"
 }
 
 _impl_vlocal() {
+  __ctx7_vl_query() {
   npm ls -g ctx7 --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Context7 version" __ctx7_vl_query
 }
 
 _impl_vremote() {
+  __ctx7_vr_query() {
   npm view ctx7 version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Context7 updates" __ctx7_vr_query
 }
 
 case "${1:-}" in

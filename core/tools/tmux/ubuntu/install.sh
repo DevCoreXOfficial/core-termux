@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y tmux
+  loading "Updating tmux" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y tmux || { log_error "Failed to update tmux"; return 1; }
+  log_success "tmux updated to the latest version"
 }
 
 _impl_vlocal() {
+  __tmux_vl_query() {
   dpkg -s tmux 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting tmux version" __tmux_vl_query
 }
 
 _impl_vremote() {
+  __tmux_vr_query() {
   apt-cache policy tmux 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking tmux updates" __tmux_vr_query
 }
 
 case "${1:-}" in

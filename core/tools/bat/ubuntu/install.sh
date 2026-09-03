@@ -45,15 +45,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y bat
+  loading "Updating bat" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y bat || { log_error "Failed to update bat"; return 1; }
+  log_success "bat updated to the latest version"
 }
 
 _impl_vlocal() {
+  __bat_vl_query() {
   dpkg -s bat 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting bat version" __bat_vl_query
 }
 
 _impl_vremote() {
+  __bat_vr_query() {
   apt-cache policy bat 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking bat updates" __bat_vr_query
 }
 
 case "${1:-}" in

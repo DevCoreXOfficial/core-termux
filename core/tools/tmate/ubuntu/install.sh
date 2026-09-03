@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y tmate
+  loading "Updating tmate" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y tmate || { log_error "Failed to update tmate"; return 1; }
+  log_success "tmate updated to the latest version"
 }
 
 _impl_vlocal() {
+  __tmate_vl_query() {
   dpkg -s tmate 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting tmate version" __tmate_vl_query
 }
 
 _impl_vremote() {
+  __tmate_vr_query() {
   apt-cache policy tmate 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking tmate updates" __tmate_vr_query
 }
 
 case "${1:-}" in

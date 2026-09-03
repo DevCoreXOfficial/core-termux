@@ -45,15 +45,23 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  $CORE_SUDO apt-get update -qq && $CORE_SUDO apt-get install -y gh
+  $CORE_SUDO apt-get update -qq
+  loading "Updating GitHub CLI" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y gh || { log_error "Failed to update GitHub CLI"; return 1; }
+  log_success "GitHub CLI updated to the latest version"
 }
 
 _impl_vlocal() {
+  __gh_vl_query() {
   gh --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  }
+  _spin_capture "Detecting GitHub API version" __gh_vl_query
 }
 
 _impl_vremote() {
+  __gh_vr_query() {
   curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d v
+  }
+  _spin_capture "Checking GitHub API updates" __gh_vr_query
 }
 
 case "${1:-}" in

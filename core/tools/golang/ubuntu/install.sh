@@ -59,15 +59,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y golang-go
+  loading "Updating Go" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y golang-go || { log_error "Failed to update Go"; return 1; }
+  log_success "Go updated to the latest version"
 }
 
 _impl_vlocal() {
+  __golang_vl_query() {
   dpkg -s golang-go 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting Go version" __golang_vl_query
 }
 
 _impl_vremote() {
+  __golang_vr_query() {
   apt-cache policy golang-go 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking Go updates" __golang_vr_query
 }
 
 case "${1:-}" in

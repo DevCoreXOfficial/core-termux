@@ -35,7 +35,8 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash &>>"$LOG_FILE"
+  loading "Updating Gentle AI" bash -c 'curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Gentle AI"; return 1; }
+  log_success "Gentle AI updated to the latest version"
 }
 
 _impl_vlocal() {

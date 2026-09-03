@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y redis-server
+  loading "Updating Redis" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y redis-server || { log_error "Failed to update Redis"; return 1; }
+  log_success "Redis updated to the latest version"
 }
 
 _impl_vlocal() {
+  __redis_vl_query() {
   dpkg -s redis-server 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting Redis version" __redis_vl_query
 }
 
 _impl_vremote() {
+  __redis_vr_query() {
   apt-cache policy redis-server 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking Redis updates" __redis_vr_query
 }
 
 case "${1:-}" in

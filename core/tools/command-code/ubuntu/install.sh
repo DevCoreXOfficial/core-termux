@@ -56,15 +56,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g command-code@latest &>>"$LOG_FILE"
+  loading "Updating Command Code" bash -c '_npm_g install -g command-code@latest &>>"$LOG_FILE"' || { log_error "Failed to update Command Code"; return 1; }
+  log_success "Command Code updated to the latest version"
 }
 
 _impl_vlocal() {
+  __command_code_vl_query() {
   npm ls -g command-code --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Command Code version" __command_code_vl_query
 }
 
 _impl_vremote() {
+  __command_code_vr_query() {
   npm view command-code version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Command Code updates" __command_code_vr_query
 }
 
 case "${1:-}" in

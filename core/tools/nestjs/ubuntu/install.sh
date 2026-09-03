@@ -66,15 +66,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g @nestjs/cli@latest &>>"$LOG_FILE"
+  loading "Updating NestJS CLI" bash -c '_npm_g install -g @nestjs/cli@latest &>>"$LOG_FILE"' || { log_error "Failed to update NestJS CLI"; return 1; }
+  log_success "NestJS CLI updated to the latest version"
 }
 
 _impl_vlocal() {
+  __nestjs_vl_query() {
   npm ls -g @nestjs/cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting NestJS CLI version" __nestjs_vl_query
 }
 
 _impl_vremote() {
+  __nestjs_vr_query() {
   npm view @nestjs/cli version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking NestJS CLI updates" __nestjs_vr_query
 }
 
 case "${1:-}" in

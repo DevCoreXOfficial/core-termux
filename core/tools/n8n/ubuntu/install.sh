@@ -66,15 +66,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g n8n@latest &>>"$LOG_FILE"
+  loading "Updating n8n" bash -c '_npm_g install -g n8n@latest &>>"$LOG_FILE"' || { log_error "Failed to update n8n"; return 1; }
+  log_success "n8n updated to the latest version"
 }
 
 _impl_vlocal() {
+  __n8n_vl_query() {
   npm ls -g n8n --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting n8n version" __n8n_vl_query
 }
 
 _impl_vremote() {
+  __n8n_vr_query() {
   npm view n8n version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking n8n updates" __n8n_vr_query
 }
 
 case "${1:-}" in

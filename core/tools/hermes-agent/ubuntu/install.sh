@@ -39,7 +39,8 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash &>>"$LOG_FILE"
+  loading "Updating Hermes Agent" bash -c 'curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Hermes Agent"; return 1; }
+  log_success "Hermes Agent updated to the latest version"
 }
 
 _impl_vlocal() {

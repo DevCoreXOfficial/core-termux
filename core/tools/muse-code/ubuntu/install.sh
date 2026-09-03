@@ -106,22 +106,28 @@ uninstall_muse_code() {
 }
 
 _get_installed_muse_version() {
-  local out
-  out="$(muse-code --version 2>&1 || muse --version 2>&1 || true)"
-  echo "$out" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+[~.\-][Rr]?[0-9.]+' | head -1
-  if [[ -z "$out" ]]; then
-    _get_installed_version muse-code 2>/dev/null || _get_installed_version muse 2>/dev/null || true
-  fi
+  __muse_vl_query() {
+    local out
+    out="$(muse-code --version 2>&1 || muse --version 2>&1 || true)"
+    echo "$out" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+[~.\-][Rr]?[0-9.]+' | head -1
+    if [[ -z "$out" ]]; then
+      _get_installed_version muse-code 2>/dev/null || _get_installed_version muse 2>/dev/null || true
+    fi
+  }
+  _spin_capture "Detecting Muse Code version" __muse_vl_query
 }
 
 _get_remote_muse_version() {
-  local ver
-  ver="$(curl -fsSL "$CHANNEL_URL" 2>/dev/null | grep -oE '"version"[[:space:]]*:[[:space:]]*"[^"]+"' | cut -d'"' -f4 | head -1)"
-  if [[ -n "$ver" ]]; then
-    echo "$ver"
-    return 0
-  fi
-  curl -fsSL "https://dev.meta.ai/install.sh" 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+~R[0-9.]+' | head -1 || true
+  __muse_vr_query() {
+    local ver
+    ver="$(curl -fsSL "$CHANNEL_URL" 2>/dev/null | grep -oE '"version"[[:space:]]*:[[:space:]]*"[^"]+"' | cut -d'"' -f4 | head -1)"
+    if [[ -n "$ver" ]]; then
+      echo "$ver"
+      return 0
+    fi
+    curl -fsSL "https://dev.meta.ai/install.sh" 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+~R[0-9.]+' | head -1 || true
+  }
+  _spin_capture "Checking Muse Code updates" __muse_vr_query
 }
 
 _update_muse_code() {

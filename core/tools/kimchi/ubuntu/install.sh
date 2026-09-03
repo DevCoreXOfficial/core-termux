@@ -35,7 +35,8 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://github.com/getkimchi/kimchi/releases/latest/download/install.sh | bash &>>"$LOG_FILE"
+  loading "Updating Kimchi" bash -c 'curl -fsSL https://github.com/getkimchi/kimchi/releases/latest/download/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Kimchi"; return 1; }
+  log_success "Kimchi updated to the latest version"
 }
 
 _impl_vlocal() {

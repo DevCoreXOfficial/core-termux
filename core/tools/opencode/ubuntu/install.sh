@@ -35,15 +35,22 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://opencode.ai/install | bash &>>"$LOG_FILE"
+  loading "Updating OpenCode CLI" bash -c 'curl -fsSL https://opencode.ai/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update OpenCode CLI"; return 1; }
+  log_success "OpenCode CLI updated to the latest version"
 }
 
 _impl_vlocal() {
+  __opencode_vl_query() {
   command -v opencode >/dev/null 2>&1 && opencode --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  }
+  _spin_capture "Detecting OpenCode CLI version" __opencode_vl_query
 }
 
 _impl_vremote() {
+  __opencode_vr_query() {
   curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
+  }
+  _spin_capture "Checking OpenCode CLI updates" __opencode_vr_query
 }
 
 case "${1:-}" in

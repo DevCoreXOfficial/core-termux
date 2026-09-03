@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y php
+  loading "Updating PHP" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y php || { log_error "Failed to update PHP"; return 1; }
+  log_success "PHP updated to the latest version"
 }
 
 _impl_vlocal() {
+  __php_vl_query() {
   dpkg -s php 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting PHP version" __php_vl_query
 }
 
 _impl_vremote() {
+  __php_vr_query() {
   apt-cache policy php 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking PHP updates" __php_vr_query
 }
 
 case "${1:-}" in

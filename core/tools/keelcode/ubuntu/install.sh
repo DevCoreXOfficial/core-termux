@@ -55,15 +55,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g @keelcode-ai/keelcode@latest &>>"$LOG_FILE"
+  loading "Updating KeelCode CLI" bash -c '_npm_g install -g @keelcode-ai/keelcode@latest &>>"$LOG_FILE"' || { log_error "Failed to update KeelCode CLI"; return 1; }
+  log_success "KeelCode CLI updated to the latest version"
 }
 
 _impl_vlocal() {
+  __keelcode_vl_query() {
   npm ls -g @keelcode-ai/keelcode --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting KeelCode CLI version" __keelcode_vl_query
 }
 
 _impl_vremote() {
+  __keelcode_vr_query() {
   npm view @keelcode-ai/keelcode version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking KeelCode CLI updates" __keelcode_vr_query
 }
 
 case "${1:-}" in

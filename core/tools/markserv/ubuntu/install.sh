@@ -46,15 +46,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g markserv@latest &>>"$LOG_FILE"
+  loading "Updating Markserv" bash -c '_npm_g install -g markserv@latest &>>"$LOG_FILE"' || { log_error "Failed to update Markserv"; return 1; }
+  log_success "Markserv updated to the latest version"
 }
 
 _impl_vlocal() {
+  __markserv_vl_query() {
   npm ls -g markserv --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Markserv version" __markserv_vl_query
 }
 
 _impl_vremote() {
+  __markserv_vr_query() {
   npm view markserv version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Markserv updates" __markserv_vr_query
 }
 
 case "${1:-}" in

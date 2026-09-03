@@ -46,15 +46,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g live-server@latest &>>"$LOG_FILE"
+  loading "Updating Live Server" bash -c '_npm_g install -g live-server@latest &>>"$LOG_FILE"' || { log_error "Failed to update Live Server"; return 1; }
+  log_success "Live Server updated to the latest version"
 }
 
 _impl_vlocal() {
+  __live_server_vl_query() {
   npm ls -g live-server --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Live Server version" __live_server_vl_query
 }
 
 _impl_vremote() {
+  __live_server_vr_query() {
   npm view live-server version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Live Server updates" __live_server_vr_query
 }
 
 case "${1:-}" in

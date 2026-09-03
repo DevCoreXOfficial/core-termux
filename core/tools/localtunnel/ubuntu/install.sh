@@ -46,15 +46,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g localtunnel@latest &>>"$LOG_FILE"
+  loading "Updating Localtunnel" bash -c '_npm_g install -g localtunnel@latest &>>"$LOG_FILE"' || { log_error "Failed to update Localtunnel"; return 1; }
+  log_success "Localtunnel updated to the latest version"
 }
 
 _impl_vlocal() {
+  __localtunnel_vl_query() {
   npm ls -g localtunnel --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Localtunnel version" __localtunnel_vl_query
 }
 
 _impl_vremote() {
+  __localtunnel_vr_query() {
   npm view localtunnel version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Localtunnel updates" __localtunnel_vr_query
 }
 
 case "${1:-}" in

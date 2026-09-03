@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y wget
+  loading "Updating wget" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y wget || { log_error "Failed to update wget"; return 1; }
+  log_success "wget updated to the latest version"
 }
 
 _impl_vlocal() {
+  __wget_vl_query() {
   dpkg -s wget 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting wget version" __wget_vl_query
 }
 
 _impl_vremote() {
+  __wget_vr_query() {
   apt-cache policy wget 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking wget updates" __wget_vr_query
 }
 
 case "${1:-}" in

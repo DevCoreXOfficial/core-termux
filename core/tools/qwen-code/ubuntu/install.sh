@@ -56,15 +56,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g @qwen-code/qwen-code@latest &>>"$LOG_FILE"
+  loading "Updating Qwen Code" bash -c '_npm_g install -g @qwen-code/qwen-code@latest &>>"$LOG_FILE"' || { log_error "Failed to update Qwen Code"; return 1; }
+  log_success "Qwen Code updated to the latest version"
 }
 
 _impl_vlocal() {
+  __qwen_code_vl_query() {
   npm ls -g @qwen-code/qwen-code --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Qwen Code version" __qwen_code_vl_query
 }
 
 _impl_vremote() {
+  __qwen_code_vr_query() {
   npm view @qwen-code/qwen-code version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Qwen Code updates" __qwen_code_vr_query
 }
 
 case "${1:-}" in

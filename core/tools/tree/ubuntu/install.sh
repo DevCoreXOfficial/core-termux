@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y tree
+  loading "Updating tree" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y tree || { log_error "Failed to update tree"; return 1; }
+  log_success "tree updated to the latest version"
 }
 
 _impl_vlocal() {
+  __tree_vl_query() {
   dpkg -s tree 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting tree version" __tree_vl_query
 }
 
 _impl_vremote() {
+  __tree_vr_query() {
   apt-cache policy tree 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking tree updates" __tree_vr_query
 }
 
 case "${1:-}" in

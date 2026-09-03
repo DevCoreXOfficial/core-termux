@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql postgresql-contrib
+  loading "Updating PostgreSQL" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql postgresql-contrib || { log_error "Failed to update PostgreSQL"; return 1; }
+  log_success "PostgreSQL updated to the latest version"
 }
 
 _impl_vlocal() {
+  __postgresql_vl_query() {
   dpkg -s postgresql 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting PostgreSQL version" __postgresql_vl_query
 }
 
 _impl_vremote() {
+  __postgresql_vr_query() {
   apt-cache policy postgresql 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking PostgreSQL updates" __postgresql_vr_query
 }
 
 case "${1:-}" in

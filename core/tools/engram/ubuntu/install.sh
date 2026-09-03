@@ -22,9 +22,9 @@ _impl_install() {
 }
 _impl_install_impl() {
   command -v go >/dev/null 2>&1 || pm_install golang-go
-  mkdir -p "~/.local/share/core-data/engram" "$HOME/.local/bin" "$HOME/go/bin"
-  git clone --depth 1 https://github.com/Gentleman-Programming/engram.git "~/.local/share/core-data/engram" 2>/dev/null || (cd "~/.local/share/core-data/engram" && git pull --ff-only) &>>"$LOG_FILE"
-  (cd "~/.local/share/core-data/engram" && CGO_ENABLED=0 go install ./cmd/engram) &>>"$LOG_FILE"
+  mkdir -p "$HOME/.local/share/core-data/engram" "$HOME/.local/bin" "$HOME/go/bin"
+  git clone --depth 1 https://github.com/Gentleman-Programming/engram.git "$HOME/.local/share/core-data/engram" 2>/dev/null || (cd "$HOME/.local/share/core-data/engram" && git pull --ff-only) &>>"$LOG_FILE"
+  (cd "$HOME/.local/share/core-data/engram" && CGO_ENABLED=0 go install ./cmd/engram) &>>"$LOG_FILE"
   [ -f "$HOME/go/bin/engram" ] && ln -sf "$HOME/go/bin/engram" "$HOME/.local/bin/engram"
 }
 
@@ -36,12 +36,18 @@ _impl_uninstall() {
 
   rm -f "$HOME/.local/bin/engram" "$HOME/go/bin/engram" 2>/dev/null
   read_confirm_default "Delete ~/.local/share/core-data/engram?" n __a
-  [ "$__a" = y ] && rm -rf "~/.local/share/core-data/engram"
+  [ "$__a" = y ] && rm -rf "$HOME/.local/share/core-data/engram"
 }
 
 _impl_update() {
-  (cd "~/.local/share/core-data/engram" && git pull --ff-only) &>>"$LOG_FILE"
-  (cd "~/.local/share/core-data/engram" && CGO_ENABLED=0 go install ./cmd/engram) &>>"$LOG_FILE"
+  __engram_update_query() {
+    (cd "$HOME/.local/share/core-data/engram" && git pull --ff-only) &>>"$LOG_FILE" || return 1
+    (cd "$HOME/.local/share/core-data/engram" && CGO_ENABLED=0 go install ./cmd/engram) &>>"$LOG_FILE" || return 1
+    [ -f "$HOME/go/bin/engram" ] && ln -sf "$HOME/go/bin/engram" "$HOME/.local/bin/engram"
+    return 0
+  }
+  loading "Updating Engram (git pull + go build)" __engram_update_query || { log_error "Failed to update Engram"; return 1; }
+  log_success "Engram updated to the latest version"
 }
 
 _impl_vlocal() {

@@ -66,15 +66,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g prettier@latest &>>"$LOG_FILE"
+  loading "Updating Prettier" bash -c '_npm_g install -g prettier@latest &>>"$LOG_FILE"' || { log_error "Failed to update Prettier"; return 1; }
+  log_success "Prettier updated to the latest version"
 }
 
 _impl_vlocal() {
+  __prettier_vl_query() {
   npm ls -g prettier --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Prettier version" __prettier_vl_query
 }
 
 _impl_vremote() {
+  __prettier_vr_query() {
   npm view prettier version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Prettier updates" __prettier_vr_query
 }
 
 case "${1:-}" in

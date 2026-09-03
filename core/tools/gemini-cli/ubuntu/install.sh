@@ -56,15 +56,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g @google/gemini-cli@latest &>>"$LOG_FILE"
+  loading "Updating Gemini CLI" bash -c '_npm_g install -g @google/gemini-cli@latest &>>"$LOG_FILE"' || { log_error "Failed to update Gemini CLI"; return 1; }
+  log_success "Gemini CLI updated to the latest version"
 }
 
 _impl_vlocal() {
+  __gemini_cli_vl_query() {
   npm ls -g @google/gemini-cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Gemini CLI version" __gemini_cli_vl_query
 }
 
 _impl_vremote() {
+  __gemini_cli_vr_query() {
   npm view @google/gemini-cli version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Gemini CLI updates" __gemini_cli_vr_query
 }
 
 case "${1:-}" in

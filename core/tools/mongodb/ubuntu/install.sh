@@ -44,7 +44,9 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  $CORE_SUDO apt-get update -qq && $CORE_SUDO apt-get install -y mongodb-org mongodb-mongosh
+  $CORE_SUDO apt-get update -qq
+  loading "Updating MongoDB" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y mongodb-org mongodb-mongosh || { log_error "Failed to update MongoDB"; return 1; }
+  log_success "MongoDB updated to the latest version"
 }
 
 _impl_vlocal() {

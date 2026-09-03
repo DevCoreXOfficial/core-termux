@@ -66,15 +66,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g vercel@latest &>>"$LOG_FILE"
+  loading "Updating Vercel CLI" bash -c '_npm_g install -g vercel@latest &>>"$LOG_FILE"' || { log_error "Failed to update Vercel CLI"; return 1; }
+  log_success "Vercel CLI updated to the latest version"
 }
 
 _impl_vlocal() {
+  __vercel_vl_query() {
   npm ls -g vercel --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting Vercel CLI version" __vercel_vl_query
 }
 
 _impl_vremote() {
+  __vercel_vr_query() {
   npm view vercel version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking Vercel CLI updates" __vercel_vr_query
 }
 
 case "${1:-}" in

@@ -56,15 +56,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g freebuff@latest &>>"$LOG_FILE"
+  loading "Updating freebuff" bash -c '_npm_g install -g freebuff@latest &>>"$LOG_FILE"' || { log_error "Failed to update freebuff"; return 1; }
+  log_success "freebuff updated to the latest version"
 }
 
 _impl_vlocal() {
+  __freebuff_vl_query() {
   npm ls -g freebuff --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting freebuff version" __freebuff_vl_query
 }
 
 _impl_vremote() {
+  __freebuff_vr_query() {
   npm view freebuff version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking freebuff updates" __freebuff_vr_query
 }
 
 case "${1:-}" in

@@ -25,7 +25,8 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://omp.sh/install | bash &>>"$LOG_FILE"
+  loading "Updating Oh My Pi" bash -c 'curl -fsSL https://omp.sh/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update Oh My Pi"; return 1; }
+  log_success "Oh My Pi updated to the latest version"
 }
 
 _impl_vlocal() {

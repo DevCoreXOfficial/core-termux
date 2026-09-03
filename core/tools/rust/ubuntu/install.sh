@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential curl && curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh && source "$HOME/.cargo/env"
+  loading "Updating Rust" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential curl && curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh && source "$HOME/.cargo/env" || { log_error "Failed to update Rust"; return 1; }
+  log_success "Rust updated to the latest version"
 }
 
 _impl_vlocal() {
+  __rust_vl_query() {
   dpkg -s build-essential 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting Rust version" __rust_vl_query
 }
 
 _impl_vremote() {
+  __rust_vr_query() {
   apt-cache policy build-essential 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking Rust updates" __rust_vr_query
 }
 
 case "${1:-}" in

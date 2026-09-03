@@ -66,15 +66,22 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g ngrok@latest &>>"$LOG_FILE"
+  loading "Updating ngrok" bash -c '_npm_g install -g ngrok@latest &>>"$LOG_FILE"' || { log_error "Failed to update ngrok"; return 1; }
+  log_success "ngrok updated to the latest version"
 }
 
 _impl_vlocal() {
+  __ngrok_vl_query() {
   npm ls -g ngrok --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  }
+  _spin_capture "Detecting ngrok version" __ngrok_vl_query
 }
 
 _impl_vremote() {
+  __ngrok_vr_query() {
   npm view ngrok version 2>/dev/null | head -1
+  }
+  _spin_capture "Checking ngrok updates" __ngrok_vr_query
 }
 
 case "${1:-}" in

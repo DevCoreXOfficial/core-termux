@@ -37,7 +37,8 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://antigravity.google/cli/install.sh | bash &>>"$LOG_FILE"
+  loading "Updating Antigravity" bash -c 'curl -fsSL https://antigravity.google/cli/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Antigravity"; return 1; }
+  log_success "Antigravity updated to the latest version"
 }
 
 _impl_vlocal() {

@@ -35,15 +35,22 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://mimo.xiaomi.com/install | bash &>>"$LOG_FILE"
+  loading "Updating Mimo Code" bash -c 'curl -fsSL https://mimo.xiaomi.com/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update Mimo Code"; return 1; }
+  log_success "Mimo Code updated to the latest version"
 }
 
 _impl_vlocal() {
-  command -v mimo >/dev/null 2>&1 && mimo --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  __mimocode_vl_query() {
+    command -v mimo >/dev/null 2>&1 && mimo --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  }
+  _spin_capture "Detecting Mimo Code version" __mimocode_vl_query
 }
 
 _impl_vremote() {
-  curl -fsSL https://api.github.com/repos/XiaomiMiMo/MiMo-Code/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
+  __mimocode_vr_query() {
+    curl -fsSL https://api.github.com/repos/XiaomiMiMo/MiMo-Code/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
+  }
+  _spin_capture "Checking Mimo Code updates" __mimocode_vr_query
 }
 
 case "${1:-}" in

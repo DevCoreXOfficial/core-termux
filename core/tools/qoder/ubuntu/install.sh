@@ -35,7 +35,8 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  curl -fsSL https://qoder.com/install | bash &>>"$LOG_FILE"
+  loading "Updating Qoder CLI" bash -c 'curl -fsSL https://qoder.com/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update Qoder CLI"; return 1; }
+  log_success "Qoder CLI updated to the latest version"
 }
 
 _impl_vlocal() {

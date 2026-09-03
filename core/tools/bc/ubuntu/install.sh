@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y bc
+  loading "Updating bc" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y bc || { log_error "Failed to update bc"; return 1; }
+  log_success "bc updated to the latest version"
 }
 
 _impl_vlocal() {
+  __bc_vl_query() {
   dpkg -s bc 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting bc version" __bc_vl_query
 }
 
 _impl_vremote() {
+  __bc_vr_query() {
   apt-cache policy bc 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking bc updates" __bc_vr_query
 }
 
 case "${1:-}" in

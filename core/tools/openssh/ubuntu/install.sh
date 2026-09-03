@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-server
+  loading "Updating OpenSSH Server" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-server || { log_error "Failed to update OpenSSH Server"; return 1; }
+  log_success "OpenSSH Server updated to the latest version"
 }
 
 _impl_vlocal() {
+  __openssh_vl_query() {
   dpkg -s openssh-server 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting OpenSSH Server version" __openssh_vl_query
 }
 
 _impl_vremote() {
+  __openssh_vr_query() {
   apt-cache policy openssh-server 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking OpenSSH Server updates" __openssh_vr_query
 }
 
 case "${1:-}" in

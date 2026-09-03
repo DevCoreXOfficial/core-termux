@@ -43,15 +43,22 @@ _impl_uninstall() {
 
 _impl_update() {
   $CORE_SUDO apt-get update -qq
-  $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y ncurses-bin
+  loading "Updating ncurses-utils" $CORE_SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y ncurses-bin || { log_error "Failed to update ncurses-utils"; return 1; }
+  log_success "ncurses-utils updated to the latest version"
 }
 
 _impl_vlocal() {
+  __ncurses_vl_query() {
   dpkg -s ncurses-bin 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Detecting ncurses-utils version" __ncurses_vl_query
 }
 
 _impl_vremote() {
+  __ncurses_vr_query() {
   apt-cache policy ncurses-bin 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  }
+  _spin_capture "Checking ncurses-utils updates" __ncurses_vr_query
 }
 
 case "${1:-}" in
