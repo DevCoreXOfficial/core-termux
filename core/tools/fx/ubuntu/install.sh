@@ -19,7 +19,7 @@ _impl_install() {
   echo
 
   mkdir -p "$HOME/.local/bin"
-  curl -fsSL https://fx.sh/setup.sh | bash &>>"$LOG_FILE"
+  loading "Installing fx" bash -c 'curl -fsSL https://fx.sh/setup.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to install fx"; return 1; }
 }
 
 _impl_uninstall() {
@@ -28,9 +28,7 @@ _impl_uninstall() {
   separator
   echo
 
-  log_info "Removing binaries..."
-  command -v "fx" >/dev/null 2>&1 && rm -f "$(command -v fx)"
-  rm -f "$HOME/.local/bin/fx" 2>/dev/null
+  loading "Removing fx" bash -c 'command -v "fx" >/dev/null 2>&1 && rm -f "$(command -v fx)"; rm -f "$HOME/.local/bin/fx" 2>/dev/null'
 }
 
 _impl_update() {

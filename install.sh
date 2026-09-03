@@ -329,7 +329,7 @@ main() {
   VERSION=$(grep CORE_VERSION "$INSTALL_DIR/core/core/utils/env.sh" | cut -d'"' -f2)
   separator
   echo
-  echo -e "  ${P_OK}✔${P_NC} Core v$VERSION installed successfully"
+  echo -e "  ${P_OK}✔${P_NC} ${P_PRIMARY}Core${P_NC} v$VERSION installed successfully"
   echo
   echo -e "  Run ${P_PRIMARY}core${P_NC} to get started"
   echo

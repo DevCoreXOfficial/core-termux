@@ -42,7 +42,7 @@ _impl_install() {
 
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
-  _npm_g install -g @deepseek-ai/dsh &>>"$LOG_FILE"
+  loading "Installing DeepSeek Harness" bash -c '_npm_g install -g @deepseek-ai/dsh &>>"$LOG_FILE"' || { log_error "Failed to install DeepSeek Harness"; return 1; }
 }
 
 _impl_uninstall() {
@@ -51,7 +51,7 @@ _impl_uninstall() {
   separator
   echo
 
-  _npm_g uninstall -g @deepseek-ai/dsh &>>"$LOG_FILE" || true
+  loading "Removing DeepSeek Harness" bash -c '_npm_g uninstall -g @deepseek-ai/dsh &>>"$LOG_FILE" || true'
 }
 
 _impl_update() {

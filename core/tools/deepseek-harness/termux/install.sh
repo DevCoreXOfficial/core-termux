@@ -62,7 +62,6 @@ install_deepseek-harness() {
 	box_large "Installing DeepSeek Harness"
 	separator
 	echo
-	log_info "Installing DeepSeek Harness (dsh)..."
 
 	mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -89,7 +88,6 @@ uninstall_deepseek-harness() {
 		"$HOME/.dsh" \
 		"$HOME/.config/dsh"
 
-	log_info "Uninstalling DeepSeek Harness..."
 	mkdir -p "$(dirname "$LOG_FILE")"
 
 	loading "Removing DeepSeek Harness" _uninstall_dsh_impl
@@ -111,18 +109,10 @@ update_deepseek-harness() {
 }
 
 _update_dsh() {
-	_update_dsh_impl
+  loading "Updating DeepSeek Harness" _update_dsh_impl
 }
 
 _update_dsh_impl() {
-	_update_dsh_npm
-}
-
-_update_dsh_npm() {
-  loading "Updating DeepSeek Harness" _update_dsh_npm_impl
-}
-
-_update_dsh_npm_impl() {
   if ! npm update -g @deepseek-ai/dsh &>>"$LOG_FILE"; then
     log_error "Failed to update DeepSeek Harness"
     return 1

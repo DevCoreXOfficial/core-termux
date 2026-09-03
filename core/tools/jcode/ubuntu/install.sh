@@ -19,7 +19,7 @@ _impl_install() {
   echo
 
   mkdir -p "$HOME/.local/bin"
-  curl -fsSL https://jcode.sh/install | bash &>>"$LOG_FILE"
+  loading "Installing Jcode" bash -c 'curl -fsSL https://jcode.sh/install | bash &>>"$LOG_FILE"' || { log_error "Failed to install Jcode"; return 1; }
 }
 
 _impl_uninstall() {
@@ -28,9 +28,7 @@ _impl_uninstall() {
   separator
   echo
 
-  log_info "Removing binaries..."
-  command -v "jcode" >/dev/null 2>&1 && rm -f "$(command -v jcode)"
-  rm -f "$HOME/.local/bin/jcode" 2>/dev/null
+  loading "Removing Jcode" bash -c 'command -v "jcode" >/dev/null 2>&1 && rm -f "$(command -v jcode)"; rm -f "$HOME/.local/bin/jcode" 2>/dev/null'
 }
 
 _impl_update() {

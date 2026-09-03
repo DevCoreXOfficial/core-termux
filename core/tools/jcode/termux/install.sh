@@ -58,7 +58,6 @@ install_jcode() {
   box_large "Installing Jcode"
   separator
   echo
-  log_info "Installing Jcode..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -85,7 +84,6 @@ uninstall_jcode() {
     "$HOME/.jcode" \
     "$HOME/.config/jcode"
 
-  log_info "Uninstalling Jcode..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
   loading "Removing Jcode" _uninstall_jcode_impl
@@ -110,14 +108,10 @@ update_jcode() {
 }
 
 _update_jcode() {
-  _update_jcode_impl
+  loading "Updating Jcode" _update_jcode_impl
 }
 
 _update_jcode_impl() {
-  loading "Updating Jcode" _update_jcode_binary
-}
-
-_update_jcode_binary() {
   if ! curl -fsSL https://jcode.sh/install | bash &>>"$LOG_FILE"; then
     log_error "Failed to update Jcode"
     return 1

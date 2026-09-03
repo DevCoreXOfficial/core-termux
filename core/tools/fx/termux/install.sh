@@ -34,7 +34,6 @@ install_fx() {
   box_large "Installing fx"
   separator
   echo
-  log_info "Installing fx..."
 
   mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -60,7 +59,6 @@ uninstall_fx() {
     "$HOME/.fx" \
     "$HOME/.config/fx"
 
-  log_info "Uninstalling fx..."
   mkdir -p "$(dirname "$LOG_FILE")"
 
   loading "Removing fx" _uninstall_fx_impl
@@ -84,14 +82,10 @@ update_fx() {
 }
 
 _update_fx() {
-  _update_fx_impl
+  loading "Updating fx" _update_fx_impl
 }
 
 _update_fx_impl() {
-  loading "Updating fx" _update_fx_binary
-}
-
-_update_fx_binary() {
   if ! curl -fsSL https://fx.sh/setup.sh | bash &>>"$LOG_FILE"; then
     log_error "Failed to update fx"
     return 1
