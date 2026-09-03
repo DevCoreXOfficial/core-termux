@@ -1,0 +1,52 @@
+{
+  "name": "deepseek-harness",
+  "display": "DeepSeek Harness",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "dsh",
+  "homepage": "https://deepseek.com/harness",
+  "dependencies": [
+    {
+      "name": "nodejs",
+      "check": "node",
+      "pkg": {
+        "termux": "nodejs-lts",
+        "ubuntu": "nodejs npm"
+      }
+    },
+    {
+      "name": "clang",
+      "check": "clang",
+      "pkg": {
+        "termux": "clang",
+        "ubuntu": "clang"
+      }
+    },
+    {
+      "name": "make",
+      "check": "make",
+      "pkg": {
+        "termux": "make",
+        "ubuntu": "build-essential"
+      }
+    },
+    {
+      "name": "cmake",
+      "check": "cmake",
+      "pkg": {
+        "termux": "cmake",
+        "ubuntu": "cmake"
+      }
+    }
+  ],
+  "description": "DeepSeek Harness: open-source agent harness with everything-is-a-plugin architecture",
+  "tags": [
+    "ai",
+    "agent",
+    "coding",
+    "deepseek"
+  ]
+}

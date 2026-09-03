@@ -1,0 +1,18 @@
+{
+  "name": "jcode",
+  "display": "Jcode",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "jcode",
+  "homepage": "https://jcode.sh",
+  "dependencies": [],
+  "description": "The most RAM efficient and intelligent coding agent harness, written in Rust",
+  "tags": [
+    "ai",
+    "agent",
+    "coding"
+  ]
+}
