@@ -59,11 +59,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  npm ls -g github:vikasprogrammer/walkie --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  _get_installed_version walkie
 }
 
 _impl_vremote() {
-  npm view github:vikasprogrammer/walkie version 2>/dev/null | head -1
+  _get_remote_github_version vikasprogrammer/walkie
 }
 
 case "${1:-}" in

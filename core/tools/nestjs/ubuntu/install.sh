@@ -70,11 +70,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  npm ls -g cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  npm ls -g @nestjs/cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
 }
 
 _impl_vremote() {
-  npm view cli version 2>/dev/null | head -1
+  npm view @nestjs/cli version 2>/dev/null | head -1
 }
 
 case "${1:-}" in

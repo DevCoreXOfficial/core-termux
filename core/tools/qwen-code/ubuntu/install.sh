@@ -60,11 +60,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  npm ls -g qwen-code --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  npm ls -g @qwen-code/qwen-code --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
 }
 
 _impl_vremote() {
-  npm view qwen-code version 2>/dev/null | head -1
+  npm view @qwen-code/qwen-code version 2>/dev/null | head -1
 }
 
 case "${1:-}" in

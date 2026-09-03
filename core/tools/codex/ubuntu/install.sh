@@ -60,11 +60,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  npm ls -g codex --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  npm ls -g @openai/codex --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
 }
 
 _impl_vremote() {
-  npm view codex version 2>/dev/null | head -1
+  npm view @openai/codex version 2>/dev/null | head -1
 }
 
 case "${1:-}" in
