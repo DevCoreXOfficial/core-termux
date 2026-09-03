@@ -592,8 +592,27 @@ _update_walkie() {
   return 0
 }
 
+# Remote version must resolve the same git spec the installer uses
+# (github:vikasprogrammer/walkie, package name `walkie-sh`). The GitHub
+# repo has no releases/tags and the npm `walkie-sh` package is a frozen
+# 1.4.0 artifact, so query the git spec via npm (npm >= 10 understands
+# it) and fall back to the upstream package.json on the default branch.
+# NOTE: `_walkie_remote_version` must be defined before it is used by
+# the verb dispatcher at the bottom of this file.
+WALKIE_PKG_JSON_URL="https://raw.githubusercontent.com/vikasprogrammer/walkie/master/package.json"
+
+_walkie_remote_version() {
+  local v
+  v=$(npm view github:vikasprogrammer/walkie version 2>/dev/null | head -1)
+  if [ -z "$v" ]; then
+    v=$(_spin_capture "Checking Walkie upstream" bash -c \
+      "curl -fsSL '$WALKIE_PKG_JSON_URL' 2>/dev/null | grep '\"version\"' | head -1 | sed 's/[^0-9.]//g'")
+  fi
+  echo "$v"
+}
+
 update_walkie() {
-  _check_update_needed "Walkie" "$(_get_installed_version walkie)" "$(_get_remote_github_version vikasprogrammer/walkie)" _update_walkie
+  _check_update_needed "Walkie" "$(_get_installed_version walkie)" "$(_walkie_remote_version)" _update_walkie
 }
 
 reinstall_walkie() {
@@ -607,4 +626,4 @@ if [[ "${1:-}" == "uninstall" ]]; then uninstall_walkie; fi
 if [[ "${1:-}" == "update" ]]; then update_walkie; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_walkie; fi
 if [[ "${1:-}" == "version-local" ]]; then _get_installed_version walkie; fi
-if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version walkie-ai/walkie; fi
+if [[ "${1:-}" == "version-remote" ]]; then _walkie_remote_version; fi

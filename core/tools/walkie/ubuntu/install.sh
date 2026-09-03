@@ -12,6 +12,13 @@ core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
+# Upstream has no npm-hosted release channel: the CLI ships from the
+# GitHub repo (github:vikasprogrammer/walkie -> package name `walkie-sh`,
+# which is a different, frozen 1.4.0 artifact on the npm registry). Keep
+# install/update/version sources pointing at the same git source.
+WALKIE_SPEC="github:vikasprogrammer/walkie"
+WALKIE_PKG_JSON_URL="https://raw.githubusercontent.com/vikasprogrammer/walkie/master/package.json"
+
 # Global installs can hit a root-owned npm prefix (distro nodejs).
 _npm_g() {
   npm "$@" &>>"$LOG_FILE" || {
@@ -41,7 +48,7 @@ _impl_install() {
   echo
 
   _impl_require_npm
-  _npm_g install -g github:vikasprogrammer/walkie &>>"$LOG_FILE"
+  _npm_g install -g "$WALKIE_SPEC" &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
@@ -50,20 +57,36 @@ _impl_uninstall() {
   separator
   echo
 
-  _npm_g uninstall -g github:vikasprogrammer/walkie &>>"$LOG_FILE" || true
+  _npm_g uninstall -g "$WALKIE_SPEC" &>>"$LOG_FILE" || true
 }
 
 _impl_update() {
   _impl_require_npm
-  _npm_g install -g github:vikasprogrammer/walkie@latest &>>"$LOG_FILE"
+  _npm_g install -g "${WALKIE_SPEC}" &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {
-  _get_installed_version walkie
+  # `npm ls` cannot resolve a git spec, so query the installed package
+  # name (walkie-sh) and fall back to its global package.json.
+  local v
+  v=$(npm ls -g walkie-sh --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1)
+  if [ -z "$v" ]; then
+    v=$(_spin_capture "Detecting Walkie version" bash -c \
+      "curl -fsSL \"\$(npm prefix -g)/lib/node_modules/walkie-sh/package.json\" 2>/dev/null | grep '\"version\"' | head -1 | sed 's/[^0-9.]//g'")
+  fi
+  echo "$v"
 }
 
 _impl_vremote() {
-  _get_remote_github_version vikasprogrammer/walkie
+  # Resolve the installed git spec directly (works on modern npm);
+  # fall back to the upstream package.json on the default branch.
+  local v
+  v=$(npm view "$WALKIE_SPEC" version 2>/dev/null | head -1)
+  if [ -z "$v" ]; then
+    v=$(_spin_capture "Checking Walkie upstream" bash -c \
+      "curl -fsSL '$WALKIE_PKG_JSON_URL' 2>/dev/null | grep '\"version\"' | head -1 | sed 's/[^0-9.]//g'")
+  fi
+  echo "$v"
 }
 
 case "${1:-}" in
