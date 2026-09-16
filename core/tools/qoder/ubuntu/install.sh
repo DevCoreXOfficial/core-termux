@@ -12,6 +12,7 @@ import "@/lib/engine"
 core_detect_platform
 
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
+QODER_MANIFEST_URL="https://qoder-ide.oss-accelerate.aliyuncs.com/qodercli/channels/manifest.json"
 
 _impl_install() {
   separator
@@ -56,7 +57,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _get_remote_github_version "qoder-ai/qoder"
+  _spin_capture "Checking Qoder updates" bash -c "curl -fsSL '$QODER_MANIFEST_URL' 2>/dev/null | sed -n 's/.*\"latest\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\".*/\1/p'"
 }
 
 case "${1:-}" in
