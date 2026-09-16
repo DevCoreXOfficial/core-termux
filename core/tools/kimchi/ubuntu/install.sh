@@ -48,11 +48,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Kimchi version" bash -c "_get_installed_version kimchi"
+  _get_installed_version "kimchi" "--version" "Kimchi"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Kimchi updates" bash -c "_get_remote_github_version getkimchi/kimchi"
+  _get_remote_github_version "getkimchi/kimchi"
 }
 
 case "${1:-}" in

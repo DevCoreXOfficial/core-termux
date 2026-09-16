@@ -52,11 +52,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Hermes Agent version" bash -c "_get_installed_version hermes"
+  _get_installed_version "hermes" "--version" "Hermes Agent"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Hermes Agent updates" bash -c "_get_remote_github_version NousResearch/hermes-agent"
+  _get_remote_github_version "NousResearch/hermes-agent"
 }
 
 case "${1:-}" in

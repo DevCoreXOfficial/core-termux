@@ -48,11 +48,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Droid Factory version" bash -c "_get_installed_version droid"
+  _get_installed_version "droid" "--version" "Droid Factory"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Droid Factory updates" bash -c "_get_remote_github_version droid-factory/droid-factory"
+  _get_remote_github_version "droid-factory/droid-factory"
 }
 
 case "${1:-}" in

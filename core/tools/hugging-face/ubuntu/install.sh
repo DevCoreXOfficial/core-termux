@@ -48,11 +48,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Hugging Face version" bash -c "_get_installed_version hf"
+  _get_installed_version "hf" "--version" "Hugging Face"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Hugging Face updates" bash -c "_get_remote_pip_version huggingface_hub"
+  _get_remote_pip_version "huggingface_hub"
 }
 
 case "${1:-}" in

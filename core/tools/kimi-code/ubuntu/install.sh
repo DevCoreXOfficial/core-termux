@@ -48,11 +48,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Kimi Code version" bash -c "_get_installed_version kimi"
+  _get_installed_version "kimi" "--version" "Kimi Code"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Kimi Code updates" bash -c "_get_remote_npm_version @moonshot-ai/kimi-code"
+  _get_remote_npm_version "@moonshot-ai/kimi-code"
 }
 
 case "${1:-}" in

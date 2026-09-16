@@ -35,12 +35,18 @@ _impl_require_npm() {
 }
 
 _impl_install() {
-  _impl_require_npm
-  mkdir -p "$HOME/.local/bin"
-  _npm_g install -g live-server &>>"$LOG_FILE"
+  separator
+  box_large "Installing Live Server"
+  separator
+  echo
+
+  loading "Installing Live Server" _impl_install_impl
 }
 
 _impl_install_impl() {
+  _impl_require_npm
+  mkdir -p "$HOME/.local/bin"
+  _npm_g install -g live-server &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {

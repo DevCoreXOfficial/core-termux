@@ -54,11 +54,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Mongodb version" bash -c "_get_installed_version mongosh"
+  _get_installed_version "mongosh" "--version" "MongoDB"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Mongodb updates" bash -c "_get_remote_github_version mongodb/mongosh"
+  _get_remote_github_version "mongodb/mongosh"
 }
 
 case "${1:-}" in

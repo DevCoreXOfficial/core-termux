@@ -51,11 +51,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Engram version" bash -c "_get_installed_version engram"
+  _get_installed_version "engram" "--version" "Engram"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Engram updates" bash -c "_get_remote_github_version Gentleman-Programming/engram"
+  _get_remote_github_version "Gentleman-Programming/engram"
 }
 
 case "${1:-}" in

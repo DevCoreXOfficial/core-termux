@@ -48,11 +48,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Gentle Ai version" bash -c "_get_installed_version gentle-ai"
+  _get_installed_version "gentle-ai" "--version" "Gentle AI"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Gentle Ai updates" bash -c "_get_remote_github_version Gentleman-Programming/gentle-ai"
+  _get_remote_github_version "Gentleman-Programming/gentle-ai"
 }
 
 case "${1:-}" in

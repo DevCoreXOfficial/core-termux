@@ -44,11 +44,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Cursor version" bash -c "_get_installed_version cursor"
+  _get_installed_version "cursor" "--version" "Cursor"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Cursor updates" bash -c "_get_remote_github_version anthropics/cursor"
+  _get_remote_github_version "anthropics/cursor"
 }
 
 case "${1:-}" in

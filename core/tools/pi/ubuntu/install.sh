@@ -48,11 +48,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Pi version" bash -c "_get_installed_version pi"
+  _get_installed_version "pi" "--version" "PI"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Pi updates" bash -c "_get_remote_npm_version @earendil-works/pi-coding-agent"
+  _get_remote_npm_version "@earendil-works/pi-coding-agent"
 }
 
 case "${1:-}" in

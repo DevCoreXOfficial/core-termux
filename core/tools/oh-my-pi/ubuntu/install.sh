@@ -13,13 +13,19 @@ core_detect_platform
 LOG_FILE="${LOG_FILE:-$CORE_CACHE/install.log}"
 
 _impl_install() {
+  separator
+  box_large "Installing Oh My Pi"
+  separator
+  echo
+
+  loading "Installing Oh My Pi" _impl_install_impl
+}
+
+_impl_install_impl() {
   mkdir -p "$HOME/.local/bin"
   curl -fsSL https://omp.sh/install | bash &>>"$LOG_FILE"
   # Expose binaries from well-known script locations.
   for d in "$HOME/.local/bin" "$HOME/bin"; do [[ -d "$d" ]] && case ":$PATH:" in *":$d:"*) ;; *) export PATH="$d:$PATH";; esac; done
-}
-
-_impl_install_impl() {
 }
 
 _impl_uninstall() {
@@ -37,28 +43,16 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Oh My Pi version" bash -c "_get_installed_version omp"
+  _get_installed_version "omp" "--version" "Oh My Pi"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Oh My Pi updates" bash -c "_get_remote_github_version ohmyzsh/ohmyzsh"
+  _get_remote_github_version "ohmyzsh/ohmyzsh"
 }
 
 case "${1:-}" in
-  install)
-    separator
-    box_large "Installing Oh My Pi"
-    separator
-    echo
-
-    _impl_install ;;
-  uninstall)
-    separator
-    box_large "Uninstalling Oh My Pi"
-    separator
-    echo
-
-    _impl_uninstall ;;
+  install)    _impl_install ;;
+  uninstall)  _impl_uninstall ;;
   update)     _check_update_needed "Oh-My-Pi" "$(_impl_vlocal)" "$(_impl_vremote)" _impl_update ;;
   reinstall)  _impl_install ;;
   *)

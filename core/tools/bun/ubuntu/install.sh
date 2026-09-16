@@ -58,11 +58,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Bun version" bash -c "_get_installed_version bun"
+  _get_installed_version "bun" "--version" "Bun"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Bun updates" bash -c "_get_remote_github_version oven-sh/bun"
+  _get_remote_github_version "oven-sh/bun"
 }
 
 case "${1:-}" in

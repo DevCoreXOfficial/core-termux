@@ -48,11 +48,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Mistral Vibe version" bash -c "_get_installed_version vibe"
+  _get_installed_version "vibe" "--version" "Mistral Vibe"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Mistral Vibe updates" bash -c "_get_remote_pip_version mistral-vibe"
+  _get_remote_pip_version "mistral-vibe"
 }
 
 case "${1:-}" in
