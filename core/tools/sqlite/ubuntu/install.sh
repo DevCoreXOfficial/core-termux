@@ -48,11 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  dpkg -s sqlite3 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  _spin_capture "Detecting Sqlite version" bash -c "dpkg -s sqlite3 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1"
 }
 
 _impl_vremote() {
-  apt-cache policy sqlite3 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  _spin_capture "Checking Sqlite updates" bash -c "apt-cache policy sqlite3 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1"
 }
 
 case "${1:-}" in

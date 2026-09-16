@@ -48,11 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  dpkg -s clang 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  _spin_capture "Detecting Clang version" bash -c "dpkg -s clang 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1"
 }
 
 _impl_vremote() {
-  apt-cache policy clang 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  _spin_capture "Checking Clang updates" bash -c "apt-cache policy clang 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1"
 }
 
 case "${1:-}" in

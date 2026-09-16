@@ -48,11 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  dpkg -s jq 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
+  _spin_capture "Detecting Jq version" bash -c "dpkg -s jq 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1"
 }
 
 _impl_vremote() {
-  apt-cache policy jq 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
+  _spin_capture "Checking Jq updates" bash -c "apt-cache policy jq 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1"
 }
 
 case "${1:-}" in

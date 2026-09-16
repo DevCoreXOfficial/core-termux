@@ -51,11 +51,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  gh --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  _spin_capture "Detecting Gh version" bash -c "gh --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
 }
 
 _impl_vremote() {
-  curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d v
+  _spin_capture "Checking Gh updates" bash -c "curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d v"
 }
 
 case "${1:-}" in

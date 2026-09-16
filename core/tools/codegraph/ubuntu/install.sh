@@ -40,11 +40,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _get_installed_version codegraph
+  _spin_capture "Detecting Codegraph version" bash -c "_get_installed_version codegraph"
 }
 
 _impl_vremote() {
-  _get_remote_github_version colbymchenry/codegraph
+  _spin_capture "Checking Codegraph updates" bash -c "_get_remote_github_version colbymchenry/codegraph"
 }
 
 case "${1:-}" in

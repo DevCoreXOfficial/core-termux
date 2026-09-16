@@ -50,11 +50,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _get_installed_version mongosh
+  _spin_capture "Detecting Mongodb version" bash -c "_get_installed_version mongosh"
 }
 
 _impl_vremote() {
-  _get_remote_github_version mongodb/mongosh
+  _spin_capture "Checking Mongodb updates" bash -c "_get_remote_github_version mongodb/mongosh"
 }
 
 case "${1:-}" in

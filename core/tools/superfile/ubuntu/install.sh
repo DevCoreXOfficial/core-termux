@@ -36,11 +36,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  command -v spf >/dev/null 2>&1 && spf --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  _spin_capture "Detecting Superfile version" bash -c "command -v spf >/dev/null 2>&1 && spf --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
 }
 
 _impl_vremote() {
-  curl -fsSL https://api.github.com/repos/yorukot/superfile/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
+  _spin_capture "Checking Superfile updates" bash -c "curl -fsSL https://api.github.com/repos/yorukot/superfile/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'"
 }
 
 case "${1:-}" in

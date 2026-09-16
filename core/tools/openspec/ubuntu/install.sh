@@ -65,11 +65,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  npm ls -g @fission-ai/openspec --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  _spin_capture "Detecting Openspec version" bash -c "npm ls -g @fission-ai/openspec --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1"
 }
 
 _impl_vremote() {
-  npm view @fission-ai/openspec version 2>/dev/null | head -1
+  _spin_capture "Checking Openspec updates" bash -c "npm view @fission-ai/openspec version 2>/dev/null | head -1"
 }
 
 case "${1:-}" in

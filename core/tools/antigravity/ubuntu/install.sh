@@ -42,11 +42,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _get_installed_version agy
+  _spin_capture "Detecting Antigravity version" bash -c "_get_installed_version agy"
 }
 
 _impl_vremote() {
-  _get_remote_github_version antigravity-ai/antigravity-cli
+  _spin_capture "Checking Antigravity updates" bash -c "_get_remote_github_version antigravity-ai/antigravity-cli"
 }
 
 case "${1:-}" in

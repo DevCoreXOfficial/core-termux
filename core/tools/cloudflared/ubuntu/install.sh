@@ -50,11 +50,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  cloudflared --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  _spin_capture "Detecting Cloudflared version" bash -c "cloudflared --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
 }
 
 _impl_vremote() {
-  curl -fsSL https://api.github.com/repos/cloudflare/cloudflared/releases/latest | grep '"tag_name"' | cut -d'"' -f4
+  _spin_capture "Checking Cloudflared updates" bash -c "curl -fsSL https://api.github.com/repos/cloudflare/cloudflared/releases/latest | grep '"tag_name"' | cut -d'"' -f4"
 }
 
 case "${1:-}" in

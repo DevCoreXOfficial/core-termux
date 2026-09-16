@@ -81,21 +81,21 @@ __walkie_update_query() {
 }
 
 _impl_vlocal() {
-  local v
+  _spin_capture "Detecting Walkie version" bash -c "local v
     v=$(npm ls -g walkie-sh --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1)
     if [ -z "$v" ]; then
       v=$(curl -fsSL "$(npm prefix -g)/lib/node_modules/walkie-sh/package.json" 2>/dev/null | grep '"version"' | head -1 | sed 's/[^0-9.]//g')
     fi
-    echo "$v"
+    echo "$v""
 }
 
 _impl_vremote() {
-  local v
+  _spin_capture "Checking Walkie updates" bash -c "local v
     v=$(npm view "$WALKIE_SPEC" version 2>/dev/null | head -1)
     if [ -z "$v" ]; then
       v=$(curl -fsSL "$WALKIE_PKG_JSON_URL" 2>/dev/null | grep '"version"' | head -1 | sed 's/[^0-9.]//g')
     fi
-    echo "$v"
+    echo "$v""
 }
 
 case "${1:-}" in

@@ -75,11 +75,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  npm ls -g @nestjs/cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  _spin_capture "Detecting Nestjs version" bash -c "npm ls -g @nestjs/cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1"
 }
 
 _impl_vremote() {
-  npm view @nestjs/cli version 2>/dev/null | head -1
+  _spin_capture "Checking Nestjs updates" bash -c "npm view @nestjs/cli version 2>/dev/null | head -1"
 }
 
 case "${1:-}" in

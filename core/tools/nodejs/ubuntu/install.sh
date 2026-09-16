@@ -78,13 +78,13 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  node --version 2>/dev/null | tr -d v
+  _spin_capture "Detecting Nodejs version" bash -c "node --version 2>/dev/null | tr -d v"
 }
 
 _impl_vremote() {
-  # Official distribution index: first entry is the newest release line.
+  _spin_capture "Checking Nodejs updates" bash -c "# Official distribution index: first entry is the newest release line.
   curl -fsSL https://nodejs.org/dist/index.json 2>/dev/null \
-    | jq -r '[.[] | select(.lts)][0].version' | tr -d v
+    | jq -r '[.[] | select(.lts)][0].version' | tr -d v"
 }
 
 case "${1:-install}" in

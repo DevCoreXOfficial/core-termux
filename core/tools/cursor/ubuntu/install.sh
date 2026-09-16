@@ -36,11 +36,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _get_installed_version cursor
+  _spin_capture "Detecting Cursor version" bash -c "_get_installed_version cursor"
 }
 
 _impl_vremote() {
-  _get_remote_github_version anthropics/cursor
+  _spin_capture "Checking Cursor updates" bash -c "_get_remote_github_version anthropics/cursor"
 }
 
 case "${1:-}" in

@@ -40,11 +40,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  command -v opencode >/dev/null 2>&1 && opencode --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
+  _spin_capture "Detecting Opencode version" bash -c "command -v opencode >/dev/null 2>&1 && opencode --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
 }
 
 _impl_vremote() {
-  curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
+  _spin_capture "Checking Opencode updates" bash -c "curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'"
 }
 
 case "${1:-}" in

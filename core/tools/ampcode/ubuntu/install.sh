@@ -40,11 +40,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _get_installed_version amp
+  _spin_capture "Detecting Ampcode version" bash -c "_get_installed_version amp"
 }
 
 _impl_vremote() {
-  _get_remote_github_version anthropics/amp
+  _spin_capture "Checking Ampcode updates" bash -c "_get_remote_github_version anthropics/amp"
 }
 
 case "${1:-}" in

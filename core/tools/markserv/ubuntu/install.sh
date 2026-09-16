@@ -55,11 +55,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  npm ls -g markserv --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
+  _spin_capture "Detecting Markserv version" bash -c "npm ls -g markserv --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1"
 }
 
 _impl_vremote() {
-  npm view markserv version 2>/dev/null | head -1
+  _spin_capture "Checking Markserv updates" bash -c "npm view markserv version 2>/dev/null | head -1"
 }
 
 case "${1:-}" in

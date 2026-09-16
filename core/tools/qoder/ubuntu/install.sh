@@ -40,11 +40,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _get_installed_version qodercli
+  _spin_capture "Detecting Qoder version" bash -c "_get_installed_version qodercli"
 }
 
 _impl_vremote() {
-  _get_remote_github_version qoder-ai/qoder
+  _spin_capture "Checking Qoder updates" bash -c "_get_remote_github_version qoder-ai/qoder"
 }
 
 case "${1:-}" in

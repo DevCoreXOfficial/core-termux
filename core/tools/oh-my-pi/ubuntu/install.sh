@@ -30,11 +30,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _get_installed_version omp
+  _spin_capture "Detecting Oh My Pi version" bash -c "_get_installed_version omp"
 }
 
 _impl_vremote() {
-  _get_remote_github_version ohmyzsh/ohmyzsh
+  _spin_capture "Checking Oh My Pi updates" bash -c "_get_remote_github_version ohmyzsh/ohmyzsh"
 }
 
 case "${1:-}" in
