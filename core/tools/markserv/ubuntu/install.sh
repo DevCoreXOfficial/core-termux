@@ -55,7 +55,7 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Markserv version" bash -c "command -v markserv >/dev/null 2>&1 && markserv --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1"
+  _spin_capture "Detecting Markserv version" bash -c 'command -v markserv >/dev/null 2>&1 && markserv --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

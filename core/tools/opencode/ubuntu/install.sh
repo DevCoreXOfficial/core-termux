@@ -40,7 +40,7 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Opencode version" bash -c "command -v opencode >/dev/null 2>&1 && opencode --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
+  _spin_capture "Detecting Opencode version" bash -c 'command -v opencode >/dev/null 2>&1 && opencode --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

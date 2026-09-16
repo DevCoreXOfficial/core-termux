@@ -75,7 +75,7 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting N8N version" bash -c "command -v n8n >/dev/null 2>&1 && n8n --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1"
+  _spin_capture "Detecting N8N version" bash -c 'command -v n8n >/dev/null 2>&1 && n8n --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

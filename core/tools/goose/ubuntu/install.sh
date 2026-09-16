@@ -40,7 +40,7 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Goose version" bash -c "command -v goose >/dev/null 2>&1 && goose --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
+  _spin_capture "Detecting Goose version" bash -c 'command -v goose >/dev/null 2>&1 && goose --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
 }
 
 _impl_vremote() {

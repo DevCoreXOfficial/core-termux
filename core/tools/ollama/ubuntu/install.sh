@@ -50,7 +50,7 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Ollama version" bash -c "command -v ollama >/dev/null 2>&1 && ollama --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
+  _spin_capture "Detecting Ollama version" bash -c 'command -v ollama >/dev/null 2>&1 && ollama --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
 }
 
 _impl_vremote() {
