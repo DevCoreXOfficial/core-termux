@@ -15,7 +15,11 @@ _impl_install() {
   separator
   echo
 
-  DEST="$HOME/.local/share/core-data/gentleman-guardian-angel"
+  loading "Installing GGA" _impl_install_impl
+}
+
+_impl_install_impl() {
+DEST="$HOME/.local/share/core-data/gentleman-guardian-angel"
   mkdir -p "$DEST"
   git clone --depth 1 https://github.com/Gentleman-Programming/gentleman-guardian-angel.git "$DEST" 2>/dev/null || (cd "$DEST" && git pull --ff-only) &>>"$LOG_FILE"
   (cd "$DEST" && bash ./install.sh </dev/null) &>>"$LOG_FILE"

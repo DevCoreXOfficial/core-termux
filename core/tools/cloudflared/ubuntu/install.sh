@@ -23,7 +23,11 @@ _impl_install() {
   separator
   echo
 
-  curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | $CORE_SUDO tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+  loading "Installing Cloudflared" _impl_install_impl
+}
+
+_impl_install_impl() {
+curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | $CORE_SUDO tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
   echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | $CORE_SUDO tee /etc/apt/sources.list.d/cloudflared.list >/dev/null
   pm_install cloudflared
 }

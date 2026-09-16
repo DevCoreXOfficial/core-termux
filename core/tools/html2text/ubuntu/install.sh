@@ -23,7 +23,11 @@ _impl_install() {
   separator
   echo
 
-  mkdir -p "$HOME/.local/bin"
+  loading "Installing html2text" _impl_install_impl
+}
+
+_impl_install_impl() {
+mkdir -p "$HOME/.local/bin"
   pm_install html2text
 }
 

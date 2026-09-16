@@ -18,7 +18,11 @@ _impl_install() {
   separator
   echo
 
-  curl -fsSL https://superfile.dev/install.sh | bash &>>"$LOG_FILE"
+  loading "Installing SuperFile" _impl_install_impl
+}
+
+_impl_install_impl() {
+curl -fsSL https://superfile.dev/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {

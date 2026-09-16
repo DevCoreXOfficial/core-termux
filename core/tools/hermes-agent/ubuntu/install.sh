@@ -18,7 +18,11 @@ _impl_install() {
   separator
   echo
 
-  # Official prerequisites (docs): git, curl, xz-utils on Debian/Ubuntu.
+  loading "Installing Hermes Agent" _impl_install_impl
+}
+
+_impl_install_impl() {
+# Official prerequisites (docs): git, curl, xz-utils on Debian/Ubuntu.
   pm_install git curl xz-utils ca-certificates
   mkdir -p "$HOME/.local/bin" "$HOME/.local/opt"
   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash &>>"$LOG_FILE"

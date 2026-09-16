@@ -40,6 +40,9 @@ _impl_install() {
   _npm_g install -g markserv &>>"$LOG_FILE"
 }
 
+_impl_install_impl() {
+}
+
 _impl_uninstall() {
   _npm_g uninstall -g markserv &>>"$LOG_FILE" || true
 }

@@ -23,7 +23,11 @@ _impl_install() {
   separator
   echo
 
-  mkdir -p "$HOME/.local/bin"
+  loading "Installing Rust" _impl_install_impl
+}
+
+_impl_install_impl() {
+mkdir -p "$HOME/.local/bin"
   pm_install build-essential curl && curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh && source "$HOME/.cargo/env"
 }
 

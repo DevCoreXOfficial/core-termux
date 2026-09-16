@@ -18,7 +18,11 @@ _impl_install() {
   separator
   echo
 
-  curl -fsSL https://cursor.com/install | bash &>>"$LOG_FILE"
+  loading "Installing Cursor" _impl_install_impl
+}
+
+_impl_install_impl() {
+curl -fsSL https://cursor.com/install | bash &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {

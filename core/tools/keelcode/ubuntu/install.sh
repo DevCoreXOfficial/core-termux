@@ -40,7 +40,11 @@ _impl_install() {
   separator
   echo
 
-  _impl_require_npm
+  loading "Installing KeelCode" _impl_install_impl
+}
+
+_impl_install_impl() {
+_impl_require_npm
   _npm_g install -g @keelcode-ai/keelcode &>>"$LOG_FILE"
 }
 

@@ -6,6 +6,7 @@ CORE_TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$CORE_PATH/utils/bootstrap.sh"
 import "@/utils/env"
 import "@/utils/log"
+import "@/utils/version"
 import "@/lib/platform"
 import "@/lib/engine"
 core_detect_platform
@@ -18,6 +19,10 @@ _impl_install() {
   separator
   echo
 
+  loading "Installing Qoder CLI" _impl_install_impl
+}
+
+_impl_install_impl() {
   mkdir -p "$HOME/.local/bin"
   curl -fsSL https://qoder.com/install | bash &>>"$LOG_FILE"
   # Expose binaries from well-known script locations.
@@ -44,11 +49,11 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Qoder version" bash -c "_get_installed_version qodercli"
+  _get_installed_version "qodercli" "--version" "Qoder"
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Qoder updates" bash -c "_get_remote_github_version qoder-ai/qoder"
+  _get_remote_github_version "qoder-ai/qoder"
 }
 
 case "${1:-}" in

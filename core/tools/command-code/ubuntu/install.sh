@@ -40,7 +40,11 @@ _impl_install() {
   separator
   echo
 
-  _impl_require_npm
+  loading "Installing Command Code" _impl_install_impl
+}
+
+_impl_install_impl() {
+_impl_require_npm
   mkdir -p "$HOME/.local/bin"
   _npm_g install -g command-code &>>"$LOG_FILE"
 }

@@ -23,7 +23,11 @@ _impl_install() {
   separator
   echo
 
-  mkdir -p "$HOME/.local/bin"
+  loading "Installing Bun" _impl_install_impl
+}
+
+_impl_install_impl() {
+mkdir -p "$HOME/.local/bin"
   curl -fsSL https://bun.sh/install | bash &>>"$LOG_FILE"
   # Expose binaries from well-known script locations.
   for d in "$HOME/.local/bin" "$HOME/bin"; do [[ -d "$d" ]] && case ":$PATH:" in *":$d:"*) ;; *) export PATH="$d:$PATH";; esac; done

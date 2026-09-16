@@ -23,7 +23,11 @@ _impl_install() {
   separator
   echo
 
-  pm_install golang-go
+  loading "Installing Go" _impl_install_impl
+}
+
+_impl_install_impl() {
+pm_install golang-go
 
   # Go environment (user dirs + go/bin on PATH) in every shell config.
   for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do

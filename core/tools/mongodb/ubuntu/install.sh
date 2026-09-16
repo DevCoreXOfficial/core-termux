@@ -23,7 +23,11 @@ _impl_install() {
   separator
   echo
 
-  curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | $CORE_SUDO gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+  loading "Installing MongoDB" _impl_install_impl
+}
+
+_impl_install_impl() {
+curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | $CORE_SUDO gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
   echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/8.0 multiverse" | $CORE_SUDO tee /etc/apt/sources.list.d/mongodb-org-8.0.list >/dev/null
   pm_install mongodb-org mongodb-mongosh
 }
