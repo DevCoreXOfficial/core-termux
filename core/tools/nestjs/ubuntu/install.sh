@@ -54,13 +54,11 @@ _impl_uninstall() {
   if ! command -v nest &>/dev/null; then
     log_info "NestJS is not installed"
     return 2
+  local bin_path
+  bin_path="$(command -v nestjs 2>/dev/null)"
+  if [[ -n "$bin_path" ]]; then
+    rm -f "$bin_path" || $CORE_SUDO rm -f "$bin_path" || true
   fi
-
-  separator
-  box_large "Uninstalling NestJS"
-  separator
-  echo
-
   _npm_g uninstall -g @nestjs/cli &>>"$LOG_FILE" || true
 }
 
@@ -71,11 +69,11 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g @nestjs/cli@latest &>>"$LOG_FILE"
+  _npm_g install -g @nestjs/cli@latest
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Nestjs version" bash -c 'command -v cli >/dev/null 2>&1 && cli --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
+  _spin_capture "Detecting Nestjs version" bash -c 'command -v nest >/dev/null 2>&1 && nest --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

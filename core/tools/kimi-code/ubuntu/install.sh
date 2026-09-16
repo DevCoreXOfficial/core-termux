@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Kimi Code CLI" bash -c 'curl -fsSL https://code.kimi.com/kimi-code/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Kimi Code CLI"; return 1; }
+  loading "Updating Kimi Code CLI" _impl_update_impl || { log_error "Failed to update Kimi Code CLI"; return 1; }
   log_success "Kimi Code CLI updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://code.kimi.com/kimi-code/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

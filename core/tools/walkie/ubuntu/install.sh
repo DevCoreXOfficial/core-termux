@@ -81,7 +81,7 @@ __walkie_update_query() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Walkie version" bash -c 'command -v walkie-sh >/dev/null 2>&1 && walkie-sh --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
+  _spin_capture "Detecting Walkie version" bash -c 'command -v walkie >/dev/null 2>&1 && walkie --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

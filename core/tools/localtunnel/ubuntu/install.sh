@@ -51,11 +51,11 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g localtunnel@latest &>>"$LOG_FILE"
+  _npm_g install -g localtunnel@latest
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Localtunnel version" bash -c 'command -v localtunnel >/dev/null 2>&1 && localtunnel --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
+  _spin_capture "Detecting Localtunnel version" bash -c 'command -v lt >/dev/null 2>&1 && lt --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

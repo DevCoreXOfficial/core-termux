@@ -49,8 +49,11 @@ _impl_uninstall() {
   separator
   box_large "Uninstalling Gemini CLI"
   separator
-  echo
-
+  local bin_path
+  bin_path="$(command -v gemini-cli 2>/dev/null)"
+  if [[ -n "$bin_path" ]]; then
+    rm -f "$bin_path" || $CORE_SUDO rm -f "$bin_path" || true
+  fi
   _npm_g uninstall -g @google/gemini-cli &>>"$LOG_FILE" || true
 }
 
@@ -61,11 +64,11 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g @google/gemini-cli@latest &>>"$LOG_FILE"
+  _npm_g install -g @google/gemini-cli@latest
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Gemini Cli version" bash -c 'command -v gemini-cli >/dev/null 2>&1 && gemini-cli --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
+  _spin_capture "Detecting Gemini Cli version" bash -c 'command -v gemini >/dev/null 2>&1 && gemini --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating CodeGraph" bash -c 'curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update CodeGraph"; return 1; }
+  loading "Updating CodeGraph" _impl_update_impl || { log_error "Failed to update CodeGraph"; return 1; }
   log_success "CodeGraph updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

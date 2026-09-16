@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Claude Code" bash -c 'curl -fsSL https://claude.ai/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Claude Code"; return 1; }
+  loading "Updating Claude Code" _impl_update_impl || { log_error "Failed to update Claude Code"; return 1; }
   log_success "Claude Code updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://claude.ai/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {
@@ -44,7 +48,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Claude Code updates" bash -c "curl -fsSL https://api.github.com/repos/anthropics/claude-code/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//""
+  _spin_capture "Checking Claude Code updates" bash -c 'curl -fsSL https://api.github.com/repos/anthropics/claude-code/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"' 
 }
 
 case "${1:-}" in

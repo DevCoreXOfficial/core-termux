@@ -19,7 +19,7 @@ _impl_install() {
   echo
 
   mkdir -p "$HOME/.local/bin"
-  loading "Installing fx" bash -c 'curl -fsSL https://fx.sh/setup.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to install fx"; return 1; }
+  loading "Installing fx" _impl_update_impl || { log_error "Failed to install fx"; return 1; }
 }
 
 _impl_uninstall() {
@@ -32,8 +32,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating fx" bash -c 'curl -fsSL https://fx.sh/setup.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update fx"; return 1; }
+  loading "Updating fx" _impl_update_impl || { log_error "Failed to update fx"; return 1; }
   log_success "fx updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://fx.sh/setup.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {
@@ -41,7 +45,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Fx updates" bash -c "curl -fsSL https://api.github.com/repos/vercel-labs/fx/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//""
+  _spin_capture "Checking Fx updates" bash -c 'curl -fsSL https://api.github.com/repos/vercel-labs/fx/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"' 
 }
 
 case "${1:-}" in

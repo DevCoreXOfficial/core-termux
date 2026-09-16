@@ -51,7 +51,7 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g markserv@latest &>>"$LOG_FILE"
+  _npm_g install -g markserv@latest
 }
 
 _impl_vlocal() {

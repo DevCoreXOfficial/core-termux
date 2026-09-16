@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Mistral Vibe" bash -c 'curl -fsSL https://mistral.ai/vibe/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Mistral Vibe"; return 1; }
+  loading "Updating Mistral Vibe" _impl_update_impl || { log_error "Failed to update Mistral Vibe"; return 1; }
   log_success "Mistral Vibe updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://mistral.ai/vibe/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

@@ -48,8 +48,11 @@ _impl_uninstall() {
   separator
   box_large "Uninstalling KeelCode"
   separator
-  echo
-
+  local bin_path
+  bin_path="$(command -v keelcode 2>/dev/null)"
+  if [[ -n "$bin_path" ]]; then
+    rm -f "$bin_path" || $CORE_SUDO rm -f "$bin_path" || true
+  fi
   _npm_g uninstall -g @keelcode-ai/keelcode &>>"$LOG_FILE" || true
 }
 
@@ -60,7 +63,7 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g @keelcode-ai/keelcode@latest &>>"$LOG_FILE"
+  _npm_g install -g @keelcode-ai/keelcode@latest
 }
 
 _impl_vlocal() {

@@ -51,7 +51,7 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g live-server@latest &>>"$LOG_FILE"
+  _npm_g install -g live-server@latest
 }
 
 _impl_vlocal() {

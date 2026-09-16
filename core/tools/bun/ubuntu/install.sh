@@ -45,8 +45,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Bun" bash -c 'curl -fsSL https://bun.sh/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update Bun"; return 1; }
+  loading "Updating Bun" _impl_update_impl || { log_error "Failed to update Bun"; return 1; }
   log_success "Bun updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://bun.sh/install | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

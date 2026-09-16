@@ -31,8 +31,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Cursor CLI" bash -c 'curl -fsSL https://cursor.com/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update Cursor CLI"; return 1; }
+  loading "Updating Cursor CLI" _impl_update_impl || { log_error "Failed to update Cursor CLI"; return 1; }
   log_success "Cursor CLI updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://cursor.com/install | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

@@ -54,13 +54,11 @@ _impl_uninstall() {
   if ! command -v ncu &>/dev/null; then
     log_info "ncu is not installed"
     return 2
+  local bin_path
+  bin_path="$(command -v ncu 2>/dev/null)"
+  if [[ -n "$bin_path" ]]; then
+    rm -f "$bin_path" || $CORE_SUDO rm -f "$bin_path" || true
   fi
-
-  separator
-  box_large "Uninstalling ncu"
-  separator
-  echo
-
   _npm_g uninstall -g npm-check-updates &>>"$LOG_FILE" || true
 }
 
@@ -71,7 +69,7 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g npm-check-updates@latest &>>"$LOG_FILE"
+  _npm_g install -g npm-check-updates@latest
 }
 
 _impl_vlocal() {

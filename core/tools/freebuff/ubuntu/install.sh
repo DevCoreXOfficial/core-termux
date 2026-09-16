@@ -49,8 +49,11 @@ _impl_uninstall() {
   separator
   box_large "Uninstalling FreeBuff"
   separator
-  echo
-
+  local bin_path
+  bin_path="$(command -v freebuff 2>/dev/null)"
+  if [[ -n "$bin_path" ]]; then
+    rm -f "$bin_path" || $CORE_SUDO rm -f "$bin_path" || true
+  fi
   _npm_g uninstall -g freebuff &>>"$LOG_FILE" || true
 }
 
@@ -61,7 +64,7 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g freebuff@latest &>>"$LOG_FILE"
+  _npm_g install -g freebuff@latest
 }
 
 _impl_vlocal() {

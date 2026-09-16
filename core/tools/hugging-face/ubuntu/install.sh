@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Hugging Face" bash -c 'curl -fsSL https://hf.co/cli/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Hugging Face"; return 1; }
+  loading "Updating Hugging Face" _impl_update_impl || { log_error "Failed to update Hugging Face"; return 1; }
   log_success "Hugging Face updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://hf.co/cli/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

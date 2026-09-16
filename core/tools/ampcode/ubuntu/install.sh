@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Amp Code" bash -c 'curl -fsSL https://ampcode.com/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Amp Code"; return 1; }
+  loading "Updating Amp Code" _impl_update_impl || { log_error "Failed to update Amp Code"; return 1; }
   log_success "Amp Code updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://ampcode.com/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

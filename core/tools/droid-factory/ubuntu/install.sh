@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Droid Factory" bash -c 'curl -fsSL https://app.factory.ai/cli | bash &>>"$LOG_FILE"' || { log_error "Failed to update Droid Factory"; return 1; }
+  loading "Updating Droid Factory" _impl_update_impl || { log_error "Failed to update Droid Factory"; return 1; }
   log_success "Droid Factory updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://app.factory.ai/cli | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

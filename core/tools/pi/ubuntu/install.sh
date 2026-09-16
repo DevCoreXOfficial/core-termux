@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Pi Coding Agent" bash -c 'curl -fsSL https://pi.dev/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Pi Coding Agent"; return 1; }
+  loading "Updating Pi Coding Agent" _impl_update_impl || { log_error "Failed to update Pi Coding Agent"; return 1; }
   log_success "Pi Coding Agent updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://pi.dev/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

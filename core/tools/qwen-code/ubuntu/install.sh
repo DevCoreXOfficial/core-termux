@@ -49,8 +49,11 @@ _impl_uninstall() {
   separator
   box_large "Uninstalling Qwen Code"
   separator
-  echo
-
+  local bin_path
+  bin_path="$(command -v qwen-code 2>/dev/null)"
+  if [[ -n "$bin_path" ]]; then
+    rm -f "$bin_path" || $CORE_SUDO rm -f "$bin_path" || true
+  fi
   _npm_g uninstall -g @qwen-code/qwen-code &>>"$LOG_FILE" || true
 }
 
@@ -61,11 +64,11 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g @qwen-code/qwen-code@latest &>>"$LOG_FILE"
+  _npm_g install -g @qwen-code/qwen-code@latest
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Qwen Code version" bash -c 'command -v qwen-code >/dev/null 2>&1 && qwen-code --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
+  _spin_capture "Detecting Qwen Code version" bash -c 'command -v qwen >/dev/null 2>&1 && qwen --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {

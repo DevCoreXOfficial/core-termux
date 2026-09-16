@@ -19,7 +19,7 @@ _impl_install() {
   echo
 
   mkdir -p "$HOME/.local/bin"
-  loading "Installing Jcode" bash -c 'curl -fsSL https://jcode.sh/install | bash &>>"$LOG_FILE"' || { log_error "Failed to install Jcode"; return 1; }
+  loading "Installing Jcode" _impl_update_impl || { log_error "Failed to install Jcode"; return 1; }
 }
 
 _impl_uninstall() {
@@ -32,8 +32,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Jcode" bash -c 'curl -fsSL https://jcode.sh/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update Jcode"; return 1; }
+  loading "Updating Jcode" _impl_update_impl || { log_error "Failed to update Jcode"; return 1; }
   log_success "Jcode updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://jcode.sh/install | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {
@@ -41,7 +45,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Jcode updates" bash -c "curl -fsSL https://api.github.com/repos/1jehuang/jcode/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//""
+  _spin_capture "Checking Jcode updates" bash -c 'curl -fsSL https://api.github.com/repos/1jehuang/jcode/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"' 
 }
 
 case "${1:-}" in

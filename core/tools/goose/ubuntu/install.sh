@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating goose" bash -c 'curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update goose"; return 1; }
+  loading "Updating goose" _impl_update_impl || { log_error "Failed to update goose"; return 1; }
   log_success "goose updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {
@@ -44,7 +48,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Goose updates" bash -c "curl -fsSL https://api.github.com/repos/aaif-goose/goose/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//""
+  _spin_capture "Checking Goose updates" bash -c 'curl -fsSL https://api.github.com/repos/aaif-goose/goose/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"' 
 }
 
 case "${1:-}" in

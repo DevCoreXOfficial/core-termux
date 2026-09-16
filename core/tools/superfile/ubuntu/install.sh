@@ -31,8 +31,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Superfile" bash -c 'curl -fsSL https://superfile.dev/install.sh | bash &>>"$LOG_FILE"' || { log_error "Failed to update Superfile"; return 1; }
+  loading "Updating Superfile" _impl_update_impl || { log_error "Failed to update Superfile"; return 1; }
   log_success "Superfile updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://superfile.dev/install.sh | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {
@@ -40,7 +44,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Superfile updates" bash -c "curl -fsSL https://api.github.com/repos/yorukot/superfile/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//""
+  _spin_capture "Checking Superfile updates" bash -c 'curl -fsSL https://api.github.com/repos/yorukot/superfile/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"' 
 }
 
 case "${1:-}" in

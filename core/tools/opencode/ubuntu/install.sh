@@ -35,8 +35,12 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating OpenCode CLI" bash -c 'curl -fsSL https://opencode.ai/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update OpenCode CLI"; return 1; }
+  loading "Updating OpenCode CLI" _impl_update_impl || { log_error "Failed to update OpenCode CLI"; return 1; }
   log_success "OpenCode CLI updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://opencode.ai/install | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {

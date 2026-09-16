@@ -35,16 +35,20 @@ _impl_uninstall() {
 }
 
 _impl_update() {
-  loading "Updating Mimo Code" bash -c 'curl -fsSL https://mimo.xiaomi.com/install | bash &>>"$LOG_FILE"' || { log_error "Failed to update Mimo Code"; return 1; }
-  log_success "Mimo Code updated to the latest version"
+  loading "Updating MiMo Code" _impl_update_impl || { log_error "Failed to update MiMo Code"; return 1; }
+  log_success "MiMo Code updated to the latest version"
+}
+
+_impl_update_impl() {
+  curl -fsSL https://mimo.xiaomi.com/install | bash &>>"$LOG_FILE"
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Mimocode version" bash -c 'command -v mimo >/dev/null 2>&1 && mimo --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1"
+  _spin_capture "Detecting Mimocode version" bash -c 'command -v mimo >/dev/null 2>&1 && mimo --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Mimocode updates" bash -c "curl -fsSL https://api.github.com/repos/XiaomiMiMo/MiMo-Code/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//""
+  _spin_capture "Checking Mimocode updates" bash -c 'curl -fsSL https://api.github.com/repos/XiaomiMiMo/MiMo-Code/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"' 
 }
 
 case "${1:-}" in

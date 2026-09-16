@@ -54,13 +54,11 @@ _impl_uninstall() {
   if ! command -v tsc &>/dev/null; then
     log_info "TypeScript is not installed"
     return 2
+  local bin_path
+  bin_path="$(command -v typescript 2>/dev/null)"
+  if [[ -n "$bin_path" ]]; then
+    rm -f "$bin_path" || $CORE_SUDO rm -f "$bin_path" || true
   fi
-
-  separator
-  box_large "Uninstalling TypeScript"
-  separator
-  echo
-
   _npm_g uninstall -g typescript &>>"$LOG_FILE" || true
 }
 
@@ -71,11 +69,11 @@ _impl_update() {
 }
 
 _impl_update_impl() {
-  _npm_g install -g typescript@latest &>>"$LOG_FILE"
+  _npm_g install -g typescript@latest
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Typescript version" bash -c 'command -v typescript >/dev/null 2>&1 && typescript --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
+  _spin_capture "Detecting Typescript version" bash -c 'command -v tsc >/dev/null 2>&1 && tsc --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1'
 }
 
 _impl_vremote() {
