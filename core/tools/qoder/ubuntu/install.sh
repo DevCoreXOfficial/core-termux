@@ -27,6 +27,9 @@ _impl_install_impl() {
   curl -fsSL https://qoder.com/install | bash &>>"$LOG_FILE"
   # Expose binaries from well-known script locations.
   for d in "$HOME/.local/bin" "$HOME/bin"; do [[ -d "$d" ]] && case ":$PATH:" in *":$d:"*) ;; *) export PATH="$d:$PATH";; esac; done
+  # Verify installation succeeded regardless of curl exit code
+  command -v qodercli &>/dev/null && return 0
+  return 1
 }
 
 _impl_uninstall() {
