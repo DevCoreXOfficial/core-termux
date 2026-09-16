@@ -44,7 +44,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Opencode updates" bash -c "curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'"
+  _spin_capture "Checking Opencode updates" bash -c 'curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"'
 }
 
 case "${1:-}" in

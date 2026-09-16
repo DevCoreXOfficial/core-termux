@@ -65,7 +65,7 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Qwen Code version" bash -c "npm ls -g @qwen-code/qwen-code --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1"
+  _spin_capture "Detecting Qwen Code version" bash -c "command -v qwen-code >/dev/null 2>&1 && qwen-code --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1"
 }
 
 _impl_vremote() {

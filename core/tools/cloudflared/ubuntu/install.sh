@@ -54,7 +54,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Cloudflared updates" bash -c "curl -fsSL https://api.github.com/repos/cloudflare/cloudflared/releases/latest | grep '"tag_name"' | cut -d'"' -f4"
+  _spin_capture "Checking Cloudflared updates" bash -c "curl -fsSL https://api.github.com/repos/cloudflare/cloudflared/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4"
 }
 
 case "${1:-}" in

@@ -65,7 +65,7 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Cline version" bash -c "npm ls -g cline --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1"
+  _spin_capture "Detecting Cline version" bash -c "command -v cline >/dev/null 2>&1 && cline --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1"
 }
 
 _impl_vremote() {

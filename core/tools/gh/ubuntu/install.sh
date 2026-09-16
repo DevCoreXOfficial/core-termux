@@ -55,7 +55,7 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Gh updates" bash -c "curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d v"
+  _spin_capture "Checking Gh updates" bash -c "curl -fsSL https://api.github.com/repos/cli/cli/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | tr -d v"
 }
 
 case "${1:-}" in

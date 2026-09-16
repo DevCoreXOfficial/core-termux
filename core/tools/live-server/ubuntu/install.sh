@@ -55,7 +55,7 @@ _impl_update_impl() {
 }
 
 _impl_vlocal() {
-  _spin_capture "Detecting Live Server version" bash -c "npm ls -g live-server --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1"
+  _spin_capture "Detecting Live Server version" bash -c "command -v live-server >/dev/null 2>&1 && live-server --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1"
 }
 
 _impl_vremote() {
