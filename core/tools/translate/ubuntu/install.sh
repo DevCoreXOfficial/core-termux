@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __translate_vl_query() {
   dpkg -s translate-shell 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting Translate Shell version" __translate_vl_query
 }
 
 _impl_vremote() {
-  __translate_vr_query() {
   apt-cache policy translate-shell 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking Translate Shell updates" __translate_vr_query
 }
 
 case "${1:-}" in

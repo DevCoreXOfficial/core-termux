@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __rust_vl_query() {
   dpkg -s build-essential 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting Rust version" __rust_vl_query
 }
 
 _impl_vremote() {
-  __rust_vr_query() {
   apt-cache policy build-essential 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking Rust updates" __rust_vr_query
 }
 
 case "${1:-}" in

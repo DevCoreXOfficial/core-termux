@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __php_vl_query() {
   dpkg -s php 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting PHP version" __php_vl_query
 }
 
 _impl_vremote() {
-  __php_vr_query() {
   apt-cache policy php 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking PHP updates" __php_vr_query
 }
 
 case "${1:-}" in

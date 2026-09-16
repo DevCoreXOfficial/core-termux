@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __imagemagick_vl_query() {
   dpkg -s imagemagick 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting ImageMagick version" __imagemagick_vl_query
 }
 
 _impl_vremote() {
-  __imagemagick_vr_query() {
   apt-cache policy imagemagick 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking ImageMagick updates" __imagemagick_vr_query
 }
 
 case "${1:-}" in

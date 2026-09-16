@@ -42,7 +42,7 @@ _impl_install() {
 
   _impl_require_npm
   mkdir -p "$HOME/.local/bin"
-  loading "Installing DeepSeek Harness" bash -c '_npm_g install -g @deepseek-ai/dsh &>>"$LOG_FILE"' || { log_error "Failed to install DeepSeek Harness"; return 1; }
+  _npm_g install -g @deepseek-ai/dsh &>>"$LOG_FILE"
 }
 
 _impl_uninstall() {
@@ -51,27 +51,25 @@ _impl_uninstall() {
   separator
   echo
 
-  loading "Removing DeepSeek Harness" bash -c '_npm_g uninstall -g @deepseek-ai/dsh &>>"$LOG_FILE" || true'
+  _npm_g uninstall -g @deepseek-ai/dsh &>>"$LOG_FILE" || true
 }
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating DeepSeek Harness" bash -c '_npm_g install -g @deepseek-ai/dsh@latest &>>"$LOG_FILE"' || { log_error "Failed to update DeepSeek Harness"; return 1; }
+  loading "Updating DeepSeek Harness" _impl_update_impl || { log_error "Failed to update DeepSeek Harness"; return 1; }
   log_success "DeepSeek Harness updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g @deepseek-ai/dsh@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __dsh_vl_query() {
   npm ls -g @deepseek-ai/dsh --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting DeepSeek Harness version" __dsh_vl_query
 }
 
 _impl_vremote() {
-  __dsh_vr_query() {
   npm view @deepseek-ai/dsh version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking DeepSeek Harness updates" __dsh_vr_query
 }
 
 case "${1:-}" in

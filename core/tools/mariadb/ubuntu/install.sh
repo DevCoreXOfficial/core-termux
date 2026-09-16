@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __mariadb_vl_query() {
   dpkg -s mysql-server 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting MariaDB version" __mariadb_vl_query
 }
 
 _impl_vremote() {
-  __mariadb_vr_query() {
   apt-cache policy mysql-server 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking MariaDB updates" __mariadb_vr_query
 }
 
 case "${1:-}" in

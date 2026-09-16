@@ -56,22 +56,20 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating OpenClaude" bash -c '_npm_g install -g @gitlawb/openclaude@latest &>>"$LOG_FILE"' || { log_error "Failed to update OpenClaude"; return 1; }
+  loading "Updating OpenClaude" _impl_update_impl || { log_error "Failed to update OpenClaude"; return 1; }
   log_success "OpenClaude updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g @gitlawb/openclaude@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __openclaude_vl_query() {
   npm ls -g @gitlawb/openclaude --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting OpenClaude version" __openclaude_vl_query
 }
 
 _impl_vremote() {
-  __openclaude_vr_query() {
   npm view @gitlawb/openclaude version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking OpenClaude updates" __openclaude_vr_query
 }
 
 case "${1:-}" in

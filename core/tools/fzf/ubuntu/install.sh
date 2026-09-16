@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __fzf_vl_query() {
   dpkg -s fzf 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting fzf version" __fzf_vl_query
 }
 
 _impl_vremote() {
-  __fzf_vr_query() {
   apt-cache policy fzf 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking fzf updates" __fzf_vr_query
 }
 
 case "${1:-}" in

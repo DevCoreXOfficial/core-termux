@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __postgresql_vl_query() {
   dpkg -s postgresql 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting PostgreSQL version" __postgresql_vl_query
 }
 
 _impl_vremote() {
-  __postgresql_vr_query() {
   apt-cache policy postgresql 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking PostgreSQL updates" __postgresql_vr_query
 }
 
 case "${1:-}" in

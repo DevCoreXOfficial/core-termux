@@ -37,17 +37,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __jcode_vl_query() {
   command -v jcode >/dev/null 2>&1 && jcode --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1
-  }
-  _spin_capture "Detecting Jcode version" __jcode_vl_query
 }
 
 _impl_vremote() {
-  __jcode_vr_query() {
   curl -fsSL https://api.github.com/repos/1jehuang/jcode/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
-  }
-  _spin_capture "Checking Jcode updates" __jcode_vr_query
 }
 
 case "${1:-}" in

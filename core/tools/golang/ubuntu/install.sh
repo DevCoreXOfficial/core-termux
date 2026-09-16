@@ -64,17 +64,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __golang_vl_query() {
   dpkg -s golang-go 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting Go version" __golang_vl_query
 }
 
 _impl_vremote() {
-  __golang_vr_query() {
   apt-cache policy golang-go 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking Go updates" __golang_vr_query
 }
 
 case "${1:-}" in

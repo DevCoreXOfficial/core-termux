@@ -50,17 +50,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __bat_vl_query() {
   dpkg -s bat 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting bat version" __bat_vl_query
 }
 
 _impl_vremote() {
-  __bat_vr_query() {
   apt-cache policy bat 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking bat updates" __bat_vr_query
 }
 
 case "${1:-}" in

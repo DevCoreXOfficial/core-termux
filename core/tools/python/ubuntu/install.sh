@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __python_vl_query() {
   dpkg -s python3 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting Python version" __python_vl_query
 }
 
 _impl_vremote() {
-  __python_vr_query() {
   apt-cache policy python3 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking Python updates" __python_vr_query
 }
 
 case "${1:-}" in

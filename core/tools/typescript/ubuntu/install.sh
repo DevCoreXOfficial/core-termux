@@ -66,22 +66,20 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating TypeScript" bash -c '_npm_g install -g typescript@latest &>>"$LOG_FILE"' || { log_error "Failed to update TypeScript"; return 1; }
+  loading "Updating TypeScript" _impl_update_impl || { log_error "Failed to update TypeScript"; return 1; }
   log_success "TypeScript updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g typescript@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __typescript_vl_query() {
   npm ls -g typescript --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting TypeScript version" __typescript_vl_query
 }
 
 _impl_vremote() {
-  __typescript_vr_query() {
   npm view typescript version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking TypeScript updates" __typescript_vr_query
 }
 
 case "${1:-}" in

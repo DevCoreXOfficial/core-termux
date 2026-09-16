@@ -40,17 +40,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __goose_vl_query() {
   command -v goose >/dev/null 2>&1 && goose --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
-  }
-  _spin_capture "Detecting goose version" __goose_vl_query
 }
 
 _impl_vremote() {
-  __goose_vr_query() {
   curl -fsSL https://api.github.com/repos/aaif-goose/goose/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
-  }
-  _spin_capture "Checking goose updates" __goose_vr_query
 }
 
 case "${1:-}" in

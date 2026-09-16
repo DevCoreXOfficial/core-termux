@@ -81,31 +81,21 @@ __walkie_update_query() {
 }
 
 _impl_vlocal() {
-  # `npm ls` cannot resolve a git spec, so query the installed package
-  # name (walkie-sh) and fall back to its global package.json.
-  __walkie_vl_query() {
-    local v
+  local v
     v=$(npm ls -g walkie-sh --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1)
     if [ -z "$v" ]; then
       v=$(curl -fsSL "$(npm prefix -g)/lib/node_modules/walkie-sh/package.json" 2>/dev/null | grep '"version"' | head -1 | sed 's/[^0-9.]//g')
     fi
     echo "$v"
-  }
-  _spin_capture "Detecting Walkie version" __walkie_vl_query
 }
 
 _impl_vremote() {
-  # Resolve the installed git spec directly (works on modern npm);
-  # fall back to the upstream package.json on the default branch.
-  __walkie_vr_query() {
-    local v
+  local v
     v=$(npm view "$WALKIE_SPEC" version 2>/dev/null | head -1)
     if [ -z "$v" ]; then
       v=$(curl -fsSL "$WALKIE_PKG_JSON_URL" 2>/dev/null | grep '"version"' | head -1 | sed 's/[^0-9.]//g')
     fi
     echo "$v"
-  }
-  _spin_capture "Checking Walkie updates" __walkie_vr_query
 }
 
 case "${1:-}" in

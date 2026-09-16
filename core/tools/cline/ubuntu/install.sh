@@ -56,22 +56,20 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating Cline CLI" bash -c '_npm_g install -g cline@latest &>>"$LOG_FILE"' || { log_error "Failed to update Cline CLI"; return 1; }
+  loading "Updating Cline CLI" _impl_update_impl || { log_error "Failed to update Cline CLI"; return 1; }
   log_success "Cline CLI updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g cline@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __cline_vl_query() {
   npm ls -g cline --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting Cline CLI version" __cline_vl_query
 }
 
 _impl_vremote() {
-  __cline_vr_query() {
   npm view cline version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking Cline CLI updates" __cline_vr_query
 }
 
 case "${1:-}" in

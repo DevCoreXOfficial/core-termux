@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __bc_vl_query() {
   dpkg -s bc 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting bc version" __bc_vl_query
 }
 
 _impl_vremote() {
-  __bc_vr_query() {
   apt-cache policy bc 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking bc updates" __bc_vr_query
 }
 
 case "${1:-}" in

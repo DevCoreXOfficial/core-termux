@@ -50,17 +50,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __ollama_vl_query() {
   command -v ollama >/dev/null 2>&1 && ollama --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
-  }
-  _spin_capture "Detecting Ollama version" __ollama_vl_query
 }
 
 _impl_vremote() {
-  __ollama_vr_query() {
   curl -fsSL https://api.github.com/repos/ollama/ollama/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
-  }
-  _spin_capture "Checking Ollama updates" __ollama_vr_query
 }
 
 case "${1:-}" in

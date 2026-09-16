@@ -40,17 +40,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __claude_code_vl_query() {
   command -v claude >/dev/null 2>&1 && claude --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
-  }
-  _spin_capture "Detecting Claude Code version" __claude_code_vl_query
 }
 
 _impl_vremote() {
-  __claude_code_vr_query() {
   curl -fsSL https://api.github.com/repos/anthropics/claude-code/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
-  }
-  _spin_capture "Checking Claude Code updates" __claude_code_vr_query
 }
 
 case "${1:-}" in

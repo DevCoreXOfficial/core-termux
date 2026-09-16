@@ -56,22 +56,20 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating Codex CLI" bash -c '_npm_g install -g @openai/codex@latest &>>"$LOG_FILE"' || { log_error "Failed to update Codex CLI"; return 1; }
+  loading "Updating Codex CLI" _impl_update_impl || { log_error "Failed to update Codex CLI"; return 1; }
   log_success "Codex CLI updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g @openai/codex@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __codex_vl_query() {
   npm ls -g @openai/codex --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting Codex CLI version" __codex_vl_query
 }
 
 _impl_vremote() {
-  __codex_vr_query() {
   npm view @openai/codex version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking Codex CLI updates" __codex_vr_query
 }
 
 case "${1:-}" in

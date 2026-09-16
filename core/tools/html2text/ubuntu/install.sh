@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __html2text_vl_query() {
   dpkg -s html2text 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting html2text version" __html2text_vl_query
 }
 
 _impl_vremote() {
-  __html2text_vr_query() {
   apt-cache policy html2text 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking html2text updates" __html2text_vr_query
 }
 
 case "${1:-}" in

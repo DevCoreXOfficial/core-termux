@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __ncurses_vl_query() {
   dpkg -s ncurses-bin 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting ncurses-utils version" __ncurses_vl_query
 }
 
 _impl_vremote() {
-  __ncurses_vr_query() {
   apt-cache policy ncurses-bin 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking ncurses-utils updates" __ncurses_vr_query
 }
 
 case "${1:-}" in

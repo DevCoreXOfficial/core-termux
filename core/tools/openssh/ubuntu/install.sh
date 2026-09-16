@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __openssh_vl_query() {
   dpkg -s openssh-server 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting OpenSSH Server version" __openssh_vl_query
 }
 
 _impl_vremote() {
-  __openssh_vr_query() {
   apt-cache policy openssh-server 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking OpenSSH Server updates" __openssh_vr_query
 }
 
 case "${1:-}" in

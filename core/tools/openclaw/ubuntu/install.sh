@@ -56,22 +56,20 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating OpenClaw" bash -c '_npm_g install -g openclaw@latest &>>"$LOG_FILE"' || { log_error "Failed to update OpenClaw"; return 1; }
+  loading "Updating OpenClaw" _impl_update_impl || { log_error "Failed to update OpenClaw"; return 1; }
   log_success "OpenClaw updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g openclaw@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __openclaw_vl_query() {
   npm ls -g openclaw --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting OpenClaw version" __openclaw_vl_query
 }
 
 _impl_vremote() {
-  __openclaw_vr_query() {
   npm view openclaw version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking OpenClaw updates" __openclaw_vr_query
 }
 
 case "${1:-}" in

@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __curl_vl_query() {
   dpkg -s curl 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting curl version" __curl_vl_query
 }
 
 _impl_vremote() {
-  __curl_vr_query() {
   apt-cache policy curl 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking curl updates" __curl_vr_query
 }
 
 case "${1:-}" in

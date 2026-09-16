@@ -66,22 +66,20 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating npm-check-updates" bash -c '_npm_g install -g npm-check-updates@latest &>>"$LOG_FILE"' || { log_error "Failed to update npm-check-updates"; return 1; }
+  loading "Updating npm-check-updates" _impl_update_impl || { log_error "Failed to update npm-check-updates"; return 1; }
   log_success "npm-check-updates updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g npm-check-updates@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __ncu_vl_query() {
   npm ls -g npm-check-updates --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting npm-check-updates version" __ncu_vl_query
 }
 
 _impl_vremote() {
-  __ncu_vr_query() {
   npm view npm-check-updates version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking npm-check-updates updates" __ncu_vr_query
 }
 
 case "${1:-}" in

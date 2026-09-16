@@ -50,17 +50,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __cloudflared_vl_query() {
   cloudflared --version 2>/dev/null | grep -oE "[0-9]+\.[0-9]+[^ ]*" | head -1
-  }
-  _spin_capture "Detecting Cloudflare version" __cloudflared_vl_query
 }
 
 _impl_vremote() {
-  __cloudflared_vr_query() {
   curl -fsSL https://api.github.com/repos/cloudflare/cloudflared/releases/latest | grep '"tag_name"' | cut -d'"' -f4
-  }
-  _spin_capture "Checking Cloudflare updates" __cloudflared_vr_query
 }
 
 case "${1:-}" in

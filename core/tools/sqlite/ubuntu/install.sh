@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __sqlite_vl_query() {
   dpkg -s sqlite3 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting SQLite version" __sqlite_vl_query
 }
 
 _impl_vremote() {
-  __sqlite_vr_query() {
   apt-cache policy sqlite3 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking SQLite updates" __sqlite_vr_query
 }
 
 case "${1:-}" in

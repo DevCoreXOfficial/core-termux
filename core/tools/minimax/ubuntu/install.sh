@@ -56,22 +56,20 @@ _impl_uninstall() {
 
 _impl_update() {
   _impl_require_npm
-  loading "Updating MiniMax Agent" bash -c '_npm_g install -g mmx-cli@latest &>>"$LOG_FILE"' || { log_error "Failed to update MiniMax Agent"; return 1; }
+  loading "Updating MiniMax Agent" _impl_update_impl || { log_error "Failed to update MiniMax Agent"; return 1; }
   log_success "MiniMax Agent updated to the latest version"
 }
 
+_impl_update_impl() {
+  _npm_g install -g mmx-cli@latest &>>"$LOG_FILE"
+}
+
 _impl_vlocal() {
-  __minimax_vl_query() {
   npm ls -g mmx-cli --depth=0 2>/dev/null | grep '@' | sed 's/.*@//' | head -1
-  }
-  _spin_capture "Detecting MiniMax Agent version" __minimax_vl_query
 }
 
 _impl_vremote() {
-  __minimax_vr_query() {
   npm view mmx-cli version 2>/dev/null | head -1
-  }
-  _spin_capture "Checking MiniMax Agent updates" __minimax_vr_query
 }
 
 case "${1:-}" in

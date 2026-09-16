@@ -48,17 +48,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __make_vl_query() {
   dpkg -s build-essential 2>/dev/null | grep '^Version:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Detecting Make version" __make_vl_query
 }
 
 _impl_vremote() {
-  __make_vr_query() {
   apt-cache policy build-essential 2>/dev/null | grep 'Candidate:' | awk '{print $2}' | head -1
-  }
-  _spin_capture "Checking Make updates" __make_vr_query
 }
 
 case "${1:-}" in

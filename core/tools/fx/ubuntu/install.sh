@@ -37,17 +37,11 @@ _impl_update() {
 }
 
 _impl_vlocal() {
-  __fx_vl_query() {
   command -v fx >/dev/null 2>&1 && fx --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+[^ ]*' | head -1
-  }
-  _spin_capture "Detecting fx version" __fx_vl_query
 }
 
 _impl_vremote() {
-  __fx_vr_query() {
   curl -fsSL https://api.github.com/repos/vercel-labs/fx/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
-  }
-  _spin_capture "Checking fx updates" __fx_vr_query
 }
 
 case "${1:-}" in
