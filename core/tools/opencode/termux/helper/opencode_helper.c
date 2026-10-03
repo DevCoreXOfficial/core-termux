@@ -24,10 +24,10 @@ int main(int argc, char** argv) {
     char* dir = dirname(exec_path);
 
     // 4. Construct paths for the glibc loader and the real binary
-    // In our deb structure, opencode.real is in /usr/share/opencode/
-    // This bootstrapper is usually in /usr/bin/
+    // This bootstrapper is a fallback for the native v2 launcher
+    // (bin/opencode.v2), which also keeps the v2 background service alive.
     char* loader = "/data/data/com.termux/files/usr/glibc/lib/ld-linux-aarch64.so.1";
-    char real_bin[] = "/data/data/com.termux/files/home/.local/share/core-termux-data/opencode/opencode";
+    char real_bin[] = "/data/data/com.termux/files/home/.local/share/core-termux-data/opencode-v2/opencode";
     char lib_path[] = "/data/data/com.termux/files/usr/glibc/lib";
 
     // 5. Construct argument array for execv

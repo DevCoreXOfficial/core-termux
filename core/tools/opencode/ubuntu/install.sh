@@ -52,7 +52,10 @@ _impl_vlocal() {
 }
 
 _impl_vremote() {
-  _spin_capture "Checking Opencode updates" bash -c 'curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | grep "\"tag_name\"" | cut -d"\"" -f4 | sed "s/^v//"'
+  # v2 channel. The installer script (opencode.ai/install) installs v2, so
+  # checking the GitHub releases feed (v1) here made update detection compare
+  # a v2 install against a v1 version and could report bogus updates.
+  _spin_capture "Checking Opencode updates" bash -c 'curl -fsSL https://opencode.ai/update/api/latest/cli/npm | sed -n "s/.*\"version\":\"\([^\"]*\)\".*/\1/p" | head -1'
 }
 
 case "${1:-}" in

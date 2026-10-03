@@ -46,8 +46,11 @@ core update ai --opencode
 ## Notes
 
 - **Native mode** requires `glibc-repo`, `glibc`, `clang`, and other dependencies (installed automatically)
-- The native binary is stored in `~/.local/share/core-termux-data/opencode/`
-- A small C bootstrapper (`opencode_helper.c`) handles ELF loading via the glibc dynamic linker
+- The native binary is stored in `~/.local/share/core-termux-data/opencode-v2/`
+- Updates track the **v2** release channel (npm `@opencode/cli-*`); updates never downgrade v2 to v1
+- The launcher (`bin/opencode.v2`) runs the binary through the glibc dynamic linker and keeps the v2 background service alive
+- A C bootstrapper (`opencode_helper.c`) is retained as a fallback and also targets v2
 - **Proot mode** uses `proot-distro ubuntu` and installs via the official opencode.ai installer
-- Data directory: `~/.local/share/core-termux-data/opencode/`
+- Data directory: `~/.local/share/core-termux-data/opencode-v2/`
+- The legacy v1 directory (`~/.local/share/core-termux-data/opencode/`) is removed on uninstall if present
 

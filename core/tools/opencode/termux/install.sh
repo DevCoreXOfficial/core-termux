@@ -13,7 +13,12 @@ import "@/utils/uninstall"
 import "@/utils/walkie"
 
 LOG_FILE="$CORE_CACHE/install_ai.log"
+# legacy v1 (GitHub anomalyco/opencode releases) - kept only so old installs can be cleaned up
 OPENCODE_DATA_DIR="$HOME/.local/share/core-termux-data/opencode"
+# v2 (npm @opencode/cli-*) - this is what install/update manage
+OPENCODE_V2_DATA_DIR="$HOME/.local/share/core-termux-data/opencode-v2"
+OPENCODE_V2_VERSION_URL="https://opencode.ai/update/api/latest/cli/npm"
+OPENCODE_V2_REGISTRY="https://registry.npmjs.org"
 
 _opencode_detect_ubuntu_root() {
   local root
@@ -35,9 +40,26 @@ _opencode_proot_ubuntu() {
     -- "$@"
 }
 
-_get_latest_opencode_version() {
-  curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest |
-    grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
+_get_latest_opencode_v2_version() {
+  local json
+  json=$(curl -fsSL --max-time 30 "$OPENCODE_V2_VERSION_URL" 2>/dev/null)
+  echo "$json" | sed -n 's/.*"version":"\([^"]*\)".*/\1/p' | head -1
+}
+
+_get_remote_opencode_v2_version() {
+  _parse_version "$(_get_latest_opencode_v2_version)"
+}
+
+# npm package target triple, e.g. linux-arm64
+_opencode_v2_target() {
+  local os arch
+  os=$(uname -s | tr '[:upper:]' '[:lower:]')
+  arch=$(uname -m)
+  case "$arch" in
+  aarch64 | arm64) arch="arm64" ;;
+  x86_64 | amd64) arch="x64" ;;
+  esac
+  echo "$os-$arch"
 }
 
 _opencode_install_deps_native() {
@@ -89,54 +111,70 @@ _download_opencode_binary() {
 
 _download_opencode_binary_impl() {
   local latest_version
-  latest_version=$(_get_latest_opencode_version)
+  latest_version=$(_get_latest_opencode_v2_version)
   if [ -z "$latest_version" ]; then
     log_error "Failed to fetch latest OpenCode version"
     return 1
   fi
 
-  mkdir -p "$OPENCODE_DATA_DIR"
+  local target package tarball download_url
+  target=$(_opencode_v2_target)
+  package="@opencode/cli-$target"
+  tarball="cli-$target-$latest_version.tgz"
+  download_url="$OPENCODE_V2_REGISTRY/$package/-/$tarball"
 
-  local tarball="opencode-linux-arm64.tar.gz"
-  local download_url="https://github.com/anomalyco/opencode/releases/download/$latest_version/$tarball"
+  # Stage inside the target dir so the final swap is a same-filesystem rename.
+  # A failed download/extract must never leave a truncated binary behind.
+  mkdir -p "$OPENCODE_V2_DATA_DIR"
+  local staging="$OPENCODE_V2_DATA_DIR/.staging.$$"
+  rm -rf "$staging"
+  mkdir -p "$staging"
 
-  if ! curl -fsSL "$download_url" -o "$OPENCODE_DATA_DIR/$tarball" &>>"$LOG_FILE"; then
+  if ! curl -fsSL "$download_url" -o "$staging/$tarball" &>>"$LOG_FILE"; then
+    rm -rf "$staging"
     log_error "Failed to download OpenCode binary"
     return 1
   fi
 
-  if ! tar -zxf "$OPENCODE_DATA_DIR/$tarball" -C "$OPENCODE_DATA_DIR" &>>"$LOG_FILE"; then
+  if ! tar -zxf "$staging/$tarball" -C "$staging" &>>"$LOG_FILE"; then
+    rm -rf "$staging"
     log_error "Failed to extract OpenCode binary"
     return 1
   fi
 
-  rm -f "$OPENCODE_DATA_DIR/$tarball"
-
-  if [ ! -f "$OPENCODE_DATA_DIR/opencode" ]; then
+  if [ ! -f "$staging/package/bin/opencode" ]; then
+    rm -rf "$staging"
     log_error "OpenCode binary not found after extraction"
     return 1
   fi
 
-  chmod +x "$OPENCODE_DATA_DIR/opencode"
+  if ! mv -f "$staging/package/bin/opencode" "$OPENCODE_V2_DATA_DIR/opencode"; then
+    rm -rf "$staging"
+    log_error "Failed to install OpenCode binary"
+    return 1
+  fi
+
+  rm -rf "$staging"
+  chmod +x "$OPENCODE_V2_DATA_DIR/opencode"
+  printf '%s' "$latest_version" >"$OPENCODE_V2_DATA_DIR/.install-version"
   return 0
 }
 
-_compile_opencode_helper() {
-  loading "Compiling helper" _compile_opencode_helper_impl
+_install_opencode_v2_launcher() {
+  loading "Installing launcher" _install_opencode_v2_launcher_impl
 }
 
-_compile_opencode_helper_impl() {
-  local HELPER_SRC="$CORE_TOOL_DIR/helper/opencode_helper.c"
-  if [ ! -f "$HELPER_SRC" ]; then
-    log_error "Helper source not found at $HELPER_SRC"
+_install_opencode_v2_launcher_impl() {
+  local launcher_src="$CORE_TOOL_DIR/bin/opencode.v2"
+  if [ ! -f "$launcher_src" ]; then
+    log_error "Launcher template not found at $launcher_src"
     return 1
   fi
 
-  if ! clang -O2 -o "$PREFIX/bin/opencode" "$HELPER_SRC" &>>"$LOG_FILE"; then
-    log_error "Failed to compile opencode helper"
+  sed "s|__DATA_DIR__|$OPENCODE_V2_DATA_DIR|g" "$launcher_src" >"$PREFIX/bin/opencode" || {
+    log_error "Failed to write launcher"
     return 1
-  fi
-
+  }
   chmod +x "$PREFIX/bin/opencode"
   return 0
 }
@@ -144,8 +182,8 @@ _compile_opencode_helper_impl() {
 _install_opencode_native() {
   _opencode_install_deps_native || return 1
   _download_opencode_binary || return 1
-  _compile_opencode_helper || return 1
-  log_success "OpenCode installed natively"
+  _install_opencode_v2_launcher || return 1
+  log_success "OpenCode v2 installed natively"
   return 0
 }
 
@@ -155,7 +193,7 @@ _install_opencode_proot_glibc() {
   _download_opencode_binary || return 1
   loading "Creating proot wrapper" _opencode_create_proot_wrapper || return 1
 
-  printf 'proot-glibc' >"$OPENCODE_DATA_DIR/.install-method"
+  printf 'proot-glibc' >"$OPENCODE_V2_DATA_DIR/.install-method"
   log_success "OpenCode installed with glibc + proot"
   return 0
 }
@@ -176,7 +214,7 @@ _opencode_create_proot_wrapper() {
     log_error "Wrapper template not found at $wrapper_src"
     return 1
   fi
-  sed "s|__DATA_DIR__|$OPENCODE_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/opencode"
+  sed "s|__DATA_DIR__|$OPENCODE_V2_DATA_DIR|g" "$wrapper_src" >"$PREFIX/bin/opencode"
   chmod +x "$PREFIX/bin/opencode"
   return 0
 }
@@ -314,13 +352,12 @@ uninstall_opencode() {
 }
 
 _uninstall_opencode_impl() {
-  if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
-    local method="native"
-    if [ -f "$OPENCODE_DATA_DIR/.install-method" ]; then
-      method="$(cat "$OPENCODE_DATA_DIR/.install-method")"
-    fi
+  if _opencode_installed; then
+    local method
+    method="$(_opencode_install_method)"
     rm -f "$PREFIX/bin/opencode"
-    rm -rf "$OPENCODE_DATA_DIR"
+    # managed v2 dir, plus any legacy v1 dir left by older installs
+    rm -rf "$OPENCODE_V2_DATA_DIR" "$OPENCODE_DATA_DIR"
     log_success "OpenCode ($method) uninstalled"
     return 0
   fi
@@ -343,6 +380,22 @@ _uninstall_opencode_impl() {
   fi
 }
 
+_opencode_installed() {
+  [ -f "$OPENCODE_V2_DATA_DIR/opencode" ] || [ -f "$OPENCODE_DATA_DIR/opencode" ]
+}
+
+# v2 dir wins; fall back to the legacy v1 dir so pre-existing installs report correctly
+_opencode_install_method() {
+  local method_file
+  for method_file in "$OPENCODE_V2_DATA_DIR/.install-method" "$OPENCODE_DATA_DIR/.install-method"; do
+    if [ -f "$method_file" ]; then
+      cat "$method_file"
+      return 0
+    fi
+  done
+  echo "native"
+}
+
 _update_opencode() {
 	_update_opencode_impl
 }
@@ -350,11 +403,9 @@ _update_opencode() {
 _update_opencode_impl() {
   mkdir -p "$(dirname "$LOG_FILE")"
 
-  if [ -f "$OPENCODE_DATA_DIR/opencode" ]; then
-    local method="native"
-    if [ -f "$OPENCODE_DATA_DIR/.install-method" ]; then
-      method="$(cat "$OPENCODE_DATA_DIR/.install-method")"
-    fi
+  if _opencode_installed; then
+    local method
+    method="$(_opencode_install_method)"
     if [ "$method" = "proot-glibc" ]; then
       _install_opencode_proot_glibc
     else
@@ -367,7 +418,7 @@ _update_opencode_impl() {
 }
 
 update_opencode() {
-  _check_update_needed "OpenCode" "$(_get_installed_version opencode)" "$(_get_remote_github_version anomalyco/opencode)" _update_opencode
+  _check_update_needed "OpenCode" "$(_get_installed_version opencode)" "$(_get_remote_opencode_v2_version)" _update_opencode
 }
 
 _update_opencode_proot_impl() {
@@ -404,4 +455,4 @@ if [[ "${1:-}" == "uninstall" ]]; then uninstall_opencode; fi
 if [[ "${1:-}" == "update" ]]; then update_opencode; fi
 if [[ "${1:-}" == "reinstall" ]]; then reinstall_opencode; fi
 if [[ "${1:-}" == "version-local" ]]; then _get_installed_version opencode; fi
-if [[ "${1:-}" == "version-remote" ]]; then _get_remote_github_version anomalyco/opencode; fi
+if [[ "${1:-}" == "version-remote" ]]; then _get_remote_opencode_v2_version; fi

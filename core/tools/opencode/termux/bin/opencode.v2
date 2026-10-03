@@ -1,0 +1,86 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# OpenCode v2 launcher for Termux.
+# - runs the glibc-linked binary through the Termux glibc loader
+# - keeps the v2 background service alive (v2 spawns itself via process.execPath,
+#   which cannot run natively under bionic, so we start it ourselves)
+
+unset LD_PRELOAD
+unset LD_LIBRARY_PATH
+export GODEBUG=netdns=cgo
+export SSL_CERT_FILE=/data/data/com.termux/files/usr/etc/tls/cert.pem
+# this install is managed by core-termux, never self-upgrade
+export OPENCODE_DISABLE_AUTOUPDATE=1
+
+PREFIX_DIR=/data/data/com.termux/files/usr
+GLIBC_LIB="$PREFIX_DIR/glibc/lib"
+LOADER="$GLIBC_LIB/ld-linux-aarch64.so.1"
+OC_BIN="__DATA_DIR__/opencode"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/opencode"
+STATE_FILE="$STATE_DIR/service.json"
+SERVICE_LOG="$STATE_DIR/service.log"
+
+oc() { exec "$LOADER" --library-path "$GLIBC_LIB" "$OC_BIN" "$@"; }
+
+service_alive() {
+  [ -f "$STATE_FILE" ] || return 1
+  local url pid pw code
+  url=$(jq -r '.url // empty' "$STATE_FILE" 2>/dev/null) || return 1
+  pid=$(jq -r '.pid // empty' "$STATE_FILE" 2>/dev/null)
+  pw=$(jq -r '.password // empty' "$STATE_FILE" 2>/dev/null)
+  [ -n "$url" ] && [ -n "$pid" ] || return 1
+  kill -0 "$pid" 2>/dev/null || return 1
+  code=$(curl -s -m 3 -o /dev/null -w '%{http_code}' -u "opencode:$pw" "$url/config" 2>/dev/null)
+  [ "$code" = "200" ]
+}
+
+warm_service() {
+  local url pw
+  url=$(jq -r '.url // empty' "$STATE_FILE" 2>/dev/null)
+  pw=$(jq -r '.password // empty' "$STATE_FILE" 2>/dev/null)
+  [ -n "$url" ] || return 0
+  curl -s -m 30 -o /dev/null -u "opencode:$pw" "$url/api/provider" 2>/dev/null
+  curl -s -m 30 -o /dev/null -u "opencode:$pw" "$url/api/model" 2>/dev/null
+  return 0
+}
+
+start_service() {
+  mkdir -p "$STATE_DIR"
+  rm -f "$STATE_FILE"
+  setsid "$LOADER" --library-path "$GLIBC_LIB" "$OC_BIN" serve --service \
+    >>"$SERVICE_LOG" 2>&1 </dev/null &
+  disown 2>/dev/null
+  local i
+  for ((i = 0; i < 60; i++)); do
+    sleep 0.5
+    if service_alive; then
+      warm_service
+      return 0
+    fi
+  done
+  echo "opencode: background service failed to start (see $SERVICE_LOG)" >&2
+  return 1
+}
+
+case "${1:-}" in
+serve)
+  oc "$@"
+  ;;
+service)
+  case "${2:-}" in
+  start | restart)
+    service_alive || start_service
+    oc service status
+    ;;
+  *)
+    oc "$@"
+    ;;
+  esac
+  ;;
+--version | -v | --help | -h)
+  oc "$@"
+  ;;
+*)
+  service_alive || start_service
+  oc "$@"
+  ;;
+esac
