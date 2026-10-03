@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 # Core - multiplatform entrypoint.
-# #!/usr/bin/env bash works on Termux, Ubuntu Linux and Ubuntu (WSL).
+#
+# NOTE: `#!/usr/bin/env bash` does NOT work on Termux. Android has no /usr/bin,
+# so the kernel cannot resolve the interpreter and exec fails with ENOENT.
+# The Termux installer therefore installs a wrapper that runs this file through
+# bash explicitly (see install.sh: link_binary). Do not rely on this shebang on
+# Termux -- invoke it as `bash core/bin/core` there.
 
 SOURCE="${BASH_SOURCE[0]}"
 
@@ -38,7 +43,15 @@ if ! core_platform_supported; then
 fi
 
 # ===== CHECK UPDATES =====
-CORE_REMOTE_VERSION_URL="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/core/utils/env.sh"
+# Compare against the branch this install actually came from. Hardcoding `main`
+# meant a v5.0.0-beta install was only ever told about main releases -- and, since
+# main's version is lower, never about beta ones. Falls back to main when the
+# clone is missing or detached, so main installs behave exactly as before.
+CORE_REMOTE_BRANCH="$(git -C "$CORE_PATH" rev-parse --abbrev-ref HEAD 2>/dev/null)"
+case "$CORE_REMOTE_BRANCH" in
+"" | HEAD) CORE_REMOTE_BRANCH="main" ;;
+esac
+CORE_REMOTE_VERSION_URL="https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/$CORE_REMOTE_BRANCH/core/utils/env.sh"
 
 check_for_updates() {
   local version_file="$CORE_CACHE/last_version_check"

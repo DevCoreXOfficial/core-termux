@@ -41,7 +41,7 @@ update_main() {
         fi
       else
         log_warn "Core was not installed via git — reinstall to update:"
-        list_item "${GRAY_19}curl -fsSL https://raw.githubusercontent.com/DevCoreXOfficial/core/main/install.sh | bash${D_NC}"
+        list_item "${GRAY_19}curl -fsSL https://raw.githubusercontent.com/DevCoreXOfficial/core-termux/main/install.sh | bash${D_NC}"
       fi
       echo
       continue

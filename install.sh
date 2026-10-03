@@ -260,7 +260,20 @@ link_binary() {
   chmod +x "$target"
 
   if [[ "$PLATFORM" == "termux" ]]; then
-    ln -sf "$target" "$PREFIX/bin/core"
+    # Android has no /usr/bin, so the entrypoint's `#!/usr/bin/env bash` cannot
+    # be resolved by the kernel and `core` fails to exec. Every other Core
+    # script is already invoked through an explicit interpreter
+    # (`bash "$script"`, `python3 ...`, `node ...`), so this entrypoint link is
+    # the only place a shebang is actually used.
+    #
+    # Install a thin wrapper with a Termux-resolvable interpreter instead of
+    # symlinking the entrypoint directly. The wrapper lives outside the clone,
+    # so a later `git reset --hard` during an update cannot undo it.
+    mkdir -p "$PREFIX/bin"
+    rm -f "$PREFIX/bin/core" # a previous install symlinked here; writing
+                             # through it would truncate the entrypoint
+    printf '#!%s/bin/bash\nexec bash %q "$@"\n' "$PREFIX" "$target" >"$PREFIX/bin/core"
+    chmod +x "$PREFIX/bin/core"
   else
     mkdir -p "$HOME/.local/bin"
     ln -sf "$target" "$HOME/.local/bin/core"
