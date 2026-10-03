@@ -1,0 +1,37 @@
+{
+  "name": "herdr",
+  "display": "Herdr",
+  "platforms": [
+    "termux",
+    "ubuntu",
+    "wsl"
+  ],
+  "check_cmd": "herdr",
+  "homepage": "https://herdr.dev",
+  "description": "Terminal workspace manager for AI coding agents",
+  "tags": [
+    "terminal",
+    "multiplexer",
+    "sessions",
+    "agents",
+    "ai"
+  ],
+  "dependencies": [
+    {
+      "name": "curl",
+      "check": "curl",
+      "pkg": {
+        "termux": "curl",
+        "ubuntu": "curl"
+      }
+    },
+    {
+      "name": "coreutils",
+      "check": "sha256sum",
+      "pkg": {
+        "termux": "coreutils",
+        "ubuntu": "coreutils"
+      }
+    }
+  ]
+}
