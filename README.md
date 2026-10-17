@@ -210,6 +210,31 @@ core agent config                                     # Show or edit saved setti
 
 **Interactive slash commands:** `/help`, `/model <name>`, `/endpoint <url>`, `/temp <n>`, `/max <n>`, `/workspace <dir>`, `/plan`, `/build`, `/voice`, `/clear`, `/history`, `/status`, `/exit`
 
+**Web research:** `core agent run` can search the web and fetch page excerpts
+with [Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp).
+Search uses Fast mode, with no account or API key. For example:
+
+```bash
+core agent run -p "Find the current official Termux installation instructions and cite sources"
+core agent run --no-search -p "Explain the files in this directory"
+core agent config search_provider none      # persistently disable web actions
+core agent run --search parallel -p "Find current Bash release notes"  # session override
+core agent config search_timeout 20         # per HTTP request, 1–60 seconds
+```
+
+Parallel is enabled for unconfigured installations. No request is made until the
+model emits a `web_search` or `web_fetch` action. Queries and requested URLs are
+sent to `https://search.parallel.ai/mcp`; web actions use the same confirmation
+settings as commands, including in Plan mode. Noninteractive runs require `-y`
+or `confirm_commands=0`. `ESC ESC` cancels an active request. Free service has
+usage limits; errors return to the model without switching providers. Model
+inference still uses your configured endpoint. `core agent ask` remains plain chat.
+
+Developers can run the deterministic, scripted-model web action tests on Linux
+or Termux with `bash`, `curl`, `jq` and Python 3:
+`python3 -m unittest discover -s tests -v`. These tests do not call a live model
+or use the network.
+
 **Plan vs Build mode:** in **Plan mode** (`--plan` or `/plan`) the agent is read-only — `## File:` blocks are ignored, write commands (rm, mv, mkdir, redirections, git commit, package installs...) are blocked, and only read-only commands (ls, cat, sed -n, grep, git status...) run. Use it to explore and get a concrete plan before touching anything, then switch to **Build mode** (`/build`) to apply it.
 
 **Reading files:** a file attached with `@` is passed to the agent with its FULL content, so the agent already has it in context and doesn't need to re-read it. A `## File:` heading never precedes a command: a command-in-File slip is reinterpreted as a command instead of overwriting your file.

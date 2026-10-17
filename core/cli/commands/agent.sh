@@ -47,6 +47,8 @@ agent_help() {
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-w, --workspace <dir>" "Agent working dir (run mode, default: \$PWD)"
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-n, --max-iterations <n>" "Agent loop limit (default: $AGENT_MAX_ITERATIONS)"
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "-y, --yes" "Auto-approve commands (skip y/N prompt)"
+	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--search <parallel|none>" "Web research provider (default: parallel)"
+	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--no-search" "Disable built-in web research for this run"
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--plan" "Plan mode (read-only): no file writes, write commands blocked"
 	printf "    ${D_CYAN}%-22s${D_NC} %s\n" "--build" "Build mode (default): files and commands applied"
 	echo
@@ -125,6 +127,7 @@ agent_main() {
 agent_status_line() {
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Model" "$NC" "$AGENT_MODEL"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Endpoint" "$NC" "$AGENT_ENDPOINT"
+	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Search" "$NC" "$AGENT_SEARCH_PROVIDER"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Temp" "$NC" "$AGENT_TEMPERATURE"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Max tokens" "$NC" "$AGENT_MAX_TOKENS"
 	printf '    %b%-10s%b : %s\n' "$D_CYAN" "Context" "$NC" "$AGENT_CONTEXT_WINDOW tokens"
@@ -178,6 +181,8 @@ agent_config_help() {
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "confirm_commands" "Ask y/N before running commands (1/0)"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "context_window" "Model context window in tokens (default: 8192)"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "server_command" "Command that starts the model server in the background"
+	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "search_provider" "Web research: parallel (default) or none"
+	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "search_timeout" "Per-request web timeout, 1 to 60 seconds (default: 30)"
 	printf "    ${D_CYAN}%-14s${D_NC} %s\n" "workspace" "Default agent working dir"
 	echo
 	log_tip "Run ${D_CYAN}core agent config${D_NC} with no arguments to show current settings."
@@ -260,6 +265,7 @@ agent_parse_args() {
 		-w | --workspace) AGENT_WORKSPACE="$arg"; prev=""; continue ;;
 		-n | --max-iterations) AGENT_MAX_ITERATIONS="$arg"; prev=""; continue ;;
 		--max-tokens) AGENT_MAX_TOKENS="$arg"; prev=""; continue ;;
+		--search) AGENT_SEARCH_PROVIDER="$arg"; prev=""; continue ;;
 		esac
 		case "$arg" in
 		-p=* | --prompt=*) AGENT_PROMPT="${arg#*=}" ;;
@@ -269,6 +275,9 @@ agent_parse_args() {
 		-w=* | --workspace=*) AGENT_WORKSPACE="${arg#*=}" ;;
 		-n=* | --max-iterations=*) AGENT_MAX_ITERATIONS="${arg#*=}" ;;
 		--max-tokens=*) AGENT_MAX_TOKENS="${arg#*=}" ;;
+		--search=*) AGENT_SEARCH_PROVIDER="${arg#*=}" ;;
+		--search) prev="$arg" ;;
+		--no-search) AGENT_SEARCH_PROVIDER=none ;;
 		-p | --prompt | -m | --model | -u | --endpoint | -t | --temperature | -w | --workspace | -n | --max-iterations | --max-tokens) prev="$arg" ;;
 		--plan) AGENT_PLAN_MODE=1 ;;
 		--build) AGENT_PLAN_MODE=0 ;;
@@ -734,6 +743,11 @@ agent_run_loop() {
 
 	AGENT_ACTIONS_WORKSPACE="$AGENT_WORKSPACE"
 	AGENT_ABORT=0
+	# One stable conversation identifier, including all turns in a REPL. No key
+	# or account is required, and model-emitted JSON cannot override this value.
+	if [[ -z "${AGENT_SEARCH_SESSION_ID:-}" ]]; then
+		AGENT_SEARCH_SESSION_ID=$(cat /proc/sys/kernel/random/uuid)
+	fi
 	agent_timer_start
 	# fresh read-dedup registry per task
 	: >"$(agent_md_dir)/ran_commands.txt"
