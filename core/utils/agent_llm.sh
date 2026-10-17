@@ -19,6 +19,8 @@ AGENT_MAX_TOKENS="${AGENT_MAX_TOKENS:-2048}"
 AGENT_MAX_ITERATIONS="${AGENT_MAX_ITERATIONS:-12}"
 AGENT_WORKSPACE="${AGENT_WORKSPACE:-$PWD}"
 AGENT_CONFIRM_COMMANDS="${AGENT_CONFIRM_COMMANDS:-1}"
+AGENT_SEARCH_PROVIDER="${AGENT_SEARCH_PROVIDER-parallel}"
+AGENT_SEARCH_TIMEOUT="${AGENT_SEARCH_TIMEOUT:-30}"
 AGENT_CONTEXT_WINDOW="${AGENT_CONTEXT_WINDOW:-8192}"
 AGENT_SERVER_CMD="${AGENT_SERVER_CMD:-cactus serve Cactus-Compute/gemma-4-E2B-it --host 127.0.0.1 --port 8000 --no-cloud-handoff}"
 
@@ -61,6 +63,8 @@ AGENT_MAX_ITERATIONS=$AGENT_MAX_ITERATIONS
 AGENT_CONFIRM_COMMANDS=$AGENT_CONFIRM_COMMANDS
 AGENT_CONTEXT_WINDOW=$AGENT_CONTEXT_WINDOW
 AGENT_SERVER_CMD="$AGENT_SERVER_CMD"
+AGENT_SEARCH_PROVIDER="$AGENT_SEARCH_PROVIDER"
+AGENT_SEARCH_TIMEOUT=$AGENT_SEARCH_TIMEOUT
 EOF
 }
 
@@ -79,6 +83,14 @@ agent_config_set() {
 	confirm_commands | confirm) AGENT_CONFIRM_COMMANDS="$value" ;;
 	context_window | context) AGENT_CONTEXT_WINDOW="$value" ;;
 	server_command | server) AGENT_SERVER_CMD="$value" ;;
+	search_provider)
+		case "$value" in parallel | none) AGENT_SEARCH_PROVIDER="$value" ;;
+		*) log_error "search_provider must be parallel or none"; return 1 ;; esac
+		;;
+	search_timeout)
+		[[ "$value" =~ ^([1-9]|[1-5][0-9]|60)$ ]] || { log_error "search_timeout must be 1 to 60 seconds"; return 1; }
+		AGENT_SEARCH_TIMEOUT="$value"
+		;;
 	workspace) AGENT_WORKSPACE="$value" ;;
 	*)
 		log_error "Unknown setting: $key"

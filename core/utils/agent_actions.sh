@@ -18,6 +18,7 @@
 
 import "@/utils/log"
 import "@/utils/colors"
+import "@/utils/agent_search"
 
 AGENT_CONFIRM_COMMANDS="${AGENT_CONFIRM_COMMANDS:-1}"
 AGENT_YES=0
@@ -140,6 +141,7 @@ AGENT_SYSTEM_PROMPT
 	sys=${sys//\{MODE_NAME\}/$mode_name}
 	sys=${sys//\{MODE_RULES\}/$mode_rules}
 	printf '%s' "$sys"
+	printf '\n%s\n' "$(agent_search_prompt)"
 }
 
 # ------------------------------------------------------------
@@ -308,7 +310,12 @@ agent_parse_response() {
 				[[ "$cl" =~ ^[[:space:]]*\`\`\` ]] && break
 				buf+="$cl"$'\n'
 			done
-			if [[ -n "$pending" ]]; then
+			if [[ "$lang" == web_search || "$lang" == web_fetch ]]; then
+				nc=$((nc + 1))
+				printf '%s\t%s\n' "$nc" "$lang" >>"$cm"
+				printf '%s' "$buf" >"$d/action_cmd_$nc"
+				pending=""
+			elif [[ -n "$pending" ]]; then
 				# The model sometimes (wrongly) puts a shell COMMAND under a
 				# `## File:` heading (e.g. `### File: page.tsx` + a bash block
 				# with `$ sed -n ...` when it meant to READ the file). Writing
@@ -505,6 +512,11 @@ agent_execute_commands() {
 	while IFS=$'\t' read -r n lang <&3; do
 		[[ -z "$n" ]] && continue
 		cmd=$(cat "$d/action_cmd_$n")
+		if [[ "$lang" == web_search || "$lang" == web_fetch ]]; then
+			agent_execute_search "$lang" "$cmd" "$results_file" "$d/search_out_$n.txt"
+			(( AGENT_ABORT )) && return 1
+			continue
+		fi
 		echo
 		printf '    %s$%s %s\n' "$D_GREEN" "$NC" "$cmd"
 
